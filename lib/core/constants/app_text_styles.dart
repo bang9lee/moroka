@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTextStyles {
-  // Headers - Gothic & Mysterious
-  static TextStyle displayLarge = GoogleFonts.cinzel(
+  // Headers - Gothic & Mysterious (Using local Cinzel font)
+  static const TextStyle displayLarge = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 48,
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     letterSpacing: 1.5,
     shadows: [
-      const Shadow(
+      Shadow(
         color: AppColors.evilGlow,
         blurRadius: 20,
         offset: Offset(0, 0),
@@ -18,14 +18,16 @@ class AppTextStyles {
     ],
   );
   
-  static TextStyle displayMedium = GoogleFonts.cinzel(
+  static const TextStyle displayMedium = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 36,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     letterSpacing: 1.2,
   );
   
-  static TextStyle displaySmall = GoogleFonts.cinzel(
+  static const TextStyle displaySmall = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 28,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
@@ -33,13 +35,14 @@ class AppTextStyles {
   );
   
   // Mystical Headers
-  static TextStyle mysticTitle = GoogleFonts.almendra(
+  static const TextStyle mysticTitle = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: AppColors.textMystic,
     letterSpacing: 2.0,
     shadows: [
-      const Shadow(
+      Shadow(
         color: AppColors.mysticPurple,
         blurRadius: 15,
         offset: Offset(0, 2),
@@ -48,21 +51,21 @@ class AppTextStyles {
   );
   
   // Body Text
-  static TextStyle bodyLarge = GoogleFonts.crimsonText(
+  static const TextStyle bodyLarge = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.6,
   );
   
-  static TextStyle bodyMedium = GoogleFonts.crimsonText(
+  static const TextStyle bodyMedium = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.5,
   );
   
-  static TextStyle bodySmall = GoogleFonts.crimsonText(
+  static const TextStyle bodySmall = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -70,13 +73,14 @@ class AppTextStyles {
   );
   
   // Special Text Styles
-  static TextStyle cardName = GoogleFonts.uncialAntiqua(
+  static const TextStyle cardName = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.ghostWhite,
     letterSpacing: 1.5,
     shadows: [
-      const Shadow(
+      Shadow(
         color: AppColors.blackOverlay80,
         blurRadius: 8,
         offset: Offset(2, 2),
@@ -84,7 +88,7 @@ class AppTextStyles {
     ],
   );
   
-  static TextStyle interpretation = GoogleFonts.crimsonText(
+  static const TextStyle interpretation = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -92,7 +96,7 @@ class AppTextStyles {
     letterSpacing: 0.5,
   );
   
-  static TextStyle whisper = GoogleFonts.dancingScript(
+  static const TextStyle whisper = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.fogGray,
@@ -101,14 +105,16 @@ class AppTextStyles {
   );
   
   // Button Text
-  static TextStyle buttonLarge = GoogleFonts.cinzel(
+  static const TextStyle buttonLarge = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.ghostWhite,
     letterSpacing: 1.5,
   );
   
-  static TextStyle buttonMedium = GoogleFonts.cinzel(
+  static const TextStyle buttonMedium = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.ghostWhite,
@@ -116,14 +122,14 @@ class AppTextStyles {
   );
   
   // Chat Styles
-  static TextStyle chatUser = GoogleFonts.lato(
+  static const TextStyle chatUser = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
     height: 1.4,
   );
   
-  static TextStyle chatAI = GoogleFonts.crimsonText(
+  static const TextStyle chatAI = TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w400,
     color: AppColors.textMystic,
@@ -132,13 +138,14 @@ class AppTextStyles {
   );
   
   // Warning & Omen Text
-  static TextStyle omen = GoogleFonts.creepster(
+  static const TextStyle omen = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 20,
     fontWeight: FontWeight.w400,
     color: AppColors.crimsonGlow,
     letterSpacing: 1.5,
     shadows: [
-      const Shadow(
+      Shadow(
         color: AppColors.bloodMoon,
         blurRadius: 10,
         offset: Offset(0, 0),
@@ -147,7 +154,7 @@ class AppTextStyles {
   );
   
   // Loading & Status Text
-  static TextStyle loading = GoogleFonts.orbitron(
+  static const TextStyle loading = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,

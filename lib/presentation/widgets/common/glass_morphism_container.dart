@@ -4,8 +4,8 @@ import '../../../core/constants/app_colors.dart';
 
 class GlassMorphismContainer extends StatelessWidget {
   final Widget child;
-  final double width;
-  final double height;
+  final double? width;  // Made nullable
+  final double? height; // Made nullable
   final double borderRadius;
   final double blur;
   final EdgeInsetsGeometry? padding;
@@ -18,8 +18,8 @@ class GlassMorphismContainer extends StatelessWidget {
   const GlassMorphismContainer({
     super.key,
     required this.child,
-    this.width = double.infinity,
-    this.height = double.infinity,
+    this.width,  // Removed default value
+    this.height, // Removed default value
     this.borderRadius = 16,
     this.blur = 10,
     this.padding,

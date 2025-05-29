@@ -7,6 +7,7 @@ import '../../../data/models/chat_message_model.dart';
 import '../../../data/models/ai_interpretation_model.dart';
 import '../../../data/models/tarot_reading_model.dart';
 import '../../../providers.dart';
+import '../../../core/utils/app_logger.dart';
 
 final resultChatViewModelProvider = 
     StateNotifierProvider<ResultChatViewModel, ResultChatState>((ref) {
@@ -24,6 +25,8 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     required TarotCardModel card,
     required String userMood,
   }) async {
+    AppLogger.debug("ResultChatViewModel initialize - card: ${card.name}, mood: $userMood");
+    
     state = state.copyWith(
       selectedCard: card,
       userMood: userMood,
@@ -33,10 +36,14 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     try {
       // Get AI interpretation
       final tarotAIRepo = _ref.read(tarotAIRepositoryProvider);
+      AppLogger.debug("Getting AI interpretation...");
+      
       final interpretation = await tarotAIRepo.getCardInterpretation(
         card: card,
         userMood: userMood,
       );
+      
+      AppLogger.debug("AI interpretation received: ${interpretation.length > 50 ? interpretation.substring(0, 50) : interpretation}...");
 
       final interpretationModel = AIInterpretationModel(
         cardName: card.name,
@@ -50,18 +57,39 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         isLoadingInterpretation: false,
       );
 
-      // Save to Firestore
-      await _saveReading();
-    } catch (e) {
+      // Save to Firestore if user is logged in
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _saveReading();
+      } else {
+        AppLogger.warning("User not logged in, skipping Firestore save");
+      }
+    } catch (e, stack) {
+      AppLogger.error("Error in initialize", e, stack);
       state = state.copyWith(
         isLoadingInterpretation: false,
         error: e.toString(),
+      );
+      
+      // Set a default interpretation if API fails
+      final defaultInterpretation = AIInterpretationModel(
+        cardName: card.name,
+        interpretation: "운명의 카드가 당신 앞에 놓였습니다. ${card.nameKr} 카드는 ${card.keywords.join(', ')}를 상징합니다. 당신의 현재 상황을 비추어 보면, 이 카드는 깊은 의미를 담고 있습니다...",
+        userMood: userMood,
+        keywords: card.keywords,
+      );
+      
+      state = state.copyWith(
+        interpretation: defaultInterpretation,
+        error: null,
       );
     }
   }
 
   Future<void> sendMessage(String message) async {
     if (message.trim().isEmpty) return;
+    
+    AppLogger.debug("Sending message: $message");
 
     // Add user message
     final userMessage = ChatMessageModel(
@@ -73,17 +101,21 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     state = state.copyWith(
       messages: [...state.messages, userMessage],
       isTyping: true,
+      isLoading: true,
     );
 
     // Increment turn count
     _ref.read(chatTurnCountProvider.notifier).state++;
     final turnCount = _ref.read(chatTurnCountProvider);
+    
+    AppLogger.debug("Turn count: $turnCount");
 
     // Check if should show ad prompt
     if (turnCount >= 3 && !state.hasShownAd) {
       state = state.copyWith(
         showAdPrompt: true,
         isTyping: false,
+        isLoading: false,
       );
       return;
     }
@@ -92,12 +124,16 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       // Get AI response
       final tarotAIRepo = _ref.read(tarotAIRepositoryProvider);
       
+      AppLogger.debug("Getting chat response...");
+      
       final response = await tarotAIRepo.getChatResponse(
         cardName: state.selectedCard?.name ?? '',
         interpretation: state.interpretation?.interpretation ?? '',
         previousMessages: state.messages,
         userMessage: message,
       );
+      
+      AppLogger.debug("Chat response received: ${response.length > 50 ? response.substring(0, 50) : response}...");
 
       // Add AI response
       final aiMessage = ChatMessageModel(
@@ -109,19 +145,36 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       state = state.copyWith(
         messages: [...state.messages, aiMessage],
         isTyping: false,
+        isLoading: false,
       );
 
-      // Update Firestore
-      await _updateChatHistory(userMessage, aiMessage);
-    } catch (e) {
+      // Update Firestore if logged in
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && _currentReadingId != null) {
+        await _updateChatHistory(userMessage, aiMessage);
+      }
+    } catch (e, stack) {
+      AppLogger.error("Error in sendMessage", e, stack);
+      
+      // Add error message
+      final errorMessage = ChatMessageModel(
+        id: _uuid.v4(),
+        message: "죄송합니다. 운명의 실이 잠시 엉켜버렸네요. 다시 시도해 주세요.",
+        isUser: false,
+      );
+      
       state = state.copyWith(
+        messages: [...state.messages, errorMessage],
         isTyping: false,
+        isLoading: false,
         error: e.toString(),
       );
     }
   }
 
   Future<void> showAd() async {
+    AppLogger.debug("Showing ad...");
+    
     final adRepo = _ref.read(adRepositoryProvider);
     
     try {
@@ -136,6 +189,7 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       // Preload next ad
       adRepo.preloadAds();
     } catch (e) {
+      AppLogger.error("Ad failed", e);
       // Ad failed, but continue anyway
       state = state.copyWith(
         hasShownAd: true,
@@ -148,23 +202,29 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    final firestoreService = _ref.read(firestoreServiceProvider);
-    
-    final reading = TarotReadingModel(
-      id: _uuid.v4(),
-      userId: user.uid,
-      cardName: state.selectedCard?.nameKr ?? '',
-      cardImage: state.selectedCard?.imagePath ?? '',
-      interpretation: state.interpretation?.interpretation ?? '',
-      chatHistory: [],
-      createdAt: DateTime.now(),
-      userMood: state.userMood,
-    );
+    try {
+      final firestoreService = _ref.read(firestoreServiceProvider);
+      
+      final reading = TarotReadingModel(
+        id: _uuid.v4(),
+        userId: user.uid,
+        cardName: state.selectedCard?.nameKr ?? '',
+        cardImage: state.selectedCard?.imagePath ?? '',
+        interpretation: state.interpretation?.interpretation ?? '',
+        chatHistory: [],
+        createdAt: DateTime.now(),
+        userMood: state.userMood,
+      );
 
-    _currentReadingId = await firestoreService.saveTarotReading(reading);
-    
-    // Update user's reading count
-    await firestoreService.incrementReadingCount(user.uid);
+      _currentReadingId = await firestoreService.saveTarotReading(reading);
+      
+      // Update user's reading count
+      await firestoreService.incrementReadingCount(user.uid);
+      
+      AppLogger.debug("Reading saved with ID: $_currentReadingId");
+    } catch (e) {
+      AppLogger.error("Error saving reading", e);
+    }
   }
 
   Future<void> _updateChatHistory(
@@ -173,18 +233,22 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
   ) async {
     if (_currentReadingId == null) return;
 
-    final firestoreService = _ref.read(firestoreServiceProvider);
-    
-    final exchange = ChatExchange(
-      userMessage: userMessage.message,
-      aiResponse: aiMessage.message,
-      timestamp: DateTime.now(),
-    );
+    try {
+      final firestoreService = _ref.read(firestoreServiceProvider);
+      
+      final exchange = ChatExchange(
+        userMessage: userMessage.message,
+        aiResponse: aiMessage.message,
+        timestamp: DateTime.now(),
+      );
 
-    await firestoreService.addChatExchange(
-      readingId: _currentReadingId!,
-      exchange: exchange,
-    );
+      await firestoreService.addChatExchange(
+        readingId: _currentReadingId!,
+        exchange: exchange,
+      );
+    } catch (e) {
+      AppLogger.error("Error updating chat history", e);
+    }
   }
 
   void reset() {

@@ -2,8 +2,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdmobService {
   // Test Ad IDs (Replace with your actual Ad IDs in production)
-  static const String _testInterstitialAdId = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _testRewardedAdId = 'ca-app-pub-3940256099942544/5224354917';
+  static const String _testInterstitialAdId = 'ca-app-pub-7537131530412793/7821395051';
+  static const String _testRewardedAdId = 'ca-app-pub-7537131530412793/7821395051';
   
   InterstitialAd? _interstitialAd;
   RewardedAd? _rewardedAd;

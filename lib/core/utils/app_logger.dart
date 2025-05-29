@@ -1,64 +1,39 @@
 import 'package:flutter/foundation.dart';
 
 class AppLogger {
-  static const String _prefix = '[MOROKA]';
-  
-  static void debug(String message, [dynamic data]) {
+  static void debug(String message) {
     if (kDebugMode) {
-      print('$_prefix [DEBUG] $message');
-      if (data != null) {
-        print('$_prefix [DATA] $data');
-      }
+      print('🔍 DEBUG: $message');
     }
   }
   
-  static void info(String message, [dynamic data]) {
+  static void info(String message) {
     if (kDebugMode) {
-      print('$_prefix [INFO] $message');
-      if (data != null) {
-        print('$_prefix [DATA] $data');
-      }
+      print('ℹ️ INFO: $message');
     }
   }
   
-  static void warning(String message, [dynamic data]) {
+  static void warning(String message) {
     if (kDebugMode) {
-      print('$_prefix [WARNING] $message');
-      if (data != null) {
-        print('$_prefix [DATA] $data');
-      }
+      print('⚠️ WARNING: $message');
     }
   }
   
   static void error(String message, [dynamic error, StackTrace? stackTrace]) {
     if (kDebugMode) {
-      print('$_prefix [ERROR] $message');
+      print('❌ ERROR: $message');
       if (error != null) {
-        print('$_prefix [ERROR DETAIL] $error');
+        print('   Error: $error');
       }
       if (stackTrace != null) {
-        print('$_prefix [STACK TRACE] $stackTrace');
+        print('   Stack trace:\n$stackTrace');
       }
     }
   }
   
-  static void api(String endpoint, {
-    String? method,
-    dynamic request,
-    dynamic response,
-    int? statusCode,
-  }) {
+  static void success(String message) {
     if (kDebugMode) {
-      print('$_prefix [API] ${method ?? 'GET'} $endpoint');
-      if (request != null) {
-        print('$_prefix [API REQUEST] $request');
-      }
-      if (response != null) {
-        print('$_prefix [API RESPONSE] $response');
-      }
-      if (statusCode != null) {
-        print('$_prefix [API STATUS] $statusCode');
-      }
+      print('✅ SUCCESS: $message');
     }
   }
 }

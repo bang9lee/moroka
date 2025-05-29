@@ -30,6 +30,8 @@ class ChatBubbleWidget extends StatelessWidget {
               isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             GlassMorphismContainer(
+              width: null, // Changed from double.infinity
+              height: null, // Changed from double.infinity
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               backgroundColor: isUser
                   ? AppColors.mysticPurple.withAlpha(50)
@@ -43,7 +45,8 @@ class ChatBubbleWidget extends StatelessWidget {
                     ? AppTextStyles.chatUser
                     : AppTextStyles.chatAI,
               ),
-            ),
+            ).animate().fadeIn(duration: const Duration(milliseconds: 300))
+                .slideY(begin: 0.2, end: 0),
             const SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -57,8 +60,7 @@ class ChatBubbleWidget extends StatelessWidget {
             ),
           ],
         ),
-      ).animate().fadeIn(duration: const Duration(milliseconds: 300))
-          .slideY(begin: 0.2, end: 0),
+      ),
     );
   }
 

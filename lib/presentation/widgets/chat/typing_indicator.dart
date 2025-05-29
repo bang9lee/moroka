@@ -13,6 +13,8 @@ class TypingIndicator extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(right: 50),
         child: GlassMorphismContainer(
+          width: null, // Changed from double.infinity
+          height: null, // Changed from double.infinity
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           backgroundColor: AppColors.bloodMoon.withAlpha(30),
           borderColor: AppColors.crimsonGlow,

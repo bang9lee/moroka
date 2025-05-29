@@ -20,16 +20,16 @@ class AppTheme {
     ),
     
     // AppBar Theme
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.obsidianBlack,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: AppTextStyles.displaySmall,
-      iconTheme: const IconThemeData(
+      iconTheme: IconThemeData(
         color: AppColors.textPrimary,
         size: 24,
       ),
-      systemOverlayStyle: const SystemUiOverlayStyle(
+      systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
@@ -138,7 +138,7 @@ class AppTheme {
     ),
     
     // Text Theme
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: AppTextStyles.displayLarge,
       displayMedium: AppTextStyles.displayMedium,
       displaySmall: AppTextStyles.displaySmall,

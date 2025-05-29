@@ -73,7 +73,10 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       curve: Curves.easeIn,
     ));
     
-    _startRevealSequence();
+    // Use WidgetsBinding to ensure the widget tree is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startRevealSequence();
+    });
   }
 
   Future<void> _startRevealSequence() async {
@@ -81,17 +84,17 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final card = TarotCardModel.getCardById(widget.selectedCardIndex);
     final userMood = ref.read(userMoodProvider) ?? '';
     
-    ref.read(resultChatViewModelProvider.notifier).initialize(
-      card: card,
-      userMood: userMood,
-    );
+    // Delay the provider modification to avoid build-time error
+    Future(() {
+      ref.read(resultChatViewModelProvider.notifier).initialize(
+        card: card,
+        userMood: userMood,
+      );
+    });
     
     // Start reveal animation
     await Future.delayed(const Duration(milliseconds: 500));
     await _cardRevealController.forward();
-    
-    setState(() {
-    });
     
     await Future.delayed(const Duration(milliseconds: 500));
     await _interpretationController.forward();
@@ -121,11 +124,13 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     
     // Scroll to bottom
     Future.delayed(const Duration(milliseconds: 100), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
@@ -136,6 +141,8 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
         child: GlassMorphismContainer(
+          width: 300,
+          height: 400,
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -193,7 +200,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.crimsonGlow,
                     ),
-                    child: Text(
+                    child: const Text(
                       '받아들이기',
                       style: AppTextStyles.buttonMedium,
                     ),
@@ -257,122 +264,125 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
               
               // Content
               Expanded(
-                child: SingleChildScrollView(
+                child: ListView(
                   controller: _scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      // Card reveal
+                  children: [
+                    // Card reveal
+                    AnimatedBuilder(
+                      animation: _cardFlipAnimation,
+                      builder: (context, child) {
+                        final isShowingFront = _cardFlipAnimation.value >= 0.5;
+                        return Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001)
+                            ..rotateY(_cardFlipAnimation.value * 3.14159),
+                          child: SizedBox(
+                            height: 300,
+                            child: Center(
+                              child: isShowingFront
+                                  ? Transform(
+                                      alignment: Alignment.center,
+                                      transform: Matrix4.identity()..rotateY(3.14159),
+                                      child: TarotCardFront(
+                                        cardName: card?.nameKr ?? '',
+                                        imagePath: AppAssets.getCardImage(widget.selectedCardIndex),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 200,
+                                      height: 300,
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          colors: AppColors.mysticGradient,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: AppColors.cardBorder,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.remove_red_eye,
+                                          size: 80,
+                                          color: AppColors.ghostWhite,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    
+                    const SizedBox(height: 32),
+                    
+                    // Initial interpretation
+                    if (_showInterpretation)
                       AnimatedBuilder(
-                        animation: _cardFlipAnimation,
+                        animation: _interpretationFadeAnimation,
                         builder: (context, child) {
-                          final isShowingFront = _cardFlipAnimation.value >= 0.5;
-                          return Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.identity()
-                              ..setEntry(3, 2, 0.001)
-                              ..rotateY(_cardFlipAnimation.value * 3.14159),
-                            child: isShowingFront
-                                ? Transform(
-                                    alignment: Alignment.center,
-                                    transform: Matrix4.identity()..rotateY(3.14159),
-                                    child: TarotCardFront(
-                                      cardName: card?.nameKr ?? '',
-                                      imagePath: AppAssets.getCardImage(widget.selectedCardIndex),
-                                    ),
-                                  )
-                                : Container(
-                                    width: 200,
-                                    height: 300,
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        colors: AppColors.mysticGradient,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: AppColors.cardBorder,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.remove_red_eye,
-                                        size: 80,
-                                        color: AppColors.ghostWhite,
-                                      ),
+                          return Opacity(
+                            opacity: _interpretationFadeAnimation.value,
+                            child: GlassMorphismContainer(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '첫 번째 속삭임',
+                                    style: AppTextStyles.mysticTitle.copyWith(
+                                      fontSize: 20,
                                     ),
                                   ),
+                                  const SizedBox(height: 16),
+                                  if (state.isLoadingInterpretation)
+                                    const CircularProgressIndicator(
+                                      color: AppColors.evilGlow,
+                                    )
+                                  else
+                                    Text(
+                                      state.interpretation?.interpretation ?? '',
+                                      style: AppTextStyles.interpretation,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                ],
+                              ),
+                            ).animate().shimmer(
+                              duration: const Duration(seconds: 3),
+                              color: AppColors.whiteOverlay10,
+                            ),
                           );
                         },
                       ),
-                      
-                      const SizedBox(height: 32),
-                      
-                      // Initial interpretation
-                      if (_showInterpretation)
-                        AnimatedBuilder(
-                          animation: _interpretationFadeAnimation,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _interpretationFadeAnimation.value,
-                              child: GlassMorphismContainer(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      '첫 번째 속삭임',
-                                      style: AppTextStyles.mysticTitle.copyWith(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    if (state.isLoadingInterpretation)
-                                      const CircularProgressIndicator(
-                                        color: AppColors.evilGlow,
-                                      )
-                                    else
-                                      Text(
-                                        state.interpretation?.interpretation ?? '',
-                                        style: AppTextStyles.interpretation,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                  ],
-                                ),
-                              ).animate().shimmer(
-                                duration: const Duration(seconds: 3),
-                                color: AppColors.whiteOverlay10,
-                              ),
-                            );
-                          },
+                    
+                    const SizedBox(height: 24),
+                    
+                    // Chat messages
+                    if (_showChat) ...[
+                      ...state.messages.map((message) => Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ChatBubbleWidget(
+                          message: message.message,
+                          isUser: message.isUser,
+                          timestamp: message.timestamp,
                         ),
+                      )),
                       
-                      const SizedBox(height: 24),
-                      
-                      // Chat messages
-                      if (_showChat) ...[
-                        ...state.messages.map((message) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: ChatBubbleWidget(
-                            message: message.message,
-                            isUser: message.isUser,
-                            timestamp: message.timestamp,
-                          ),
-                        )),
-                        
-                        if (state.isTyping)
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 16),
-                            child: TypingIndicator(),
-                          ),
-                      ],
-                      
-                      const SizedBox(height: 80),
+                      if (state.isTyping)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: TypingIndicator(),
+                        ),
                     ],
-                  ),
+                    
+                    const SizedBox(height: 80),
+                  ],
                 ),
               ),
               
-                // Input area
+              // Input area
               if (_showChat && !state.showAdPrompt)
                 Container(
                   padding: const EdgeInsets.all(16),
