@@ -10,9 +10,14 @@ dependencies:
   flutter:
     sdk: flutter
   
-  # State Management
+ 
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
+  package_info_plus: ^8.3.0
+  fl_chart: ^0.66.0
+  intl: ^0.19.0
+  flutter_local_notifications: ^19.2.1
+  timezone: ^0.10.1
   
   # UI/UX
   google_fonts: ^6.2.1
@@ -27,6 +32,7 @@ dependencies:
   # API & Networking
   dio: ^5.4.3+1
   google_generative_ai: ^0.4.3
+  url_launcher: ^6.3.1
   
   # Local Storage
   shared_preferences: ^2.2.3
@@ -39,7 +45,7 @@ dependencies:
   
   # Utilities
   uuid: ^4.4.0
-  intl: ^0.19.0
+  
   
   # Animations & Effects
   flutter_staggered_animations: ^1.1.1

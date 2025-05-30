@@ -7,7 +7,6 @@ import 'package:sign_in_button/sign_in_button.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../widgets/common/animated_gradient_background.dart';
-import '../../widgets/common/glass_morphism_container.dart';
 import 'login_viewmodel.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -110,33 +109,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.evilGlow.withAlpha(100),
-                            blurRadius: 30,
-                            spreadRadius: 10,
+                    // Logo - 로고 이미지 사용, 배경 제거
+                    Image.asset(
+                      'assets/images/logo/logo.png',
+                      width: 180,
+                      height: 180,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        // 로고 이미지가 없을 경우 기본 디자인
+                        return Container(
+                          width: 250,
+                          height: 250,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                AppColors.mysticPurple,
+                                AppColors.deepViolet,
+                                AppColors.obsidianBlack,
+                              ],
+                            ),
+                            border: Border.all(
+                              color: AppColors.evilGlow,
+                              width: 2,
+                            ),
                           ),
-                        ],
-                      ),
-                      child: GlassMorphismContainer(
-                        borderRadius: 60,
-                        child: const Icon(
-                          Icons.remove_red_eye,
-                          size: 60,
-                          color: AppColors.ghostWhite,
-                        ).animate(
-                          onPlay: (controller) => controller.repeat(),
-                        ).shimmer(
-                          duration: const Duration(seconds: 3),
-                          color: AppColors.spiritGlow,
-                        ),
-                      ),
+                          child: const Icon(
+                            Icons.remove_red_eye_outlined,
+                            size: 80,
+                            color: AppColors.ghostWhite,
+                          ),
+                        );
+                      },
+                    ).animate(
+                      onPlay: (controller) => controller.repeat(),
+                    ).shimmer(
+                      duration: const Duration(seconds: 3),
+                      color: AppColors.spiritGlow,
                     ).animate(controller: _animationController)
                         .scale(duration: const Duration(milliseconds: 600)),
                     

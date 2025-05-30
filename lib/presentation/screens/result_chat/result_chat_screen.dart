@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,23 +8,24 @@ import 'package:vibration/vibration.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../core/constants/app_assets.dart';
 import '../../../data/models/tarot_card_model.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/glass_morphism_container.dart';
-import '../../widgets/cards/tarot_card_widget.dart';
+import '../../widgets/common/custom_loading_indicator.dart';
+import '../../widgets/spreads/spread_layout_widget.dart';
 import '../../widgets/chat/chat_bubble_widget.dart';
 import '../../widgets/chat/typing_indicator.dart';
 import '../main/main_viewmodel.dart';
+import '../spread_selection/spread_selection_viewmodel.dart';
 import 'result_chat_viewmodel.dart';
 
 class ResultChatScreen extends ConsumerStatefulWidget {
-  final int selectedCardIndex;
+  final List<int> selectedCardIndices;
   
   const ResultChatScreen({
     super.key,
-    required this.selectedCardIndex,
+    required this.selectedCardIndices,
   });
 
   @override
@@ -35,19 +38,24 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
   
-  late AnimationController _cardRevealController;
+  late AnimationController _layoutRevealController;
   late AnimationController _interpretationController;
-  late Animation<double> _cardFlipAnimation;
+  late AnimationController _cardFlipController;
+  late Animation<double> _layoutFadeAnimation;
   late Animation<double> _interpretationFadeAnimation;
   
   bool _showInterpretation = false;
   bool _showChat = false;
+  bool _isExpanded = false;
+
+  final List<AnimationController> _sectionControllers = [];
+  final List<Animation<double>> _sectionAnimations = [];
 
   @override
   void initState() {
     super.initState();
     
-    _cardRevealController = AnimationController(
+    _layoutRevealController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
@@ -57,12 +65,17 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       vsync: this,
     );
     
-    _cardFlipAnimation = Tween<double>(
+    _cardFlipController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    _layoutFadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _cardRevealController,
-      curve: Curves.easeInOut,
+      parent: _layoutRevealController,
+      curve: Curves.easeIn,
     ));
     
     _interpretationFadeAnimation = Tween<double>(
@@ -73,40 +86,317 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       curve: Curves.easeIn,
     ));
     
-    // Use WidgetsBinding to ensure the widget tree is built
+    // 섹션별 애니메이션 초기화 - 최대 10개까지 지원
+    for (int i = 0; i < 10; i++) {
+      final controller = AnimationController(
+        duration: Duration(milliseconds: 400 + (i * 100)),
+        vsync: this,
+      );
+      _sectionControllers.add(controller);
+      
+      final animation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeOutBack,
+      ));
+      _sectionAnimations.add(animation);
+    }
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _startRevealSequence();
     });
   }
 
   Future<void> _startRevealSequence() async {
-    // Get initial interpretation
-    final card = TarotCardModel.getCardById(widget.selectedCardIndex);
+    final selectedSpread = ref.read(selectedSpreadProvider);
     final userMood = ref.read(userMoodProvider) ?? '';
     
-    // Delay the provider modification to avoid build-time error
+    final cards = widget.selectedCardIndices
+        .map((id) => TarotCardModel.getCardById(id))
+        .toList();
+    
     Future(() {
-      ref.read(resultChatViewModelProvider.notifier).initialize(
-        card: card,
+      ref.read(resultChatViewModelProvider.notifier).initializeWithSpread(
+        cards: cards,
         userMood: userMood,
+        spread: selectedSpread!,
       );
     });
     
-    // Start reveal animation
     await Future.delayed(const Duration(milliseconds: 500));
-    await _cardRevealController.forward();
+    await _layoutRevealController.forward();
     
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     await _interpretationController.forward();
     
     setState(() {
       _showInterpretation = true;
     });
     
-    await Future.delayed(const Duration(milliseconds: 1000));
+    // 섹션별 애니메이션 시작 - 실제 섹션 개수만큼만
+    final sectionCount = math.min(_sectionControllers.length, 6); // 보통 4-6개 섹션
+    for (int i = 0; i < sectionCount; i++) {
+      await Future.delayed(const Duration(milliseconds: 200));
+      if (mounted && i < _sectionControllers.length) {
+        _sectionControllers[i].forward();
+      }
+    }
+    
+    await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       _showChat = true;
     });
+  }
+
+  // 해석을 섹션별로 파싱하여 카드로 만들기
+  List<Widget> _buildInterpretationSections(String interpretation) {
+    AppLogger.debug('해석 전체 내용: $interpretation');
+    AppLogger.debug('해석 길이: ${interpretation.length}');
+    
+    final sections = <Widget>[];
+    final parts = interpretation.split('\n\n');
+    
+    AppLogger.debug('파싱된 부분 개수: ${parts.length}');
+    
+    final sectionData = <Map<String, dynamic>>[];
+    String currentTitle = '';
+    String currentContent = '';
+    
+    for (final part in parts) {
+      AppLogger.debug('현재 파트: $part');
+      if (part.trim().startsWith('[') && part.trim().contains(']')) {
+        if (currentTitle.isNotEmpty) {
+          sectionData.add({
+            'title': currentTitle,
+            'content': currentContent.trim(),
+          });
+          AppLogger.debug('섹션 추가: $currentTitle');
+        }
+        currentTitle = part.trim().replaceAll('[', '').replaceAll(']', '');
+        currentContent = '';
+      } else {
+        currentContent += '$part\n';
+      }
+    }
+    
+    if (currentTitle.isNotEmpty) {
+      sectionData.add({
+        'title': currentTitle,
+        'content': currentContent.trim(),
+      });
+      AppLogger.debug('마지막 섹션 추가: $currentTitle');
+    }
+    
+    AppLogger.debug('최종 섹션 개수: ${sectionData.length}');
+    
+    // 섹션이 없으면 전체 텍스트를 하나의 카드로 표시
+    if (sectionData.isEmpty) {
+      AppLogger.debug('섹션 파싱 실패 - 원본 텍스트 표시');
+      return [
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.mysticPurple.withAlpha(30),
+                AppColors.deepViolet.withAlpha(20),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.mysticPurple.withAlpha(100),
+              width: 1,
+            ),
+          ),
+          child: Text(
+            interpretation,
+            style: AppTextStyles.bodyMedium.copyWith(
+              height: 1.6,
+              color: AppColors.textPrimary,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ];
+    }
+    
+    // 섹션별 아이콘과 색상 매핑
+    final sectionStyles = {
+      '카드의 메시지': {
+        'icon': Icons.auto_awesome,
+        'color': AppColors.spiritGlow,
+        'gradient': [AppColors.spiritGlow, AppColors.mysticPurple],
+      },
+      '현재 상황': {
+        'icon': Icons.remove_red_eye,
+        'color': AppColors.evilGlow,
+        'gradient': [AppColors.evilGlow, AppColors.crimsonGlow],
+      },
+      '실천 조언': {
+        'icon': Icons.lightbulb_outline,
+        'color': AppColors.omenGlow,
+        'gradient': [AppColors.omenGlow, AppColors.mysticPurple],
+      },
+      '앞으로의 전망': {
+        'icon': Icons.star_outline,
+        'color': AppColors.spiritGlow,
+        'gradient': [AppColors.mysticPurple, AppColors.deepViolet],
+      },
+    };
+    
+    for (int i = 0; i < sectionData.length; i++) {
+      final animationIndex = i < _sectionAnimations.length ? i : _sectionAnimations.length - 1;
+      final section = sectionData[i];
+      final style = sectionStyles[section['title']] ?? {
+        'icon': Icons.info_outline,
+        'color': AppColors.fogGray,
+        'gradient': [AppColors.fogGray, AppColors.ashGray],
+      };
+      
+      sections.add(
+        AnimatedBuilder(
+          animation: _sectionAnimations[animationIndex],
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(0, 20 * (1 - _sectionAnimations[animationIndex].value)),
+              child: Opacity(
+                opacity: _sectionAnimations[animationIndex].value,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      // 탭하면 확장/축소
+                      setState(() {
+                        _isExpanded = !_isExpanded;
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            (style['gradient'] as List<Color>)[0].withAlpha(30),
+                            (style['gradient'] as List<Color>)[1].withAlpha(20),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: (style['color'] as Color).withAlpha(100),
+                          width: 1,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 헤더
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: (style['color'] as Color).withAlpha(50),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      style['icon'] as IconData,
+                                      color: style['color'] as Color,
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      section['title'],
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: style['color'] as Color,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              // 내용
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                child: Text(
+                                  section['content'],
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    height: 1.6,
+                                    color: AppColors.textPrimary,
+                                    fontSize: 15,
+                                  ),
+                                  maxLines: _isExpanded ? null : 3,
+                                  overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                                ),
+                              ),
+                              // 실천 조언의 경우 특별 처리
+                              if (section['title'] == '실천 조언' && section['content'].contains('•'))
+                                Container(
+                                  margin: const EdgeInsets.only(top: 12),
+                                  child: Column(
+                                    children: section['content']
+                                        .split('•')
+                                        .where((item) => item.trim().isNotEmpty)
+                                        .map((item) => Container(
+                                              margin: const EdgeInsets.only(bottom: 8),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    margin: const EdgeInsets.only(top: 4),
+                                                    width: 6,
+                                                    height: 6,
+                                                    decoration: BoxDecoration(
+                                                      color: style['color'] as Color,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  Expanded(
+                                                    child: Text(
+                                                      item.trim(),
+                                                      style: AppTextStyles.bodyMedium.copyWith(
+                                                        color: AppColors.textPrimary,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ).animate()
+                        .shimmer(
+                          duration: const Duration(seconds: 3),
+                          color: (style['color'] as Color).withAlpha(30),
+                          delay: Duration(milliseconds: i * 500),
+                        ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+    
+    return sections;
   }
 
   void _sendMessage() async {
@@ -122,7 +412,6 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     
     await ref.read(resultChatViewModelProvider.notifier).sendMessage(message);
     
-    // Scroll to bottom
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -140,74 +429,130 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       barrierDismissible: false,
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
-        child: GlassMorphismContainer(
-          width: 300,
-          height: 400,
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.remove_red_eye,
-                size: 64,
-                color: AppColors.evilGlow,
-              ).animate(
-                onPlay: (controller) => controller.repeat(),
-              ).shimmer(
-                duration: const Duration(seconds: 2),
-                color: AppColors.spiritGlow,
-              ),
-              
-              const SizedBox(height: 24),
-              
-              Text(
-                '더 깊은 진실',
-                style: AppTextStyles.displaySmall.copyWith(
-                  fontSize: 24,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: GlassMorphismContainer(
+            padding: const EdgeInsets.all(32),
+            borderRadius: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.evilGlow, AppColors.crimsonGlow],
+                    ),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.evilGlow.withAlpha(100),
+                        blurRadius: 30,
+                        spreadRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.remove_red_eye,
+                    size: 40,
+                    color: AppColors.ghostWhite,
+                  ),
+                ).animate(
+                  onPlay: (controller) => controller.repeat(),
+                ).scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(1.1, 1.1),
+                  duration: const Duration(seconds: 2),
+                  curve: Curves.easeInOut,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              
-              const SizedBox(height: 16),
-              
-              Text(
-                AppStrings.watchAdPrompt,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.fogGray,
+                
+                const SizedBox(height: 24),
+                
+                Text(
+                  '더 깊은 진실을 원하시나요?',
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              
-              const SizedBox(height: 32),
-              
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      '거부하기',
-                      style: AppTextStyles.buttonMedium.copyWith(
-                        color: AppColors.ashGray,
+                
+                const SizedBox(height: 16),
+                
+                Text(
+                  '광고를 시청하고 무제한으로\n타로 마스터와 대화를 이어가세요',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.fogGray,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                
+                const SizedBox(height: 32),
+                
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.ashGray,
+                              width: 2,
+                            ),
+                          ),
+                          child: Text(
+                            '다음에',
+                            style: AppTextStyles.buttonMedium.copyWith(
+                              color: AppColors.ashGray,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      await ref.read(resultChatViewModelProvider.notifier).showAd();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.crimsonGlow,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                          await ref.read(resultChatViewModelProvider.notifier).showAd();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [AppColors.crimsonGlow, AppColors.evilGlow],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.crimsonGlow.withAlpha(100),
+                                blurRadius: 20,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                          child: const Text(
+                            '광고 보기',
+                            style: AppTextStyles.buttonMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ).animate()
+                            .shimmer(
+                              duration: const Duration(seconds: 2),
+                              color: AppColors.whiteOverlay20,
+                            ),
+                      ),
                     ),
-                    child: const Text(
-                      '받아들이기',
-                      style: AppTextStyles.buttonMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -219,15 +564,39 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     _messageController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
-    _cardRevealController.dispose();
+    _layoutRevealController.dispose();
     _interpretationController.dispose();
+    _cardFlipController.dispose();
+    for (final controller in _sectionControllers) {
+      controller.dispose();
+    }
     super.dispose();
+  }
+  
+  // 카드 개수에 따른 레이아웃 높이 계산
+  double _getLayoutHeight(int cardCount) {
+    switch (cardCount) {
+      case 1:
+        return 280; // 원카드
+      case 3:
+        return 320; // 쓰리카드
+      case 5:
+        return 320; // 예/아니오
+      case 7:
+        return 400; // 관계
+      case 10:
+        return 450; // 켈틱크로스
+      default:
+        return 380;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(resultChatViewModelProvider);
-    final card = state.selectedCard;
+    final selectedSpread = ref.watch(selectedSpreadProvider);
+    final spreadName = selectedSpread?.nameKr ?? '';
+    final isOneCard = state.selectedCards.length == 1;
     
     return Scaffold(
       body: AnimatedGradientBackground(
@@ -238,23 +607,57 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         child: SafeArea(
           child: Column(
             children: [
-              // Header
-              Padding(
+              // 헤더 - 더 세련되게
+              Container(
                 padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.shadowGray.withAlpha(200),
+                      AppColors.shadowGray.withAlpha(0),
+                    ],
+                  ),
+                ),
                 child: Row(
                   children: [
-                    IconButton(
-                      onPressed: () => context.go('/main'),
-                      icon: const Icon(
-                        Icons.close,
-                        color: AppColors.ghostWhite,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteOverlay10,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () => context.go('/main'),
+                        icon: const Icon(
+                          Icons.close,
+                          color: AppColors.ghostWhite,
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                        card?.nameKr ?? '',
-                        style: AppTextStyles.displaySmall.copyWith(fontSize: 20),
-                        textAlign: TextAlign.center,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteOverlay10,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.whiteOverlay20,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          spreadName,
+                          style: AppTextStyles.displaySmall.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 48),
@@ -262,104 +665,140 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 ),
               ),
               
-              // Content
+              // 컨텐츠
               Expanded(
                 child: ListView(
                   controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  physics: const BouncingScrollPhysics(),
                   children: [
-                    // Card reveal
-                    AnimatedBuilder(
-                      animation: _cardFlipAnimation,
-                      builder: (context, child) {
-                        final isShowingFront = _cardFlipAnimation.value >= 0.5;
-                        return Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0.001)
-                            ..rotateY(_cardFlipAnimation.value * 3.14159),
-                          child: SizedBox(
-                            height: 300,
-                            child: Center(
-                              child: isShowingFront
-                                  ? Transform(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.identity()..rotateY(3.14159),
-                                      child: TarotCardFront(
-                                        cardName: card?.nameKr ?? '',
-                                        imagePath: AppAssets.getCardImage(widget.selectedCardIndex),
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 200,
-                                      height: 300,
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          colors: AppColors.mysticGradient,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: AppColors.cardBorder,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: 80,
-                                          color: AppColors.ghostWhite,
-                                        ),
-                                      ),
-                                    ),
+                    // 카드 레이아웃
+                    if (selectedSpread != null)
+                      AnimatedBuilder(
+                        animation: _layoutFadeAnimation,
+                        builder: (context, child) {
+                          return Opacity(
+                            opacity: _layoutFadeAnimation.value,
+                            child: Container(
+                              height: _getLayoutHeight(state.selectedCards.length),
+                              margin: const EdgeInsets.only(bottom: 24),
+                              child: SpreadLayoutWidget(
+                                spread: selectedSpread,
+                                drawnCards: state.selectedCards,
+                                showCardNames: true,
+                                isInteractive: false,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
                     
-                    const SizedBox(height: 32),
-                    
-                    // Initial interpretation
+                    // 해석 섹션
                     if (_showInterpretation)
                       AnimatedBuilder(
                         animation: _interpretationFadeAnimation,
                         builder: (context, child) {
                           return Opacity(
                             opacity: _interpretationFadeAnimation.value,
-                            child: GlassMorphismContainer(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '첫 번째 속삭임',
-                                    style: AppTextStyles.mysticTitle.copyWith(
-                                      fontSize: 20,
+                            child: Column(
+                              children: [
+                                // 제목 카드
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                  padding: const EdgeInsets.all(24),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        AppColors.mysticPurple.withAlpha(50),
+                                        AppColors.deepViolet.withAlpha(30),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: AppColors.mysticPurple.withAlpha(100),
+                                      width: 1,
                                     ),
                                   ),
-                                  const SizedBox(height: 16),
-                                  if (state.isLoadingInterpretation)
-                                    const CircularProgressIndicator(
-                                      color: AppColors.evilGlow,
-                                    )
-                                  else
-                                    Text(
-                                      state.interpretation?.interpretation ?? '',
-                                      style: AppTextStyles.interpretation,
-                                      textAlign: TextAlign.center,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              AppColors.mysticPurple,
+                                              AppColors.deepViolet,
+                                            ],
+                                          ),
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: Icon(
+                                          isOneCard ? Icons.style : Icons.dashboard,
+                                          color: AppColors.ghostWhite,
+                                          size: 28,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              isOneCard ? '카드가 전하는 메시지' : '카드들이 그리는 이야기',
+                                              style: AppTextStyles.displaySmall.copyWith(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              '당신을 위한 특별한 해석',
+                                              style: AppTextStyles.bodySmall.copyWith(
+                                                color: AppColors.fogGray,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                
+                                // 로딩 또는 해석 내용
+                                if (state.isLoadingInterpretation)
+                                  Container(
+                                    padding: const EdgeInsets.all(40),
+                                    child: Column(
+                                      children: [
+                                        const CustomLoadingIndicator(
+                                          size: 60,
+                                          color: AppColors.evilGlow,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Text(
+                                          '카드의 의미를 해석하는 중...',
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            color: AppColors.fogGray,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                ],
-                              ),
-                            ).animate().shimmer(
-                              duration: const Duration(seconds: 3),
-                              color: AppColors.whiteOverlay10,
+                                  )
+                                else
+                                  ..._buildInterpretationSections(
+                                    state.spreadInterpretation ?? '',
+                                  ),
+                              ],
                             ),
                           );
                         },
                       ),
                     
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     
-                    // Chat messages
+                    // 채팅 메시지들
                     if (_showChat) ...[
                       ...state.messages.map((message) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -367,7 +806,12 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                           message: message.message,
                           isUser: message.isUser,
                           timestamp: message.timestamp,
-                        ),
+                        ).animate()
+                            .slideX(
+                              begin: message.isUser ? 0.1 : -0.1,
+                              duration: const Duration(milliseconds: 300),
+                            )
+                            .fadeIn(),
                       )),
                       
                       if (state.isTyping)
@@ -382,107 +826,170 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 ),
               ),
               
-              // Input area
+              // 입력 영역 - 더 세련되게
               if (_showChat && !state.showAdPrompt)
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppColors.shadowGray,
-                    border: Border(
-                      top: BorderSide(color: AppColors.cardBorder),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        AppColors.shadowGray,
+                        AppColors.shadowGray.withAlpha(240),
+                      ],
+                    ),
+                    border: const Border(
+                      top: BorderSide(
+                        color: AppColors.whiteOverlay10,
+                        width: 1,
+                      ),
                     ),
                   ),
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          controller: _messageController,
-                          focusNode: _focusNode,
-                          style: AppTextStyles.bodyMedium,
-                          decoration: InputDecoration(
-                            hintText: AppStrings.typeMessageHint,
-                            hintStyle: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.ashGray,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.blackOverlay40,
+                                AppColors.blackOverlay60,
+                              ],
                             ),
-                            filled: true,
-                            fillColor: AppColors.blackOverlay40,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 12,
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                              color: AppColors.whiteOverlay10,
+                              width: 1,
                             ),
                           ),
-                          onSubmitted: (_) => _sendMessage(),
-                          enabled: !state.isLoading,
+                          child: TextField(
+                            controller: _messageController,
+                            focusNode: _focusNode,
+                            style: AppTextStyles.bodyMedium,
+                            decoration: InputDecoration(
+                              hintText: '궁금한 것을 물어보세요...',
+                              hintStyle: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.ashGray,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 14,
+                              ),
+                            ),
+                            onSubmitted: (_) => _sendMessage(),
+                            enabled: !state.isLoading,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       GestureDetector(
                         onTap: state.isLoading ? null : _sendMessage,
                         child: Container(
-                          width: 48,
-                          height: 48,
+                          width: 52,
+                          height: 52,
                           decoration: BoxDecoration(
-                            color: state.isLoading
-                                ? AppColors.ashGray
-                                : AppColors.crimsonGlow,
+                            gradient: LinearGradient(
+                              colors: state.isLoading
+                                  ? [AppColors.ashGray, AppColors.fogGray]
+                                  : [AppColors.crimsonGlow, AppColors.evilGlow],
+                            ),
                             shape: BoxShape.circle,
+                            boxShadow: state.isLoading
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: AppColors.crimsonGlow.withAlpha(100),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
                           ),
                           child: const Icon(
-                            Icons.send,
+                            Icons.send_rounded,
                             color: AppColors.ghostWhite,
-                            size: 20,
+                            size: 22,
                           ),
-                        ),
+                        ).animate()
+                            .scale(
+                              begin: const Offset(0.8, 0.8),
+                              duration: const Duration(milliseconds: 200),
+                            ),
                       ),
                     ],
                   ),
                 ),
               
-              // Ad prompt
+              // 광고 프롬프트 - 프리미엄 디자인
               if (state.showAdPrompt)
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppColors.shadowGray,
-                    border: Border(
-                      top: BorderSide(color: AppColors.cardBorder),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        AppColors.shadowGray,
+                        AppColors.shadowGray.withAlpha(240),
+                      ],
+                    ),
+                    border: const Border(
+                      top: BorderSide(
+                        color: AppColors.crimsonGlow,
+                        width: 2,
+                      ),
                     ),
                   ),
                   child: SafeArea(
                     child: GestureDetector(
                       onTap: _showAdPrompt,
-                      child: GlassMorphismContainer(
+                      child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
-                          vertical: 16,
+                          vertical: 18,
                         ),
-                        backgroundColor: AppColors.bloodMoon.withAlpha(50),
-                        borderColor: AppColors.crimsonGlow,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.crimsonGlow,
+                              AppColors.evilGlow,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.crimsonGlow.withAlpha(100),
+                              blurRadius: 30,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
                               Icons.remove_red_eye,
-                              color: AppColors.crimsonGlow,
+                              color: AppColors.ghostWhite,
+                              size: 24,
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              AppStrings.continueReading,
+                              '대화 계속하기',
                               style: AppTextStyles.buttonLarge.copyWith(
                                 color: AppColors.ghostWhite,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
                       ).animate(
                         onPlay: (controller) => controller.repeat(),
-                      ).shimmer(
-                        duration: const Duration(seconds: 3),
-                        color: AppColors.omenGlow,
+                      ).scale(
+                        begin: const Offset(1, 1),
+                        end: const Offset(1.05, 1.05),
+                        duration: const Duration(seconds: 2),
+                        curve: Curves.easeInOut,
                       ),
                     ),
                   ),

@@ -7,8 +7,13 @@ import '../screens/splash/splash_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/main/main_screen.dart';
+import '../screens/spread_selection/spread_selection_screen.dart';
 import '../screens/card_selection/card_selection_screen.dart';
 import '../screens/result_chat/result_chat_screen.dart';
+import '../screens/history/history_screen.dart';
+import '../screens/statistics/statistics_screen.dart';
+import '../screens/settings/settings_screen.dart';
+import '../screens/about/about_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -104,6 +109,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/spread-selection',
+        name: 'spreadSelection',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SpreadSelectionScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutCubic;
+            
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+            
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      GoRoute(
         path: '/card-selection',
         name: 'cardSelection',
         pageBuilder: (context, state) => CustomTransitionPage(
@@ -132,11 +162,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/result-chat',
         name: 'resultChat',
         pageBuilder: (context, state) {
-          final cardIndex = state.extra as int?;
+          final selectedCards = state.extra as List<int>? ?? [];
           
           return CustomTransitionPage(
             key: state.pageKey,
-            child: ResultChatScreen(selectedCardIndex: cardIndex ?? 0),
+            child: ResultChatScreen(selectedCardIndices: selectedCards),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
@@ -153,6 +183,114 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             },
           );
         },
+      ),
+      
+      // History Screen
+      GoRoute(
+        path: '/history',
+        name: 'history',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const HistoryScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutCubic;
+            
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+            
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      
+      // Statistics Screen
+      GoRoute(
+        path: '/statistics',
+        name: 'statistics',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const StatisticsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutCubic;
+            
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+            
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      
+      // Settings Screen
+      GoRoute(
+        path: '/settings',
+        name: 'settings',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SettingsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutCubic;
+            
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+            
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      
+      // About Screen
+      GoRoute(
+        path: '/about',
+        name: 'about',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const AboutScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: Tween<double>(
+                  begin: 0.9,
+                  end: 1.0,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
+                child: child,
+              ),
+            );
+          },
+        ),
       ),
     ],
     
@@ -172,16 +310,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               const SizedBox(height: 16),
               Text(
                 'Page not found',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 state.error?.toString() ?? 'Unknown error',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.white70,
+                ),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => context.go('/'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
                 child: const Text('Go Home'),
               ),
             ],

@@ -23,7 +23,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late AnimationController _textController;
   late Animation<double> _logoAnimation;
   late Animation<double> _textAnimation;
-  late Animation<double> _glowAnimation;
 
   @override
   void initState() {
@@ -48,14 +47,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       parent: _textController,
       curve: Curves.easeInOut,
     );
-    
-    _glowAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _logoController,
-      curve: Curves.easeInOut,
-    ));
     
     _startAnimation();
   }
@@ -105,81 +96,56 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo
+                // Logo - 크기 확대 및 배경 제거
                 AnimatedBuilder(
                   animation: _logoAnimation,
                   builder: (context, child) {
                     return Transform.scale(
                       scale: _logoAnimation.value,
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.evilGlow.withAlpha(
-                                (100 * _glowAnimation.value).toInt(),
+                      child: Image.asset(
+                        'assets/images/logo/logo.png',
+                        width: 280,
+                        height: 280,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          // 로고 이미지가 없을 경우 기본 아이콘 표시
+                          return Container(
+                            width: 280,
+                            height: 280,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  AppColors.mysticPurple,
+                                  AppColors.deepViolet,
+                                  AppColors.obsidianBlack,
+                                ],
                               ),
-                              blurRadius: 50 * _glowAnimation.value,
-                              spreadRadius: 20 * _glowAnimation.value,
-                            ),
-                            BoxShadow(
-                              color: AppColors.mysticPurple.withAlpha(
-                                (60 * _glowAnimation.value).toInt(),
+                              border: Border.all(
+                                color: AppColors.evilGlow,
+                                width: 2,
                               ),
-                              blurRadius: 30 * _glowAnimation.value,
-                              spreadRadius: 10 * _glowAnimation.value,
                             ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            'assets/images/logo/logo.png',
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) {
-                              // 로고 이미지가 없을 경우 기본 아이콘 표시
-                              return Container(
-                                width: 200,
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      AppColors.mysticPurple,
-                                      AppColors.deepViolet,
-                                      AppColors.obsidianBlack,
-                                    ],
-                                  ),
-                                  border: Border.all(
-                                    color: AppColors.evilGlow,
-                                    width: 2,
-                                  ),
+                            child: const Icon(
+                              Icons.remove_red_eye_outlined,
+                              size: 140,
+                              color: AppColors.ghostWhite,
+                              shadows: [
+                                Shadow(
+                                  color: AppColors.evilGlow,
+                                  blurRadius: 20,
                                 ),
-                                child: const Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  size: 100,
-                                  color: AppColors.ghostWhite,
-                                  shadows: [
-                                    Shadow(
-                                      color: AppColors.evilGlow,
-                                      blurRadius: 20,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ).animate(
-                            onPlay: (controller) => controller.repeat(),
-                          ).shimmer(
-                            duration: const Duration(seconds: 3),
-                            color: AppColors.spiritGlow,
-                          ),
-                        ),
+                              ],
+                            ),
+                          );
+                        },
+                      ).animate(
+                        onPlay: (controller) => controller.repeat(),
+                      ).shimmer(
+                        duration: const Duration(seconds: 3),
+                        color: AppColors.spiritGlow,
                       ),
                     );
                   },

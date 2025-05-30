@@ -14,6 +14,8 @@ android {
     ndkVersion = "27.0.12077973"
 
     compileOptions {
+        // Core library desugaring 활성화
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -31,6 +33,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // MultiDex 지원 추가 (필요한 경우)
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -44,4 +49,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Core library desugaring 의존성 추가 (최신 버전)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

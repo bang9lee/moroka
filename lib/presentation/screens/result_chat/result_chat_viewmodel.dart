@@ -3,8 +3,8 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../data/models/tarot_card_model.dart';
+import '../../../data/models/tarot_spread_model.dart';
 import '../../../data/models/chat_message_model.dart';
-import '../../../data/models/ai_interpretation_model.dart';
 import '../../../data/models/tarot_reading_model.dart';
 import '../../../providers.dart';
 import '../../../core/utils/app_logger.dart';
@@ -21,20 +21,20 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 
   ResultChatViewModel(this._ref) : super(ResultChatState());
 
+  // 단일 카드 초기화 (원카드용)
   Future<void> initialize({
     required TarotCardModel card,
     required String userMood,
   }) async {
-    AppLogger.debug("ResultChatViewModel initialize - card: ${card.name}, mood: $userMood");
+    AppLogger.debug("ResultChatViewModel initialize - single card: ${card.name}, mood: $userMood");
     
     state = state.copyWith(
-      selectedCard: card,
+      selectedCards: [card],
       userMood: userMood,
       isLoadingInterpretation: true,
     );
 
     try {
-      // Get AI interpretation
       final tarotAIRepo = _ref.read(tarotAIRepositoryProvider);
       AppLogger.debug("Getting AI interpretation...");
       
@@ -43,45 +43,64 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         userMood: userMood,
       );
       
-      AppLogger.debug("AI interpretation received: ${interpretation.length > 50 ? interpretation.substring(0, 50) : interpretation}...");
-
-      final interpretationModel = AIInterpretationModel(
-        cardName: card.name,
-        interpretation: interpretation,
-        userMood: userMood,
-        keywords: card.keywords,
-      );
+      AppLogger.debug("AI interpretation received");
 
       state = state.copyWith(
-        interpretation: interpretationModel,
+        spreadInterpretation: interpretation,
         isLoadingInterpretation: false,
       );
 
-      // Save to Firestore if user is logged in
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await _saveReading();
-      } else {
-        AppLogger.warning("User not logged in, skipping Firestore save");
-      }
+      await _saveReading();
     } catch (e, stack) {
       AppLogger.error("Error in initialize", e, stack);
       state = state.copyWith(
         isLoadingInterpretation: false,
         error: e.toString(),
       );
+    }
+  }
+
+  // 배열법 초기화
+  Future<void> initializeWithSpread({
+    required List<TarotCardModel> cards,
+    required String userMood,
+    required TarotSpread spread,
+  }) async {
+    AppLogger.debug("ResultChatViewModel initialize - spread: ${spread.name}, cards: ${cards.length}, mood: $userMood");
+    
+    state = state.copyWith(
+      selectedCards: cards,
+      userMood: userMood,
+      spread: spread,
+      spreadType: spread.type,
+      isLoadingInterpretation: true,
+    );
+
+    try {
+      final geminiService = _ref.read(geminiServiceProvider);
+      AppLogger.debug("Getting spread interpretation...");
       
-      // Set a default interpretation if API fails
-      final defaultInterpretation = AIInterpretationModel(
-        cardName: card.name,
-        interpretation: "운명의 카드가 당신 앞에 놓였습니다. ${card.nameKr} 카드는 ${card.keywords.join(', ')}를 상징합니다. 당신의 현재 상황을 비추어 보면, 이 카드는 깊은 의미를 담고 있습니다...",
+      final interpretation = await geminiService.generateSpreadInterpretation(
+        spreadType: spread.type,
+        drawnCards: cards,
         userMood: userMood,
-        keywords: card.keywords,
+        spread: spread,
       );
       
+      AppLogger.debug("Spread interpretation received");
+
       state = state.copyWith(
-        interpretation: defaultInterpretation,
-        error: null,
+        spreadInterpretation: interpretation,
+        isLoadingInterpretation: false,
+      );
+
+      await _saveReading();
+    } catch (e, stack) {
+      AppLogger.error("Error in initializeWithSpread", e, stack);
+      state = state.copyWith(
+        isLoadingInterpretation: false,
+        error: e.toString(),
+        spreadInterpretation: _getDefaultSpreadInterpretation(cards, spread, userMood),
       );
     }
   }
@@ -121,19 +140,24 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     }
 
     try {
-      // Get AI response
-      final tarotAIRepo = _ref.read(tarotAIRepositoryProvider);
+      final geminiService = _ref.read(geminiServiceProvider);
       
       AppLogger.debug("Getting chat response...");
       
-      final response = await tarotAIRepo.getChatResponse(
-        cardName: state.selectedCard?.name ?? '',
-        interpretation: state.interpretation?.interpretation ?? '',
+      // 배열법에 따라 다른 컨텍스트 제공
+      final cardContext = state.spreadType != null && state.selectedCards.length > 1
+          ? state.selectedCards.map((c) => c.nameKr).join(', ')
+          : state.selectedCards.first.name;
+      
+      final response = await geminiService.generateChatResponse(
+        cardName: cardContext,
+        interpretation: state.spreadInterpretation ?? '',
         previousMessages: state.messages,
         userMessage: message,
+        spreadType: state.spreadType,
       );
       
-      AppLogger.debug("Chat response received: ${response.length > 50 ? response.substring(0, 50) : response}...");
+      AppLogger.debug("Chat response received");
 
       // Add AI response
       final aiMessage = ChatMessageModel(
@@ -178,7 +202,6 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     final adRepo = _ref.read(adRepositoryProvider);
     
     try {
-      // Show interstitial ad
       adRepo.showInterstitialAd();
       
       state = state.copyWith(
@@ -186,11 +209,9 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         showAdPrompt: false,
       );
       
-      // Preload next ad
       adRepo.preloadAds();
     } catch (e) {
       AppLogger.error("Ad failed", e);
-      // Ad failed, but continue anyway
       state = state.copyWith(
         hasShownAd: true,
         showAdPrompt: false,
@@ -205,20 +226,25 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     try {
       final firestoreService = _ref.read(firestoreServiceProvider);
       
+      // 배열법에 따른 카드 정보 저장
+      final cardNames = state.selectedCards.map((c) => c.nameKr).join(', ');
+      final cardImages = state.selectedCards.map((c) => c.imagePath).join(',');
+      
       final reading = TarotReadingModel(
         id: _uuid.v4(),
         userId: user.uid,
-        cardName: state.selectedCard?.nameKr ?? '',
-        cardImage: state.selectedCard?.imagePath ?? '',
-        interpretation: state.interpretation?.interpretation ?? '',
+        cardName: cardNames,
+        cardImage: cardImages,
+        interpretation: state.spreadInterpretation ?? '',
         chatHistory: [],
         createdAt: DateTime.now(),
         userMood: state.userMood,
+        spreadType: state.spreadType?.toString(),
+        cardCount: state.selectedCards.length,
       );
 
       _currentReadingId = await firestoreService.saveTarotReading(reading);
       
-      // Update user's reading count
       await firestoreService.incrementReadingCount(user.uid);
       
       AppLogger.debug("Reading saved with ID: $_currentReadingId");
@@ -251,6 +277,24 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     }
   }
 
+  String _getDefaultSpreadInterpretation(
+    List<TarotCardModel> cards,
+    TarotSpread spread,
+    String userMood,
+  ) {
+    final cardNames = cards.map((c) => c.nameKr).join(', ');
+    return '''
+${spread.nameKr} 배열이 펼쳐졌습니다.
+
+선택하신 카드들: $cardNames
+
+이 카드들이 만들어내는 에너지가 당신의 $userMood 마음과 공명하고 있습니다.
+각 카드가 전하는 메시지들이 서로 연결되어 더 큰 그림을 그리고 있네요.
+
+잠시 후 더 깊은 해석을 전해드리겠습니다...
+''';
+  }
+
   void reset() {
     state = ResultChatState();
     _ref.read(chatTurnCountProvider.notifier).state = 0;
@@ -259,9 +303,11 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 }
 
 class ResultChatState {
-  final TarotCardModel? selectedCard;
+  final List<TarotCardModel> selectedCards;
   final String userMood;
-  final AIInterpretationModel? interpretation;
+  final TarotSpread? spread;
+  final SpreadType? spreadType;
+  final String? spreadInterpretation;
   final List<ChatMessageModel> messages;
   final bool isLoadingInterpretation;
   final bool isTyping;
@@ -271,9 +317,11 @@ class ResultChatState {
   final String? error;
 
   ResultChatState({
-    this.selectedCard,
+    this.selectedCards = const [],
     this.userMood = '',
-    this.interpretation,
+    this.spread,
+    this.spreadType,
+    this.spreadInterpretation,
     this.messages = const [],
     this.isLoadingInterpretation = false,
     this.isTyping = false,
@@ -284,9 +332,11 @@ class ResultChatState {
   });
 
   ResultChatState copyWith({
-    TarotCardModel? selectedCard,
+    List<TarotCardModel>? selectedCards,
     String? userMood,
-    AIInterpretationModel? interpretation,
+    TarotSpread? spread,
+    SpreadType? spreadType,
+    String? spreadInterpretation,
     List<ChatMessageModel>? messages,
     bool? isLoadingInterpretation,
     bool? isTyping,
@@ -296,9 +346,11 @@ class ResultChatState {
     String? error,
   }) {
     return ResultChatState(
-      selectedCard: selectedCard ?? this.selectedCard,
+      selectedCards: selectedCards ?? this.selectedCards,
       userMood: userMood ?? this.userMood,
-      interpretation: interpretation ?? this.interpretation,
+      spread: spread ?? this.spread,
+      spreadType: spreadType ?? this.spreadType,
+      spreadInterpretation: spreadInterpretation ?? this.spreadInterpretation,
       messages: messages ?? this.messages,
       isLoadingInterpretation: isLoadingInterpretation ?? this.isLoadingInterpretation,
       isTyping: isTyping ?? this.isTyping,
