@@ -80,6 +80,11 @@ flutter:
     - assets/images/
     - assets/images/logo/
     - assets/images/cards/
+    - assets/images/cards/major/
+    - assets/images/cards/minor/cupus/
+    - assets/images/cards/minor/pentacles/
+    - assets/images/cards/minor/swords/
+    - assets/images/cards/minor/wands/
     - assets/images/backgrounds/
     - assets/images/icons/
     - assets/animations/

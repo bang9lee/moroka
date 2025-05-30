@@ -347,8 +347,6 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         .scale(begin: const Offset(0.95, 0.95), end: const Offset(1, 1));
   }
   
-  
-  
   Widget _buildTabBarView(
     SpreadSelectionState spreads,
     Size screenSize,
@@ -421,10 +419,13 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
     return AnimatedBuilder(
       animation: _cardAnimations[animationIndex],
       builder: (context, child) {
+        // opacity 값을 0.0 ~ 1.0 범위로 제한
+        final clampedOpacity = _cardAnimations[animationIndex].value.clamp(0.0, 1.0);
+        
         return Transform.scale(
           scale: _cardAnimations[animationIndex].value,
           child: Opacity(
-            opacity: _cardAnimations[animationIndex].value,
+            opacity: clampedOpacity,
             child: SpreadCardWidget(
               spread: spread,
               onTap: () => _selectSpread(spread),
