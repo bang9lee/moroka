@@ -27,17 +27,17 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _logoController = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    
+
     _contentController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _loadAppInfo();
     _logoController.repeat();
     _contentController.forward();
@@ -165,14 +165,13 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                           );
                         },
                       ),
-                    ).animate()
-                        .scale(
+                    ).animate().scale(
                           duration: const Duration(milliseconds: 600),
                           curve: Curves.easeOutBack,
                         ),
-                    
+
                     const SizedBox(height: 32),
-                    
+
                     // App Name & Version
                     Text(
                       'MOROKA',
@@ -181,12 +180,13 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                         letterSpacing: 8,
                       ),
                       textAlign: TextAlign.center,
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(delay: const Duration(milliseconds: 300))
                         .slideY(begin: 0.2, end: 0),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     Text(
                       '불길한 속삭임',
                       style: AppTextStyles.mysticTitle.copyWith(
@@ -194,23 +194,25 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                         color: AppColors.textMystic,
                       ),
                       textAlign: TextAlign.center,
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(delay: const Duration(milliseconds: 400))
                         .slideY(begin: 0.2, end: 0),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     Text(
                       'Version $_version ($_buildNumber)',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.fogGray,
                       ),
                       textAlign: TextAlign.center,
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(delay: const Duration(milliseconds: 500)),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Description
                     GlassMorphismContainer(
                       padding: const EdgeInsets.all(20),
@@ -241,12 +243,13 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                           ),
                         ],
                       ),
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(delay: const Duration(milliseconds: 600))
                         .slideY(begin: 0.1, end: 0),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Features
                     _buildFeatureCard(
                       icon: Icons.style,
@@ -254,83 +257,77 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                       description: '메이저 아르카나 22장과 마이너 아르카나 56장의 완전한 덱',
                       delay: 700,
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildFeatureCard(
                       icon: Icons.dashboard,
                       title: '5가지 전문 배열법',
                       description: '원카드부터 켈틱 크로스까지 다양한 리딩 방법 제공',
                       delay: 800,
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildFeatureCard(
                       icon: Icons.psychology,
                       title: 'AI 타로 마스터',
                       description: '100년 경력의 타로 마스터처럼 깊이 있는 해석 제공',
                       delay: 900,
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildFeatureCard(
                       icon: Icons.chat,
                       title: '대화형 상담',
                       description: '카드에 대해 궁금한 점을 자유롭게 질문하세요',
                       delay: 1000,
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Links
                     _buildLinkTile(
                       icon: Icons.privacy_tip,
                       title: '개인정보 처리방침',
                       onTap: () => _launchUrl('https://moroka.app/privacy'),
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildLinkTile(
                       icon: Icons.description,
                       title: '이용약관',
                       onTap: () => _launchUrl('https://moroka.app/terms'),
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     _buildLinkTile(
                       icon: Icons.mail,
                       title: '문의하기',
                       onTap: () => _launchUrl('mailto:support@moroka.app'),
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Developer Info
                     GlassMorphismContainer(
                       padding: const EdgeInsets.all(20),
                       backgroundColor: AppColors.blackOverlay20,
                       child: Column(
                         children: [
-                          Text(
-                            'Developed by',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.fogGray,
-                            ),
-                          ),
                           const SizedBox(height: 8),
                           Text(
-                            'Mystic Studio',
+                            'Today`s Studio',
                             style: AppTextStyles.displaySmall.copyWith(
                               fontSize: 20,
                             ),
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            '© 2024 Mystic Studio. All rights reserved.',
+                            '© 2025 Today`s Studio. All rights reserved.',
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.ashGray,
                             ),
@@ -338,9 +335,10 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                           ),
                         ],
                       ),
-                    ).animate()
+                    )
+                        .animate()
                         .fadeIn(delay: const Duration(milliseconds: 1100)),
-                    
+
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -398,7 +396,8 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ),
         ],
       ),
-    ).animate()
+    )
+        .animate()
         .fadeIn(
           delay: Duration(milliseconds: delay),
           duration: const Duration(milliseconds: 400),
@@ -452,7 +451,8 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ],
         ),
       ),
-    ).animate()
+    )
+        .animate()
         .fadeIn(duration: const Duration(milliseconds: 400))
         .slideX(begin: 0.1, end: 0);
   }

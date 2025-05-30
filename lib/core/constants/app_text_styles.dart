@@ -51,7 +51,8 @@ class AppTextStyles {
   );
   
   // Body Text
-  static const TextStyle bodyLarge = TextStyle(
+  static const TextStyle bodyLarge = TextStyle(  //카드결과화면 폰트
+    fontFamily: 'ChosunSm',
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -59,6 +60,7 @@ class AppTextStyles {
   );
   
   static const TextStyle bodyMedium = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -66,6 +68,7 @@ class AppTextStyles {
   );
   
   static const TextStyle bodySmall = TextStyle(
+    fontFamily: 'Cinzel',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -89,6 +92,7 @@ class AppTextStyles {
   );
   
   static const TextStyle interpretation = TextStyle(
+    fontFamily: 'ChosunSm',
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -97,6 +101,7 @@ class AppTextStyles {
   );
   
   static const TextStyle whisper = TextStyle(
+    fontFamily: 'ChosunSm',
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.fogGray,
@@ -123,6 +128,7 @@ class AppTextStyles {
   
   // Chat Styles
   static const TextStyle chatUser = TextStyle(
+    fontFamily: 'ChosunSm',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -130,6 +136,7 @@ class AppTextStyles {
   );
   
   static const TextStyle chatAI = TextStyle(
+    fontFamily: 'ChosunSm',
     fontSize: 17,
     fontWeight: FontWeight.w400,
     color: AppColors.textMystic,
@@ -155,6 +162,7 @@ class AppTextStyles {
   
   // Loading & Status Text
   static const TextStyle loading = TextStyle(
+    fontFamily: 'ChosunSm',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,

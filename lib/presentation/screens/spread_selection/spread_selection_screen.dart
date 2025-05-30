@@ -235,15 +235,15 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.mysticPurple.withValues(alpha: 0.1),
-              AppColors.deepViolet.withValues(alpha: 0.05),
+              AppColors.mysticPurple.withAlpha(25),
+              AppColors.deepViolet.withAlpha(13),
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppColors.mysticPurple.withValues(alpha: 0.3),
+            color: AppColors.mysticPurple.withAlpha(76),
             width: 1,
           ),
         ),
@@ -259,7 +259,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
             const SizedBox(width: 8),
             Flexible(
               child: Text(
-                '질문의 성격에 맞는 배열법을 선택하세요',
+                '현재 느끼는 감정을 생각하여 선택하세요',
                 style: AppTextStyles.whisper.copyWith(
                   fontSize: isSmallScreen ? 14 : 16,
                   color: AppColors.textMystic,
@@ -275,7 +275,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         .fadeIn(duration: _animationDuration)
         .shimmer(
           duration: const Duration(seconds: 2),
-          color: AppColors.spiritGlow.withValues(alpha: 0.3),
+          color: AppColors.spiritGlow.withAlpha(76),
         );
   }
   
@@ -313,7 +313,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
           borderRadius: BorderRadius.circular(23),
           boxShadow: [
             BoxShadow(
-              color: AppColors.mysticPurple.withValues(alpha: 0.5),
+              color: AppColors.mysticPurple.withAlpha(127),
               blurRadius: 12,
               spreadRadius: -2,
             ),
@@ -322,12 +322,19 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorPadding: EdgeInsets.zero,
-        labelColor: AppColors.ghostWhite,
+        labelColor: Colors.white, // 더 밝은 흰색으로 변경
         unselectedLabelColor: AppColors.fogGray,
         labelStyle: AppTextStyles.buttonMedium.copyWith(
           fontSize: isSmallScreen ? 14 : 15,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700, // 더 두껍게
           letterSpacing: 0.5,
+          shadows: [ // 텍스트에 그림자 추가로 가시성 향상
+            const Shadow(
+              offset: Offset(0, 1),
+              blurRadius: 4,
+              color: Colors.black54,
+            ),
+          ],
         ),
         unselectedLabelStyle: AppTextStyles.buttonMedium.copyWith(
           fontSize: isSmallScreen ? 13 : 14,
@@ -336,9 +343,9 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         splashFactory: NoSplash.splashFactory,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
         tabs: const [
-          Tab(text: '초급'),
-          Tab(text: '중급'),
-          Tab(text: '상급'),
+          Tab(text: '1~3장'),
+          Tab(text: '5~7장'),
+          Tab(text: '10장'),
         ],
       ),
     ).animate()

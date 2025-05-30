@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../widgets/common/animated_gradient_background.dart';
+import '../../widgets/common/glass_morphism_container.dart';
 import 'login_viewmodel.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -20,69 +20,178 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     with TickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   
-  bool _isSignUp = false;
   bool _obscurePassword = true;
   late AnimationController _animationController;
-  late AnimationController _switchAnimationController;
+  late AnimationController _floatingController;
+  late Animation<double> _floatingAnimation;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     )..forward();
     
-    _switchAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
+    
+    _floatingAnimation = Tween<double>(
+      begin: -10,
+      end: 10,
+    ).animate(CurvedAnimation(
+      parent: _floatingController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _floatingController.repeat(reverse: true);
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
     _animationController.dispose();
-    _switchAnimationController.dispose();
+    _floatingController.dispose();
     super.dispose();
   }
 
-  void _toggleAuthMode() {
-    setState(() {
-      _isSignUp = !_isSignUp;
-    });
-    _switchAnimationController.forward(from: 0);
-  }
-
-  Future<void> _submit() async {
+  Future<void> _signInWithEmail() async {
     if (!_formKey.currentState!.validate()) return;
 
-    if (_isSignUp) {
-      await ref.read(loginViewModelProvider.notifier).signUpWithEmail(
-            email: _emailController.text,
-            password: _passwordController.text,
-            displayName: _nameController.text,
-          );
-    } else {
-      await ref.read(loginViewModelProvider.notifier).signInWithEmail(
-            email: _emailController.text,
-            password: _passwordController.text,
-          );
-    }
+    await ref.read(loginViewModelProvider.notifier).signInWithEmail(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+  }
+
+  Future<void> _signInWithGoogle() async {
+    await ref.read(loginViewModelProvider.notifier).signInWithGoogle();
+  }
+
+  void _showPasswordResetDialog() {
+    final emailController = TextEditingController(text: _emailController.text);
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.shadowGray,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(
+            color: AppColors.whiteOverlay10,
+            width: 1,
+          ),
+        ),
+        title: Text(
+          '비밀번호 재설정',
+          style: AppTextStyles.displaySmall.copyWith(fontSize: 20),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '가입하신 이메일 주소를 입력해주세요.\n비밀번호 재설정 링크를 보내드립니다.',
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.fogGray,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.ghostWhite,
+              ),
+              decoration: InputDecoration(
+                hintText: 'your@email.com',
+                hintStyle: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.ashGray,
+                ),
+                filled: true,
+                fillColor: AppColors.blackOverlay40,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: AppColors.whiteOverlay10,
+                    width: 1,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: AppColors.mysticPurple,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              '취소',
+              style: AppTextStyles.buttonMedium.copyWith(
+                color: AppColors.fogGray,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              final email = emailController.text.trim();
+              if (email.isNotEmpty) {
+                Navigator.pop(context);
+                await ref.read(loginViewModelProvider.notifier)
+                    .sendPasswordResetEmail(email);
+                
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('비밀번호 재설정 이메일을 발송했습니다.'),
+                    backgroundColor: AppColors.spiritGlow,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                );
+              }
+            },
+            child: Text(
+              '전송',
+              style: AppTextStyles.buttonMedium.copyWith(
+                color: AppColors.mysticPurple,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(loginViewModelProvider);
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final isKeyboardOpen = keyboardHeight > 0;
     
-    // Listen for successful login
     ref.listen<LoginState>(loginViewModelProvider, (previous, next) {
-      if (next.user != null && !next.isLoading) {
+      if (next.needsEmailVerification) {
+        context.go('/login/email-verification');
+      } else if (next.user != null && !next.isLoading) {
         context.go('/main');
       }
       if (next.error != null) {
@@ -90,277 +199,73 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           SnackBar(
             content: Text(next.error!),
             backgroundColor: AppColors.bloodMoon,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         );
       }
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: AnimatedGradientBackground(
-        gradients: _isSignUp 
-            ? [AppColors.bloodGradient, AppColors.mysticGradient]
-            : [AppColors.mysticGradient, AppColors.darkGradient],
+        gradients: const [
+          AppColors.mysticGradient,
+          AppColors.darkGradient,
+        ],
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: screenHeight - 
+                           MediaQuery.of(context).padding.top - 
+                           MediaQuery.of(context).padding.bottom,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: screenSize.width * 0.08,
+              ),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo - 로고 이미지 사용, 배경 제거
-                    Image.asset(
-                      'assets/images/logo/logo.png',
-                      width: 180,
-                      height: 180,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        // 로고 이미지가 없을 경우 기본 디자인
-                        return Container(
-                          width: 250,
-                          height: 250,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                AppColors.mysticPurple,
-                                AppColors.deepViolet,
-                                AppColors.obsidianBlack,
-                              ],
-                            ),
-                            border: Border.all(
-                              color: AppColors.evilGlow,
-                              width: 2,
-                            ),
-                          ),
-                          child: const Icon(
-                            Icons.remove_red_eye_outlined,
-                            size: 80,
-                            color: AppColors.ghostWhite,
-                          ),
-                        );
-                      },
-                    ).animate(
-                      onPlay: (controller) => controller.repeat(),
-                    ).shimmer(
-                      duration: const Duration(seconds: 3),
-                      color: AppColors.spiritGlow,
-                    ).animate(controller: _animationController)
-                        .scale(duration: const Duration(milliseconds: 600)),
+                    // 상단 여백 - 화면 높이에 따라 조절
+                    SizedBox(height: screenHeight * (isKeyboardOpen ? 0.03 : 0.08)),
                     
-                    const SizedBox(height: 32),
-                    
-                    // Title
-                    Text(
-                      _isSignUp ? '운명의 계약' : '다시 돌아오셨군요',
-                      style: AppTextStyles.mysticTitle.copyWith(
-                        fontSize: 32,
-                        color: AppColors.ghostWhite,
-                      ),
-                    ).animate(controller: _switchAnimationController)
-                        .fadeIn()
-                        .slideY(begin: 0.2, end: 0),
-                    
-                    const SizedBox(height: 8),
-                    
-                    Text(
-                      _isSignUp 
-                          ? '당신의 영혼을 등록하세요' 
-                          : '당신을 기다리고 있었습니다',
-                      style: AppTextStyles.whisper.copyWith(
-                        color: AppColors.fogGray,
-                      ),
-                    ).animate(controller: _switchAnimationController)
-                        .fadeIn(delay: const Duration(milliseconds: 200)),
-                    
-                    const SizedBox(height: 48),
-                    
-                    // Form fields
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: AppColors.blackOverlay40,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: AppColors.whiteOverlay20,
-                          width: 1,
-                        ),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppColors.blackOverlay40,
-                            blurRadius: 20,
-                            offset: Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          // Name field (sign up only)
-                          if (_isSignUp) ...[
-                            _buildTextField(
-                              controller: _nameController,
-                              label: '이름',
-                              icon: Icons.person,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '이름을 입력해주세요';
-                                }
-                                return null;
-                              },
-                            ).animate(controller: _switchAnimationController)
-                                .fadeIn()
-                                .slideX(begin: -0.2, end: 0),
-                            const SizedBox(height: 16),
-                          ],
-                          
-                          // Email field
-                          _buildTextField(
-                            controller: _emailController,
-                            label: '이메일',
-                            icon: Icons.email,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '이메일을 입력해주세요';
-                              }
-                              if (!value.contains('@')) {
-                                return '올바른 이메일 형식이 아닙니다';
-                              }
-                              return null;
-                            },
-                          ),
-                          
-                          const SizedBox(height: 16),
-                          
-                          // Password field
-                          _buildTextField(
-                            controller: _passwordController,
-                            label: '비밀번호',
-                            icon: Icons.lock,
-                            obscureText: _obscurePassword,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword 
-                                    ? Icons.visibility_off 
-                                    : Icons.visibility,
-                                color: AppColors.fogGray,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePassword = !_obscurePassword;
-                                });
-                              },
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '비밀번호를 입력해주세요';
-                              }
-                              if (value.length < 6) {
-                                return '비밀번호는 6자 이상이어야 합니다';
-                              }
-                              return null;
-                            },
-                          ),
-                          
-                          const SizedBox(height: 24),
-                          
-                          // Submit button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed: state.isLoading ? null : _submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.crimsonGlow,
-                                disabledBackgroundColor: AppColors.ashGray,
-                              ),
-                              child: state.isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: AppColors.ghostWhite,
-                                    )
-                                  : Text(
-                                      _isSignUp ? '영혼 등록' : '입장하기',
-                                      style: AppTextStyles.buttonLarge,
-                                    ),
-                            ),
-                          ).animate(controller: _animationController)
-                              .fadeIn(delay: const Duration(milliseconds: 600))
-                              .slideY(begin: 0.2, end: 0),
-                        ],
-                      ),
+                    // Logo Section
+                    SizedBox(
+                      height: screenHeight * (isKeyboardOpen ? 0.12 : 0.15),
+                      child: _buildLogo(),
                     ),
                     
-                    const SizedBox(height: 24),
+                    SizedBox(height: screenHeight * 0.02),
+                    
+                    // Welcome Text
+                    _buildWelcomeText(),
+                    
+                    SizedBox(height: screenHeight * 0.04),
+                    
+                    // Login Form
+                    _buildLoginForm(state),
+                    
+                    SizedBox(height: screenHeight * 0.025),
                     
                     // Divider
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 1,
-                            color: AppColors.whiteOverlay20,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'OR',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.fogGray,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 1,
-                            color: AppColors.whiteOverlay20,
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildDivider(),
                     
-                    const SizedBox(height: 24),
+                    SizedBox(height: screenHeight * 0.025),
                     
-                    // Google sign in
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: SignInButton(
-                        Buttons.google,
-                        text: _isSignUp 
-                            ? "Google로 시작하기" 
-                            : "Google로 로그인",
-                        onPressed: state.isLoading 
-                            ? () {} 
-                            : () => ref
-                                .read(loginViewModelProvider.notifier)
-                                .signInWithGoogle(),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ).animate(controller: _animationController)
-                        .fadeIn(delay: const Duration(milliseconds: 800))
-                        .slideY(begin: 0.2, end: 0),
+                    // Social Login
+                    _buildSocialLogin(state),
                     
-                    const SizedBox(height: 32),
+                    SizedBox(height: screenHeight * 0.04),
                     
-                    // Toggle auth mode
-                    TextButton(
-                      onPressed: _toggleAuthMode,
-                      child: Text(
-                        _isSignUp 
-                            ? '이미 계정이 있으신가요? 로그인' 
-                            : '처음이신가요? 회원가입',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textMystic,
-                        ),
-                      ),
-                    ).animate(controller: _animationController)
-                        .fadeIn(delay: const Duration(milliseconds: 1000)),
+                    // Sign Up Prompt
+                    _buildSignUpPrompt(),
+                    
+                    SizedBox(height: screenHeight * 0.03),
                   ],
                 ),
               ),
@@ -371,9 +276,386 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
+  Widget _buildLogo() {
+    return AnimatedBuilder(
+      animation: _floatingAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _floatingAnimation.value),
+          child: Center(
+            child: Container(
+              width: 100,
+              height: 120,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.mysticPurple.withAlpha(80),
+                    blurRadius: 30,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/logo/logo.png',
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.deepViolet,
+                            AppColors.mysticPurple,
+                          ],
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.auto_awesome,
+                        size: 40,
+                        color: AppColors.ghostWhite,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ).animate(controller: _animationController)
+              .scale(
+                begin: const Offset(0.8, 0.8),
+                end: const Offset(1, 1),
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeOutBack,
+              )
+              .fadeIn(duration: const Duration(milliseconds: 600)),
+        );
+      },
+    );
+  }
+
+  Widget _buildWelcomeText() {
+    return Column(
+      children: [
+        Text(
+          'MOROKA',
+          style: AppTextStyles.mysticTitle.copyWith(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 3,
+            color: AppColors.ghostWhite,
+          ),
+        ).animate(controller: _animationController)
+            .fadeIn(delay: const Duration(milliseconds: 400))
+            .slideY(begin: 0.3, end: 0),
+        const SizedBox(height: 8),
+        Text(
+          '운명의 문이 열리길 기다립니다',
+          style: AppTextStyles.whisper.copyWith(
+            color: AppColors.fogGray,
+            fontSize: 14,
+          ),
+        ).animate(controller: _animationController)
+            .fadeIn(delay: const Duration(milliseconds: 600)),
+      ],
+    );
+  }
+
+  Widget _buildLoginForm(LoginState state) {
+    return GlassMorphismContainer(
+      padding: const EdgeInsets.all(20),
+      borderRadius: 20,
+      backgroundColor: AppColors.blackOverlay40,
+      borderColor: AppColors.whiteOverlay10,
+      child: Column(
+        children: [
+          _buildTextField(
+            controller: _emailController,
+            label: '이메일',
+            hint: 'your@email.com',
+            icon: Icons.email_outlined,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '이메일을 입력해주세요';
+              }
+              if (!value.contains('@')) {
+                return '올바른 이메일 형식이 아닙니다';
+              }
+              return null;
+            },
+          ).animate(controller: _animationController)
+              .fadeIn(delay: const Duration(milliseconds: 800))
+              .slideX(begin: -0.1, end: 0),
+          
+          const SizedBox(height: 16),
+          
+          _buildTextField(
+            controller: _passwordController,
+            label: '비밀번호',
+            hint: '6자 이상 입력',
+            icon: Icons.lock_outline,
+            obscureText: _obscurePassword,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword 
+                    ? Icons.visibility_off_outlined 
+                    : Icons.visibility_outlined,
+                color: AppColors.fogGray,
+                size: 20,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '비밀번호를 입력해주세요';
+              }
+              if (value.length < 6) {
+                return '비밀번호는 6자 이상이어야 합니다';
+              }
+              return null;
+            },
+          ).animate(controller: _animationController)
+              .fadeIn(delay: const Duration(milliseconds: 900))
+              .slideX(begin: -0.1, end: 0),
+          
+          const SizedBox(height: 8),
+          
+          // Forgot password
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: _showPasswordResetDialog,
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              ),
+              child: Text(
+                '비밀번호를 잊으셨나요?',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textMystic,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: 20),
+          
+          // Login button
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: state.isLoading ? null : _signInWithEmail,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                foregroundColor: AppColors.ghostWhite,
+                disabledBackgroundColor: AppColors.ashGray.withAlpha(50),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: EdgeInsets.zero,
+              ),
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppColors.mysticPurple,
+                      AppColors.deepViolet,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: state.isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: AppColors.ghostWhite,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.login, size: 18),
+                            SizedBox(width: 8),
+                            Text(
+                              '로그인',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ),
+            ),
+          ).animate(controller: _animationController)
+              .fadeIn(delay: const Duration(milliseconds: 1000))
+              .scale(
+                begin: const Offset(0.9, 0.9),
+                end: const Offset(1, 1),
+              ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 1,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.whiteOverlay10,
+                  AppColors.whiteOverlay20,
+                ],
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            '또는',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.fogGray,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 1,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.whiteOverlay20,
+                  AppColors.whiteOverlay10,
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    ).animate(controller: _animationController)
+        .fadeIn(delay: const Duration(milliseconds: 1100));
+  }
+
+  Widget _buildSocialLogin(LoginState state) {
+    return GlassMorphismContainer(
+      padding: EdgeInsets.zero,
+      borderRadius: 16,
+      backgroundColor: AppColors.blackOverlay40,
+      borderColor: AppColors.whiteOverlay20,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: state.isLoading ? null : _signInWithGoogle,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            height: 52,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/icons/google.png',
+                  width: 20,
+                  height: 20,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 20,
+                      height: 20,
+                      decoration: const BoxDecoration(
+                        color: AppColors.ghostWhite,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'G',
+                          style: TextStyle(
+                            color: AppColors.obsidianBlack,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Google로 계속하기',
+                  style: AppTextStyles.buttonMedium.copyWith(
+                    color: AppColors.ghostWhite,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).animate(controller: _animationController)
+        .fadeIn(delay: const Duration(milliseconds: 1200))
+        .scale(
+          begin: const Offset(0.9, 0.9),
+          end: const Offset(1, 1),
+        );
+  }
+
+  Widget _buildSignUpPrompt() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '아직 계정이 없으신가요?',
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.fogGray,
+            fontSize: 13,
+          ),
+        ),
+        TextButton(
+          onPressed: () => context.push('/login/signup'),
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+          ),
+          child: Text(
+            '회원가입',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textMystic,
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+            ),
+          ),
+        ),
+      ],
+    ).animate(controller: _animationController)
+        .fadeIn(delay: const Duration(milliseconds: 1300));
+  }
+
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
+    required String hint,
     required IconData icon,
     TextInputType? keyboardType,
     bool obscureText = false,
@@ -386,17 +668,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       obscureText: obscureText,
       style: AppTextStyles.bodyMedium.copyWith(
         color: AppColors.ghostWhite,
+        fontSize: 14,
       ),
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: AppTextStyles.bodyMedium.copyWith(
+        labelStyle: AppTextStyles.bodySmall.copyWith(
           color: AppColors.fogGray,
+          fontSize: 13,
         ),
-        prefixIcon: Icon(icon, color: AppColors.fogGray),
+        hintText: hint,
+        hintStyle: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.ashGray,
+          fontSize: 13,
+        ),
+        prefixIcon: Icon(
+          icon,
+          color: AppColors.fogGray,
+          size: 18,
+        ),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: AppColors.blackOverlay40,
+        fillColor: AppColors.blackOverlay20,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -411,7 +705,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(
-            color: AppColors.evilGlow,
+            color: AppColors.mysticPurple,
             width: 2,
           ),
         ),
@@ -419,8 +713,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(
             color: AppColors.bloodMoon,
+            width: 1,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: AppColors.bloodMoon,
             width: 2,
           ),
+        ),
+        errorStyle: AppTextStyles.bodySmall.copyWith(
+          color: AppColors.bloodMoon,
+          fontSize: 11,
         ),
       ),
     );

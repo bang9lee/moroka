@@ -1,16 +1,15 @@
 name: moroka
 description: Ominous Whispers Tarot - A dark and mysterious tarot app
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  
- 
+
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
   package_info_plus: ^8.3.0
@@ -18,42 +17,41 @@ dependencies:
   intl: ^0.19.0
   flutter_local_notifications: ^19.2.1
   timezone: ^0.10.1
-  
+
   # UI/UX
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.0
   lottie: ^3.1.2
   shimmer: ^3.0.0
   blur: ^4.0.0
-  
+
   # Navigation
   go_router: ^14.2.0
-  
+
   # API & Networking
   dio: ^5.4.3+1
   google_generative_ai: ^0.4.3
   url_launcher: ^6.3.1
-  
+
   # Local Storage
   shared_preferences: ^2.2.3
-  
+
   # Ads
-  google_mobile_ads: ^5.1.0
-  
+  google_mobile_ads: ^6.0.0
+
   # Environment Variables
   flutter_dotenv: ^5.1.0
-  
+
   # Utilities
   uuid: ^4.4.0
-  
-  
+
   # Animations & Effects
   flutter_staggered_animations: ^1.1.1
   animated_text_kit: ^4.2.2
-  
+
   # Device Features
   vibration: ^2.0.0
-  
+
   # Firebase
   firebase_core: ^3.3.0
   firebase_analytics: ^11.2.1
@@ -61,7 +59,7 @@ dependencies:
   firebase_auth: ^5.1.4
   cloud_firestore: ^5.2.1
   google_sign_in: ^6.2.1
-  
+
   # Authentication UI
   sign_in_button: ^3.2.0
 
@@ -71,27 +69,30 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   riverpod_generator: ^2.4.0
   build_runner: ^2.4.11
-  
+
 flutter:
   uses-material-design: true
-  
+
   assets:
     - .env
     - assets/images/
     - assets/images/logo/
     - assets/images/cards/
     - assets/images/cards/major/
-    - assets/images/cards/minor/cupus/
+    - assets/images/cards/minor/cups/
     - assets/images/cards/minor/pentacles/
     - assets/images/cards/minor/swords/
     - assets/images/cards/minor/wands/
     - assets/images/backgrounds/
     - assets/images/icons/
     - assets/animations/
-    
+
   fonts:
     - family: Cinzel
       fonts:
         - asset: assets/fonts/Cinzel-Regular.ttf
         - asset: assets/fonts/Cinzel-Bold.ttf
           weight: 700
+    - family: ChosunSm
+      fonts:
+        - asset: assets/fonts/ChosunSm.ttf

@@ -28,17 +28,17 @@ class _MainScreenState extends ConsumerState<MainScreen>
   // Animations
   late Animation<double> _floatingAnimation;
   
-  // Premium Moods - 더 직관적이고 감성적인 표현
+  // Premium Moods - 이모지로 변경
   final List<Map<String, dynamic>> moods = [
-    {'name': '불안해요', 'color': AppColors.bloodMoon, 'icon': Icons.sentiment_very_dissatisfied},
-    {'name': '외로워요', 'color': AppColors.deepViolet, 'icon': Icons.favorite_border},
-    {'name': '궁금해요', 'color': AppColors.mysticPurple, 'icon': Icons.help_outline},
-    {'name': '두려워요', 'color': AppColors.shadowGray, 'icon': Icons.shield_outlined},
-    {'name': '희망적이에요', 'color': AppColors.spiritGlow, 'icon': Icons.star_outline},
-    {'name': '혼란스러워요', 'color': AppColors.omenGlow, 'icon': Icons.shuffle},
-    {'name': '간절해요', 'color': AppColors.crimsonGlow, 'icon': Icons.favorite},
-    {'name': '기대돼요', 'color': AppColors.evilGlow, 'icon': Icons.auto_awesome},
-    {'name': '신비로워요', 'color': AppColors.textMystic, 'icon': Icons.lens_blur},
+    {'name': '불안해요', 'color': AppColors.bloodMoon, 'emoji': '😟'},
+    {'name': '외로워요', 'color': AppColors.deepViolet, 'emoji': '😔'},
+    {'name': '궁금해요', 'color': AppColors.mysticPurple, 'emoji': '🤔'},
+    {'name': '두려워요', 'color': AppColors.shadowGray, 'emoji': '😨'},
+    {'name': '희망적이에요', 'color': AppColors.spiritGlow, 'emoji': '😊'},
+    {'name': '혼란스러워요', 'color': AppColors.omenGlow, 'emoji': '😕'},
+    {'name': '간절해요', 'color': AppColors.crimsonGlow, 'emoji': '🙏'},
+    {'name': '기대돼요', 'color': AppColors.evilGlow, 'emoji': '😄'},
+    {'name': '신비로워요', 'color': AppColors.textMystic, 'emoji': '🔮'},
   ];
   
   String? selectedMood;
@@ -268,7 +268,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    'assets/images/logo/logo.png',
+                    'assets/images/logo/icon.png',
                     width: isSmallScreen ? 80 : 100,
                     height: isSmallScreen ? 80 : 100,
                     fit: BoxFit.cover,
@@ -351,7 +351,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        '현재 당신의 감정을 고르세요',
+        '지금 어떤 마음이신가요?',
         style: AppTextStyles.mysticTitle.copyWith(
           fontSize: isSmallScreen ? 20 : 26,
           height: 1.3,
@@ -384,12 +384,12 @@ class _MainScreenState extends ConsumerState<MainScreen>
       return 14;
     }
     
-    // 화면 크기에 따른 아이콘 크기 조절
-    double getIconSize() {
-      if (screenSize.width < 320) return 20;
-      if (screenSize.width < 375) return 22;
-      if (isSmallScreen) return 24;
-      return 28;
+    // 화면 크기에 따른 이모지 크기 조절
+    double getEmojiSize() {
+      if (screenSize.width < 320) return 24;
+      if (screenSize.width < 375) return 28;
+      if (isSmallScreen) return 32;
+      return 36;
     }
     
     return SizedBox(
@@ -448,12 +448,11 @@ class _MainScreenState extends ConsumerState<MainScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    mood['icon'],
-                    size: getIconSize(),
-                    color: isSelected
-                        ? AppColors.ghostWhite
-                        : AppColors.fogGray,
+                  Text(
+                    mood['emoji'],
+                    style: TextStyle(
+                      fontSize: getEmojiSize(),
+                    ),
                   ),
                   SizedBox(height: screenSize.width < 375 ? 4 : 8),
                   Flexible(

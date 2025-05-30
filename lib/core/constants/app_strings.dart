@@ -30,7 +30,7 @@ class AppStrings {
   static const String dontHaveAccount = '처음이신가요? 회원가입';
   
   // Main Screen
-  static const String moodQuestion = '오늘 당신의 영혼은\n어떤 색을 띠고 있나요?';
+  static const String moodQuestion = '지금 어떤 마음이신가요?';
   static const String selectSpreadButton = '타로 배열법 선택';
   
   // Moods
@@ -46,10 +46,10 @@ class AppStrings {
   
   // Spread Selection
   static const String spreadSelectionTitle = '배열법 선택';
-  static const String spreadSelectionSubtitle = '질문의 성격에 맞는 배열법을 선택하세요';
-  static const String spreadDifficultyBeginner = '초급';
-  static const String spreadDifficultyIntermediate = '중급';
-  static const String spreadDifficultyAdvanced = '상급';
+  static const String spreadSelectionSubtitle = '현재 느끼는 감정으로 배열법을 선택하세요';
+  static const String spreadDifficultyBeginner = '1~3장';
+  static const String spreadDifficultyIntermediate = '5~7장';
+  static const String spreadDifficultyAdvanced = '10장';
   
   // Spread Names
   static const String spreadOneCard = '원 카드';

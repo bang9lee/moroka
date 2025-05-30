@@ -41,6 +41,13 @@ class AppColors {
     Color(0xFF4B0082),
   ];
   
+  // Spirit Gradient 추가
+  static const List<Color> spiritGradient = [
+    Color(0xFF00FFB9),
+    Color(0xFF00D4FF),
+    Color(0xFF00A8CC),
+  ];
+  
   // Card Colors
   static const Color cardBack = Color(0xFF1C1C1C);
   static const Color cardBorder = Color(0xFF3A3A3A);

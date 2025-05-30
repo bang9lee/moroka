@@ -457,7 +457,7 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: AppColors.evilGlow.withValues(alpha: 0.12),
+            color: AppColors.evilGlow.withAlpha(31),  // 0.12 * 255
             blurRadius: 15,
             spreadRadius: 1,
           ),

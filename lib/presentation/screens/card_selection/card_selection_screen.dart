@@ -14,6 +14,7 @@ import '../main/main_viewmodel.dart';
 import '../spread_selection/spread_selection_viewmodel.dart';
 import 'card_selection_viewmodel.dart';
 
+/// 카드 선택 화면 - 영적인 스와이프 스타일
 class CardSelectionScreen extends ConsumerStatefulWidget {
   const CardSelectionScreen({super.key});
 
@@ -23,145 +24,339 @@ class CardSelectionScreen extends ConsumerStatefulWidget {
 
 class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     with TickerProviderStateMixin {
-  late AnimationController _fanAnimationController;
-  late AnimationController _selectedCardController;
-  late Animation<double> _selectedCardAnimation;
+  // Animation Controllers
+  late final AnimationController _introController;
+  late final AnimationController _cardFlowController;
+  late final AnimationController _floatingController;
+  late final AnimationController _pulseController;
   
-  // 카드 선택 관련
-  int? _hoveredCardIndex;
-  int? _selectedCardIndex;
-  bool _showConfirmation = false;
+  // Card State
+  late final List<TarotCardModel> _shuffledCards;
+  final Set<int> _selectedCardIds = {};
+  int? _focusedCardId;
   
-  // 드래그 관련
-  double _verticalDragOffset = 0;
-  int _startIndex = 0; // 현재 보여지는 첫 번째 카드 인덱스
-  final int _visibleCardCount = 22; // 한 번에 보여지는 카드 수
-  double _dragOffset = 0;
-  double _currentOffset = 0;
+  // Swipe Card Layout - 무한 스크롤을 위해 큰 값 설정
+  late final PageController _pageController;
+  static const int _virtualInfinity = 1000000;
   
-  // 섞인 카드 리스트
-  late List<TarotCardModel> _shuffledCards;
+  double _currentPageValue = 0.0;
+  bool _hasVibrator = false;
+  
+  // Card Dimensions
+  static const double _cardWidth = 280.0;
+  static const double _cardHeight = 420.0;
+  static const double _cardAspectRatio = _cardWidth / _cardHeight;
   
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+    _shuffleCards();
+    _checkVibration();
     
-    // 카드 섞기
-    _shuffledCards = List.from(TarotCardModel.fullDeck)..shuffle();
-    
-    // 부채꼴 애니메이션
-    _fanAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
+    // PageController 초기화 - 중간값에서 시작하여 양방향 스크롤 가능
+    _pageController = PageController(
+      viewportFraction: 0.85,
+      initialPage: _virtualInfinity ~/ 2,
     );
     
-    // 선택된 카드 애니메이션
-    _selectedCardController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
+    // PageController listener
+    _pageController.addListener(() {
+      setState(() {
+        _currentPageValue = _pageController.page ?? 0.0;
+      });
+    });
     
-    _selectedCardAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _selectedCardController,
-      curve: Curves.easeOut,
-    ));
-    
-    // 애니메이션 시작
+    // Start animations
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(cardSelectionViewModelProvider.notifier).shuffleAndDeal();
-      _fanAnimationController.forward();
+      _introController.forward();
+      _cardFlowController.repeat();
     });
+  }
+  
+  void _initializeAnimations() {
+    _introController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    
+    _cardFlowController = AnimationController(
+      duration: const Duration(seconds: 20),
+      vsync: this,
+    );
+    
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
+    
+    _pulseController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+  
+  void _shuffleCards() {
+    _shuffledCards = List<TarotCardModel>.from(TarotCardModel.fullDeck)
+      ..shuffle(math.Random());
+  }
+  
+  Future<void> _checkVibration() async {
+    try {
+      _hasVibrator = await Vibration.hasVibrator() == true;
+    } catch (_) {
+      _hasVibrator = false;
+    }
   }
   
   @override
   void dispose() {
-    _fanAnimationController.dispose();
-    _selectedCardController.dispose();
+    _pageController.dispose();
+    _introController.dispose();
+    _cardFlowController.dispose();
+    _floatingController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
   
-  // 카드 위치 계산
-  Offset _calculateCardPosition(int indexInView, Size screenSize) {
-    final centerX = screenSize.width / 2;
-    final centerY = screenSize.height * 0.5;
+  Future<void> _hapticFeedback({int duration = 20}) async {
+    if (!_hasVibrator) return;
     
-    // 부채꼴 반경
-    final radius = screenSize.width * 0.35;
-    
-    // 보이는 카드들의 각도 범위
-    const visibleAngle = math.pi * 0.8; // 144도
-    const angleStep = visibleAngle / 21; // 22장을 위한 간격
-    const baseAngle = -math.pi / 2 - visibleAngle / 2;
-    
-    // 드래그 오프셋 적용
-    final angle = baseAngle + (angleStep * indexInView) + (_currentOffset * 0.01);
-    
-    final x = centerX + radius * math.cos(angle);
-    final y = centerY + radius * math.sin(angle);
-    
-    return Offset(x, y);
+    try {
+      await Vibration.vibrate(duration: duration);
+    } catch (_) {
+      // Fail silently
+    }
   }
   
-  // 카드 회전 각도 계산
-  double _calculateCardRotation(int indexInView) {
-    const visibleAngle = math.pi * 0.8;
-    const angleStep = visibleAngle / 21;
-    
-    return (angleStep * indexInView) - visibleAngle / 2 + (_currentOffset * 0.01);
+  void _onPageChanged(int index) {
+    _hapticFeedback(duration: 10);
   }
   
-  Widget _buildCard(int cardIndex, int indexInView, TarotCardModel card, Size screenSize) {
-    final position = _calculateCardPosition(indexInView, screenSize);
-    final rotation = _calculateCardRotation(indexInView);
-    final isHovered = _hoveredCardIndex == cardIndex;
-    final isSelected = _selectedCardIndex == cardIndex;
+  Future<void> _selectCard(int cardId) async {
+    if (_selectedCardIds.contains(cardId)) return;
+    
+    setState(() {
+      _focusedCardId = cardId;
+    });
+    
+    await _hapticFeedback(duration: 30);
+  }
+  
+  Future<void> _confirmCardSelection(int cardId) async {
+    final selectedSpread = ref.read(selectedSpreadProvider);
+    final requiredCards = selectedSpread?.cardCount ?? 1;
+    final currentSelections = ref.read(cardSelectionViewModelProvider).selectedCards.length;
+    
+    if (currentSelections >= requiredCards) return;
+    
+    setState(() {
+      _selectedCardIds.add(cardId);
+      _focusedCardId = null;
+    });
+    
+    final card = TarotCardModel.getCardById(cardId);
+    ref.read(cardSelectionViewModelProvider.notifier).selectCard(card);
+    
+    await _hapticFeedback(duration: 50);
+    
+    // Check if selection is complete
+    if (currentSelections + 1 >= requiredCards) {
+      await Future.delayed(const Duration(milliseconds: 800));
+      if (mounted) {
+        final selectedCardIndices = ref.read(cardSelectionViewModelProvider)
+            .selectedCards.map((c) => c.id).toList();
+        context.push('/result-chat', extra: selectedCardIndices);
+      }
+    }
+  }
+  
+  Widget _buildCard(int virtualIndex) {
+    // 실제 카드 인덱스 계산
+    final actualIndex = virtualIndex % _shuffledCards.length;
+    final card = _shuffledCards[actualIndex];
+    final isSelected = _selectedCardIds.contains(card.id);
+    
+    // 현재 페이지와의 거리 계산
+    double distance = (virtualIndex - _currentPageValue).abs();
+    double scale = 1.0 - (distance * 0.15).clamp(0.0, 0.3);
+    double opacity = 1.0 - (distance * 0.3).clamp(0.0, 0.7);
+    double rotation = (virtualIndex - _currentPageValue) * 0.05;
     
     return AnimatedBuilder(
-      animation: _fanAnimationController,
+      animation: Listenable.merge([_floatingController, _pulseController]),
       builder: (context, child) {
-        return Positioned(
-          left: position.dx - 40,
-          top: position.dy - 60,
-          child: Transform.rotate(
-            angle: rotation * _fanAnimationController.value,
-            alignment: Alignment.bottomCenter,
+        // 중앙 카드만 플로팅 효과
+        final floatOffset = distance < 0.5 && !isSelected
+            ? _floatingController.value * 10 - 5
+            : 0.0;
+        
+        return Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..translate(0.0, floatOffset)
+            ..rotateY(rotation)
+            ..scale(scale),
+          child: Opacity(
+            opacity: opacity,
             child: GestureDetector(
-              onTap: () => _selectCard(cardIndex, card),
-              child: MouseRegion(
-                onEnter: (_) => setState(() => _hoveredCardIndex = cardIndex),
-                onExit: (_) => setState(() => _hoveredCardIndex = null),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  transform: Matrix4.identity()
-                    ..translate(0.0, isHovered || isSelected ? -20.0 : 0.0)
-                    ..scale(isHovered || isSelected ? 1.05 : 1.0),
-                  child: Container(
-                    width: 80,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xFF1a1a2e),
-                      border: Border.all(
-                        color: isHovered || isSelected 
-                            ? AppColors.evilGlow 
-                            : const Color(0xFF3a3a4e),
-                        width: isHovered || isSelected ? 2 : 1,
+              onTap: distance < 0.5 ? () => _selectCard(card.id) : null,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 60),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // 신비로운 광선 효과 (중앙 카드만)
+                    if (distance < 0.5 && !isSelected)
+                      Container(
+                        width: _cardWidth,
+                        height: _cardHeight,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.mysticPurple.withAlpha(60),
+                              blurRadius: 40 + (_pulseController.value * 20),
+                              spreadRadius: 10 + (_pulseController.value * 10),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '?',
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: Color(0xFF5a5a6e),
-                          fontWeight: FontWeight.bold,
+                    
+                    // 카드 본체
+                    AspectRatio(
+                      aspectRatio: _cardAspectRatio,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: AppColors.blackOverlay80,
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              // 카드 뒷면
+                              Image.asset(
+                                'assets/images/card_back.png',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          AppColors.deepViolet,
+                                          AppColors.obsidianBlack,
+                                        ],
+                                      ),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.auto_awesome,
+                                        size: 60,
+                                        color: AppColors.mysticPurple,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              
+                              // 카드 테두리 효과
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors.spiritGlow
+                                        : distance < 0.5
+                                            ? AppColors.mysticPurple.withAlpha(150)
+                                            : AppColors.whiteOverlay20,
+                                    width: isSelected || distance < 0.5 ? 3 : 1,
+                                  ),
+                                ),
+                              ),
+                              
+                              // 선택된 카드 오버레이
+                              if (isSelected)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.spiritGlow.withAlpha(40),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Center(
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      size: 80,
+                                      color: AppColors.spiritGlow,
+                                    ).animate()
+                                        .scale(
+                                          begin: const Offset(0, 0),
+                                          end: const Offset(1, 1),
+                                          duration: 500.ms,
+                                          curve: Curves.elasticOut,
+                                        ),
+                                  ),
+                                ),
+                              
+                              // 미스틱 오버레이 (중앙 카드)
+                              if (distance < 0.5 && !isSelected)
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: RadialGradient(
+                                      center: Alignment(0, -0.5),
+                                      radius: 1.5,
+                                      colors: [
+                                        AppColors.glowOverlay20,
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                  ),
+                                ).animate(
+                                  onPlay: (controller) => controller.repeat(),
+                                ).shimmer(
+                                  duration: const Duration(seconds: 3),
+                                  color: AppColors.whiteOverlay10,
+                                ),
+                              
+                              // 카드 번호 (디버그용 - 나중에 제거)
+                              if (distance < 1)
+                                Positioned(
+                                  bottom: 16,
+                                  right: 16,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.blackOverlay60,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      '${actualIndex + 1} / 78',
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                        color: AppColors.fogGray,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -169,73 +364,6 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
         );
       },
     );
-  }
-  
-  void _selectCard(int index, TarotCardModel card) async {
-    final hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator == true) {
-      Vibration.vibrate(duration: 50);
-    }
-    
-    setState(() {
-      _selectedCardIndex = index;
-      _showConfirmation = true;
-    });
-    
-    _selectedCardController.forward();
-  }
-  
-  void _confirmSelection(TarotCardModel card) async {
-    if (_verticalDragOffset < -50) {
-      final hasVibrator = await Vibration.hasVibrator();
-      if (hasVibrator == true) {
-        Vibration.vibrate(duration: 100);
-      }
-      
-      // 카드 선택
-      ref.read(cardSelectionViewModelProvider.notifier).selectCard(card);
-      
-      // 상태 초기화
-      setState(() {
-        _selectedCardIndex = null;
-        _showConfirmation = false;
-        _verticalDragOffset = 0;
-      });
-      
-      _selectedCardController.reset();
-      
-      // 다음 화면으로 이동 체크
-      final state = ref.read(cardSelectionViewModelProvider);
-      final selectedSpread = ref.read(selectedSpreadProvider);
-      
-      if (state.selectedCards.length >= (selectedSpread?.cardCount ?? 1)) {
-        final selectedCardIndices = state.selectedCards.map((c) => c.id).toList();
-        if (mounted) {
-          context.push('/result-chat', extra: selectedCardIndices);
-        }
-      }
-    }
-  }
-  
-  void _handleHorizontalDrag(double delta) {
-    setState(() {
-      _dragOffset += delta;
-      
-      // 카드 하나의 너비만큼 드래그하면 다음/이전 카드로
-      if (_dragOffset.abs() > 50) {
-        if (_dragOffset > 0 && _startIndex > 0) {
-          // 오른쪽으로 드래그 - 이전 카드들 보기
-          _startIndex = math.max(0, _startIndex - 5);
-          _dragOffset = 0;
-        } else if (_dragOffset < 0 && _startIndex + _visibleCardCount < 78) {
-          // 왼쪽으로 드래그 - 다음 카드들 보기
-          _startIndex = math.min(78 - _visibleCardCount, _startIndex + 5);
-          _dragOffset = 0;
-        }
-      }
-      
-      _currentOffset = _dragOffset;
-    });
   }
   
   @override
@@ -247,352 +375,478 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     final remainingCards = requiredCards - state.selectedCards.length;
     
     return Scaffold(
-      body: AnimatedGradientBackground(
-        gradients: const [
-          AppColors.mysticGradient,
-          AppColors.darkGradient,
+      backgroundColor: AppColors.obsidianBlack,
+      body: Stack(
+        children: [
+          // 배경
+          AnimatedGradientBackground(
+            gradients: const [
+              AppColors.mysticGradient,
+              AppColors.darkGradient,
+            ],
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    AppColors.blackOverlay40,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          
+          // 메인 컨텐츠
+          SafeArea(
+            child: AnimatedBuilder(
+              animation: _introController,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _introController.value,
+                  child: Column(
+                    children: [
+                      _buildHeader(userMood, remainingCards),
+                      
+                      Expanded(
+                        child: state.showingCards
+                            ? _buildCardSwiper()
+                            : _buildLoadingIndicator(),
+                      ),
+                      
+                      _buildBottomInfo(state.selectedCards.length, requiredCards),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          
+          // 확인 다이얼로그
+          if (_focusedCardId != null)
+            _buildConfirmationDialog(),
+            
+          // 미스틱 파티클 효과
+          _buildMysticParticles(),
         ],
-        child: SafeArea(
-          child: GestureDetector(
-            // 좌우 드래그로 카드 넘기기
-            onHorizontalDragUpdate: (details) {
-              if (!_showConfirmation) {
-                _handleHorizontalDrag(details.delta.dx);
-              }
-            },
-            onHorizontalDragEnd: (details) {
-              setState(() {
-                _currentOffset = 0;
-                _dragOffset = 0;
-              });
-            },
-            child: Stack(
+      ),
+    );
+  }
+  
+  Widget _buildCardSwiper() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // 카드 스와이퍼 - 무한 스크롤
+        PageView.builder(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          itemCount: _virtualInfinity,
+          itemBuilder: (context, index) => _buildCard(index),
+        ),
+        
+        // 좌우 힌트 애니메이션 (처음에만)
+        if (_selectedCardIds.isEmpty)
+          Positioned(
+            bottom: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // 카드 부채꼴 - 현재 범위의 카드만 표시
-                if (state.showingCards)
-                  for (int i = 0; i < _visibleCardCount && _startIndex + i < 78; i++)
-                    _buildCard(
-                      _startIndex + i,
-                      i,
-                      _shuffledCards[_startIndex + i],
-                      MediaQuery.of(context).size,
-                    ),
-                
-                // Header
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          AppColors.shadowGray,
-                          AppColors.shadowGray.withAlpha(0),
-                        ],
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () => context.pop(),
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: AppColors.ghostWhite,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '운명의 카드를 선택하세요',
-                                style: AppTextStyles.displaySmall.copyWith(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            const SizedBox(width: 48),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        
-                        // 정보 표시
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GlassMorphismContainer(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              child: Text(
-                                '기분: $userMood',
-                                style: AppTextStyles.bodySmall,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            GlassMorphismContainer(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              child: Text(
-                                remainingCards > 0
-                                    ? '$remainingCards장 더 선택'
-                                    : '모든 카드 선택됨',
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: remainingCards > 0
-                                      ? AppColors.evilGlow
-                                      : AppColors.spiritGlow,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                const Icon(
+                  Icons.chevron_left,
+                  color: AppColors.fogGray,
+                  size: 30,
+                ).animate(
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                ).moveX(begin: 0, end: -10, duration: 1.seconds),
+                const SizedBox(width: 40),
+                Text(
+                  '좌우로 스와이프',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.fogGray,
+                  ),
+                ),
+                const SizedBox(width: 40),
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.fogGray,
+                  size: 30,
+                ).animate(
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                ).moveX(begin: 0, end: 10, duration: 1.seconds),
+              ],
+            ).animate()
+                .fadeIn(duration: 1.seconds)
+                .then(delay: 3.seconds)
+                .fadeOut(duration: 1.seconds),
+          ),
+      ],
+    );
+  }
+  
+  Widget _buildMysticParticles() {
+    return IgnorePointer(
+      child: AnimatedBuilder(
+        animation: _cardFlowController,
+        builder: (context, child) {
+          return CustomPaint(
+            size: MediaQuery.of(context).size,
+            painter: MysticParticlePainter(
+              animation: _cardFlowController.value,
+            ),
+          );
+        },
+      ),
+    );
+  }
+  
+  Widget _buildConfirmationDialog() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _focusedCardId = null;
+        });
+      },
+      child: Container(
+        color: AppColors.blackOverlay80,
+        child: Center(
+          child: GlassMorphismContainer(
+            width: 320,
+            padding: const EdgeInsets.all(24),
+            borderRadius: 20,
+            backgroundColor: AppColors.shadowGray,
+            borderColor: AppColors.mysticPurple,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 타이틀
+                Text(
+                  '운명의 선택',
+                  style: AppTextStyles.mysticTitle.copyWith(
+                    fontSize: 24,
                   ),
                 ),
                 
-                // 드래그 힌트
-                if (state.showingCards && state.selectedCards.isEmpty)
-                  Positioned(
-                    bottom: 100,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: GlassMorphismContainer(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.swipe,
-                              color: AppColors.fogGray,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '좌우로 드래그하여 더 많은 카드를 보세요',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.fogGray,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ).animate(
-                      onPlay: (controller) => controller.repeat(),
-                    ).fadeIn().then().fadeOut(
-                      delay: const Duration(seconds: 3),
-                    ),
-                  ),
+                const SizedBox(height: 20),
                 
-                // 현재 카드 범위 표시
-                Positioned(
-                  bottom: 60,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: GlassMorphismContainer(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
+                // 카드 프리뷰
+                Container(
+                  width: 160,
+                  height: 240,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.mysticPurple,
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.mysticPurple.withAlpha(100),
+                        blurRadius: 30,
+                        spreadRadius: 5,
                       ),
-                      child: Text(
-                        '${_startIndex + 1} - ${math.min(_startIndex + _visibleCardCount, 78)} / 78',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.ghostWhite,
-                        ),
-                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      'assets/images/card_back.png',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.deepViolet,
+                                AppColors.obsidianBlack,
+                              ],
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.auto_awesome,
+                            size: 50,
+                            color: AppColors.mysticPurple,
+                          ),
+                        );
+                      },
                     ),
                   ),
+                ).animate()
+                    .scale(
+                      begin: const Offset(0.8, 0.8),
+                      end: const Offset(1, 1),
+                      duration: 400.ms,
+                      curve: Curves.easeOutBack,
+                    ),
+                
+                const SizedBox(height: 24),
+                
+                Text(
+                  '이 카드가 당신을 부르고 있습니다',
+                  style: AppTextStyles.whisper.copyWith(
+                    fontSize: 16,
+                    color: AppColors.fogGray,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
                 
-                // 선택된 카드 개수 표시
-                if (state.selectedCards.isNotEmpty)
-                  Positioned(
-                    bottom: 20,
-                    left: 20,
-                    child: GlassMorphismContainer(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.style,
-                            color: AppColors.spiritGlow,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${state.selectedCards.length}장 선택됨',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.spiritGlow,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                const SizedBox(height: 32),
                 
-                // 좌우 화살표 힌트
-                if (_startIndex > 0)
-                  Positioned(
-                    left: 10,
-                    top: MediaQuery.of(context).size.height / 2,
-                    child: Icon(
-                      Icons.chevron_left,
-                      color: AppColors.fogGray.withAlpha(100),
-                      size: 40,
-                    ),
-                  ),
-                if (_startIndex + _visibleCardCount < 78)
-                  Positioned(
-                    right: 10,
-                    top: MediaQuery.of(context).size.height / 2,
-                    child: Icon(
-                      Icons.chevron_right,
-                      color: AppColors.fogGray.withAlpha(100),
-                      size: 40,
-                    ),
-                  ),
-                
-                // 카드 선택 확인 오버레이
-                if (_showConfirmation && _selectedCardIndex != null)
-                  GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      setState(() {
-                        _verticalDragOffset = math.min(0, _verticalDragOffset + details.delta.dy);
-                      });
-                    },
-                    onVerticalDragEnd: (details) {
-                      final card = _shuffledCards[_selectedCardIndex!];
-                      _confirmSelection(card);
-                    },
-                    onTap: () {
-                      setState(() {
-                        _showConfirmation = false;
-                        _selectedCardIndex = null;
-                        _verticalDragOffset = 0;
-                      });
-                      _selectedCardController.reset();
-                    },
-                    child: Container(
-                      color: AppColors.blackOverlay60,
-                      child: Center(
-                        child: AnimatedBuilder(
-                          animation: _selectedCardAnimation,
-                          builder: (context, child) {
-                            return Transform.translate(
-                              offset: Offset(0, _verticalDragOffset),
-                              child: Transform.scale(
-                                scale: _selectedCardAnimation.value,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // 선택된 카드 (여전히 뒷면)
-                                    Container(
-                                      width: 200,
-                                      height: 300,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: const Color(0xFF1a1a2e),
-                                        border: Border.all(
-                                          color: AppColors.evilGlow,
-                                          width: 3,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColors.evilGlow.withAlpha(150),
-                                            blurRadius: 30,
-                                            spreadRadius: 10,
-                                          ),
-                                        ],
-                                      ),
-                                      child: const Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '?',
-                                              style: TextStyle(
-                                                fontSize: 80,
-                                                color: Color(0xFF5a5a6e),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            SizedBox(height: 20),
-                                            Text(
-                                              '운명의 카드',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF7a7a9a),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    
-                                    const SizedBox(height: 30),
-                                    
-                                    // 안내 메시지
-                                    GlassMorphismContainer(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '이 카드를 선택하시겠습니까?',
-                                            style: AppTextStyles.mysticTitle.copyWith(
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.swipe_up,
-                                                color: AppColors.fogGray,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '위로 드래그하여 선택',
-                                                style: AppTextStyles.bodyMedium.copyWith(
-                                                  color: AppColors.fogGray,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            '탭하여 취소',
-                                            style: AppTextStyles.bodySmall.copyWith(
-                                              color: AppColors.ashGray,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                // 버튼들
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _focusedCardId = null;
+                          });
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: Text(
+                          '다시 생각하기',
+                          style: AppTextStyles.buttonMedium.copyWith(
+                            color: AppColors.fogGray,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => _confirmCardSelection(_focusedCardId!),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.mysticPurple,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          '선택하기',
+                          style: AppTextStyles.buttonMedium.copyWith(
+                            color: AppColors.ghostWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
+      ).animate().fadeIn(duration: 300.ms),
+    );
+  }
+  
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  AppColors.mysticPurple.withAlpha(60),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.mysticPurple,
+                strokeWidth: 3,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            '운명의 실이 엮이고 있습니다...',
+            style: AppTextStyles.whisper,
+          ).animate(
+            onPlay: (controller) => controller.repeat(),
+          ).fadeIn(duration: 1.seconds).then().fadeOut(duration: 1.seconds),
+        ],
       ),
     );
+  }
+  
+  Widget _buildHeader(String userMood, int remainingCards) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.arrow_back),
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.blackOverlay40,
+                  foregroundColor: AppColors.ghostWhite,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  '운명의 카드를 선택하세요',
+                  style: AppTextStyles.displaySmall.copyWith(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(width: 48),
+            ],
+          ),
+          
+          const SizedBox(height: 12),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildInfoChip(
+                icon: Icons.mood,
+                label: userMood,
+                color: AppColors.fogGray,
+              ),
+              const SizedBox(width: 12),
+              AnimatedBuilder(
+                animation: _floatingController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: remainingCards > 0 
+                        ? 1.0 + (_floatingController.value * 0.05) 
+                        : 1.0,
+                    child: _buildInfoChip(
+                      icon: remainingCards > 0 
+                          ? Icons.style 
+                          : Icons.check_circle,
+                      label: remainingCards > 0
+                          ? '$remainingCards장 더 선택'
+                          : '선택 완료!',
+                      color: remainingCards > 0
+                          ? AppColors.evilGlow
+                          : AppColors.spiritGlow,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildInfoChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return GlassMorphismContainer(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      borderRadius: 20,
+      backgroundColor: AppColors.blackOverlay40,
+      borderColor: color.withAlpha(50),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildBottomInfo(int selectedCount, int requiredCount) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          // 진행 상황 바
+          Container(
+            height: 6,
+            decoration: BoxDecoration(
+              color: AppColors.blackOverlay40,
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(3),
+              child: AnimatedFractionallySizedBox(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                widthFactor: selectedCount / requiredCount,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.mysticPurple,
+                        AppColors.evilGlow,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          
+          const SizedBox(height: 8),
+          
+          // 카운터
+          Text(
+            '$selectedCount / $requiredCount',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.ghostWhite,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 미스틱 파티클 페인터
+class MysticParticlePainter extends CustomPainter {
+  final double animation;
+  
+  MysticParticlePainter({required this.animation});
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.fill;
+    
+    // 신비로운 파티클 그리기
+    for (int i = 0; i < 20; i++) {
+      final progress = (animation + i / 20) % 1.0;
+      final y = size.height * (1 - progress);
+      final x = size.width * 0.2 + 
+          (size.width * 0.6) * math.sin(progress * math.pi * 2 + i);
+      final opacity = (1 - progress) * 0.3;
+      
+      paint.color = AppColors.mysticPurple.withAlpha((opacity * 255).toInt());
+      canvas.drawCircle(Offset(x, y), 2 + math.Random().nextDouble() * 2, paint);
+    }
+  }
+  
+  @override
+  bool shouldRepaint(MysticParticlePainter oldDelegate) {
+    return animation != oldDelegate.animation;
   }
 }

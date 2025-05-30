@@ -50,8 +50,8 @@ class TarotCardBack extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isSelected
-                ? AppColors.omenGlow.withValues(alpha: 0.6)
-                : AppColors.evilGlow.withValues(alpha: 0.4),
+                ? AppColors.omenGlow.withAlpha(153)  // 0.6 * 255
+                : AppColors.evilGlow.withAlpha(102),  // 0.4 * 255
             blurRadius: isSelected ? 30 : 20,
             spreadRadius: isSelected ? 5 : 2,
           ),
@@ -248,7 +248,7 @@ class TarotCardFront extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.evilGlow.withValues(alpha: 0.2),
+            color: AppColors.evilGlow.withAlpha(51),  // 0.2 * 255
             blurRadius: 15,
             spreadRadius: 2,
           ),
