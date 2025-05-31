@@ -203,35 +203,183 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   List<Map<String, dynamic>> _parseInterpretation(String interpretation) {
-    final parts = interpretation.split('\n\n');
     final sectionData = <Map<String, dynamic>>[];
     
-    String currentTitle = '';
+    // 섹션별로 분리
+    String? currentTitle;
     String currentContent = '';
     
-    for (final part in parts) {
-      if (part.trim().startsWith('[') && part.trim().contains(']')) {
-        if (currentTitle.isNotEmpty) {
+    final lines = interpretation.split('\n');
+    
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i].trim();
+      
+      // 빈 줄은 스킵
+      if (line.isEmpty) {
+        if (currentContent.isNotEmpty) {
+          currentContent += '\n\n';
+        }
+        continue;
+      }
+      
+      // 섹션 제목인지 확인
+      bool isSection = false;
+      String? newTitle;
+      
+      // [제목] 형식
+      if (line.startsWith('[') && line.endsWith(']')) {
+        newTitle = line.substring(1, line.length - 1);
+        isSection = true;
+      }
+      // **제목** 형식
+      else if (line.startsWith('**') && line.endsWith('**') && line.length > 4) {
+        newTitle = line.substring(2, line.length - 2);
+        isSection = true;
+      }
+      // # 제목 형식
+      else if (line.startsWith('#')) {
+        newTitle = line.replaceAll('#', '').trim();
+        isSection = true;
+      }
+      // 1. 제목: 형식
+      else if (RegExp(r'^\d+\.\s*[가-힣\s]+:').hasMatch(line)) {
+        newTitle = line.replaceAll(RegExp(r'^\d+\.\s*'), '').replaceAll(':', '').trim();
+        isSection = true;
+      }
+      
+      if (isSection && newTitle != null) {
+        // 이전 섹션 저장
+        if (currentTitle != null && currentContent.trim().isNotEmpty) {
           sectionData.add({
             'title': currentTitle,
             'content': currentContent.trim(),
           });
         }
-        currentTitle = part.trim().replaceAll('[', '').replaceAll(']', '');
+        
+        currentTitle = newTitle;
         currentContent = '';
       } else {
-        currentContent += '$part\n';
+        // 일반 내용
+        if (currentTitle != null) {
+          currentContent += '$line\n';
+        }
       }
     }
     
-    if (currentTitle.isNotEmpty) {
+    // 마지막 섹션 저장
+    if (currentTitle != null && currentContent.trim().isNotEmpty) {
       sectionData.add({
         'title': currentTitle,
         'content': currentContent.trim(),
       });
     }
     
+    // 섹션이 없으면 전체를 하나의 섹션으로
+    if (sectionData.isEmpty && interpretation.trim().isNotEmpty) {
+      // 내용 기반으로 자동 섹션 분리 시도
+      final autoSections = _autoDetectSections(interpretation);
+      if (autoSections.isNotEmpty) {
+        return autoSections;
+      }
+    }
+    
     return sectionData;
+  }
+  
+  List<Map<String, dynamic>> _autoDetectSections(String interpretation) {
+    final sections = <Map<String, dynamic>>[];
+    final lines = interpretation.split('\n');
+    
+    // 주요 키워드로 섹션 자동 감지
+    final keywordPatterns = {
+      '현재': '현재 상황',
+      '과거': '과거의 영향',
+      '미래': '앞으로의 전망',
+      '조언': '실천 조언',
+      '메시지': '카드의 메시지',
+      '의미': '전체적인 의미',
+      '해석': '종합 해석',
+    };
+    
+    String currentSection = '';
+    String currentTitle = '카드의 메시지';
+    
+    for (final line in lines) {
+      final trimmedLine = line.trim();
+      if (trimmedLine.isEmpty) continue;
+      
+      // 키워드 감지
+      bool foundKeyword = false;
+      for (final entry in keywordPatterns.entries) {
+        if (trimmedLine.contains(entry.key) && 
+            (trimmedLine.length < 50 || trimmedLine.startsWith(entry.key))) {
+          // 이전 섹션 저장
+          if (currentSection.isNotEmpty) {
+            sections.add({
+              'title': currentTitle,
+              'content': currentSection.trim(),
+            });
+          }
+          
+          currentTitle = entry.value;
+          currentSection = '$trimmedLine\n';
+          foundKeyword = true;
+          break;
+        }
+      }
+      
+      if (!foundKeyword) {
+        currentSection += '$trimmedLine\n';
+      }
+    }
+    
+    // 마지막 섹션 저장
+    if (currentSection.isNotEmpty) {
+      sections.add({
+        'title': currentTitle,
+        'content': currentSection.trim(),
+      });
+    }
+    
+    // 섹션이 너무 적으면 수동으로 분리
+    if (sections.length <= 1) {
+      return _manualSplitSections(interpretation);
+    }
+    
+    return sections;
+  }
+  
+  List<Map<String, dynamic>> _manualSplitSections(String interpretation) {
+    final sections = <Map<String, dynamic>>[];
+    final sentences = interpretation.split(RegExp(r'[.!?]\s+'));
+    
+    if (sentences.length >= 6) {
+      // 문장이 많으면 3개 섹션으로 분리
+      final third = sentences.length ~/ 3;
+      
+      sections.add({
+        'title': '현재 상황',
+        'content': '${sentences.take(third).join('. ')}.',
+      });
+      
+      sections.add({
+        'title': '카드의 메시지',
+        'content': '${sentences.skip(third).take(third).join('. ')}.',
+      });
+      
+      sections.add({
+        'title': '앞으로의 조언',
+        'content': '${sentences.skip(third * 2).join('. ')}.',
+      });
+    } else {
+      // 문장이 적으면 하나의 섹션으로
+      sections.add({
+        'title': '카드의 메시지',
+        'content': interpretation,
+      });
+    }
+    
+    return sections;
   }
 
   Widget _buildEmptyInterpretation() {
@@ -252,23 +400,82 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   Widget _buildSingleInterpretationCard(String interpretation) {
     return Container(
+      width: double.infinity,  // 가로 전체 너비 고정
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.blackOverlay40,
-        borderRadius: BorderRadius.circular(16),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.blackOverlay40,
+            AppColors.blackOverlay60,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColors.whiteOverlay10,
-          width: 1,
+          width: 1.5,
         ),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.blackOverlay40,
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
       ),
-      child: Text(
-        interpretation,
-        style: AppTextStyles.bodyMedium.copyWith(
-          height: 1.7,
-          color: AppColors.textPrimary,
-          fontSize: 15,
-          letterSpacing: -0.3,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 16,
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.mysticPurple.withAlpha(30),
+                    AppColors.mysticPurple.withAlpha(20),
+                  ],
+                ),
+                border: const Border(
+                  bottom: BorderSide(
+                    color: AppColors.whiteOverlay10,
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.auto_awesome,
+                    color: AppColors.mysticPurple,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    '카드의 메시지',
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.mysticPurple,
+                      fontSize: 17,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: _buildParagraphs(interpretation),
+            ),
+          ],
         ),
       ),
     );
@@ -291,49 +498,81 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           child: Opacity(
             opacity: animationValue,
             child: Container(
+              width: double.infinity,  // 가로 전체 너비 고정
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: AppColors.blackOverlay40,
-                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.blackOverlay40,
+                    AppColors.blackOverlay60,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: AppColors.whiteOverlay10,
-                  width: 1,
+                  width: 1.5,
                 ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.blackOverlay40,
+                    blurRadius: 20,
+                    offset: Offset(0, 10),
+                  ),
+                ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Section Title
+                    // Section Header
                     Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: Text(
-                        section['title'],
-                        style: AppTextStyles.bodyLarge.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: style['color'] as Color,
-                          fontSize: 17,
-                          letterSpacing: -0.5,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            (style['color'] as Color).withAlpha(30),
+                            (style['color'] as Color).withAlpha(20),
+                          ],
                         ),
+                        border: const Border(
+                          bottom: BorderSide(
+                            color: AppColors.whiteOverlay10,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            style['icon'] as IconData,
+                            color: style['color'] as Color,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            section['title'],
+                            style: AppTextStyles.bodyLarge.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: style['color'] as Color,
+                              fontSize: 17,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     
                     // Section Content
-                    if (section['title'] == '실천 조언' && section['content'].contains('•'))
-                      _buildBulletPoints(section['content'], style)
-                    else if (section['content'].contains('**'))
-                      _buildFormattedContent(section['content'], style)
-                    else
-                      Text(
-                        section['content'],
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          height: 1.7,
-                          color: AppColors.textPrimary,
-                          fontSize: 15,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: _buildSectionContent(section, style),
+                    ),
                   ],
                 ),
               ),
@@ -341,6 +580,51 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           ),
         );
       },
+    );
+  }
+  
+  Widget _buildSectionContent(Map<String, dynamic> section, Map<String, dynamic> style) {
+    final content = section['content'] as String;
+    
+    // 특별한 포맷팅이 필요한 섹션 처리
+    if (section['title'] == '실천 조언' && content.contains('•')) {
+      return _buildBulletPoints(content, style);
+    } else if (content.contains('**')) {
+      return _buildFormattedContent(content, style);
+    }
+    
+    // 일반 텍스트 - 문단 자연스럽게 구분
+    return _buildParagraphs(content);
+  }
+  
+  Widget _buildParagraphs(String content) {
+    // 문단 구분 개선 - 마침표 2개 이상 또는 줄바꿈으로 구분
+    final paragraphs = content.split(RegExp(r'\n\n|\. \s*(?=[가-힣A-Z])'));
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: paragraphs.map((paragraph) {
+        final trimmed = paragraph.trim();
+        if (trimmed.isEmpty) return const SizedBox.shrink();
+        
+        // 마침표가 없으면 추가
+        final text = trimmed.endsWith('.') || trimmed.endsWith('?') || trimmed.endsWith('!') 
+            ? trimmed 
+            : '$trimmed.';
+        
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Text(
+            text,
+            style: AppTextStyles.bodyMedium.copyWith(
+              height: 1.8,
+              color: AppColors.textPrimary,
+              fontSize: 15,
+              letterSpacing: -0.3,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -562,19 +846,23 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   double _getLayoutHeight(int cardCount) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isSmallScreen = screenHeight < 700;
+    
+    // 화면 크기에 따라 동적으로 높이 조정
     switch (cardCount) {
       case 1:
-        return 280;
+        return isSmallScreen ? 280 : 340;
       case 3:
-        return 320;
+        return isSmallScreen ? 320 : 380;
       case 5:
-        return 320;
+        return isSmallScreen ? 360 : 420;
       case 7:
-        return 400;
+        return isSmallScreen ? 400 : 460;
       case 10:
-        return 450;
+        return isSmallScreen ? 480 : 580;
       default:
-        return 380;
+        return isSmallScreen ? 380 : 440;
     }
   }
 
@@ -600,24 +888,33 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final spreadName = selectedSpread?.nameKr ?? '';
     final isOneCard = state.selectedCards.length == 1;
     
-    return Scaffold(
-      body: AnimatedGradientBackground(
-        gradients: const [
-          AppColors.bloodGradient,
-          AppColors.darkGradient,
-        ],
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(spreadName),
-              Expanded(
-                child: _buildContent(state, selectedSpread, isOneCard),
-              ),
-              if (_showChat && !state.showAdPrompt)
-                _buildChatInput(state),
-              if (state.showAdPrompt)
-                _buildAdPromptBar(),
-            ],
+    return PopScope(
+      canPop: false,  // 백 버튼 비활성화
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // 백 버튼 눌렀을 때 홈으로 이동
+          context.go('/main');
+        }
+      },
+      child: Scaffold(
+        body: AnimatedGradientBackground(
+          gradients: const [
+            AppColors.bloodGradient,
+            AppColors.darkGradient,
+          ],
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(spreadName),
+                Expanded(
+                  child: _buildContent(state, selectedSpread, isOneCard),
+                ),
+                if (_showChat && !state.showAdPrompt)
+                  _buildChatInput(state),
+                if (state.showAdPrompt)
+                  _buildAdPromptBar(),
+              ],
+            ),
           ),
         ),
       ),

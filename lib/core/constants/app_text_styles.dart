@@ -36,7 +36,7 @@ class AppTextStyles {
   
   // Mystical Headers
   static const TextStyle mysticTitle = TextStyle(
-    fontFamily: 'Cinzel',
+    fontFamily: 'ChosunSm',
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: AppColors.textMystic,
@@ -60,7 +60,7 @@ class AppTextStyles {
   );
   
   static const TextStyle bodyMedium = TextStyle(
-    fontFamily: 'Cinzel',
+    fontFamily: 'ChosunSm',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
@@ -68,7 +68,7 @@ class AppTextStyles {
   );
   
   static const TextStyle bodySmall = TextStyle(
-    fontFamily: 'Cinzel',
+    fontFamily: 'ChosunSm',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -77,7 +77,7 @@ class AppTextStyles {
   
   // Special Text Styles
   static const TextStyle cardName = TextStyle(
-    fontFamily: 'Cinzel',
+    fontFamily: 'ChosunSm',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.ghostWhite,
