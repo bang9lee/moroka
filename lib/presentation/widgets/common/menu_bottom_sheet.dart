@@ -1,3 +1,4 @@
+// File: lib/presentation/widgets/common/menu_bottom_sheet.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,10 +7,13 @@ import 'package:vibration/vibration.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/app_logger.dart';
 import '../../../providers.dart';
 import '../../screens/login/login_viewmodel.dart';
 import 'glass_morphism_container.dart';
 
+/// 메뉴 바텀시트
+/// 사용자 프로필과 주요 메뉴를 표시합니다.
 class MenuBottomSheet extends ConsumerWidget {
   const MenuBottomSheet({super.key});
 
@@ -64,172 +68,56 @@ class MenuBottomSheet extends ConsumerWidget {
                   children: [
                     // User Profile Section
                     currentUser.when(
-                      data: (user) => GlassMorphismContainer(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            // Profile icon
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppColors.mysticPurple,
-                                    AppColors.deepViolet,
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.mysticPurple.withAlpha(100),
-                                    blurRadius: 20,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.person,
-                                size: 40,
-                                color: AppColors.ghostWhite,
-                              ),
-                            ).animate().scale(
-                              duration: const Duration(milliseconds: 600),
-                              curve: Curves.easeOutBack,
-                            ),
-                            
-                            const SizedBox(height: 16),
-                            
-                            // User info
-                            Text(
-                              user?.displayName ?? '익명의 영혼',
-                              style: AppTextStyles.displaySmall.copyWith(
-                                fontSize: 22,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              user?.email ?? '',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.fogGray,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            // Stats
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildStat('총 리딩', '${user?.totalReadings ?? 0}'),
-                                Container(
-                                  width: 1,
-                                  height: 30,
-                                  color: AppColors.divider,
-                                ),
-                                _buildStat('가입일', _formatDate(user?.createdAt)),
-                              ],
-                            ),
-                          ],
+                      data: (user) => _UserProfileSection(user: user),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.mysticPurple,
                         ),
                       ),
-                      loading: () => const Center(child: CircularProgressIndicator()),
                       error: (_, __) => const SizedBox(),
                     ),
                     
                     const SizedBox(height: 24),
                     
                     // Menu Items
-                    _buildMenuItem(
+                    const _MenuItem(
                       icon: Icons.history,
                       title: '지난 타로 기록',
                       subtitle: '과거의 운명을 되돌아보세요',
-                      onTap: () async {
-                        await _vibrate();
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                          context.push('/history');
-                        }
-                      },
+                      route: '/history',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    _buildMenuItem(
+                    const _MenuItem(
                       icon: Icons.analytics,
                       title: '통계 & 분석',
                       subtitle: '당신의 운명 패턴을 분석합니다',
-                      onTap: () async {
-                        await _vibrate();
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                          context.push('/statistics');
-                        }
-                      },
+                      route: '/statistics',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    _buildMenuItem(
+                    const _MenuItem(
                       icon: Icons.settings,
                       title: '설정',
                       subtitle: '앱 환경을 조정하세요',
-                      onTap: () async {
-                        await _vibrate();
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                          context.push('/settings');
-                        }
-                      },
+                      route: '/settings',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    _buildMenuItem(
+                    const _MenuItem(
                       icon: Icons.info_outline,
                       title: '앱 정보',
                       subtitle: 'Moroka - 불길한 속삭임',
-                      onTap: () async {
-                        await _vibrate();
-                        if (context.mounted) {
-                          Navigator.pop(context);
-                          context.push('/about');
-                        }
-                      },
+                      route: '/about',
                     ),
                     
                     const SizedBox(height: 24),
                     
                     // Logout button
-                    GestureDetector(
-                      onTap: () async {
-                        await _vibrate();
-                        if (context.mounted) {
-                          _showLogoutDialog(context, ref);
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.bloodMoon.withAlpha(50),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: AppColors.bloodMoon,
-                            width: 1,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '로그아웃',
-                            style: AppTextStyles.buttonMedium.copyWith(
-                              color: AppColors.crimsonGlow,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ).animate().fadeIn(
-                      duration: const Duration(milliseconds: 600),
-                      delay: const Duration(milliseconds: 400),
-                    ),
+                    const _LogoutButton(),
                   ],
                 ),
               ),
@@ -239,8 +127,110 @@ class MenuBottomSheet extends ConsumerWidget {
       },
     );
   }
+}
+
+/// 사용자 프로필 섹션
+class _UserProfileSection extends StatelessWidget {
+  final dynamic user;
   
-  Widget _buildStat(String label, String value) {
+  const _UserProfileSection({required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassMorphismContainer(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          // Profile icon
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [
+                  AppColors.mysticPurple,
+                  AppColors.deepViolet,
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.mysticPurple.withAlpha(100),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.person,
+              size: 40,
+              color: AppColors.ghostWhite,
+            ),
+          ).animate().scale(
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutBack,
+          ),
+          
+          const SizedBox(height: 16),
+          
+          // User info
+          Text(
+            user?.displayName ?? '익명의 영혼',
+            style: AppTextStyles.displaySmall.copyWith(
+              fontSize: 22,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user?.email ?? '',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.fogGray,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Stats
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _StatItem(
+                label: '총 리딩',
+                value: '${user?.totalReadings ?? 0}',
+              ),
+              Container(
+                width: 1,
+                height: 30,
+                color: AppColors.divider,
+              ),
+              _StatItem(
+                label: '가입일',
+                value: _formatDate(user?.createdAt),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+  String _formatDate(DateTime? date) {
+    if (date == null) return '-';
+    return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+  }
+}
+
+/// 통계 아이템
+class _StatItem extends StatelessWidget {
+  final String label;
+  final String value;
+  
+  const _StatItem({
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -260,15 +250,32 @@ class MenuBottomSheet extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// 메뉴 아이템
+class _MenuItem extends ConsumerWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final String route;
   
-  Widget _buildMenuItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
+  const _MenuItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.route,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () async {
+        await _vibrate();
+        if (context.mounted) {
+          Navigator.pop(context);
+          context.push(route);
+        }
+      },
       child: GlassMorphismContainer(
         padding: const EdgeInsets.all(16),
         backgroundColor: AppColors.blackOverlay20,
@@ -319,22 +326,72 @@ class MenuBottomSheet extends ConsumerWidget {
     ).animate().fadeIn().slideX(begin: 0.1, end: 0);
   }
   
-  String _formatDate(DateTime? date) {
-    if (date == null) return '-';
-    return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+  Future<void> _vibrate() async {
+    try {
+      final hasVibrator = await Vibration.hasVibrator();
+      if (hasVibrator == true) {
+        Vibration.vibrate(duration: 50);
+      }
+    } catch (_) {
+      // Fail silently
+    }
+  }
+}
+
+/// 로그아웃 버튼
+class _LogoutButton extends ConsumerWidget {
+  const _LogoutButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () async {
+        await _vibrate();
+        if (context.mounted) {
+          _showLogoutDialog(context, ref);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.bloodMoon.withAlpha(50),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.bloodMoon,
+            width: 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            '로그아웃',
+            style: AppTextStyles.buttonMedium.copyWith(
+              color: AppColors.crimsonGlow,
+            ),
+          ),
+        ),
+      ),
+    ).animate().fadeIn(
+      duration: const Duration(milliseconds: 600),
+      delay: const Duration(milliseconds: 400),
+    );
   }
   
   Future<void> _vibrate() async {
-    final hasVibrator = await Vibration.hasVibrator();
-    if (hasVibrator == true) {
-      Vibration.vibrate(duration: 50);
+    try {
+      final hasVibrator = await Vibration.hasVibrator();
+      if (hasVibrator == true) {
+        Vibration.vibrate(duration: 50);
+      }
+    } catch (_) {
+      // Fail silently
     }
   }
   
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
         backgroundColor: AppColors.shadowGray,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -352,7 +409,7 @@ class MenuBottomSheet extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               '머무르기',
               style: AppTextStyles.buttonMedium.copyWith(
@@ -362,11 +419,65 @@ class MenuBottomSheet extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
-              await ref.read(loginViewModelProvider.notifier).signOut();
-              if (context.mounted) {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                context.go('/login');
+              AppLogger.debug('Starting logout process');
+              
+              // 로딩 표시
+              Navigator.pop(dialogContext);
+              
+              // 로딩 다이얼로그 표시
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const PopScope(
+                  canPop: false,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.mysticPurple,
+                    ),
+                  ),
+                ),
+              );
+              
+              try {
+                // 광고 서비스 정리
+                AppLogger.debug('Cleaning up ads');
+                ref.read(adRepositoryProvider).cleanUp();
+                
+                // 채팅 카운트 초기화
+                AppLogger.debug('Resetting chat count');
+                ref.read(chatTurnCountProvider.notifier).state = 0;
+                
+                // 로그아웃 수행
+                AppLogger.debug('Performing sign out');
+                await ref.read(loginViewModelProvider.notifier).signOut();
+                
+                // 약간의 딜레이 (리소스 정리 완료 대기)
+                await Future.delayed(const Duration(milliseconds: 500));
+                
+                if (context.mounted) {
+                  AppLogger.debug('Navigating to login page');
+                  
+                  // 모든 다이얼로그와 페이지 닫기
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  
+                  // 로그인 페이지로 이동
+                  context.go('/login');
+                }
+              } catch (e, stack) {
+                AppLogger.error('Logout error', e, stack);
+                
+                if (context.mounted) {
+                  // 로딩 다이얼로그 닫기
+                  Navigator.pop(context);
+                  
+                  // 에러 표시
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('로그아웃 중 오류가 발생했습니다'),
+                      backgroundColor: AppColors.bloodMoon,
+                    ),
+                  );
+                }
               }
             },
             child: Text(

@@ -1,1 +1,41 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"moroka-32704","appId":"1:692624774743:android:4e1e47d1ffb7ee63603512","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"moroka-32704","configurations":{"android":"1:692624774743:android:4e1e47d1ffb7ee63603512","ios":"1:692624774743:ios:7e05f96741e7912d603512","macos":"1:692624774743:ios:7e05f96741e7912d603512","web":"1:692624774743:web:ae26a04c002357f7603512","windows":"1:692624774743:web:5dcd43698037cfbb603512"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "moroka-32704",
+          "appId": "1:692624774743:android:4e1e47d1ffb7ee63603512",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "moroka-32704",
+          "configurations": {
+            "android": "1:692624774743:android:4e1e47d1ffb7ee63603512",
+            "ios": "1:692624774743:ios:7e05f96741e7912d603512",
+            "macos": "1:692624774743:ios:7e05f96741e7912d603512",
+            "web": "1:692624774743:web:ae26a04c002357f7603512",
+            "windows": "1:692624774743:web:5dcd43698037cfbb603512"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

@@ -1,8 +1,11 @@
+// File: lib/presentation/screens/login/login_viewmodel.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../../core/utils/app_logger.dart';
 import '../../../data/services/auth_service.dart';
 import '../../../data/models/user_model.dart';
-import '../../../core/utils/app_logger.dart';
+import '../../../providers.dart';
 
 /// AuthService Provider
 final authServiceProvider = Provider<AuthService>((ref) {
@@ -12,14 +15,15 @@ final authServiceProvider = Provider<AuthService>((ref) {
 /// LoginViewModel Provider
 final loginViewModelProvider = StateNotifierProvider<LoginViewModel, LoginState>((ref) {
   final authService = ref.watch(authServiceProvider);
-  return LoginViewModel(authService);
+  return LoginViewModel(authService, ref);
 });
 
 /// 로그인 화면의 상태 관리를 담당하는 ViewModel
 class LoginViewModel extends StateNotifier<LoginState> {
   final AuthService _authService;
+  final Ref _ref;
 
-  LoginViewModel(this._authService) : super(LoginState()) {
+  LoginViewModel(this._authService, this._ref) : super(LoginState()) {
     // 초기화 시 현재 로그인 상태 확인
     _checkCurrentUser();
   }
@@ -32,7 +36,8 @@ class LoginViewModel extends StateNotifier<LoginState> {
         AppLogger.debug('Current user found: ${firebaseUser.uid}');
         
         // 이메일 인증 확인
-        if (!firebaseUser.emailVerified && firebaseUser.providerData.any((info) => info.providerId == 'password')) {
+        if (!firebaseUser.emailVerified && 
+            firebaseUser.providerData.any((info) => info.providerId == 'password')) {
           AppLogger.debug('User email not verified');
           state = state.copyWith(needsEmailVerification: true);
           return;
@@ -188,19 +193,42 @@ class LoginViewModel extends StateNotifier<LoginState> {
     state = state.copyWith(isLoading: true, error: null);
     
     try {
-      AppLogger.debug('Attempting sign out');
+      AppLogger.debug('=== LOGOUT PROCESS START ===');
       
+      // 1. 광고 서비스 정리
+      try {
+        AppLogger.debug('Step 1: Cleaning up ads');
+        _ref.read(adRepositoryProvider).cleanUp();
+        AppLogger.debug('Ads cleanup completed');
+      } catch (e) {
+        AppLogger.error('Error during ad cleanup (continuing)', e);
+        // 광고 정리 실패해도 로그아웃 계속 진행
+      }
+      
+      // 2. 채팅 카운트 초기화
+      try {
+        AppLogger.debug('Step 2: Resetting chat count');
+        _ref.read(chatTurnCountProvider.notifier).state = 0;
+        AppLogger.debug('Chat count reset completed');
+      } catch (e) {
+        AppLogger.error('Error resetting chat count (continuing)', e);
+      }
+      
+      // 3. Firebase 로그아웃
+      AppLogger.debug('Step 3: Signing out from Firebase');
       await _authService.signOut();
+      AppLogger.debug('Firebase sign out completed');
       
-      AppLogger.debug('Sign out successful');
-      
-      // 상태 초기화
+      // 4. 상태 초기화
+      AppLogger.debug('Step 4: Resetting state');
       state = LoginState();
-    } catch (e, stack) {
-      AppLogger.error('Error during sign out', e, stack);
       
-      state = state.copyWith(
-        isLoading: false,
+      AppLogger.debug('=== LOGOUT PROCESS COMPLETED ===');
+    } catch (e, stack) {
+      AppLogger.error('=== LOGOUT ERROR ===', e, stack);
+      
+      // 에러가 있어도 상태는 초기화
+      state = LoginState(
         error: '로그아웃 중 오류가 발생했습니다.',
       );
     }

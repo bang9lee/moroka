@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:vibration/vibration.dart';
+import 'dart:math' as math;
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
+/// 온보딩 스크린 - 다크 고딕 테마
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -16,286 +19,507 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     with TickerProviderStateMixin {
-  final PageController _pageController = PageController();
+  // Controllers
+  late final PageController _pageController;
+  late final AnimationController _backgroundAnimationController;
+  late final AnimationController _particleAnimationController;
+  late final AnimationController _pulseAnimationController;
+  late final AnimationController _transitionAnimationController;
+  
+  // State
   int _currentPage = 0;
-  late AnimationController _animationController;
-
-  final List<OnboardingPage> _pages = [
-    OnboardingPage(
-      title: '운명의 문이 열립니다',
-      description: '고대의 지혜와 현대의 기술이 만나\n당신의 미래를 속삭입니다',
-      icon: Icons.auto_fix_high,
-      gradient: AppColors.mysticGradient,
-    ),
-    OnboardingPage(
-      title: '어둠 속의 진실',
-      description: '타로 카드는 거짓말을 하지 않습니다\n당신이 감당할 수 있는 진실만을 보여줄 뿐',
-      icon: Icons.remove_red_eye,
-      gradient: AppColors.bloodGradient,
-    ),
-    OnboardingPage(
-      title: 'AI가 읽는 운명',
-      description: '인공지능이 당신의 카드를 해석하고\n깊은 대화를 통해 길을 안내합니다',
-      icon: Icons.psychology,
-      gradient: AppColors.darkGradient,
-    ),
-    OnboardingPage(
-      title: '준비되셨나요?',
-      description: '모든 선택에는 대가가 따릅니다\n당신의 운명을 마주할 준비가 되셨다면...',
-      icon: Icons.warning_amber,
-      gradient: [AppColors.crimsonGlow, AppColors.bloodMoon, AppColors.obsidianBlack],
-    ),
-  ];
-
+  bool _isTransitioning = false;
+  bool _hasVibrator = false;
+  
+  // Constants
+  static const Duration _pageTransitionDuration = Duration(milliseconds: 600);
+  static const Duration _animationDuration = Duration(milliseconds: 1000);
+  
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+    _initializeControllers();
+    _checkVibrationSupport();
+    _startAnimations();
+  }
+  
+  void _initializeControllers() {
+    _pageController = PageController();
+    
+    _backgroundAnimationController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
+    );
+    
+    _particleAnimationController = AnimationController(
+      duration: const Duration(seconds: 20),
+      vsync: this,
+    );
+    
+    _pulseAnimationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    
+    _transitionAnimationController = AnimationController(
+      duration: _animationDuration,
       vsync: this,
     );
   }
-
+  
+  Future<void> _checkVibrationSupport() async {
+    try {
+      _hasVibrator = await Vibration.hasVibrator() == true;
+    } catch (_) {
+      _hasVibrator = false;
+    }
+  }
+  
+  void _startAnimations() {
+    _backgroundAnimationController.repeat();
+    _particleAnimationController.repeat();
+    _pulseAnimationController.repeat(reverse: true);
+    _transitionAnimationController.forward();
+  }
+  
   @override
   void dispose() {
     _pageController.dispose();
-    _animationController.dispose();
+    _backgroundAnimationController.dispose();
+    _particleAnimationController.dispose();
+    _pulseAnimationController.dispose();
+    _transitionAnimationController.dispose();
     super.dispose();
   }
-
-  Future<void> _nextPage() async {
-    if (_currentPage < _pages.length - 1) {
-      final hasVibrator = await Vibration.hasVibrator();
-      if (hasVibrator == true) {
-        Vibration.vibrate(duration: 50);
-      }
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+  
+  // Haptic feedback
+  Future<void> _triggerHaptic({int duration = 30}) async {
+    if (!_hasVibrator) return;
+    
+    try {
+      await Vibration.vibrate(duration: duration);
+    } catch (_) {
+      // Fail silently
+    }
+  }
+  
+  // Navigation
+  Future<void> _navigateToNext() async {
+    if (_isTransitioning) return;
+    
+    setState(() => _isTransitioning = true);
+    await _triggerHaptic(duration: 40);
+    
+    if (_currentPage < OnboardingData.pages.length - 1) {
+      await _pageController.nextPage(
+        duration: _pageTransitionDuration,
+        curve: Curves.easeInOutCubic,
       );
     } else {
-      // Navigate to login
+      // Final page - navigate to login
+      await _triggerHaptic(duration: 60);
       if (mounted) {
         context.go('/login');
       }
     }
+    
+    setState(() => _isTransitioning = false);
   }
-
-  Future<void> _previousPage() async {
-    if (_currentPage > 0) {
-      final hasVibrator = await Vibration.hasVibrator();
-      if (hasVibrator == true) {
-        Vibration.vibrate(duration: 30);
-      }
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+  
+  Future<void> _navigateToPrevious() async {
+    if (_isTransitioning || _currentPage == 0) return;
+    
+    setState(() => _isTransitioning = true);
+    await _triggerHaptic();
+    
+    await _pageController.previousPage(
+      duration: _pageTransitionDuration,
+      curve: Curves.easeInOutCubic,
+    );
+    
+    setState(() => _isTransitioning = false);
+  }
+  
+  Future<void> _skipOnboarding() async {
+    await _triggerHaptic(duration: 20);
+    if (mounted) {
+      context.go('/login');
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: _pages[_currentPage].gradient,
-          ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // Animated background
+            _buildAnimatedBackground(),
+            
+            // Mystical particles
+            _buildParticleLayer(),
+            
+            // Content
+            _buildContent(),
+            
+            // Overlay gradient for depth
+            _buildOverlayGradient(),
+          ],
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Skip button
-              Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: () {
-                    if (mounted) {
-                      context.go('/login');
-                    }
-                  },
-                  child: Text(
-                    'SKIP',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.fogGray,
-                    ),
-                  ),
-                ).animate().fadeIn(duration: const Duration(milliseconds: 600)),
+      ),
+    );
+  }
+  
+  Widget _buildAnimatedBackground() {
+    return AnimatedBuilder(
+      animation: _backgroundAnimationController,
+      builder: (context, child) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(
+                math.sin(_backgroundAnimationController.value * 2 * math.pi) * 0.3,
+                math.cos(_backgroundAnimationController.value * 2 * math.pi) * 0.3 - 0.5,
               ),
-              
-              // Page content
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                    _animationController.forward(from: 0);
-                  },
-                  itemCount: _pages.length,
-                  itemBuilder: (context, index) {
-                    return _buildPage(_pages[index]);
-                  },
-                ),
+              end: Alignment(
+                math.sin(_backgroundAnimationController.value * 2 * math.pi + math.pi) * 0.3,
+                math.cos(_backgroundAnimationController.value * 2 * math.pi + math.pi) * 0.3 + 0.5,
               ),
-              
-              // Bottom navigation
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  children: [
-                    // Page indicators
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        _pages.length,
-                        (index) => _buildPageIndicator(index == _currentPage),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    
-                    // Navigation buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Back button
-                        GestureDetector(
-                          onTap: _currentPage > 0 ? _previousPage : null,
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 300),
-                            opacity: _currentPage > 0 ? 1.0 : 0.0,
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppColors.whiteOverlay30,
-                                  width: 2,
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.arrow_back,
-                                color: AppColors.ghostWhite,
-                              ),
-                            ),
-                          ),
-                        ),
-                        
-                        // Next/Start button
-                        GestureDetector(
-                          onTap: _nextPage,
-                          child: Container(
-                            width: _currentPage == _pages.length - 1 ? 200 : 120,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.crimsonGlow,
-                                  AppColors.bloodMoon,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                              border: Border.all(
-                                color: AppColors.evilGlow,
-                                width: 2,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.evilGlow.withAlpha(100),
-                                  blurRadius: 20,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                _currentPage == _pages.length - 1 ? '시작하기' : 'NEXT',
-                                style: AppTextStyles.buttonLarge.copyWith(
-                                  color: AppColors.ghostWhite,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              colors: const [
+                AppColors.obsidianBlack,
+                AppColors.shadowGray,
+                AppColors.deepViolet,
+                AppColors.obsidianBlack,
+              ],
+              stops: const [0.0, 0.3, 0.7, 1.0],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildParticleLayer() {
+    return AnimatedBuilder(
+      animation: _particleAnimationController,
+      builder: (context, child) {
+        return CustomPaint(
+          size: MediaQuery.of(context).size,
+          painter: MysticalParticlePainter(
+            animation: _particleAnimationController.value,
+            particleCount: 50,
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildOverlayGradient() {
+    return IgnorePointer(
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient:           RadialGradient(
+            center: Alignment(0, -0.3),
+            radius: 1.5,
+            colors: [
+              Colors.transparent,
+              AppColors.blackOverlay20,
+              AppColors.blackOverlay40,
             ],
           ),
         ),
       ),
     );
   }
-
-  Widget _buildPage(OnboardingPage page) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+  
+  Widget _buildContent() {
+    return SafeArea(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon with glow effect
-          Container(
-            width: 160,
-            height: 160,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [
-                  AppColors.mysticPurple,
-                  AppColors.deepViolet,
-                ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.evilGlow.withAlpha(100),
-                  blurRadius: 50,
-                  spreadRadius: 20,
-                ),
-              ],
-            ),
-            child: Icon(
-              page.icon,
-              size: 80,
-              color: AppColors.ghostWhite,
+          // Header with skip button
+          _buildHeader(),
+          
+          // Page content
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() => _currentPage = index);
+                _transitionAnimationController.forward(from: 0);
+              },
+              itemCount: OnboardingData.pages.length,
+              itemBuilder: (context, index) {
+                return _OnboardingPageContent(
+                  page: OnboardingData.pages[index],
+                  animation: _transitionAnimationController,
+                  pulseAnimation: _pulseAnimationController,
+                );
+              },
             ),
           ),
           
-          const SizedBox(height: 48),
-          
-          // Title
-          Text(
-            page.title,
-            style: AppTextStyles.mysticTitle.copyWith(
-              fontSize: 36,
-              color: AppColors.ghostWhite,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          
-          const SizedBox(height: 24),
-          
-          // Description
-          Text(
-            page.description,
-            style: AppTextStyles.bodyLarge.copyWith(
-              color: AppColors.fogGray,
-              height: 1.8,
-            ),
-            textAlign: TextAlign.center,
-          ),
+          // Bottom navigation
+          _buildBottomNavigation(),
         ],
       ),
     );
   }
+  
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            onPressed: _skipOnboarding,
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  'SKIP',
+                  style: AppTextStyles.buttonMedium.copyWith(
+                    color: AppColors.fogGray,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: AppColors.fogGray,
+                ),
+              ],
+            ),
+          ).animate()
+              .fadeIn(delay: const Duration(milliseconds: 500))
+              .slideX(begin: 0.1, end: 0),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildBottomNavigation() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(32, 20, 32, 32),
+      child: Column(
+        children: [
+          // Page indicators
+          _buildPageIndicators(),
+          
+          const SizedBox(height: 40),
+          
+          // Navigation buttons
+          _buildNavigationButtons(),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildPageIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        OnboardingData.pages.length,
+        (index) => _PageIndicator(
+          isActive: index == _currentPage,
+          index: index,
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildNavigationButtons() {
+    final isLastPage = _currentPage == OnboardingData.pages.length - 1;
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Back button
+        _NavigationButton(
+          onTap: _currentPage > 0 ? _navigateToPrevious : null,
+          icon: Icons.arrow_back,
+          isVisible: _currentPage > 0,
+        ),
+        
+        // Next/Start button
+        _PrimaryNavigationButton(
+          onTap: _navigateToNext,
+          text: isLastPage ? '운명의 문을 열다' : 'NEXT',
+          isExpanded: isLastPage,
+          pulseAnimation: isLastPage ? _pulseAnimationController : null,
+        ),
+      ],
+    );
+  }
+}
 
-  Widget _buildPageIndicator(bool isActive) {
+/// 온보딩 페이지 컨텐츠
+class _OnboardingPageContent extends StatelessWidget {
+  final OnboardingPageData page;
+  final Animation<double> animation;
+  final AnimationController pulseAnimation;
+  
+  const _OnboardingPageContent({
+    required this.page,
+    required this.animation,
+    required this.pulseAnimation,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        final opacity = Curves.easeIn.transform(animation.value);
+        final scale = 0.8 + (0.2 * Curves.elasticOut.transform(animation.value));
+        
+        return Opacity(
+          opacity: opacity,
+          child: Transform.scale(
+            scale: scale,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Icon with effects
+                  _buildIconSection(),
+                  
+                  const SizedBox(height: 56),
+                  
+                  // Title
+                  _buildTitle(),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // Description
+                  _buildDescription(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildIconSection() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Glow effect
+        AnimatedBuilder(
+          animation: pulseAnimation,
+          builder: (context, child) {
+            return Container(
+              width: 200 + (pulseAnimation.value * 20),
+              height: 200 + (pulseAnimation.value * 20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    page.glowColor.withAlpha((100 * pulseAnimation.value).toInt()),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+        
+        // Icon container
+        Container(
+          width: 160,
+          height: 160,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                page.iconGradient.first,
+                page.iconGradient.last,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: page.glowColor.withAlpha(60),
+                blurRadius: 40,
+                spreadRadius: 10,
+              ),
+            ],
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Mystical pattern
+              CustomPaint(
+                size: const Size(160, 160),
+                painter: MysticalSymbolPainter(
+                  color: AppColors.whiteOverlay10,
+                ),
+              ),
+              
+              // Icon
+              Icon(
+                page.icon,
+                size: 80,
+                color: AppColors.ghostWhite,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildTitle() {
+    return Text(
+      page.title,
+      style: AppTextStyles.mysticTitle.copyWith(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: AppColors.ghostWhite,
+        letterSpacing: -0.5,
+        height: 1.2,
+      ),
+      textAlign: TextAlign.center,
+    ).animate()
+        .fadeIn(delay: const Duration(milliseconds: 200))
+        .slideY(begin: 0.1, end: 0);
+  }
+  
+  Widget _buildDescription() {
+    return Text(
+      page.description,
+      style: AppTextStyles.bodyLarge.copyWith(
+        color: AppColors.fogGray,
+        height: 1.6,
+        fontSize: 16,
+      ),
+      textAlign: TextAlign.center,
+    ).animate()
+        .fadeIn(delay: const Duration(milliseconds: 400))
+        .slideY(begin: 0.1, end: 0);
+  }
+}
+
+/// 페이지 인디케이터
+class _PageIndicator extends StatelessWidget {
+  final bool isActive;
+  final int index;
+  
+  const _PageIndicator({
+    required this.isActive,
+    required this.index,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -303,31 +527,286 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       width: isActive ? 32 : 8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        color: isActive ? AppColors.evilGlow : AppColors.whiteOverlay30,
+        color: isActive ? AppColors.crimsonGlow : AppColors.whiteOverlay30,
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: AppColors.evilGlow.withAlpha(100),
+                  color: AppColors.crimsonGlow.withAlpha(100),
                   blurRadius: 10,
                   spreadRadius: 2,
                 ),
               ]
             : null,
       ),
+    ).animate(delay: Duration(milliseconds: index * 100))
+        .fadeIn()
+        .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1));
+  }
+}
+
+/// 네비게이션 버튼
+class _NavigationButton extends StatelessWidget {
+  final VoidCallback? onTap;
+  final IconData icon;
+  final bool isVisible;
+  
+  const _NavigationButton({
+    required this.onTap,
+    required this.icon,
+    required this.isVisible,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: isVisible ? 1.0 : 0.0,
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 300),
+        scale: isVisible ? 1.0 : 0.8,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.whiteOverlay30,
+                  width: 2,
+                ),
+              ),
+              child: Icon(
+                icon,
+                color: AppColors.ghostWhite,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class OnboardingPage {
+/// 주요 네비게이션 버튼
+class _PrimaryNavigationButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String text;
+  final bool isExpanded;
+  final AnimationController? pulseAnimation;
+  
+  const _PrimaryNavigationButton({
+    required this.onTap,
+    required this.text,
+    required this.isExpanded,
+    this.pulseAnimation,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    final width = isExpanded ? 200.0 : 120.0;
+    
+    return AnimatedBuilder(
+      animation: pulseAnimation ?? const AlwaysStoppedAnimation(0),
+      builder: (context, child) {
+        final glowIntensity = pulseAnimation?.value ?? 0;
+        
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              width: width,
+              height: 60,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    AppColors.crimsonGlow,
+                    AppColors.bloodMoon,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: isExpanded 
+                      ? AppColors.spiritGlow 
+                      : AppColors.evilGlow,
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.evilGlow.withAlpha(
+                      (100 + (glowIntensity * 50)).toInt(),
+                    ),
+                    blurRadius: 20 + (glowIntensity * 10),
+                    spreadRadius: 2 + (glowIntensity * 3),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  text,
+                  style: AppTextStyles.buttonLarge.copyWith(
+                    color: AppColors.ghostWhite,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: isExpanded ? 0.5 : 1.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// 신비로운 파티클 페인터
+class MysticalParticlePainter extends CustomPainter {
+  final double animation;
+  final int particleCount;
+  
+  MysticalParticlePainter({
+    required this.animation,
+    required this.particleCount,
+  });
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.fill
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    
+    for (int i = 0; i < particleCount; i++) {
+      final seed = i * 0.1;
+      final progress = (animation + seed) % 1.0;
+      
+      // Create floating path
+      final x = size.width * (0.1 + 0.8 * _pseudoRandom(seed));
+      final y = size.height * (1 - progress);
+      
+      // Sine wave movement
+      final waveX = x + math.sin(progress * math.pi * 4 + seed) * 30;
+      
+      // Particle properties
+      final opacity = math.sin(progress * math.pi) * 0.3;
+      final radius = 1 + _pseudoRandom(seed + 0.5) * 2;
+      
+      paint.color = AppColors.mysticPurple.withAlpha((opacity * 255).toInt());
+      canvas.drawCircle(Offset(waveX, y), radius, paint);
+    }
+  }
+  
+  double _pseudoRandom(double seed) {
+    return (math.sin(seed * 12.9898) * 43758.5453) % 1;
+  }
+  
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+/// 신비로운 심볼 페인터
+class MysticalSymbolPainter extends CustomPainter {
+  final Color color;
+  
+  MysticalSymbolPainter({required this.color});
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.5;
+    
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+    
+    // Outer circle
+    canvas.drawCircle(center, radius * 0.9, paint);
+    
+    // Inner circles
+    canvas.drawCircle(center, radius * 0.6, paint);
+    canvas.drawCircle(center, radius * 0.3, paint);
+    
+    // Mystical star pattern
+    _drawMysticalStar(canvas, center, radius * 0.7, paint);
+  }
+  
+  void _drawMysticalStar(Canvas canvas, Offset center, double radius, Paint paint) {
+    final path = Path();
+    const points = 8;
+    
+    for (int i = 0; i < points * 2; i++) {
+      final angle = (i * math.pi / points) - (math.pi / 2);
+      final r = i.isEven ? radius : radius * 0.5;
+      final x = center.dx + r * math.cos(angle);
+      final y = center.dy + r * math.sin(angle);
+      
+      if (i == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+    path.close();
+    
+    canvas.drawPath(path, paint);
+  }
+  
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// 온보딩 데이터
+class OnboardingData {
+  static final List<OnboardingPageData> pages = [
+    const OnboardingPageData(
+      title: '운명의 문이 열립니다',
+      description: '고대의 지혜와 현대의 기술이 만나\n당신의 미래를 속삭입니다',
+      icon: Icons.auto_fix_high,
+      iconGradient: [AppColors.mysticPurple, AppColors.deepViolet],
+      glowColor: AppColors.mysticPurple,
+    ),
+    const OnboardingPageData(
+      title: '어둠 속의 진실',
+      description: '타로 카드는 거짓말을 하지 않습니다\n당신이 감당할 수 있는 진실만을 보여줄 뿐',
+      icon: Icons.remove_red_eye,
+      iconGradient: [AppColors.crimsonGlow, AppColors.bloodMoon],
+      glowColor: AppColors.crimsonGlow,
+    ),
+    const OnboardingPageData(
+      title: 'AI가 읽는 운명',
+      description: '인공지능이 당신의 카드를 해석하고\n깊은 대화를 통해 길을 안내합니다',
+      icon: Icons.psychology_alt,
+      iconGradient: [AppColors.evilGlow, AppColors.omenGlow],
+      glowColor: AppColors.evilGlow,
+    ),
+    const OnboardingPageData(
+      title: '준비되셨나요?',
+      description: '모든 선택에는 대가가 따릅니다\n당신의 운명을 마주할 준비가 되셨다면...',
+      icon: Icons.warning_amber_rounded,
+      iconGradient: [AppColors.spiritGlow, AppColors.mysticPurple],
+      glowColor: AppColors.spiritGlow,
+    ),
+  ];
+}
+
+/// 온보딩 페이지 데이터
+class OnboardingPageData {
   final String title;
   final String description;
   final IconData icon;
-  final List<Color> gradient;
-
-  OnboardingPage({
+  final List<Color> iconGradient;
+  final Color glowColor;
+  
+  const OnboardingPageData({
     required this.title,
     required this.description,
     required this.icon,
-    required this.gradient,
+    required this.iconGradient,
+    required this.glowColor,
   });
 }

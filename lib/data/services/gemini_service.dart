@@ -1,350 +1,145 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import '../models/chat_message_model.dart';
 import '../models/tarot_card_model.dart';
 import '../models/tarot_spread_model.dart';
 import '../../core/utils/app_logger.dart';
 
+/// Gemini AI 서비스 - Firebase Functions를 통한 안전한 API 호출
 class GeminiService {
-  GenerativeModel? _model;
+  late final FirebaseFunctions _functions;
+  
+  // 타임아웃 설정 (30초)
+  static const Duration _timeout = Duration(seconds: 30);
   
   GeminiService() {
-    _initializeModel();
+    _initializeFunctions();
   }
   
-  void _initializeModel() {
+  /// Firebase Functions 초기화
+  void _initializeFunctions() {
+  try {
+    _functions = FirebaseFunctions.instance;  // 리전 설정 제거
+    AppLogger.debug("Firebase Functions initialized");
+  } catch (e) {
+    AppLogger.error("Failed to initialize Firebase Functions", e);
+    rethrow;
+  }
+}
+  
+  /// Firebase Function 호출 헬퍼 메서드
+  Future<T> _callFunction<T>(String functionName, Map<String, dynamic> data) async {
     try {
-      final apiKey = dotenv.env['GEMINI_API_KEY'];
-      if (apiKey == null || apiKey.isEmpty) {
-        AppLogger.error("GEMINI_API_KEY not found in .env file");
-        throw Exception('GEMINI_API_KEY not found');
-      }
-      
-      AppLogger.debug("Initializing Gemini with API key: ${apiKey.substring(0, 10)}...");
-      
-      _model = GenerativeModel(
-        model: 'gemini-1.5-flash',
-        apiKey: apiKey,
-        generationConfig: GenerationConfig(
-          temperature: 0.9,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 2048,
-        ),
+      final callable = _functions.httpsCallable(
+        functionName,
+        options: HttpsCallableOptions(timeout: _timeout),
       );
       
-      AppLogger.debug("Gemini model initialized successfully");
+      final result = await callable.call(data);
+      return result.data as T;
+    } on FirebaseFunctionsException catch (e) {
+      AppLogger.error("Firebase Functions error: ${e.code} - ${e.message}");
+      
+      // 에러 타입별 처리
+      switch (e.code) {
+        case 'unauthenticated':
+          throw Exception('로그인이 필요합니다.');
+        case 'resource-exhausted':
+          throw Exception('오늘의 무료 사용량을 초과했습니다.');
+        case 'deadline-exceeded':
+          throw Exception('요청 시간이 초과되었습니다. 다시 시도해주세요.');
+        default:
+          throw Exception('AI 서비스 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
     } catch (e) {
-      AppLogger.error("Failed to initialize Gemini model", e);
-      rethrow;
+      AppLogger.error("Unexpected error calling function: $functionName", e);
+      throw Exception('네트워크 오류가 발생했습니다.');
     }
   }
   
-  // 단일 카드 해석 (원카드용) - 짧고 핵심적으로
+  /// 단일 카드 해석 (원카드용)
   Future<String> generateTarotInterpretation({
     required String cardName,
     required String userMood,
   }) async {
-    if (_model == null) {
-      AppLogger.error("Gemini model is not initialized");
-      throw Exception('Gemini model not initialized');
-    }
-    
-    final prompt = '''
-너는 50년 경력의 타로 마스터야. 단순명료하게 핵심만 전달해.
-
-사용자 기분: $userMood
-뽑은 카드: $cardName
-
-다음 형식으로 짧게 해석해줘:
-
-[카드의 메시지]
-이 카드가 전하는 핵심 메시지 (1-2문장)
-
-[현재 상황]
-$userMood 기분의 원인과 현재 상태 (2-3문장)
-
-[실천 조언]
-• 오늘 당장 할 일
-• 이번 주 목표
-• 한 달 내 변화
-
-[앞으로의 전망]
-긍정적 변화 예측 (1-2문장)
-
-규칙:
-- 전체 8-10문장 이내
-- 쉬운 단어만 사용
-- 구체적 행동 제시
-''';
-
     try {
-      final content = [Content.text(prompt)];
-      final response = await _model!.generateContent(content);
+      AppLogger.debug("Generating interpretation for card: $cardName, mood: $userMood");
       
-      final text = response.text;
-      if (text == null || text.isEmpty) {
-        throw Exception('Empty response from Gemini');
+      final Map<String, dynamic> result = await _callFunction(
+        'generateTarotInterpretation',
+        {
+          'cardName': cardName,
+          'userMood': userMood,
+          'interpretationType': 'single',
+        },
+      );
+      
+      final interpretation = result['interpretation'] as String?;
+      if (interpretation == null || interpretation.isEmpty) {
+        throw Exception('해석 결과를 받지 못했습니다.');
       }
       
-      return text;
+      AppLogger.debug("Successfully generated interpretation");
+      return interpretation;
+      
     } catch (e) {
       AppLogger.error("Failed to generate interpretation", e);
+      
+      // 에러 발생 시 로컬 폴백 해석 제공
       return _getFallbackInterpretation(cardName, userMood);
     }
   }
   
-  // 배열법별 종합 해석
+  /// 스프레드별 종합 해석
   Future<String> generateSpreadInterpretation({
     required SpreadType spreadType,
     required List<TarotCardModel> drawnCards,
     required String userMood,
     required TarotSpread spread,
   }) async {
-    if (_model == null) {
-      throw Exception('Gemini model not initialized');
-    }
-    
-    String prompt = '';
-    
-    switch (spreadType) {
-      case SpreadType.oneCard:
-        return generateTarotInterpretation(
-          cardName: drawnCards[0].name,
-          userMood: userMood,
-        );
-        
-      case SpreadType.threeCard:
-        prompt = _buildThreeCardPrompt(drawnCards, userMood, spread);
-        break;
-        
-      case SpreadType.celticCross:
-        prompt = _buildCelticCrossPrompt(drawnCards, userMood, spread);
-        break;
-        
-      case SpreadType.relationship:
-        prompt = _buildRelationshipPrompt(drawnCards, userMood, spread);
-        break;
-        
-      case SpreadType.yesNo:
-        prompt = _buildYesNoPrompt(drawnCards, userMood, spread);
-        break;
+    // 원카드는 단일 해석 함수 사용
+    if (spreadType == SpreadType.oneCard) {
+      return generateTarotInterpretation(
+        cardName: drawnCards[0].name,
+        userMood: userMood,
+      );
     }
     
     try {
-      final content = [Content.text(prompt)];
-      final response = await _model!.generateContent(content);
+      AppLogger.debug("Generating spread interpretation for: ${spreadType.name}");
       
-      final text = response.text;
-      if (text == null || text.isEmpty) {
-        throw Exception('Empty response from Gemini');
+      // 카드 정보 준비
+      final cardsData = drawnCards.map((card) => {
+        'name': card.name,
+        'nameKr': card.nameKr,
+        'id': card.id,
+      }).toList();
+      
+      final Map<String, dynamic> result = await _callFunction(
+        'generateSpreadInterpretation',
+        {
+          'spreadType': spreadType.name,
+          'cards': cardsData,
+          'userMood': userMood,
+          'spreadName': spread.name,
+          'positions': spread.positions.map((p) => p.titleKr).toList(),
+        },
+      );
+      
+      final interpretation = result['interpretation'] as String?;
+      if (interpretation == null || interpretation.isEmpty) {
+        throw Exception('해석 결과를 받지 못했습니다.');
       }
       
-      return text;
+      AppLogger.debug("Successfully generated spread interpretation");
+      return interpretation;
+      
     } catch (e) {
       AppLogger.error("Failed to generate spread interpretation", e);
       return _getSpreadFallback(spreadType, drawnCards, userMood);
     }
   }
   
-  // 쓰리 카드 프롬프트 - 중간 길이
-  String _buildThreeCardPrompt(
-    List<TarotCardModel> cards,
-    String userMood,
-    TarotSpread spread,
-  ) {
-    return '''
-너는 타로 전문가야. 과거-현재-미래의 흐름을 명확히 해석해.
-
-사용자 기분: $userMood
-
-카드:
-과거: ${cards[0].nameKr}
-현재: ${cards[1].nameKr}
-미래: ${cards[2].nameKr}
-
-다음 형식으로 간결하게:
-
-[전체 흐름]
-세 카드의 연결점 (1-2문장)
-
-[시간대별 해석]
-• 과거: ${cards[0].nameKr}가 남긴 영향
-• 현재: ${cards[1].nameKr}로 본 지금 상황
-• 미래: ${cards[2].nameKr}가 보여주는 가능성
-
-[행동 지침]
-• 과거에서 배울 점
-• 현재 집중할 일
-• 미래를 위한 준비
-
-[핵심 조언]
-당신이 가장 먼저 해야 할 일 (1-2문장)
-
-규칙:
-- 전체 15문장 이내
-- 시간의 흐름 강조
-- 실천 가능한 조언
-''';
-  }
-  
-  // 켈틱 크로스 프롬프트 - 상세 분석
-  String _buildCelticCrossPrompt(
-    List<TarotCardModel> cards,
-    String userMood,
-    TarotSpread spread,
-  ) {
-    return '''
-너는 타로 마스터야. 10장 켈틱 크로스를 체계적으로 분석해.
-마크다운 문법 절대 사용하지 마. 별표나 샵 기호 쓰지 마.
-
-사용자 기분: $userMood
-
-카드 배치:
-1. 현재 상황: ${cards[0].nameKr}
-2. 도전/장애물: ${cards[1].nameKr}
-3. 의식적 목표: ${cards[2].nameKr}
-4. 무의식 기반: ${cards[3].nameKr}
-5. 최근 과거: ${cards[4].nameKr}
-6. 가까운 미래: ${cards[5].nameKr}
-7. 자신의 태도: ${cards[6].nameKr}
-8. 외부 영향: ${cards[7].nameKr}
-9. 희망과 두려움: ${cards[8].nameKr}
-10. 최종 결과: ${cards[9].nameKr}
-
-다음 형식으로 깔끔하게 해석:
-
-[핵심 상황 분석]
-${cards[0].nameKr}와 ${cards[1].nameKr}로 본 현재의 핵심 이슈를 2-3문장으로 설명
-
-[내면의 갈등]
-의식: ${cards[2].nameKr} - 겉으로 원하는 것
-무의식: ${cards[3].nameKr} - 진짜 욕구
-내 태도: ${cards[6].nameKr} - 실제 행동 패턴
-
-[시간축 분석]
-과거: ${cards[4].nameKr} - 현재에 미친 영향
-현재: ${cards[0].nameKr} - 지금 직면한 선택
-미래: ${cards[5].nameKr} - 3개월 내 전개
-
-[외부 요인]
-${cards[7].nameKr}가 보여주는 주변 환경의 영향을 구체적으로
-
-[최종 전망]
-${cards[8].nameKr}: 내면의 기대와 불안
-${cards[9].nameKr}: 예상되는 결과 (70% 확률)
-
-[단계별 실천 계획]
-1. 이번 주: 구체적 행동 한 가지
-2. 이번 달: 중간 목표
-3. 3개월 후: 최종 목표
-
-규칙:
-- 대괄호 [] 안의 제목만 사용
-- 별표 쓰지 마
-- 각 섹션 2-3문장으로 간결하게
-- 카드 이름 반복해서 언급
-''';
-  }
-  
-  // 관계 스프레드 프롬프트 - 감성적이고 구체적
-  String _buildRelationshipPrompt(
-    List<TarotCardModel> cards,
-    String userMood,
-    TarotSpread spread,
-  ) {
-    return '''
-너는 타로 전문가이자 연애 상담사야. 관계의 역학을 섬세하게 분석해.
-마크다운 문법 쓰지 마. 별표 기호 절대 금지.
-
-사용자 기분: $userMood
-
-관계 카드 배치:
-1. 나의 역할: ${cards[0].nameKr}
-2. 상대의 역할: ${cards[1].nameKr}
-3. 관계의 본질: ${cards[2].nameKr}
-4. 내 진심: ${cards[3].nameKr}
-5. 상대의 마음: ${cards[4].nameKr}
-6. 해결할 문제: ${cards[5].nameKr}
-7. 관계의 미래: ${cards[6].nameKr}
-
-감성적이고 따뜻하게 해석:
-
-[두 사람의 에너지]
-당신(${cards[0].nameKr}): 관계에서의 역할과 특징
-상대(${cards[1].nameKr}): 상대방의 성향과 태도  
-케미(${cards[2].nameKr}): 둘이 만났을 때 시너지
-
-[마음의 온도차]
-당신의 진심(${cards[3].nameKr}): 숨겨진 감정
-상대의 마음(${cards[4].nameKr}): 예상되는 감정 (온도: 70도)
-
-[관계의 걸림돌]
-${cards[5].nameKr}가 암시하는 핵심 문제와 해결 방향
-
-[미래 가능성]
-${cards[6].nameKr}로 본 관계 발전 확률: 75%
-
-[사랑을 위한 조언]
-1. 대화법: "상대방의 마음을 열려면..."
-2. 데이트: 이번 주 함께하면 좋을 활동
-3. 마음가짐: 관계 개선을 위한 태도
-
-[한 줄 조언]
-💕 관계의 핵심을 꿰뚫는 따뜻한 한마디
-
-규칙:
-- 감성적이고 공감적인 톤
-- 구체적인 행동 제안
-- 양쪽 입장 균형있게
-''';
-  }
-  
-  // 예/아니오 프롬프트 - 명확하고 단호하게
-  String _buildYesNoPrompt(
-    List<TarotCardModel> cards,
-    String userMood,
-    TarotSpread spread,
-  ) {
-    return '''
-너는 타로 전문가야. 예/아니오를 명확히 판단해.
-별표나 샵 같은 마크다운 문법 사용 금지.
-
-사용자 기분: $userMood
-
-뽑은 5장:
-${cards.map((c) => c.nameKr).join(', ')}
-
-단호하고 명확하게:
-
-[최종 답변]
-⭕ 예 / ❌ 아니오 / ⚠️ 조건부 예
-
-[판단 근거]
-긍정 카드: 3장 (카드명 나열)
-부정 카드: 2장 (카드명 나열)
-중립 카드: 0장
-
-[핵심 메시지]
-카드들이 말하는 핵심을 1-2문장으로
-
-[성공 조건]
-"예"가 되려면: 구체적 조건 1-2개
-
-[시기 예측]
-실현 가능 시기: 2주 ~ 2개월
-
-[행동 가이드]
-답변과 관계없이 지금 해야 할 일 1-2가지
-
-규칙:
-- 퍼센트로 확률 표시 (75%)
-- 애매모호함 없이 명확하게
-- 대안이나 우회로 제시
-''';
-  }
-  
-  // 대화형 응답 생성
+  /// 대화형 응답 생성
   Future<String> generateChatResponse({
     required String cardName,
     required String interpretation,
@@ -352,75 +147,50 @@ ${cards.map((c) => c.nameKr).join(', ')}
     required String userMessage,
     SpreadType? spreadType,
   }) async {
-    if (_model == null) {
-      throw Exception('Gemini model not initialized');
-    }
-    
-    // 최근 3개 메시지만 컨텍스트로 사용 (토큰 절약)
-    final recentMessages = previousMessages.length > 6 
-        ? previousMessages.sublist(previousMessages.length - 6)
-        : previousMessages;
-    
-    final conversationHistory = recentMessages
-        .map((msg) => '${msg.isUser ? "질문" : "답변"}: ${msg.message}')
-        .join('\n');
-    
-    final spreadContext = spreadType != null 
-      ? '\n사용한 배열: ${_getSpreadNameKr(spreadType)}'
-      : '';
-    
-    final prompt = '''
-너는 친근한 타로 상담사야. 공감하며 실용적 조언을 해줘.
-
-처음 카드: $cardName$spreadContext
-처음 해석 요약: ${interpretation.length > 200 ? '${interpretation.substring(0, 200)}...' : interpretation}
-
-최근 대화:
-$conversationHistory
-
-새 질문: $userMessage
-
-답변 스타일:
-- 2-3문장으로 핵심만
-- 따뜻하고 친근한 톤
-- 구체적 예시 포함
-- 긍정적 마무리
-
-한국어로 자연스럽게 답변해줘.
-''';
-
     try {
-      final content = [Content.text(prompt)];
-      final response = await _model!.generateContent(content);
+      AppLogger.debug("Generating chat response");
       
-      final text = response.text;
-      if (text == null || text.isEmpty) {
-        throw Exception('Empty response from Gemini');
+      // 최근 6개 메시지만 전송 (토큰 절약 및 컨텍스트 최적화)
+      final recentMessages = previousMessages.length > 6 
+          ? previousMessages.sublist(previousMessages.length - 6)
+          : previousMessages;
+      
+      // 메시지 형식 변환
+      final messageHistory = recentMessages.map((msg) => {
+        'role': msg.isUser ? 'user' : 'assistant',
+        'content': msg.message,
+      }).toList();
+      
+      final Map<String, dynamic> result = await _callFunction(
+        'generateChatResponse',
+        {
+          'cardName': cardName,
+          'interpretationSummary': interpretation.length > 200 
+              ? '${interpretation.substring(0, 200)}...' 
+              : interpretation,
+          'previousMessages': messageHistory,
+          'userMessage': userMessage,
+          'spreadType': spreadType?.name,
+        },
+      );
+      
+      final response = result['response'] as String?;
+      if (response == null || response.isEmpty) {
+        throw Exception('응답을 생성하지 못했습니다.');
       }
       
-      return text;
+      AppLogger.debug("Successfully generated chat response");
+      return response;
+      
     } catch (e) {
       AppLogger.error("Failed to generate chat response", e);
       return _getChatFallbackResponse(cardName, userMessage);
     }
   }
   
-  // 헬퍼 메서드들
-  String _getSpreadNameKr(SpreadType type) {
-    switch (type) {
-      case SpreadType.oneCard:
-        return '원 카드';
-      case SpreadType.threeCard:
-        return '쓰리 카드';
-      case SpreadType.celticCross:
-        return '켈틱 크로스';
-      case SpreadType.relationship:
-        return '관계 스프레드';
-      case SpreadType.yesNo:
-        return '예/아니오';
-    }
-  }
+  // ===== 폴백 응답 메서드들 (오프라인/에러 시 사용) =====
   
+  /// 단일 카드 폴백 해석
   String _getFallbackInterpretation(String cardName, String userMood) {
     return '''
 [카드의 메시지]
@@ -439,14 +209,29 @@ $userMood 기분은 변화의 신호입니다. 지금이 전환점이에요.
 ''';
   }
   
-  String _getSpreadFallback(SpreadType type, List<TarotCardModel> cards, String userMood) {
-    final cardCount = cards.length;
-    final mainCard = cards.first.nameKr;
-    
-    // 스프레드별 기본 메시지
+  /// 스프레드 폴백 해석
+  String _getSpreadFallback(
+    SpreadType type, 
+    List<TarotCardModel> cards, 
+    String userMood,
+  ) {
     switch (type) {
       case SpreadType.threeCard:
-        return '''
+        return _getThreeCardFallback(cards, userMood);
+      case SpreadType.yesNo:
+        return _getYesNoFallback(cards, userMood);
+      case SpreadType.relationship:
+        return _getRelationshipFallback(cards, userMood);
+      case SpreadType.celticCross:
+        return _getCelticCrossFallback(cards, userMood);
+      default:
+        return _getGenericFallback(cards, userMood);
+    }
+  }
+  
+  /// 쓰리카드 폴백
+  String _getThreeCardFallback(List<TarotCardModel> cards, String userMood) {
+    return '''
 [전체 흐름]
 과거에서 현재로, 그리고 미래로 이어지는 흐름이 보입니다.
 
@@ -461,23 +246,29 @@ $userMood 기분은 변화의 신호입니다. 지금이 전환점이에요.
 [핵심 조언]
 $userMood 상태에서 가장 중요한 것은 현재의 선택입니다.
 ''';
-        
-      case SpreadType.yesNo:
-        final positiveCount = cards.where((c) => 
-          c.name.contains('Sun') || c.name.contains('Star') || 
-          c.name.contains('World') || c.name.contains('Ace')
-        ).length;
-        
-        return '''
+  }
+  
+  /// 예/아니오 폴백
+  String _getYesNoFallback(List<TarotCardModel> cards, String userMood) {
+    // 긍정적인 카드 카운트 (간단한 로직)
+    final positiveCount = cards.where((c) => 
+      c.name.contains('Sun') || c.name.contains('Star') || 
+      c.name.contains('World') || c.name.contains('Ace')
+    ).length;
+    
+    final answer = positiveCount >= 3 ? '⭕ 예' : 
+                   positiveCount >= 2 ? '⚠️ 조건부 예' : '❌ 아니오';
+    
+    return '''
 [최종 답변]
-${positiveCount >= 3 ? '⭕ 예' : positiveCount >= 2 ? '⚠️ 조건부 예' : '❌ 아니오'}
+$answer
 
 [판단 근거]
 • 긍정 신호: $positiveCount장
 • 주의 신호: ${5 - positiveCount}장
 
 [핵심 메시지]
-$mainCard 카드가 중요한 열쇠를 쥐고 있습니다.
+${cards[0].nameKr} 카드가 중요한 열쇠를 쥐고 있습니다.
 
 [성공 조건]
 신중한 준비와 적절한 타이밍이 필요합니다.
@@ -488,9 +279,11 @@ ${positiveCount >= 3 ? '1-2주' : '1-2개월'} 내 결과 확인
 [행동 가이드]
 결과와 관계없이 최선을 다해 준비하세요.
 ''';
-        
-      case SpreadType.relationship:
-        return '''
+  }
+  
+  /// 관계 폴백
+  String _getRelationshipFallback(List<TarotCardModel> cards, String userMood) {
+    return '''
 [두 사람의 에너지]
 • 당신: ${cards[0].nameKr} - 관계에서 중요한 역할
 • 상대: ${cards[1].nameKr} - 상대방의 현재 상태
@@ -510,11 +303,13 @@ ${cards[5].nameKr}가 보여주는 도전 과제가 있네요.
 [한 줄 조언]
 💕 사랑은 서로를 비추는 거울과 같아요.
 ''';
-        
-      case SpreadType.celticCross:
-        return '''
+  }
+  
+  /// 켈틱 크로스 폴백
+  String _getCelticCrossFallback(List<TarotCardModel> cards, String userMood) {
+    return '''
 [핵심 상황 분석]
-$cardCount장의 카드가 복잡한 상황을 보여주고 있습니다.
+${cards.length}장의 카드가 복잡한 상황을 보여주고 있습니다.
 
 [내면의 갈등]
 의식과 무의식 사이에 갈등이 있네요.
@@ -535,14 +330,16 @@ $cardCount장의 카드가 복잡한 상황을 보여주고 있습니다.
 
 $userMood 상태를 극복할 수 있는 힘이 당신 안에 있습니다.
 ''';
-        
-      default:
-        return '''
+  }
+  
+  /// 일반 폴백
+  String _getGenericFallback(List<TarotCardModel> cards, String userMood) {
+    return '''
 [카드의 메시지]
-$cardCount장의 카드가 하나의 이야기를 만들고 있습니다.
+${cards.length}장의 카드가 하나의 이야기를 만들고 있습니다.
 
 [현재 상황]
-$mainCard 카드가 현재의 핵심을 보여줍니다.
+${cards[0].nameKr} 카드가 현재의 핵심을 보여줍니다.
 
 [실천 조언]
 • 상황을 객관적으로 바라보세요
@@ -552,16 +349,17 @@ $mainCard 카드가 현재의 핵심을 보여줍니다.
 [앞으로의 전망]
 $userMood 상태가 곧 개선될 조짐이 보입니다.
 ''';
-    }
   }
   
+  /// 채팅 폴백 응답
   String _getChatFallbackResponse(String cardName, String userMessage) {
-    // 질문 유형별 기본 응답
-    if (userMessage.contains('언제') || userMessage.contains('시기')) {
+    final lowerMessage = userMessage.toLowerCase();
+    
+    if (lowerMessage.contains('언제') || lowerMessage.contains('시기')) {
       return '타로가 보여주는 시기는 보통 1-3개월 사이예요. $cardName 카드의 에너지로 보면 조금 더 빠를 수도 있어요. 준비가 되었을 때가 가장 좋은 시기랍니다.';
-    } else if (userMessage.contains('어떻게') || userMessage.contains('방법')) {
+    } else if (lowerMessage.contains('어떻게') || lowerMessage.contains('방법')) {
       return '$cardName 카드는 직관을 따르라고 하네요. 너무 복잡하게 생각하지 말고, 마음이 이끄는 대로 한 걸음씩 나아가 보세요. 작은 시작이 큰 변화를 만들어요.';
-    } else if (userMessage.contains('왜') || userMessage.contains('이유')) {
+    } else if (lowerMessage.contains('왜') || lowerMessage.contains('이유')) {
       return '그 이유는 $cardName 카드가 암시하듯이, 지금이 변화의 시점이기 때문이에요. 과거의 패턴을 벗어나 새로운 가능성을 열어갈 때입니다.';
     } else {
       return '좋은 질문이에요. $cardName 카드의 관점에서 보면, 지금은 신중하면서도 용기있게 나아갈 때예요. 어떤 부분이 가장 궁금하신가요?';

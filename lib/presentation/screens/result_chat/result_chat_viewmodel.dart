@@ -14,6 +14,9 @@ final resultChatViewModelProvider =
   return ResultChatViewModel(ref);
 });
 
+// 광고 시청 횟수 추적
+final adWatchCountProvider = StateProvider<int>((ref) => 0);
+
 class ResultChatViewModel extends StateNotifier<ResultChatState> {
   final Ref _ref;
   final _uuid = const Uuid();
@@ -123,21 +126,11 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       isLoading: true,
     );
 
-    // Increment turn count
+    // 채팅 턴 카운트 증가
     _ref.read(chatTurnCountProvider.notifier).state++;
     final turnCount = _ref.read(chatTurnCountProvider);
     
     AppLogger.debug("Turn count: $turnCount");
-
-    // Check if should show ad prompt
-    if (turnCount >= 3 && !state.hasShownAd) {
-      state = state.copyWith(
-        showAdPrompt: true,
-        isTyping: false,
-        isLoading: false,
-      );
-      return;
-    }
 
     try {
       final geminiService = _ref.read(geminiServiceProvider);
@@ -177,6 +170,26 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       if (user != null && _currentReadingId != null) {
         await _updateChatHistory(userMessage, aiMessage);
       }
+      
+      // 광고 시청 횟수 확인
+      final adWatchCount = _ref.read(adWatchCountProvider);
+      
+      // 매 채팅 후 광고 표시 (최대 3회까지)
+      // turnCount는 방금 보낸 메시지 포함이므로 짝수일 때 광고 표시
+      // (1번째 메시지 후 = turnCount 2, 2번째 메시지 후 = turnCount 4, 3번째 메시지 후 = turnCount 6)
+      if (turnCount % 2 == 0 && turnCount <= 6 && adWatchCount < 3) {
+        AppLogger.debug("Showing ad prompt - turn: $turnCount, adWatchCount: $adWatchCount");
+        state = state.copyWith(
+          showAdPrompt: true,
+        );
+      } else if (turnCount > 6) {
+        // 3회 채팅 완료 후 더 이상 채팅 불가
+        AppLogger.debug("Chat limit reached");
+        state = state.copyWith(
+          chatLimitReached: true,
+        );
+      }
+      
     } catch (e, stack) {
       AppLogger.error("Error in sendMessage", e, stack);
       
@@ -204,10 +217,23 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     try {
       adRepo.showInterstitialAd();
       
+      // 광고 시청 횟수 증가
+      _ref.read(adWatchCountProvider.notifier).state++;
+      final adWatchCount = _ref.read(adWatchCountProvider);
+      
+      AppLogger.debug("Ad watched - count: $adWatchCount");
+      
       state = state.copyWith(
         hasShownAd: true,
         showAdPrompt: false,
       );
+      
+      // 3회 광고 시청 완료 시
+      if (adWatchCount >= 3) {
+        state = state.copyWith(
+          chatLimitReached: true,
+        );
+      }
       
       adRepo.preloadAds();
     } catch (e) {
@@ -298,6 +324,7 @@ ${spread.nameKr} 배열이 펼쳐졌습니다.
   void reset() {
     state = ResultChatState();
     _ref.read(chatTurnCountProvider.notifier).state = 0;
+    _ref.read(adWatchCountProvider.notifier).state = 0;
     _currentReadingId = null;
   }
 }
@@ -314,6 +341,7 @@ class ResultChatState {
   final bool showAdPrompt;
   final bool hasShownAd;
   final bool isLoading;
+  final bool chatLimitReached;
   final String? error;
 
   ResultChatState({
@@ -328,6 +356,7 @@ class ResultChatState {
     this.showAdPrompt = false,
     this.hasShownAd = false,
     this.isLoading = false,
+    this.chatLimitReached = false,
     this.error,
   });
 
@@ -343,6 +372,7 @@ class ResultChatState {
     bool? showAdPrompt,
     bool? hasShownAd,
     bool? isLoading,
+    bool? chatLimitReached,
     String? error,
   }) {
     return ResultChatState(
@@ -357,6 +387,7 @@ class ResultChatState {
       showAdPrompt: showAdPrompt ?? this.showAdPrompt,
       hasShownAd: hasShownAd ?? this.hasShownAd,
       isLoading: isLoading ?? this.isLoading,
+      chatLimitReached: chatLimitReached ?? this.chatLimitReached,
       error: error,
     );
   }

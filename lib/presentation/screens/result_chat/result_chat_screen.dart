@@ -203,9 +203,20 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   List<Map<String, dynamic>> _parseInterpretation(String interpretation) {
-    final sectionData = <Map<String, dynamic>>[];
+    final state = ref.watch(resultChatViewModelProvider);
     
-    // 섹션별로 분리
+    // 예/아니오 스프레드 특별 처리
+    if (state.spreadType == SpreadType.yesNo) {
+      return _parseYesNoInterpretation(interpretation);
+    }
+    
+    // 원카드 특별 처리
+    if (state.spreadType == SpreadType.oneCard || state.selectedCards.length == 1) {
+      return _parseOneCardInterpretation(interpretation);
+    }
+    
+    // 기존 파싱 로직
+    final sectionData = <Map<String, dynamic>>[];
     String? currentTitle;
     String currentContent = '';
     
@@ -241,10 +252,40 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         newTitle = line.replaceAll('#', '').trim();
         isSection = true;
       }
-      // 1. 제목: 형식
-      else if (RegExp(r'^\d+\.\s*[가-힣\s]+:').hasMatch(line)) {
-        newTitle = line.replaceAll(RegExp(r'^\d+\.\s*'), '').replaceAll(':', '').trim();
-        isSection = true;
+      // 특별한 패턴: "제목" 뒤에 내용이 바로 오는 경우
+      else {
+        // 켈틱 크로스의 섹션 제목들
+        final sectionTitles = [
+          '핵심 상황 분석',
+          '내면의 갈등',
+          '시간축 분석',
+          '외부 요인',
+          '최종 전망',
+          '단계별 실천 계획',
+          '두 사람의 에너지',
+          '마음의 온도차',
+          '관계의 걸림돌',
+          '미래 가능성',
+          '사랑을 위한 조언',
+          '한 줄 조언',
+          '전체 흐름',
+          '시간대별 해석',
+          '행동 지침',
+          '핵심 조언',
+        ];
+        
+        for (final title in sectionTitles) {
+          if (line.startsWith(title)) {
+            newTitle = title;
+            isSection = true;
+            // 제목 뒤의 내용은 현재 컨텐츠로
+            final afterTitle = line.substring(title.length).trim();
+            if (afterTitle.isNotEmpty) {
+              currentContent = '$afterTitle\n';
+            }
+            break;
+          }
+        }
       }
       
       if (isSection && newTitle != null) {
@@ -257,7 +298,10 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         }
         
         currentTitle = newTitle;
-        currentContent = '';
+        // 제목과 내용이 같은 줄에 있는 경우가 아니면 초기화
+        if (!line.contains('$newTitle ') && !line.contains('$newTitle:')) {
+          currentContent = '';
+        }
       } else {
         // 일반 내용
         if (currentTitle != null) {
@@ -284,6 +328,130 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     }
     
     return sectionData;
+  }
+
+  // 원카드 전용 파싱
+  List<Map<String, dynamic>> _parseOneCardInterpretation(String interpretation) {
+    final sections = <Map<String, dynamic>>[];
+    final lines = interpretation.split('\n');
+    
+    String? currentTitle;
+    List<String> currentLines = [];
+    
+    for (final line in lines) {
+      final trimmed = line.trim();
+      
+      // 원카드 섹션 제목 패턴
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        // 이전 섹션 저장
+        if (currentTitle != null && currentLines.isNotEmpty) {
+          sections.add({
+            'title': currentTitle,
+            'content': currentLines.join('\n').trim(),
+          });
+        }
+        
+        currentTitle = trimmed.substring(1, trimmed.length - 1);
+        currentLines = [];
+      } else if (trimmed.isNotEmpty) {
+        currentLines.add(trimmed);
+      }
+    }
+    
+    // 마지막 섹션 저장
+    if (currentTitle != null && currentLines.isNotEmpty) {
+      sections.add({
+        'title': currentTitle,
+        'content': currentLines.join('\n').trim(),
+      });
+    }
+    
+    return sections;
+  }
+
+  // 예/아니오 전용 파싱
+  List<Map<String, dynamic>> _parseYesNoInterpretation(String interpretation) {
+    final sections = <Map<String, dynamic>>[];
+    
+    // 예/아니오 특수 섹션 패턴
+    final patterns = {
+      '최종 답변': RegExp(r'최종 답변[:\s]*(.+?)(?=판단 근거|$)', dotAll: true),
+      '판단 근거': RegExp(r'판단 근거[:\s]*(.+?)(?=핵심 메시지|$)', dotAll: true),
+      '핵심 메시지': RegExp(r'핵심 메시지[:\s]*(.+?)(?=성공 조건|$)', dotAll: true),
+      '성공 조건': RegExp(r'성공 조건[:\s]*(.+?)(?=시기 예측|$)', dotAll: true),
+      '시기 예측': RegExp(r'시기 예측[:\s]*(.+?)(?=행동 가이드|$)', dotAll: true),
+      '행동 가이드': RegExp(r'행동 가이드[:\s]*(.+?)$', dotAll: true),
+    };
+    
+    for (final entry in patterns.entries) {
+      final match = entry.value.firstMatch(interpretation);
+      if (match != null) {
+        final content = match.group(1)?.trim();
+        if (content != null && content.isNotEmpty) {
+          // 최종 답변은 특별 처리
+          if (entry.key == '최종 답변') {
+            sections.add({
+              'title': entry.key,
+              'content': content,
+              'isSpecial': true,
+            });
+          } else {
+            sections.add({
+              'title': entry.key,
+              'content': content,
+            });
+          }
+        }
+      }
+    }
+    
+    // 섹션이 없으면 기본 파싱 시도
+    if (sections.isEmpty) {
+      final lines = interpretation.split('\n');
+      String? currentTitle;
+      List<String> currentLines = [];
+      
+      for (final line in lines) {
+        final trimmed = line.trim();
+        
+        // 섹션 제목 감지
+        bool isTitle = false;
+        for (final title in patterns.keys) {
+          if (trimmed.startsWith(title)) {
+            // 이전 섹션 저장
+            if (currentTitle != null && currentLines.isNotEmpty) {
+              sections.add({
+                'title': currentTitle,
+                'content': currentLines.join('\n').trim(),
+                'isSpecial': currentTitle == '최종 답변',
+              });
+            }
+            
+            currentTitle = title;
+            // 제목과 같은 줄에 내용이 있으면
+            final content = trimmed.substring(title.length).trim();
+            currentLines = content.isNotEmpty ? [content] : [];
+            isTitle = true;
+            break;
+          }
+        }
+        
+        if (!isTitle && trimmed.isNotEmpty) {
+          currentLines.add(trimmed);
+        }
+      }
+      
+      // 마지막 섹션 저장
+      if (currentTitle != null && currentLines.isNotEmpty) {
+        sections.add({
+          'title': currentTitle,
+          'content': currentLines.join('\n').trim(),
+          'isSpecial': currentTitle == '최종 답변',
+        });
+      }
+    }
+    
+    return sections;
   }
   
   List<Map<String, dynamic>> _autoDetectSections(String interpretation) {
@@ -386,12 +554,12 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(40),
-      child: const Center(
+      child: Center(
         child: Text(
           '해석을 준비하는 중입니다...',
-          style: TextStyle(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.fogGray,
-            fontSize: 16,
+            fontSize: 18,
           ),
         ),
       ),
@@ -400,7 +568,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   Widget _buildSingleInterpretationCard(String interpretation) {
     return Container(
-      width: double.infinity,  // 가로 전체 너비 고정
+      width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -411,7 +579,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
             AppColors.blackOverlay60,
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: AppColors.whiteOverlay10,
           width: 1.5,
@@ -419,27 +587,27 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         boxShadow: const [
           BoxShadow(
             color: AppColors.blackOverlay40,
-            blurRadius: 20,
-            offset: Offset(0, 10),
+            blurRadius: 24,
+            offset: Offset(0, 12),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Header
             Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
+                horizontal: 28,
+                vertical: 20,
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.mysticPurple.withAlpha(30),
-                    AppColors.mysticPurple.withAlpha(20),
+                    AppColors.mysticPurple.withAlpha(40),
+                    AppColors.mysticPurple.withAlpha(25),
                   ],
                 ),
                 border: const Border(
@@ -451,19 +619,24 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
               ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.auto_awesome,
-                    color: AppColors.mysticPurple,
-                    size: 20,
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.mysticPurple.withAlpha(30),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.auto_awesome,
+                      color: AppColors.mysticPurple,
+                      size: 24,
+                    ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 16),
                   Text(
                     '카드의 메시지',
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w700,
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.mysticPurple,
-                      fontSize: 17,
-                      letterSpacing: -0.5,
+                      fontSize: 22,
                     ),
                   ),
                 ],
@@ -472,7 +645,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
             
             // Content
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(28),
               child: _buildParagraphs(interpretation),
             ),
           ],
@@ -488,6 +661,11 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     
     final style = _getSectionStyle(section['title']);
     
+    // 예/아니오 최종 답변 특별 처리
+    if (section['isSpecial'] == true && section['title'] == '최종 답변') {
+      return _buildYesNoAnswerCard(section, animationIndex);
+    }
+    
     return AnimatedBuilder(
       animation: _sectionAnimations[animationIndex],
       builder: (context, child) {
@@ -498,8 +676,8 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           child: Opacity(
             opacity: animationValue,
             child: Container(
-              width: double.infinity,  // 가로 전체 너비 고정
-              margin: const EdgeInsets.only(bottom: 20),
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
@@ -509,7 +687,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                     AppColors.blackOverlay60,
                   ],
                 ),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
                   color: AppColors.whiteOverlay10,
                   width: 1.5,
@@ -517,27 +695,27 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 boxShadow: const [
                   BoxShadow(
                     color: AppColors.blackOverlay40,
-                    blurRadius: 20,
-                    offset: Offset(0, 10),
+                    blurRadius: 24,
+                    offset: Offset(0, 12),
                   ),
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Section Header
+                    // Section Header - 개선된 헤더 디자인
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
+                        horizontal: 28,
+                        vertical: 20,
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            (style['color'] as Color).withAlpha(30),
-                            (style['color'] as Color).withAlpha(20),
+                            (style['color'] as Color).withAlpha(40),
+                            (style['color'] as Color).withAlpha(25),
                           ],
                         ),
                         border: const Border(
@@ -549,29 +727,130 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            style['icon'] as IconData,
-                            color: style['color'] as Color,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            section['title'],
-                            style: AppTextStyles.bodyLarge.copyWith(
-                              fontWeight: FontWeight.w700,
+                          // 아이콘 배경
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: (style['color'] as Color).withAlpha(30),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              style['icon'] as IconData,
                               color: style['color'] as Color,
-                              fontSize: 17,
-                              letterSpacing: -0.5,
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          // 섹션 제목
+                          Expanded(
+                            child: Text(
+                              section['title'],
+                              style: AppTextStyles.sectionTitle.copyWith(
+                                color: style['color'] as Color,
+                                fontSize: 22,
+                                letterSpacing: 0.5,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                     
-                    // Section Content
+                    // Section Content - 여유있는 패딩
                     Padding(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(28),
                       child: _buildSectionContent(section, style),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 예/아니오 최종 답변 특별 카드
+  Widget _buildYesNoAnswerCard(Map<String, dynamic> section, int animationIndex) {
+    final content = section['content'] as String;
+    
+    // 답변 타입 판단
+    final isYes = content.contains('⭕') || content.contains('예');
+    final isNo = content.contains('❌') || content.contains('아니오');
+    final isConditional = content.contains('⚠️') || content.contains('조건부');
+    
+    Color primaryColor = AppColors.fogGray;
+    IconData answerIcon = Icons.help_outline;
+    String answerText = content.trim();
+    
+    if (isYes && !isConditional) {
+      primaryColor = AppColors.spiritGlow;
+      answerIcon = Icons.check_circle;
+      answerText = '⭕ 예';
+    } else if (isNo) {
+      primaryColor = AppColors.crimsonGlow;
+      answerIcon = Icons.cancel;
+      answerText = '❌ 아니오';
+    } else if (isConditional) {
+      primaryColor = AppColors.omenGlow;
+      answerIcon = Icons.warning;
+      answerText = '⚠️ 조건부 예';
+    }
+    
+    return AnimatedBuilder(
+      animation: _sectionAnimations[animationIndex],
+      builder: (context, child) {
+        final animationValue = _sectionAnimations[animationIndex].value.clamp(0.0, 1.0);
+        
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - animationValue)),
+          child: Opacity(
+            opacity: animationValue,
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    primaryColor.withAlpha(20),
+                    primaryColor.withAlpha(10),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: primaryColor.withAlpha(100),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryColor.withAlpha(40),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  children: [
+                    Icon(
+                      answerIcon,
+                      size: 80,
+                      color: primaryColor,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      answerText,
+                      style: AppTextStyles.displaySmall.copyWith(
+                        color: primaryColor,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -587,7 +866,12 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final content = section['content'] as String;
     
     // 특별한 포맷팅이 필요한 섹션 처리
-    if (section['title'] == '실천 조언' && content.contains('•')) {
+    if ((section['title'] == '실천 조언' || 
+         section['title'] == '행동 지침' ||
+         section['title'] == '단계별 실천 계획' ||
+         section['title'] == '사랑을 위한 조언' ||
+         section['title'] == '판단 근거') && 
+        (content.contains('•') || content.contains('1.') || content.contains('2.') || content.contains(':'))) {
       return _buildBulletPoints(content, style);
     } else if (content.contains('**')) {
       return _buildFormattedContent(content, style);
@@ -613,14 +897,15 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
             : '$trimmed.';
         
         return Container(
-          margin: const EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: 20),
           child: Text(
             text,
-            style: AppTextStyles.bodyMedium.copyWith(
-              height: 1.8,
+            style: AppTextStyles.interpretation.copyWith(
+              height: 1.85,
               color: AppColors.textPrimary,
-              fontSize: 15,
-              letterSpacing: -0.3,
+              fontSize: 19,
+              letterSpacing: 0.2,
+              fontWeight: FontWeight.w500,
             ),
           ),
         );
@@ -634,18 +919,18 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     
     for (final part in parts) {
       if (part.trim().isEmpty) {
-        widgets.add(const SizedBox(height: 8));
+        widgets.add(const SizedBox(height: 12));
       } else if (part.trim().startsWith('**') && part.trim().endsWith('**')) {
         final text = part.trim().replaceAll('**', '');
         widgets.add(
           Container(
-            margin: const EdgeInsets.only(bottom: 8, top: 4),
+            margin: const EdgeInsets.only(bottom: 12, top: 8),
             child: Text(
               text,
-              style: AppTextStyles.bodyMedium.copyWith(
+              style: AppTextStyles.interpretationEmphasis.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.ghostWhite,
-                fontSize: 16,
+                fontSize: 20,
               ),
             ),
           ),
@@ -654,28 +939,28 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         final text = part.trim().substring(1).trim();
         widgets.add(
           Container(
-            margin: const EdgeInsets.only(bottom: 6),
-            padding: const EdgeInsets.only(left: 16),
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(left: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  width: 4,
-                  height: 4,
+                  margin: const EdgeInsets.only(top: 8),
+                  width: 6,
+                  height: 6,
                   decoration: BoxDecoration(
-                    color: (style['color'] as Color).withAlpha(150),
+                    color: (style['color'] as Color).withAlpha(180),
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     text,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textPrimary,
-                      fontSize: 15,
-                      height: 1.5,
+                    style: AppTextStyles.interpretation.copyWith(
+                      fontSize: 18,
+                      height: 1.7,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -686,14 +971,13 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       } else {
         widgets.add(
           Container(
-            margin: const EdgeInsets.only(bottom: 6),
+            margin: const EdgeInsets.only(bottom: 12),
             child: Text(
               part,
-              style: AppTextStyles.bodyMedium.copyWith(
-                height: 1.6,
-                color: AppColors.textPrimary,
-                fontSize: 15,
-                letterSpacing: -0.3,
+              style: AppTextStyles.interpretation.copyWith(
+                height: 1.8,
+                fontSize: 19,
+                letterSpacing: 0.1,
               ),
             ),
           ),
@@ -708,10 +992,33 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildBulletPoints(String content, Map<String, dynamic> style) {
-    final items = content
-        .split('•')
-        .where((item) => item.trim().isNotEmpty)
-        .toList();
+    // 다양한 형식의 리스트 처리
+    final List<String> items;
+    
+    if (content.contains('•')) {
+      items = content
+          .split('•')
+          .where((item) => item.trim().isNotEmpty)
+          .toList();
+    } else if (content.contains(RegExp(r'\d+\.'))) {
+      // 숫자 리스트 처리
+      items = content
+          .split(RegExp(r'(?=\d+\.)'))
+          .where((item) => item.trim().isNotEmpty)
+          .toList();
+    } else if (content.contains(':') && content.contains('\n')) {
+      // 콜론으로 구분된 항목들 (예: "긍정 카드: 3장")
+      items = content
+          .split('\n')
+          .where((item) => item.trim().isNotEmpty && item.contains(':'))
+          .toList();
+    } else {
+      // 기타 경우 줄바꿈으로 분리
+      items = content
+          .split('\n')
+          .where((item) => item.trim().isNotEmpty)
+          .toList();
+    }
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -720,31 +1027,38 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         final hasNumber = RegExp(r'^\d+\.').hasMatch(trimmedItem);
         
         return Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.only(left: hasNumber ? 0 : 16),
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: EdgeInsets.only(left: hasNumber ? 0 : 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!hasNumber) ...[
                 Container(
-                  margin: const EdgeInsets.only(top: 6),
-                  width: 4,
-                  height: 4,
+                  margin: const EdgeInsets.only(top: 8),
+                  width: 6,
+                  height: 6,
                   decoration: BoxDecoration(
-                    color: (style['color'] as Color).withAlpha(150),
+                    color: (style['color'] as Color).withAlpha(180),
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: (style['color'] as Color).withAlpha(60),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
               ],
               Expanded(
                 child: Text(
                   trimmedItem,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textPrimary,
-                    fontSize: 15,
-                    height: 1.5,
-                    letterSpacing: -0.3,
+                  style: AppTextStyles.interpretation.copyWith(
+                    fontSize: 18,
+                    height: 1.7,
+                    letterSpacing: 0.1,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -759,7 +1073,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     const sectionStyles = {
       '카드의 메시지': {
         'icon': Icons.auto_awesome,
-        'color': AppColors.spiritGlow,
+        'color': AppColors.mysticPurple,
       },
       '현재 상황': {
         'icon': Icons.remove_red_eye,
@@ -770,12 +1084,16 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         'color': AppColors.omenGlow,
       },
       '앞으로의 전망': {
-        'icon': Icons.star_outline,
+        'icon': Icons.auto_fix_high_sharp,
         'color': AppColors.mysticPurple,
       },
       '전체 흐름': {
         'icon': Icons.timeline,
         'color': AppColors.spiritGlow,
+      },
+      '시간대별 해석': {
+        'icon': Icons.schedule,
+        'color': AppColors.evilGlow,
       },
       '과거의 영향': {
         'icon': Icons.history,
@@ -788,6 +1106,82 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       '행동 지침': {
         'icon': Icons.directions_run,
         'color': AppColors.omenGlow,
+      },
+      '핵심 조언': {
+        'icon': Icons.star,
+        'color': AppColors.spiritGlow,
+      },
+      '핵심 상황 분석': {
+        'icon': Icons.analytics,
+        'color': AppColors.spiritGlow,
+      },
+      '내면의 갈등': {
+        'icon': Icons.psychology,
+        'color': AppColors.evilGlow,
+      },
+      '시간축 분석': {
+        'icon': Icons.schedule,
+        'color': AppColors.fogGray,
+      },
+      '외부 요인': {
+        'icon': Icons.public,
+        'color': AppColors.ashGray,
+      },
+      '최종 전망': {
+        'icon': Icons.visibility,
+        'color': AppColors.mysticPurple,
+      },
+      '단계별 실천 계획': {
+        'icon': Icons.format_list_numbered,
+        'color': AppColors.omenGlow,
+      },
+      '두 사람의 에너지': {
+        'icon': Icons.favorite,
+        'color': AppColors.crimsonGlow,
+      },
+      '마음의 온도차': {
+        'icon': Icons.thermostat,
+        'color': AppColors.evilGlow,
+      },
+      '관계의 걸림돌': {
+        'icon': Icons.block,
+        'color': AppColors.ashGray,
+      },
+      '미래 가능성': {
+        'icon': Icons.trending_up,
+        'color': AppColors.spiritGlow,
+      },
+      '사랑을 위한 조언': {
+        'icon': Icons.tips_and_updates,
+        'color': AppColors.mysticPurple,
+      },
+      '한 줄 조언': {
+        'icon': Icons.format_quote,
+        'color': AppColors.omenGlow,
+      },
+      '최종 답변': {
+        'icon': Icons.check_circle,
+        'color': AppColors.spiritGlow,
+      },
+      '판단 근거': {
+        'icon': Icons.fact_check,
+        'color': AppColors.fogGray,
+      },
+      '핵심 메시지': {
+        'icon': Icons.message,
+        'color': AppColors.evilGlow,
+      },
+      '성공 조건': {
+        'icon': Icons.flag,
+        'color': AppColors.omenGlow,
+      },
+      '시기 예측': {
+        'icon': Icons.access_time,
+        'color': AppColors.ashGray,
+      },
+      '행동 가이드': {
+        'icon': Icons.explore,
+        'color': AppColors.mysticPurple,
       },
     };
     
@@ -966,12 +1360,12 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 10,
+        horizontal: 24,
+        vertical: 12,
       ),
       decoration: BoxDecoration(
         color: AppColors.whiteOverlay10,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: AppColors.whiteOverlay20,
           width: 1,
@@ -980,7 +1374,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       child: Text(
         spreadName,
         style: AppTextStyles.displaySmall.copyWith(
-          fontSize: 18,
+          fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
         textAlign: TextAlign.center,
@@ -1018,7 +1412,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           opacity: _layoutFadeAnimation.value,
           child: Container(
             height: _getLayoutHeight(state.selectedCards.length),
-            margin: const EdgeInsets.only(bottom: 24),
+            margin: const EdgeInsets.only(bottom: 32),
             child: SpreadLayoutWidget(
               spread: selectedSpread,
               drawnCards: state.selectedCards,
@@ -1055,21 +1449,21 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   Widget _buildInterpretationHeader(bool isOneCard) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(24),
+      margin: const EdgeInsets.only(bottom: 28),
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.mysticPurple.withAlpha(50),
-            AppColors.deepViolet.withAlpha(30),
+            AppColors.mysticPurple.withAlpha(60),
+            AppColors.deepViolet.withAlpha(40),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.mysticPurple.withAlpha(100),
-          width: 1,
+          color: AppColors.mysticPurple.withAlpha(120),
+          width: 1.5,
         ),
       ),
       child: Column(
@@ -1077,15 +1471,17 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           Text(
             isOneCard ? '카드가 전하는 메시지' : '카드들이 그리는 이야기',
             style: AppTextStyles.displaySmall.copyWith(
-              fontSize: 20,
+              fontSize: 26,
               fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             '당신을 위한 특별한 해석',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.fogGray,
+              fontSize: 17,
             ),
           ),
         ],
@@ -1095,18 +1491,19 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   Widget _buildLoadingIndicator() {
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: const EdgeInsets.all(60),
       child: Column(
         children: [
           const CustomLoadingIndicator(
-            size: 60,
+            size: 80,
             color: AppColors.evilGlow,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 32),
           Text(
             '카드의 의미를 해석하는 중...',
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.fogGray,
+              fontSize: 18,
             ),
           ),
         ],
@@ -1119,7 +1516,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     
     widgets.addAll(
       state.messages.map((message) => Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: 20),
         child: ChatBubbleWidget(
           message: message.message,
           isUser: message.isUser,
@@ -1136,7 +1533,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     if (state.isTyping) {
       widgets.add(
         const Padding(
-          padding: EdgeInsets.only(bottom: 16),
+          padding: EdgeInsets.only(bottom: 20),
           child: TypingIndicator(),
         ),
       );
@@ -1146,8 +1543,67 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildChatInput(ResultChatState state) {
+    // 채팅 제한 도달 시
+    if (state.chatLimitReached) {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              AppColors.shadowGray,
+              AppColors.shadowGray.withAlpha(240),
+            ],
+          ),
+          border: const Border(
+            top: BorderSide(
+              color: AppColors.crimsonGlow,
+              width: 1,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          bottom: true,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.blackOverlay40,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.crimsonGlow.withAlpha(100),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.lock,
+                  color: AppColors.crimsonGlow,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  '오늘의 대화가 모두 끝났습니다',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.crimsonGlow,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
@@ -1171,7 +1627,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
             Expanded(
               child: _buildMessageField(state),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 16),
             _buildSendButton(state),
           ],
         ),
@@ -1188,25 +1644,28 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
             AppColors.blackOverlay60,
           ],
         ),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: AppColors.whiteOverlay10,
-          width: 1,
+          width: 1.5,
         ),
       ),
       child: TextField(
         controller: _messageController,
         focusNode: _focusNode,
-        style: AppTextStyles.bodyMedium,
+        style: AppTextStyles.chatUser.copyWith(
+          fontSize: 17,
+        ),
         decoration: InputDecoration(
           hintText: '궁금한 것을 물어보세요...',
           hintStyle: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.ashGray,
+            fontSize: 17,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 14,
+            horizontal: 24,
+            vertical: 16,
           ),
         ),
         onSubmitted: (_) => _sendMessage(),
@@ -1219,8 +1678,8 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     return GestureDetector(
       onTap: state.isLoading ? null : _sendMessage,
       child: Container(
-        width: 52,
-        height: 52,
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: state.isLoading
@@ -1232,16 +1691,16 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
               ? []
               : [
                   BoxShadow(
-                    color: AppColors.crimsonGlow.withAlpha(100),
-                    blurRadius: 20,
-                    spreadRadius: 2,
+                    color: AppColors.crimsonGlow.withAlpha(120),
+                    blurRadius: 24,
+                    spreadRadius: 3,
                   ),
                 ],
         ),
         child: const Icon(
           Icons.send_rounded,
           color: AppColors.ghostWhite,
-          size: 22,
+          size: 24,
         ),
       ).animate()
           .scale(
@@ -1253,7 +1712,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   Widget _buildAdPromptBar() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
@@ -1266,7 +1725,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         border: const Border(
           top: BorderSide(
             color: AppColors.crimsonGlow,
-            width: 2,
+            width: 2.5,
           ),
         ),
       ),
@@ -1276,8 +1735,8 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           onTap: _showAdPrompt,
           child: Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 32,
-              vertical: 18,
+              horizontal: 36,
+              vertical: 20,
             ),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -1286,12 +1745,12 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                   AppColors.evilGlow,
                 ],
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.crimsonGlow.withAlpha(100),
-                  blurRadius: 30,
-                  spreadRadius: 5,
+                  color: AppColors.crimsonGlow.withAlpha(120),
+                  blurRadius: 36,
+                  spreadRadius: 8,
                 ),
               ],
             ),
@@ -1301,14 +1760,15 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 const Icon(
                   Icons.remove_red_eye,
                   color: AppColors.ghostWhite,
-                  size: 24,
+                  size: 28,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Text(
                   '대화 계속하기',
                   style: AppTextStyles.buttonLarge.copyWith(
                     color: AppColors.ghostWhite,
                     fontWeight: FontWeight.bold,
+                    fontSize: 19,
                   ),
                 ),
               ],
@@ -1340,19 +1800,19 @@ class _AdPromptDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 420),
         child: GlassMorphismContainer(
-          padding: const EdgeInsets.all(32),
-          borderRadius: 20,
+          padding: const EdgeInsets.all(40),
+          borderRadius: 24,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildIcon(),
-              const SizedBox(height: 24),
-              _buildTitle(),
-              const SizedBox(height: 16),
-              _buildDescription(),
               const SizedBox(height: 32),
+              _buildTitle(),
+              const SizedBox(height: 20),
+              _buildDescription(),
+              const SizedBox(height: 40),
               _buildButtons(context),
             ],
           ),
@@ -1363,8 +1823,8 @@ class _AdPromptDialog extends StatelessWidget {
   
   Widget _buildIcon() {
     return Container(
-      width: 80,
-      height: 80,
+      width: 100,
+      height: 100,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [AppColors.evilGlow, AppColors.crimsonGlow],
@@ -1372,15 +1832,15 @@ class _AdPromptDialog extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: AppColors.evilGlow.withAlpha(100),
-            blurRadius: 30,
-            spreadRadius: 10,
+            color: AppColors.evilGlow.withAlpha(120),
+            blurRadius: 40,
+            spreadRadius: 15,
           ),
         ],
       ),
       child: const Icon(
         Icons.remove_red_eye,
-        size: 40,
+        size: 48,
         color: AppColors.ghostWhite,
       ),
     ).animate(
@@ -1397,7 +1857,7 @@ class _AdPromptDialog extends StatelessWidget {
     return Text(
       '더 깊은 진실을 원하시나요?',
       style: AppTextStyles.displaySmall.copyWith(
-        fontSize: 22,
+        fontSize: 26,
         fontWeight: FontWeight.bold,
       ),
       textAlign: TextAlign.center,
@@ -1406,10 +1866,11 @@ class _AdPromptDialog extends StatelessWidget {
   
   Widget _buildDescription() {
     return Text(
-      '광고를 시청하고 무제한으로\n타로 마스터와 대화를 이어가세요',
+      '광고를 시청하고 \n타로 마스터와 대화를 이어가세요',
       style: AppTextStyles.bodyMedium.copyWith(
         color: AppColors.fogGray,
-        height: 1.5,
+        height: 1.6,
+        fontSize: 18,
       ),
       textAlign: TextAlign.center,
     );
@@ -1421,7 +1882,7 @@ class _AdPromptDialog extends StatelessWidget {
         Expanded(
           child: _buildCancelButton(context),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 20),
         Expanded(
           child: _buildWatchAdButton(),
         ),
@@ -1433,9 +1894,9 @@ class _AdPromptDialog extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppColors.ashGray,
             width: 2,
@@ -1445,6 +1906,7 @@ class _AdPromptDialog extends StatelessWidget {
           '다음에',
           style: AppTextStyles.buttonMedium.copyWith(
             color: AppColors.ashGray,
+            fontSize: 17,
           ),
           textAlign: TextAlign.center,
         ),
@@ -1456,23 +1918,25 @@ class _AdPromptDialog extends StatelessWidget {
     return GestureDetector(
       onTap: onAdWatch,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [AppColors.crimsonGlow, AppColors.evilGlow],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.crimsonGlow.withAlpha(100),
-              blurRadius: 20,
-              spreadRadius: 2,
+              color: AppColors.crimsonGlow.withAlpha(120),
+              blurRadius: 24,
+              spreadRadius: 3,
             ),
           ],
         ),
-        child: const Text(
+        child: Text(
           '광고 보기',
-          style: AppTextStyles.buttonMedium,
+          style: AppTextStyles.buttonMedium.copyWith(
+            fontSize: 17,
+          ),
           textAlign: TextAlign.center,
         ),
       ).animate()

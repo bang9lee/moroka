@@ -162,7 +162,6 @@ class _MainScreenState extends ConsumerState<MainScreen>
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
-    final safeAreaPadding = MediaQuery.of(context).padding;
     
     // Responsive breakpoints
     final isSmallScreen = screenHeight < 700;
@@ -178,14 +177,21 @@ class _MainScreenState extends ConsumerState<MainScreen>
         child: SafeArea(
           child: Column(
             children: [
+              // AppBar
               _buildAppBar(currentUser),
+              
+              // Main Content - Expanded로 감싸서 남은 공간 모두 사용
               Expanded(
-                child: _buildMainContent(
-                  screenSize: screenSize,
-                  isSmallScreen: isSmallScreen,
-                  isTinyScreen: isTinyScreen,
-                  isNarrowScreen: isNarrowScreen,
-                  safeAreaPadding: safeAreaPadding,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return _buildMainContent(
+                      constraints: constraints,
+                      screenSize: screenSize,
+                      isSmallScreen: isSmallScreen,
+                      isTinyScreen: isTinyScreen,
+                      isNarrowScreen: isNarrowScreen,
+                    );
+                  },
                 ),
               ),
             ],
@@ -309,60 +315,86 @@ class _MainScreenState extends ConsumerState<MainScreen>
   }
 
   Widget _buildMainContent({
+    required BoxConstraints constraints,
     required Size screenSize,
     required bool isSmallScreen,
     required bool isTinyScreen,
     required bool isNarrowScreen,
-    required EdgeInsets safeAreaPadding,
   }) {
-    // Dynamic spacing based on screen size
-    final topSpacing = isTinyScreen ? 5.0 : (isSmallScreen ? 10.0 : 20.0);
-    final logoBottomSpacing = isTinyScreen ? 10.0 : (isSmallScreen ? 15.0 : 25.0);
-    final gridBottomSpacing = isTinyScreen ? 10.0 : (isSmallScreen ? 15.0 : 25.0);
-    final bottomSpacing = isTinyScreen ? 5.0 : (isSmallScreen ? 10.0 : 20.0);
+    final availableHeight = constraints.maxHeight;
     
-    return SingleChildScrollView(
-      physics: const ClampingScrollPhysics(),
-      child: Container(
-        constraints: BoxConstraints(
-          minHeight: screenSize.height - 
-              safeAreaPadding.top - 
-              safeAreaPadding.bottom - 
-              69, // AppBar height
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: screenSize.width * 0.05,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: topSpacing),
-            _buildLogo(
-              screenSize: screenSize,
-              isSmallScreen: isSmallScreen,
-              isTinyScreen: isTinyScreen,
+    // 비율 기반 레이아웃 - 화면 크기에 따라 동적으로 조정
+    final logoSection = isTinyScreen ? 0.25 : (isSmallScreen ? 0.28 : 0.30);
+    const questionSection = 0.08;
+    final gridSection = isTinyScreen ? 0.45 : (isSmallScreen ? 0.42 : 0.40);
+    const buttonSection = 0.15;
+    
+    // 최소 간격 보장
+    final minSpacing = isTinyScreen ? 8.0 : 12.0;
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenSize.width * 0.05,
+        vertical: minSpacing,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Logo Section
+          SizedBox(
+            height: availableHeight * logoSection,
+            child: Center(
+              child: _buildLogo(
+                screenSize: screenSize,
+                isSmallScreen: isSmallScreen,
+                isTinyScreen: isTinyScreen,
+              ),
             ),
-            SizedBox(height: logoBottomSpacing),
-            _buildQuestionText(
-              isSmallScreen: isSmallScreen,
-              isTinyScreen: isTinyScreen,
+          ),
+          
+          // Question Text
+          SizedBox(
+            height: availableHeight * questionSection,
+            child: Center(
+              child: _buildQuestionText(
+                isSmallScreen: isSmallScreen,
+                isTinyScreen: isTinyScreen,
+              ),
             ),
-            SizedBox(height: logoBottomSpacing),
-            _buildMoodGrid(
-              screenSize: screenSize,
-              isSmallScreen: isSmallScreen,
-              isTinyScreen: isTinyScreen,
-              isNarrowScreen: isNarrowScreen,
+          ),
+          
+          // Mood Grid - Flexible로 감싸서 남은 공간 활용
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: availableHeight * gridSection,
+              ),
+              child: Center(
+                child: _buildMoodGrid(
+                  screenSize: screenSize,
+                  isSmallScreen: isSmallScreen,
+                  isTinyScreen: isTinyScreen,
+                  isNarrowScreen: isNarrowScreen,
+                  availableHeight: availableHeight * gridSection,
+                ),
+              ),
             ),
-            SizedBox(height: gridBottomSpacing),
-            _buildContinueButton(
-              screenSize: screenSize,
-              isSmallScreen: isSmallScreen,
-              isTinyScreen: isTinyScreen,
+          ),
+          
+          SizedBox(height: minSpacing),
+          
+          // Continue Button
+          SizedBox(
+            height: math.min(availableHeight * buttonSection, 80),
+            child: Center(
+              child: _buildContinueButton(
+                screenSize: screenSize,
+                isSmallScreen: isSmallScreen,
+                isTinyScreen: isTinyScreen,
+              ),
             ),
-            SizedBox(height: bottomSpacing),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -372,10 +404,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isSmallScreen,
     required bool isTinyScreen,
   }) {
-    // Dynamic logo size
-    final logoSize = isTinyScreen ? 70.0 : (isSmallScreen ? 80.0 : 100.0);
-    final titleFontSize = isTinyScreen ? 28.0 : (isSmallScreen ? 32.0 : 38.0);
-    final subtitleFontSize = isTinyScreen ? 11.0 : (isSmallScreen ? 12.0 : 14.0);
+    // 화면 크기에 따라 동적으로 조정되는 로고 크기
+    final logoSize = isTinyScreen ? 60.0 : (isSmallScreen ? 70.0 : 85.0);
+    final titleFontSize = isTinyScreen ? 24.0 : (isSmallScreen ? 28.0 : 34.0);
+    final subtitleFontSize = isTinyScreen ? 10.0 : (isSmallScreen ? 11.0 : 13.0);
     
     return AnimatedBuilder(
       animation: _floatingAnimation,
@@ -383,6 +415,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
         return Transform.translate(
           offset: Offset(0, _floatingAnimation.value * 0.5),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Logo Image
               Container(
@@ -417,7 +450,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                   )
                   .fadeIn(duration: const Duration(milliseconds: 600)),
               
-              const SizedBox(height: 16),
+              SizedBox(height: isTinyScreen ? 8 : 12),
               
               // Title
               Text(
@@ -447,7 +480,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                 color: AppColors.crimsonGlow,
               ),
               
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               
               // Subtitle
               Text(
@@ -500,7 +533,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isSmallScreen,
     required bool isTinyScreen,
   }) {
-    final fontSize = isTinyScreen ? 18.0 : (isSmallScreen ? 20.0 : 26.0);
+    final fontSize = isTinyScreen ? 16.0 : (isSmallScreen ? 18.0 : 22.0);
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -532,12 +565,14 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isSmallScreen,
     required bool isTinyScreen,
     required bool isNarrowScreen,
+    required double availableHeight,
   }) {
     final gridWidth = math.min(screenSize.width * 0.9, 400.0);
     
-    // Responsive parameters
-    final gridParams = _getGridParameters(
+    // 높이에 맞춰 그리드 파라미터 조정
+    final gridParams = _getAdaptiveGridParameters(
       screenWidth: screenSize.width,
+      availableHeight: availableHeight,
       isSmallScreen: isSmallScreen,
       isTinyScreen: isTinyScreen,
       isNarrowScreen: isNarrowScreen,
@@ -564,59 +599,57 @@ class _MainScreenState extends ConsumerState<MainScreen>
     );
   }
 
-  Map<String, double> _getGridParameters({
+  Map<String, double> _getAdaptiveGridParameters({
     required double screenWidth,
+    required double availableHeight,
     required bool isSmallScreen,
     required bool isTinyScreen,
     required bool isNarrowScreen,
   }) {
-    if (screenWidth < 320) {
+    // 사용 가능한 높이에 따라 동적으로 조정
+    final cellHeight = (availableHeight - 24) / 3; // 3행, spacing 고려
+    final cellWidth = (screenWidth * 0.9 - 24) / 3; // 3열, spacing 고려
+    final adaptiveAspectRatio = cellWidth / cellHeight;
+    
+    if (screenWidth < 320 || availableHeight < 250) {
+      return {
+        'fontSize': 8,
+        'emojiSize': 18,
+        'padding': 3,
+        'spacing': 6,
+        'aspectRatio': math.max(adaptiveAspectRatio, 0.7),
+      };
+    } else if (screenWidth < 375 || availableHeight < 300) {
       return {
         'fontSize': 9,
         'emojiSize': 20,
         'padding': 4,
-        'spacing': 6,
-        'aspectRatio': 0.85,
+        'spacing': 8,
+        'aspectRatio': math.max(adaptiveAspectRatio, 0.8),
       };
-    } else if (screenWidth < 375) {
+    } else if (isTinyScreen || availableHeight < 350) {
       return {
         'fontSize': 10,
+        'emojiSize': 22,
+        'padding': 5,
+        'spacing': 8,
+        'aspectRatio': math.max(adaptiveAspectRatio, 0.85),
+      };
+    } else if (isSmallScreen || availableHeight < 400) {
+      return {
+        'fontSize': 11,
         'emojiSize': 24,
         'padding': 6,
-        'spacing': 8,
-        'aspectRatio': 0.9,
-      };
-    } else if (screenWidth < 414) {
-      return {
-        'fontSize': 11,
-        'emojiSize': 28,
-        'padding': 8,
         'spacing': 10,
-        'aspectRatio': 1.0,
-      };
-    } else if (isTinyScreen) {
-      return {
-        'fontSize': 11,
-        'emojiSize': 28,
-        'padding': 8,
-        'spacing': 10,
-        'aspectRatio': 1.05,
-      };
-    } else if (isSmallScreen) {
-      return {
-        'fontSize': 12,
-        'emojiSize': 30,
-        'padding': 10,
-        'spacing': 12,
-        'aspectRatio': 1.1,
+        'aspectRatio': math.max(adaptiveAspectRatio, 0.9),
       };
     } else {
       return {
-        'fontSize': 13,
-        'emojiSize': 32,
-        'padding': 10,
-        'spacing': 12,
-        'aspectRatio': 1.2,
+        'fontSize': 12,
+        'emojiSize': 26,
+        'padding': 8,
+        'spacing': 10,
+        'aspectRatio': math.max(adaptiveAspectRatio, 1.0),
       };
     }
   }
@@ -643,33 +676,45 @@ class _MainScreenState extends ConsumerState<MainScreen>
                 gradient: isSelected
                     ? LinearGradient(
                         colors: [
-                          (mood['color'] as Color).withAlpha(77),
-                          (mood['color'] as Color).withAlpha(26),
+                          (mood['color'] as Color).withAlpha(140),
+                          (mood['color'] as Color).withAlpha(80),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
                     : null,
                 color: !isSelected ? AppColors.blackOverlay40 : null,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected
                       ? mood['color'] as Color
                       : AppColors.whiteOverlay20,
-                  width: isSelected ? 2 : 1,
+                  width: isSelected ? 2.5 : 1,
                 ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: (mood['color'] as Color).withAlpha(102),
+                          color: (mood['color'] as Color).withAlpha(150),
                           blurRadius: 20,
+                          spreadRadius: 1,
+                        ),
+                        BoxShadow(
+                          color: (mood['color'] as Color).withAlpha(80),
+                          blurRadius: 10,
                           spreadRadius: -2,
                         ),
                       ]
-                    : null,
+                    : [
+                        const BoxShadow(
+                          color: AppColors.blackOverlay40,
+                          blurRadius: 6,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     mood['emoji'] as String,
@@ -690,7 +735,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                             color: isSelected
                                 ? AppColors.ghostWhite
                                 : AppColors.fogGray,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 1,
@@ -721,9 +766,9 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isTinyScreen,
   }) {
     final buttonWidth = math.min(screenSize.width * 0.85, 320.0);
-    final buttonHeight = isTinyScreen ? 48.0 : (isSmallScreen ? 56.0 : 64.0);
-    final fontSize = isTinyScreen ? 15.0 : (isSmallScreen ? 16.0 : 18.0);
-    final iconSize = isTinyScreen ? 18.0 : (isSmallScreen ? 20.0 : 24.0);
+    final buttonHeight = isTinyScreen ? 44.0 : (isSmallScreen ? 52.0 : 60.0);
+    final fontSize = isTinyScreen ? 14.0 : (isSmallScreen ? 15.0 : 17.0);
+    final iconSize = isTinyScreen ? 16.0 : (isSmallScreen ? 18.0 : 22.0);
     
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
@@ -756,14 +801,14 @@ class _MainScreenState extends ConsumerState<MainScreen>
                 ? [
                     BoxShadow(
                       color: AppColors.mysticPurple.withAlpha(102),
-                      blurRadius: 24,
+                      blurRadius: 20,
                       spreadRadius: -4,
-                      offset: const Offset(0, 8),
+                      offset: const Offset(0, 6),
                     ),
                     BoxShadow(
                       color: AppColors.deepViolet.withAlpha(77),
-                      blurRadius: 16,
-                      spreadRadius: -8,
+                      blurRadius: 12,
+                      spreadRadius: -6,
                     ),
                   ]
                 : null,
@@ -778,7 +823,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
                     : AppColors.ashGray,
                 size: iconSize,
               ),
-              SizedBox(width: isSmallScreen ? 10 : 12),
+              SizedBox(width: isSmallScreen ? 8 : 10),
               Text(
                 '타로 카드 펼치기',
                 style: AppTextStyles.buttonLarge.copyWith(

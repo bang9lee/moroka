@@ -44,13 +44,10 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
   TarotCardModel? _pendingCard;
   bool _showConfirmDialog = false;
   
-  // ===== Layout Constants =====
+  // ===== Layout Constants - 반응형 UI 최적화 =====
   static const double _cardWidth = 120.0;
   static const double _cardHeight = 180.0;
   static const double _cardSpacing = 15.0;
-  static const double _selectedCardTop = 170.0;
-  static const double _selectedCardHeight = 90.0;
-  static const double _selectedCardHeightLarge = 180.0;
   
   // ===== Card Calling Effect =====
   final Map<int, double> _cardCallingIntensity = {};
@@ -178,7 +175,11 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     final currentSelections = ref.read(cardSelectionViewModelProvider).selectedCards;
     if (currentSelections.any((c) => c.id == card.id)) return;
     
-    if (currentSelections.length >= requiredCards) return;
+    // 이미 필요한 카드를 모두 선택했다면 리턴
+    if (currentSelections.length >= requiredCards) {
+      _hapticFeedback(duration: 50);  // 경고 진동
+      return;
+    }
     
     setState(() {
       _tappedCardIndex = index;
@@ -191,6 +192,22 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
   
   Future<void> _confirmSelection() async {
     if (_pendingCard == null || _tappedCardIndex == null) return;
+    
+    // 선택 전에 다시 한 번 체크
+    final selectedSpread = ref.read(selectedSpreadProvider);
+    final requiredCards = selectedSpread?.cardCount ?? 1;
+    final currentSelections = ref.read(cardSelectionViewModelProvider).selectedCards;
+    
+    if (currentSelections.length >= requiredCards) {
+      _cancelSelection();
+      return;
+    }
+    
+    // 중복 선택 방지
+    if (currentSelections.any((c) => c.id == _pendingCard!.id)) {
+      _cancelSelection();
+      return;
+    }
     
     setState(() {
       _selectedCardIds.add(_pendingCard!.id);
@@ -214,11 +231,9 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     }
     
     // 완료 체크
-    final selectedSpread = ref.read(selectedSpreadProvider);
-    final requiredCards = selectedSpread?.cardCount ?? 1;
-    final currentSelections = ref.read(cardSelectionViewModelProvider).selectedCards.length;
+    final updatedSelections = ref.read(cardSelectionViewModelProvider).selectedCards.length;
     
-    if (currentSelections >= requiredCards) {
+    if (updatedSelections >= requiredCards) {
       await Future.delayed(const Duration(milliseconds: 800));
       if (mounted) {
         final selectedCardIndices = ref.read(cardSelectionViewModelProvider)
@@ -260,23 +275,25 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           SafeArea(
             child: Column(
               children: [
+                // 헤더 영역
                 _buildHeader(userMood, remainingCards),
                 
+                // 선택된 카드 표시 영역 - 여기를 최적화
+                if (state.selectedCards.isNotEmpty)
+                  _buildSelectedCardsSection(state.selectedCards, requiredCards),
+                
+                // 카드 스크롤 영역
                 Expanded(
                   child: state.showingCards
-                      ? _buildCardScrollView()
+                      ? _buildCardScrollSection()
                       : _buildShufflingAnimation(),
                 ),
                 
-                _buildBottomInfo(state.selectedCards.length, requiredCards),
-                _buildInstructions(remainingCards > 0),
+                // 하단 정보 영역
+                _buildBottomSection(state.selectedCards.length, requiredCards, remainingCards),
               ],
             ),
           ),
-          
-          // 선택된 카드 표시
-          if (_selectedCardIds.isNotEmpty)
-            _buildSelectedCardsDisplay(),
           
           // 파티클 효과
           _buildParticleOverlay(),
@@ -289,47 +306,62 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
-  Widget _buildCardScrollView() {
-    return Center(
-      child: Container(
-        height: _cardHeight + 40,
-        margin: const EdgeInsets.symmetric(vertical: 20),
-        child: AnimatedBuilder(
-          animation: Listenable.merge([
-            _spreadController,
-            _breathingController,
-            _glowController,
-          ]),
-          builder: (context, child) {
-            return ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                dragDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                },
-              ),
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(
-                  decelerationRate: ScrollDecelerationRate.fast,
+  Widget _buildSelectedCardsSection(List<TarotCardModel> selectedCards, int requiredCards) {
+    final isLargeSpread = requiredCards >= 10;
+    final cardHeight = isLargeSpread ? 170.0 : 100.0;
+    
+    return Container(
+      height: cardHeight,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Center(
+        child: isLargeSpread
+            ? _buildTwoRowLayout(selectedCards)
+            : _buildSingleRowLayout(selectedCards),
+      ),
+    );
+  }
+  
+  Widget _buildCardScrollSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      child: Center(
+        child: SizedBox(
+          height: _cardHeight + 40,
+          child: AnimatedBuilder(
+            animation: Listenable.merge([
+              _spreadController,
+              _breathingController,
+              _glowController,
+            ]),
+            builder: (context, child) {
+              return ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
                 ),
-                padding: EdgeInsets.zero,
-                child: Row(
-                  children: [
-                    for (int i = 0; i < _shuffledCards.length; i++)
-                      if (!_selectedCardIds.contains(_shuffledCards[i].id))
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: _cardSpacing,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(
+                    decelerationRate: ScrollDecelerationRate.fast,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < _shuffledCards.length; i++)
+                        if (!_selectedCardIds.contains(_shuffledCards[i].id))
+                          Padding(
+                            padding: const EdgeInsets.only(right: _cardSpacing),
+                            child: _buildSingleCard(_shuffledCards[i], i),
                           ),
-                          child: _buildSingleCard(_shuffledCards[i], i),
-                        ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -519,168 +551,235 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     return GestureDetector(
       onTap: _cancelSelection,
       child: Container(
-        color: AppColors.blackOverlay60,
+        color: AppColors.blackOverlay80,
         child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
           child: Center(
             child: GestureDetector(
               onTap: () {}, // 다이얼로그 내부 클릭은 무시
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 40),
-                constraints: const BoxConstraints(maxWidth: 320),
+                constraints: const BoxConstraints(maxWidth: 340),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.blackOverlay80,
-                      AppColors.blackOverlay60,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(30),
+                  color: AppColors.obsidianBlack.withAlpha(200),
+                  borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: AppColors.mysticPurple.withAlpha(100),
-                    width: 2,
+                    color: AppColors.mysticPurple.withAlpha(60),
+                    width: 1,
                   ),
                   boxShadow: [
+                    // 메인 그림자
                     BoxShadow(
-                      color: AppColors.mysticPurple.withAlpha(40),
-                      blurRadius: 30,
-                      spreadRadius: 10,
+                      color: AppColors.mysticPurple.withAlpha(30),
+                      blurRadius: 40,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 10),
+                    ),
+                    // 내부 글로우
+                    BoxShadow(
+                      color: AppColors.evilGlow.withAlpha(15),
+                      blurRadius: 60,
+                      spreadRadius: -20,
                     ),
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  borderRadius: BorderRadius.circular(24),
+                  child: Stack(
                     children: [
-                      // 상단 아이콘 영역
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 30),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // 배경 원
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: RadialGradient(
-                                  colors: [
-                                    AppColors.mysticPurple.withAlpha(50),
-                                    AppColors.mysticPurple.withAlpha(20),
-                                    Colors.transparent,
-                                  ],
-                                ),
-                              ),
-                            ),
-                            // 아이콘
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    AppColors.spiritGlow,
-                                    AppColors.mysticPurple,
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.spiritGlow.withAlpha(80),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.visibility,
-                                color: AppColors.ghostWhite,
-                                size: 32,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      // 텍스트 영역
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Column(
-                          children: [
-                            Text(
-                              '운명의 카드',
-                              style: AppTextStyles.displaySmall.copyWith(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.ghostWhite,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              '이 카드를 선택하시겠습니까?',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                fontSize: 16,
-                                color: AppColors.fogGray,
-                                height: 1.4,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 30),
-                      
-                      // 버튼 영역
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: const BoxDecoration(
-                          color: AppColors.blackOverlay20,
-                          border: Border(
-                            top: BorderSide(
-                              color: AppColors.whiteOverlay10,
-                              width: 1,
+                      // 배경 그라데이션 오버레이
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                AppColors.deepViolet.withAlpha(20),
+                                AppColors.obsidianBlack.withAlpha(0),
+                                AppColors.mysticPurple.withAlpha(10),
+                              ],
+                              stops: const [0.0, 0.5, 1.0],
                             ),
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildDialogButton(
-                                text: '다시 보기',
-                                onTap: _cancelSelection,
-                                isPrimary: false,
-                              ),
+                      ),
+                      
+                      // 메인 컨텐츠
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // 상단 아이콘 영역
+                          Container(
+                            padding: const EdgeInsets.only(top: 40, bottom: 24),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // 배경 글로우 효과
+                                Container(
+                                  width: 120,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: RadialGradient(
+                                      colors: [
+                                        AppColors.mysticPurple.withAlpha(30),
+                                        AppColors.evilGlow.withAlpha(15),
+                                        Colors.transparent,
+                                      ],
+                                      stops: const [0.0, 0.5, 1.0],
+                                    ),
+                                  ),
+                                ),
+                                
+                                // 중간 링
+                                Container(
+                                  width: 85,
+                                  height: 85,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: AppColors.evilGlow.withAlpha(40),
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                
+                                // 메인 로고 컨테이너
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.obsidianBlack,
+                                    border: Border.all(
+                                      color: AppColors.mysticPurple.withAlpha(100),
+                                      width: 1.5,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.evilGlow.withAlpha(50),
+                                        blurRadius: 20,
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      'assets/images/logo/icon.png',
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        // 이미지 로드 실패시 대체 아이콘
+                                        return Icon(
+                                          Icons.auto_awesome,
+                                          color: AppColors.mysticPurple,
+                                          size: 36,
+                                          shadows: [
+                                            Shadow(
+                                              color: AppColors.evilGlow.withAlpha(150),
+                                              blurRadius: 10,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildDialogButton(
-                                text: '선택하기',
-                                onTap: _confirmSelection,
-                                isPrimary: true,
+                          ).animate()
+                              .scale(
+                                begin: const Offset(0.8, 0.8),
+                                end: const Offset(1, 1),
+                                duration: const Duration(milliseconds: 600),
+                                curve: Curves.easeOutBack,
                               ),
+                          
+                          // 텍스트 영역
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: Column(
+                              children: [
+                                Text(
+                                  '운명의 카드',
+                                  style: AppTextStyles.displaySmall.copyWith(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.ghostWhite,
+                                    letterSpacing: 1.5,
+                                    shadows: [
+                                      Shadow(
+                                        color: AppColors.mysticPurple.withAlpha(80),
+                                        blurRadius: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  '이 카드가 당신을 부르고 있습니다',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    fontSize: 16,
+                                    color: AppColors.fogGray,
+                                    height: 1.5,
+                                    letterSpacing: 0.5,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '선택하시겠습니까?',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    fontSize: 15,
+                                    color: AppColors.fogGray.withAlpha(180),
+                                    height: 1.3,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          
+                          const SizedBox(height: 36),
+                          
+                          // 버튼 영역
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: _buildDialogButton(
+                                    text: '다시 보기',
+                                    onTap: _cancelSelection,
+                                    isPrimary: false,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildDialogButton(
+                                    text: '선택',
+                                    onTap: _confirmSelection,
+                                    isPrimary: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ).animate()
                   .scale(
-                    begin: const Offset(0.8, 0.8),
+                    begin: const Offset(0.9, 0.9),
                     end: const Offset(1, 1),
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
                   )
-                  .fadeIn(duration: const Duration(milliseconds: 300)),
+                  .fadeIn(duration: const Duration(milliseconds: 200)),
             ),
           ),
         ),
@@ -696,32 +795,35 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 48,
+        height: 52,
         decoration: BoxDecoration(
-          gradient: isPrimary
+          gradient: isPrimary 
               ? const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppColors.spiritGlow,
                     AppColors.mysticPurple,
+                    AppColors.evilGlow,
                   ],
                 )
               : null,
-          color: isPrimary ? null : AppColors.blackOverlay40,
-          borderRadius: BorderRadius.circular(24),
+          color: isPrimary 
+              ? null
+              : AppColors.obsidianBlack,
+          borderRadius: BorderRadius.circular(26),
           border: Border.all(
             color: isPrimary 
-                ? Colors.transparent
+                ? AppColors.evilGlow.withAlpha(100)
                 : AppColors.whiteOverlay20,
             width: 1.5,
           ),
           boxShadow: isPrimary
               ? [
                   BoxShadow(
-                    color: AppColors.spiritGlow.withAlpha(60),
-                    blurRadius: 15,
-                    spreadRadius: 2,
+                    color: AppColors.evilGlow.withAlpha(40),
+                    blurRadius: 20,
+                    spreadRadius: 0,
+                    offset: const Offset(0, 4),
                   ),
                 ]
               : [],
@@ -730,59 +832,44 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           child: Text(
             text,
             style: AppTextStyles.buttonMedium.copyWith(
-              color: isPrimary ? AppColors.ghostWhite : AppColors.fogGray,
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
+              color: isPrimary 
+                  ? AppColors.ghostWhite 
+                  : AppColors.fogGray,
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              letterSpacing: 0.5,
             ),
           ),
         ),
-      ),
+      ).animate()
+          .scale(
+            begin: const Offset(0.95, 0.95),
+            end: const Offset(1, 1),
+            duration: const Duration(milliseconds: 200),
+            delay: Duration(milliseconds: isPrimary ? 100 : 0),
+          ),
     );
   }
   
-  Widget _buildSelectedCardsDisplay() {
-    final selectedSpread = ref.watch(selectedSpreadProvider);
-    final requiredCards = selectedSpread?.cardCount ?? 1;
-    final isLargeSpread = requiredCards >= 10;
-    
-    return Positioned(
-      top: _selectedCardTop,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: isLargeSpread ? _selectedCardHeightLarge : _selectedCardHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Center(
-          child: isLargeSpread
-              ? _buildTwoRowLayout()
-              : _buildSingleRowLayout(),
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildSingleRowLayout() {
+  Widget _buildSingleRowLayout(List<TarotCardModel> selectedCards) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(width: 20),
-          ..._selectedCardIds.map((cardId) {
-            final cardIndex = _selectedCardIds.toList().indexOf(cardId);
-            return _buildSelectedCard(cardIndex + 1);
+          ...selectedCards.asMap().entries.map((entry) {
+            final index = entry.key;
+            return _buildSelectedCard(index + 1);
           }),
-          const SizedBox(width: 20),
         ],
       ),
     );
   }
   
-  Widget _buildTwoRowLayout() {
-    final selectedList = _selectedCardIds.toList();
-    final firstRow = selectedList.take(5).toList();
-    final secondRow = selectedList.skip(5).toList();
+  Widget _buildTwoRowLayout(List<TarotCardModel> selectedCards) {
+    final firstRow = selectedCards.take(5).toList();
+    final secondRow = selectedCards.skip(5).toList();
     
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -794,39 +881,39 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(width: 20),
               ...firstRow.asMap().entries.map((entry) {
-                return _buildSelectedCard(entry.key + 1);
+                return _buildSelectedCard(entry.key + 1, isSmall: true);
               }),
-              const SizedBox(width: 20),
             ],
           ),
         ),
         const SizedBox(height: 10),
         // 두 번째 줄 (6-10)
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(width: 20),
-              ...secondRow.asMap().entries.map((entry) {
-                return _buildSelectedCard(entry.key + 6);
-              }),
-              const SizedBox(width: 20),
-            ],
+        if (secondRow.isNotEmpty)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...secondRow.asMap().entries.map((entry) {
+                  return _buildSelectedCard(entry.key + 6, isSmall: true);
+                }),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
   
-  Widget _buildSelectedCard(int number) {
+  Widget _buildSelectedCard(int number, {bool isSmall = false}) {
+    final size = isSmall ? 50.0 : 60.0;
+    final fontSize = isSmall ? 20.0 : 24.0;
+    
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
-      width: 55,
-      height: 80,
+      width: size,
+      height: size * 1.4,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         gradient: const LinearGradient(
@@ -855,7 +942,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           style: AppTextStyles.displaySmall.copyWith(
             color: AppColors.spiritGlow,
             fontWeight: FontWeight.bold,
-            fontSize: 24,
+            fontSize: fontSize,
           ),
         ),
       ),
@@ -1082,11 +1169,12 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
-  Widget _buildBottomInfo(int selectedCount, int requiredCount) {
+  Widget _buildBottomSection(int selectedCount, int requiredCount, int remainingCards) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
       child: Column(
         children: [
+          // 진행률 바
           Container(
             height: 6,
             decoration: BoxDecoration(
@@ -1113,43 +1201,32 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
             ),
           ),
           
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           
-          Text(
-            '$selectedCount / $requiredCount',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.ghostWhite,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildInstructions(bool showInstructions) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
-        child: showInstructions
-            ? FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$selectedCount / $requiredCount',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.ghostWhite,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              
+              if (remainingCards > 0)
+                Text(
                   '카드를 탭하여 선택하세요',
-                  key: const ValueKey('instructions'),
                   style: AppTextStyles.whisper.copyWith(
                     color: AppColors.fogGray,
                     fontSize: 14,
                   ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
                 ).animate(
                   onPlay: (controller) => controller.repeat(),
                 ).fadeIn(duration: 2.seconds).then(delay: 3.seconds).fadeOut(duration: 2.seconds),
-              )
-            : const SizedBox.shrink(key: ValueKey('empty')),
+            ],
+          ),
+        ],
       ),
     );
   }
