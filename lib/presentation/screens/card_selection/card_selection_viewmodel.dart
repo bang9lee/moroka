@@ -7,8 +7,6 @@ final cardSelectionViewModelProvider =
   return CardSelectionViewModel();
 });
 
-final chatTurnCountProvider = StateProvider<int>((ref) => 0);
-
 class CardSelectionViewModel extends StateNotifier<CardSelectionState> {
   CardSelectionViewModel() : super(CardSelectionState());
 

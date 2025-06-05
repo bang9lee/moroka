@@ -4,20 +4,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../data/models/tarot_reading_model.dart';
 import '../../../data/services/firestore_service.dart';
+import '../../../data/repositories/cache_repository.dart';
 import '../../../providers.dart';
 import '../../../core/utils/app_logger.dart';
 
 final historyViewModelProvider = 
     StateNotifierProvider<HistoryViewModel, HistoryState>((ref) {
   final firestoreService = ref.watch(firestoreServiceProvider);
-  return HistoryViewModel(firestoreService);
+  final cacheRepository = ref.watch(cacheRepositoryProvider);
+  return HistoryViewModel(firestoreService, cacheRepository);
 });
 
 class HistoryViewModel extends StateNotifier<HistoryState> {
   final FirestoreService _firestoreService;
+  final CacheRepository _cacheRepository;
   DocumentSnapshot? _lastDocument;
   
-  HistoryViewModel(this._firestoreService) : super(HistoryState());
+  HistoryViewModel(this._firestoreService, this._cacheRepository) : super(HistoryState());
 
   Future<void> loadReadings() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -26,6 +29,19 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
     state = state.copyWith(isLoading: true);
 
     try {
+      // Try to get cached readings first
+      final cachedReadings = await _cacheRepository.getCachedReadingHistory(user.uid);
+      if (cachedReadings != null && cachedReadings.isNotEmpty) {
+        AppLogger.debug('Using cached reading history');
+        state = state.copyWith(
+          readings: cachedReadings,
+          isLoading: false,
+          hasMore: cachedReadings.length >= 10,
+        );
+        return;
+      }
+
+      // If no cache, fetch from Firestore
       final readings = await _firestoreService.getUserReadings(
         userId: user.uid,
         limit: 10,
@@ -39,6 +55,12 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
             .doc(lastReadingId)
             .get();
         _lastDocument = lastDoc;
+        
+        // Cache the readings
+        await _cacheRepository.cacheUserReadingHistory(
+          userId: user.uid,
+          readings: readings,
+        );
       }
 
       state = state.copyWith(
@@ -80,8 +102,16 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
         _lastDocument = lastDoc;
       }
 
+      final updatedReadings = [...state.readings, ...moreReadings];
+      
+      // Update cache with all readings
+      await _cacheRepository.cacheUserReadingHistory(
+        userId: user.uid,
+        readings: updatedReadings,
+      );
+      
       state = state.copyWith(
-        readings: [...state.readings, ...moreReadings],
+        readings: updatedReadings,
         isLoadingMore: false,
         hasMore: moreReadings.length >= 10,
       );

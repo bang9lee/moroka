@@ -8,6 +8,7 @@ import 'package:vibration/vibration.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/tarot_card_model.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../widgets/common/animated_gradient_background.dart';
@@ -16,6 +17,7 @@ import '../../widgets/common/custom_loading_indicator.dart';
 import '../../widgets/spreads/spread_layout_widget.dart';
 import '../../widgets/chat/chat_bubble_widget.dart';
 import '../../widgets/chat/typing_indicator.dart';
+import '../../widgets/common/accessible_icon_button.dart';
 import '../main/main_viewmodel.dart';
 import '../spread_selection/spread_selection_viewmodel.dart';
 import 'result_chat_viewmodel.dart';
@@ -133,9 +135,13 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final selectedSpread = ref.read(selectedSpreadProvider);
     final userMood = ref.read(userMoodProvider) ?? '';
     
-    final cards = widget.selectedCardIndices
+    // Use the static method from TarotCardModel - now async
+    final cardFutures = widget.selectedCardIndices
         .map((id) => TarotCardModel.getCardById(id))
         .toList();
+    
+    final cardResults = await Future.wait(cardFutures);
+    final cards = cardResults.whereType<TarotCardModel>().toList();
     
     // Initialize viewmodel
     await Future(() {
@@ -203,6 +209,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   List<Map<String, dynamic>> _parseInterpretation(String interpretation) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(resultChatViewModelProvider);
     
     // 예/아니오 스프레드 특별 처리
@@ -254,36 +261,71 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       }
       // 특별한 패턴: "제목" 뒤에 내용이 바로 오는 경우
       else {
-        // 켈틱 크로스의 섹션 제목들
+        // 켈틱 크로스의 섹션 제목들 - 다국어 및 한국어 키워드 매핑
         final sectionTitles = [
-          '핵심 상황 분석',
-          '내면의 갈등',
-          '시간축 분석',
-          '외부 요인',
-          '최종 전망',
-          '단계별 실천 계획',
-          '두 사람의 에너지',
-          '마음의 온도차',
-          '관계의 걸림돌',
-          '미래 가능성',
-          '사랑을 위한 조언',
-          '한 줄 조언',
-          '전체 흐름',
-          '시간대별 해석',
-          '행동 지침',
-          '핵심 조언',
+          l10n.coreSituationAnalysis,
+          l10n.innerConflict,
+          l10n.timelineAnalysis,
+          l10n.externalFactors,
+          l10n.finalForecast,
+          l10n.stepByStepPlan,
+          l10n.twoPersonEnergy,
+          l10n.heartTemperatureDifference,
+          l10n.relationshipObstacles,
+          l10n.futurePossibility,
+          l10n.adviceForLove,
+          l10n.oneLineAdvice,
+          l10n.overallFlow,
+          l10n.timeBasedInterpretation,
+          l10n.actionGuidelines,
+          l10n.coreAdvice,
         ];
         
-        for (final title in sectionTitles) {
-          if (line.startsWith(title)) {
-            newTitle = title;
+        // 한국어 키워드 매핑 (AI가 한국어로 응답하는 경우)
+        final koreanKeywords = {
+          '핵심 상황 분석': l10n.coreSituationAnalysis,
+          '내면의 갈등': l10n.innerConflict,
+          '시간의 흐름': l10n.timelineAnalysis,
+          '외부 요인': l10n.externalFactors,
+          '최종 전망': l10n.finalForecast,
+          '단계별 실행 계획': l10n.stepByStepPlan,
+          '두 사람의 에너지': l10n.twoPersonEnergy,
+          '마음의 온도차': l10n.heartTemperatureDifference,
+          '관계의 장애물': l10n.relationshipObstacles,
+          '미래의 가능성': l10n.futurePossibility,
+          '사랑을 위한 조언': l10n.adviceForLove,
+          '한 줄 조언': l10n.oneLineAdvice,
+          '전체적인 흐름': l10n.overallFlow,
+          '시기별 해석': l10n.timeBasedInterpretation,
+          '행동 지침': l10n.actionGuidelines,
+          '핵심 조언': l10n.coreAdvice,
+        };
+        
+        // 먼저 한국어 키워드 체크
+        for (final entry in koreanKeywords.entries) {
+          if (line.startsWith(entry.key)) {
+            newTitle = entry.value;
             isSection = true;
-            // 제목 뒤의 내용은 현재 컨텐츠로
-            final afterTitle = line.substring(title.length).trim();
+            final afterTitle = line.substring(entry.key.length).trim();
             if (afterTitle.isNotEmpty) {
               currentContent = '$afterTitle\n';
             }
             break;
+          }
+        }
+        
+        // 한국어 키워드가 없으면 현재 언어 제목 체크
+        if (!isSection) {
+          for (final title in sectionTitles) {
+            if (line.startsWith(title)) {
+              newTitle = title;
+              isSection = true;
+              final afterTitle = line.substring(title.length).trim();
+              if (afterTitle.isNotEmpty) {
+                currentContent = '$afterTitle\n';
+              }
+              break;
+            }
           }
         }
       }
@@ -371,16 +413,17 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   // 예/아니오 전용 파싱
   List<Map<String, dynamic>> _parseYesNoInterpretation(String interpretation) {
+    final l10n = AppLocalizations.of(context)!;
     final sections = <Map<String, dynamic>>[];
     
-    // 예/아니오 특수 섹션 패턴
+    // 예/아니오 특수 섹션 패턴 - AI가 한국어로만 응답하므로 한국어 패턴 사용
     final patterns = {
-      '최종 답변': RegExp(r'최종 답변[:\s]*(.+?)(?=판단 근거|$)', dotAll: true),
-      '판단 근거': RegExp(r'판단 근거[:\s]*(.+?)(?=핵심 메시지|$)', dotAll: true),
-      '핵심 메시지': RegExp(r'핵심 메시지[:\s]*(.+?)(?=성공 조건|$)', dotAll: true),
-      '성공 조건': RegExp(r'성공 조건[:\s]*(.+?)(?=시기 예측|$)', dotAll: true),
-      '시기 예측': RegExp(r'시기 예측[:\s]*(.+?)(?=행동 가이드|$)', dotAll: true),
-      '행동 가이드': RegExp(r'행동 가이드[:\s]*(.+?)$', dotAll: true),
+      l10n.yes: RegExp(r'최종 답변[:\s]*(.+?)(?=판단 근거|$)', dotAll: true),
+      l10n.judgmentBasis: RegExp(r'판단 근거[:\s]*(.+?)(?=핵심 메시지|$)', dotAll: true),
+      l10n.coreMessage: RegExp(r'핵심 메시지[:\s]*(.+?)(?=성공 조건|$)', dotAll: true),
+      l10n.successConditions: RegExp(r'성공 조건[:\s]*(.+?)(?=시기 예측|$)', dotAll: true),
+      l10n.timingPrediction: RegExp(r'시기 예측[:\s]*(.+?)(?=행동 가이드|$)', dotAll: true),
+      l10n.actionGuide: RegExp(r'행동 가이드[:\s]*(.+?)$', dotAll: true),
     };
     
     for (final entry in patterns.entries) {
@@ -389,7 +432,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         final content = match.group(1)?.trim();
         if (content != null && content.isNotEmpty) {
           // 최종 답변은 특별 처리
-          if (entry.key == '최종 답변') {
+          if (entry.key == l10n.yes) {
             sections.add({
               'title': entry.key,
               'content': content,
@@ -423,7 +466,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
               sections.add({
                 'title': currentTitle,
                 'content': currentLines.join('\n').trim(),
-                'isSpecial': currentTitle == '최종 답변',
+                'isSpecial': currentTitle == l10n.yes,
               });
             }
             
@@ -446,7 +489,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         sections.add({
           'title': currentTitle,
           'content': currentLines.join('\n').trim(),
-          'isSpecial': currentTitle == '최종 답변',
+          'isSpecial': currentTitle == l10n.yes,
         });
       }
     }
@@ -455,22 +498,45 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
   
   List<Map<String, dynamic>> _autoDetectSections(String interpretation) {
+    final l10n = AppLocalizations.of(context)!;
     final sections = <Map<String, dynamic>>[];
     final lines = interpretation.split('\n');
     
-    // 주요 키워드로 섹션 자동 감지
+    // 주요 키워드로 섹션 자동 감지 - 한국어 키워드 포함
     final keywordPatterns = {
-      '현재': '현재 상황',
-      '과거': '과거의 영향',
-      '미래': '앞으로의 전망',
-      '조언': '실천 조언',
-      '메시지': '카드의 메시지',
-      '의미': '전체적인 의미',
-      '해석': '종합 해석',
+      // 원카드용 한국어 키워드
+      '카드 의미': l10n.interpretation,
+      '상황 해석': l10n.comprehensiveInterpretation,
+      '조언': l10n.practicalAdvice,
+      '오늘의 메시지': l10n.specialInterpretation,
+      
+      // 3카드용 한국어 키워드
+      '과거': l10n.pastInfluence,
+      '현재': l10n.currentSituation,
+      '미래': l10n.futureForecast,
+      
+      // 기타 한국어 키워드
+      '메시지': l10n.coreMessage,
+      '의미': l10n.interpretation,
+      '해석': l10n.comprehensiveInterpretation,
+      '전체 해석': l10n.comprehensiveInterpretation,
+      '종합 해석': l10n.comprehensiveInterpretation,
+      
+      // English keywords (in case AI responds in English)
+      'Card Message': l10n.coreMessage,
+      'Current Situation': l10n.currentSituation,
+      'Practical Advice': l10n.practicalAdvice,
+      'Past': l10n.pastInfluence,
+      'Present': l10n.currentSituation,
+      'Future': l10n.futureForecast,
+      'Overall Flow': l10n.overallFlow,
+      'Time-based Interpretation': l10n.timeBasedInterpretation,
+      'Action Guidelines': l10n.actionGuidelines,
+      'Core Advice': l10n.coreAdvice,
     };
     
     String currentSection = '';
-    String currentTitle = '카드의 메시지';
+    String currentTitle = l10n.coreMessage;
     
     for (final line in lines) {
       final trimmedLine = line.trim();
@@ -518,6 +584,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
   
   List<Map<String, dynamic>> _manualSplitSections(String interpretation) {
+    final l10n = AppLocalizations.of(context)!;
     final sections = <Map<String, dynamic>>[];
     final sentences = interpretation.split(RegExp(r'[.!?]\s+'));
     
@@ -526,23 +593,23 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       final third = sentences.length ~/ 3;
       
       sections.add({
-        'title': '현재 상황',
+        'title': l10n.currentSituation,
         'content': '${sentences.take(third).join('. ')}.',
       });
       
       sections.add({
-        'title': '카드의 메시지',
+        'title': l10n.cardMessage,
         'content': '${sentences.skip(third).take(third).join('. ')}.',
       });
       
       sections.add({
-        'title': '앞으로의 조언',
+        'title': l10n.futureAdvice,
         'content': '${sentences.skip(third * 2).join('. ')}.',
       });
     } else {
       // 문장이 적으면 하나의 섹션으로
       sections.add({
-        'title': '카드의 메시지',
+        'title': l10n.cardMessage,
         'content': interpretation,
       });
     }
@@ -551,12 +618,13 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildEmptyInterpretation() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(40),
       child: Center(
         child: Text(
-          '해석을 준비하는 중입니다...',
+          l10n.preparingInterpretation,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.fogGray,
             fontSize: 18,
@@ -567,6 +635,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildSingleInterpretationCard(String interpretation) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16),
@@ -633,7 +702,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                   ),
                   const SizedBox(width: 16),
                   Text(
-                    '카드의 메시지',
+                    l10n.cardMessage,
                     style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.mysticPurple,
                       fontSize: 22,
@@ -655,6 +724,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildSectionCard(int index, Map<String, dynamic> section) {
+    final l10n = AppLocalizations.of(context)!;
     final animationIndex = index < _sectionAnimations.length 
         ? index 
         : _sectionAnimations.length - 1;
@@ -662,7 +732,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final style = _getSectionStyle(section['title']);
     
     // 예/아니오 최종 답변 특별 처리
-    if (section['isSpecial'] == true && section['title'] == '최종 답변') {
+    if (section['isSpecial'] == true && section['title'] == l10n.yes) {
       return _buildYesNoAnswerCard(section, animationIndex);
     }
     
@@ -773,6 +843,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   // 예/아니오 최종 답변 특별 카드
   Widget _buildYesNoAnswerCard(Map<String, dynamic> section, int animationIndex) {
+    final l10n = AppLocalizations.of(context)!;
     final content = section['content'] as String;
     
     // 답변 타입 판단
@@ -787,15 +858,15 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     if (isYes && !isConditional) {
       primaryColor = AppColors.spiritGlow;
       answerIcon = Icons.check_circle;
-      answerText = '⭕ 예';
+      answerText = '⭕ ${l10n.yes}';
     } else if (isNo) {
       primaryColor = AppColors.crimsonGlow;
       answerIcon = Icons.cancel;
-      answerText = '❌ 아니오';
+      answerText = '❌ ${l10n.no}';
     } else if (isConditional) {
       primaryColor = AppColors.omenGlow;
       answerIcon = Icons.warning;
-      answerText = '⚠️ 조건부 예';
+      answerText = '⚠️ ${l10n.conditionalYes}';
     }
     
     return AnimatedBuilder(
@@ -863,14 +934,15 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
   
   Widget _buildSectionContent(Map<String, dynamic> section, Map<String, dynamic> style) {
+    final l10n = AppLocalizations.of(context)!;
     final content = section['content'] as String;
     
     // 특별한 포맷팅이 필요한 섹션 처리
-    if ((section['title'] == '실천 조언' || 
-         section['title'] == '행동 지침' ||
-         section['title'] == '단계별 실천 계획' ||
-         section['title'] == '사랑을 위한 조언' ||
-         section['title'] == '판단 근거') && 
+    if ((section['title'] == l10n.practicalAdvice || 
+         section['title'] == l10n.actionGuidelines ||
+         section['title'] == l10n.stepByStepPlan ||
+         section['title'] == l10n.adviceForLove ||
+         section['title'] == l10n.judgmentBasis) && 
         (content.contains('•') || content.contains('1.') || content.contains('2.') || content.contains(':'))) {
       return _buildBulletPoints(content, style);
     } else if (content.contains('**')) {
@@ -1070,116 +1142,117 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Map<String, dynamic> _getSectionStyle(String title) {
-    const sectionStyles = {
-      '카드의 메시지': {
+    final l10n = AppLocalizations.of(context)!;
+    final sectionStyles = {
+      l10n.cardMessage: {
         'icon': Icons.auto_awesome,
         'color': AppColors.mysticPurple,
       },
-      '현재 상황': {
+      l10n.currentSituation: {
         'icon': Icons.remove_red_eye,
         'color': AppColors.fogGray,
       },
-      '실천 조언': {
+      l10n.practicalAdvice: {
         'icon': Icons.lightbulb_outline,
         'color': AppColors.omenGlow,
       },
-      '앞으로의 전망': {
+      l10n.futureForecast: {
         'icon': Icons.auto_fix_high_sharp,
         'color': AppColors.mysticPurple,
       },
-      '전체 흐름': {
+      l10n.overallFlow: {
         'icon': Icons.timeline,
         'color': AppColors.spiritGlow,
       },
-      '시간대별 해석': {
+      l10n.timeBasedInterpretation: {
         'icon': Icons.schedule,
         'color': AppColors.evilGlow,
       },
-      '과거의 영향': {
+      l10n.pastInfluence: {
         'icon': Icons.history,
         'color': AppColors.ashGray,
       },
-      '다가올 미래': {
+      l10n.upcomingFuture: {
         'icon': Icons.trending_up,
         'color': AppColors.mysticPurple,
       },
-      '행동 지침': {
+      l10n.actionGuidelines: {
         'icon': Icons.directions_run,
         'color': AppColors.omenGlow,
       },
-      '핵심 조언': {
+      l10n.coreAdvice: {
         'icon': Icons.star,
         'color': AppColors.spiritGlow,
       },
-      '핵심 상황 분석': {
+      l10n.coreSituationAnalysis: {
         'icon': Icons.analytics,
         'color': AppColors.spiritGlow,
       },
-      '내면의 갈등': {
+      l10n.innerConflict: {
         'icon': Icons.psychology,
         'color': AppColors.evilGlow,
       },
-      '시간축 분석': {
+      l10n.timelineAnalysis: {
         'icon': Icons.schedule,
         'color': AppColors.fogGray,
       },
-      '외부 요인': {
+      l10n.externalFactors: {
         'icon': Icons.public,
         'color': AppColors.ashGray,
       },
-      '최종 전망': {
+      l10n.finalForecast: {
         'icon': Icons.visibility,
         'color': AppColors.mysticPurple,
       },
-      '단계별 실천 계획': {
+      l10n.stepByStepPlan: {
         'icon': Icons.format_list_numbered,
         'color': AppColors.omenGlow,
       },
-      '두 사람의 에너지': {
+      l10n.twoPersonEnergy: {
         'icon': Icons.favorite,
         'color': AppColors.crimsonGlow,
       },
-      '마음의 온도차': {
+      l10n.heartTemperatureDifference: {
         'icon': Icons.thermostat,
         'color': AppColors.evilGlow,
       },
-      '관계의 걸림돌': {
+      l10n.relationshipObstacles: {
         'icon': Icons.block,
         'color': AppColors.ashGray,
       },
-      '미래 가능성': {
+      l10n.futurePossibility: {
         'icon': Icons.trending_up,
         'color': AppColors.spiritGlow,
       },
-      '사랑을 위한 조언': {
+      l10n.adviceForLove: {
         'icon': Icons.tips_and_updates,
         'color': AppColors.mysticPurple,
       },
-      '한 줄 조언': {
+      l10n.oneLineAdvice: {
         'icon': Icons.format_quote,
         'color': AppColors.omenGlow,
       },
-      '최종 답변': {
+      l10n.yes: {
         'icon': Icons.check_circle,
         'color': AppColors.spiritGlow,
       },
-      '판단 근거': {
+      l10n.judgmentBasis: {
         'icon': Icons.fact_check,
         'color': AppColors.fogGray,
       },
-      '핵심 메시지': {
+      l10n.coreMessage: {
         'icon': Icons.message,
         'color': AppColors.evilGlow,
       },
-      '성공 조건': {
+      l10n.successConditions: {
         'icon': Icons.flag,
         'color': AppColors.omenGlow,
       },
-      '시기 예측': {
+      l10n.timingPrediction: {
         'icon': Icons.access_time,
         'color': AppColors.ashGray,
       },
-      '행동 가이드': {
+      l10n.actionGuide: {
         'icon': Icons.explore,
         'color': AppColors.mysticPurple,
       },
@@ -1224,6 +1297,23 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         );
       }
     });
+  }
+  
+  String _getLocalizedSpreadName(TarotSpread? spread, AppLocalizations l10n) {
+    if (spread == null) return '';
+    
+    switch (spread.type) {
+      case SpreadType.oneCard:
+        return l10n.spreadOneCard;
+      case SpreadType.threeCard:
+        return l10n.spreadThreeCard;
+      case SpreadType.celticCross:
+        return l10n.spreadCelticCross;
+      case SpreadType.relationship:
+        return l10n.spreadRelationship;
+      case SpreadType.yesNo:
+        return l10n.spreadYesNo;
+    }
   }
 
   void _showAdPrompt() {
@@ -1277,9 +1367,10 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(resultChatViewModelProvider);
     final selectedSpread = ref.watch(selectedSpreadProvider);
-    final spreadName = selectedSpread?.nameKr ?? '';
+    final spreadName = _getLocalizedSpreadName(selectedSpread, l10n);
     final isOneCard = state.selectedCards.length == 1;
     
     return PopScope(
@@ -1304,9 +1395,9 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                   child: _buildContent(state, selectedSpread, isOneCard),
                 ),
                 if (_showChat && !state.showAdPrompt)
-                  _buildChatInput(state),
+                  _buildChatInput(context, state),
                 if (state.showAdPrompt)
-                  _buildAdPromptBar(),
+                  _buildAdPromptBar(context),
               ],
             ),
           ),
@@ -1341,17 +1432,17 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildCloseButton() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.whiteOverlay10,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: IconButton(
+      child: AccessibleIconButton(
         onPressed: () => context.go('/main'),
-        icon: const Icon(
-          Icons.close,
-          color: AppColors.ghostWhite,
-        ),
+        icon: Icons.close,
+        semanticLabel: l10n.close,
+        color: AppColors.ghostWhite,
       ),
     );
   }
@@ -1405,19 +1496,24 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildCardLayout(ResultChatState state, TarotSpread selectedSpread) {
+    final l10n = AppLocalizations.of(context)!;
     return AnimatedBuilder(
       animation: _layoutFadeAnimation,
       builder: (context, child) {
         return Opacity(
           opacity: _layoutFadeAnimation.value,
-          child: Container(
-            height: _getLayoutHeight(state.selectedCards.length),
-            margin: const EdgeInsets.only(bottom: 32),
-            child: SpreadLayoutWidget(
-              spread: selectedSpread,
-              drawnCards: state.selectedCards,
-              showCardNames: true,
-              isInteractive: false,
+          child: Semantics(
+            label: l10n.selectedCardsLayout,
+            container: true,
+            child: Container(
+              height: _getLayoutHeight(state.selectedCards.length),
+              margin: const EdgeInsets.only(bottom: 32),
+              child: SpreadLayoutWidget(
+                spread: selectedSpread,
+                drawnCards: state.selectedCards,
+                showCardNames: true,
+                isInteractive: false,
+              ),
             ),
           ),
         );
@@ -1448,6 +1544,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildInterpretationHeader(bool isOneCard) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 28),
       padding: const EdgeInsets.all(32),
@@ -1469,7 +1566,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       child: Column(
         children: [
           Text(
-            isOneCard ? '카드가 전하는 메시지' : '카드들이 그리는 이야기',
+            isOneCard ? l10n.cardMessage : l10n.cardsStory,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -1478,7 +1575,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            '당신을 위한 특별한 해석',
+            l10n.specialInterpretation,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.fogGray,
               fontSize: 17,
@@ -1490,6 +1587,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
   }
 
   Widget _buildLoadingIndicator() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(60),
       child: Column(
@@ -1500,7 +1598,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           ),
           const SizedBox(height: 32),
           Text(
-            '카드의 의미를 해석하는 중...',
+            l10n.interpretingCards,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.fogGray,
               fontSize: 18,
@@ -1517,16 +1615,22 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     widgets.addAll(
       state.messages.map((message) => Padding(
         padding: const EdgeInsets.only(bottom: 20),
-        child: ChatBubbleWidget(
-          message: message.message,
-          isUser: message.isUser,
-          timestamp: message.timestamp,
-        ).animate()
-            .slideX(
-              begin: message.isUser ? 0.1 : -0.1,
-              duration: const Duration(milliseconds: 300),
-            )
-            .fadeIn(),
+        child: Semantics(
+          label: message.isUser 
+              ? '${AppLocalizations.of(context)!.yourQuestion}: ${message.message}'
+              : '${AppLocalizations.of(context)!.tarotMasterResponse}: ${message.message}',
+          container: true,
+          child: ChatBubbleWidget(
+            message: message.message,
+            isUser: message.isUser,
+            timestamp: message.timestamp,
+          ).animate()
+              .slideX(
+                begin: message.isUser ? 0.1 : -0.1,
+                duration: const Duration(milliseconds: 300),
+              )
+              .fadeIn(),
+        ),
       )),
     );
     
@@ -1542,7 +1646,8 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     return widgets;
   }
 
-  Widget _buildChatInput(ResultChatState state) {
+  Widget _buildChatInput(BuildContext context, ResultChatState state) {
+    final l10n = AppLocalizations.of(context)!;
     // 채팅 제한 도달 시
     if (state.chatLimitReached) {
       return Container(
@@ -1588,7 +1693,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  '오늘의 대화가 모두 끝났습니다',
+                  l10n.todaysChatEnded,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.crimsonGlow,
                     fontSize: 16,
@@ -1625,7 +1730,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
         child: Row(
           children: [
             Expanded(
-              child: _buildMessageField(state),
+              child: _buildMessageField(context, state),
             ),
             const SizedBox(width: 16),
             _buildSendButton(state),
@@ -1635,82 +1740,95 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     );
   }
 
-  Widget _buildMessageField(ResultChatState state) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            AppColors.blackOverlay40,
-            AppColors.blackOverlay60,
-          ],
+  Widget _buildMessageField(BuildContext context, ResultChatState state) {
+    final l10n = AppLocalizations.of(context)!;
+    return Semantics(
+      label: l10n.chatInputField,
+      textField: true,
+      enabled: !state.isLoading,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              AppColors.blackOverlay40,
+              AppColors.blackOverlay60,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: AppColors.whiteOverlay10,
+            width: 1.5,
+          ),
         ),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: AppColors.whiteOverlay10,
-          width: 1.5,
-        ),
-      ),
-      child: TextField(
-        controller: _messageController,
-        focusNode: _focusNode,
-        style: AppTextStyles.chatUser.copyWith(
-          fontSize: 17,
-        ),
-        decoration: InputDecoration(
-          hintText: '궁금한 것을 물어보세요...',
-          hintStyle: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.ashGray,
+        child: TextField(
+          controller: _messageController,
+          focusNode: _focusNode,
+          style: AppTextStyles.chatUser.copyWith(
             fontSize: 17,
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 16,
+          decoration: InputDecoration(
+            hintText: l10n.askQuestions,
+            hintStyle: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.ashGray,
+              fontSize: 17,
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
           ),
+          onSubmitted: (_) => _sendMessage(),
+          enabled: !state.isLoading,
         ),
-        onSubmitted: (_) => _sendMessage(),
-        enabled: !state.isLoading,
       ),
     );
   }
 
   Widget _buildSendButton(ResultChatState state) {
-    return GestureDetector(
-      onTap: state.isLoading ? null : _sendMessage,
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: state.isLoading
-                ? [AppColors.ashGray, AppColors.fogGray]
-                : [AppColors.crimsonGlow, AppColors.evilGlow],
+    final l10n = AppLocalizations.of(context)!;
+    return Semantics(
+      label: l10n.sendMessage,
+      button: true,
+      enabled: !state.isLoading,
+      child: GestureDetector(
+        onTap: state.isLoading ? null : _sendMessage,
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: state.isLoading
+                  ? [AppColors.ashGray, AppColors.fogGray]
+                  : [AppColors.crimsonGlow, AppColors.evilGlow],
+            ),
+            shape: BoxShape.circle,
+            boxShadow: state.isLoading
+                ? []
+                : [
+                    BoxShadow(
+                      color: AppColors.crimsonGlow.withAlpha(120),
+                      blurRadius: 24,
+                      spreadRadius: 3,
+                    ),
+                  ],
           ),
-          shape: BoxShape.circle,
-          boxShadow: state.isLoading
-              ? []
-              : [
-                  BoxShadow(
-                    color: AppColors.crimsonGlow.withAlpha(120),
-                    blurRadius: 24,
-                    spreadRadius: 3,
-                  ),
-                ],
-        ),
-        child: const Icon(
-          Icons.send_rounded,
-          color: AppColors.ghostWhite,
-          size: 24,
-        ),
-      ).animate()
-          .scale(
-            begin: const Offset(0.8, 0.8),
-            duration: const Duration(milliseconds: 200),
+          child: const Icon(
+            Icons.send_rounded,
+            color: AppColors.ghostWhite,
+            size: 24,
           ),
+        ).animate()
+            .scale(
+              begin: const Offset(0.8, 0.8),
+              duration: const Duration(milliseconds: 200),
+            ),
+      ),
     );
   }
 
-  Widget _buildAdPromptBar() {
+  Widget _buildAdPromptBar(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -1764,7 +1882,7 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  '대화 계속하기',
+                  l10n.continueConversation,
                   style: AppTextStyles.buttonLarge.copyWith(
                     color: AppColors.ghostWhite,
                     fontWeight: FontWeight.bold,
@@ -1809,9 +1927,9 @@ class _AdPromptDialog extends StatelessWidget {
             children: [
               _buildIcon(),
               const SizedBox(height: 32),
-              _buildTitle(),
+              _buildTitle(context),
               const SizedBox(height: 20),
-              _buildDescription(),
+              _buildDescription(context),
               const SizedBox(height: 40),
               _buildButtons(context),
             ],
@@ -1853,9 +1971,10 @@ class _AdPromptDialog extends StatelessWidget {
     );
   }
   
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Text(
-      '더 깊은 진실을 원하시나요?',
+      l10n.wantDeeperTruth,
       style: AppTextStyles.displaySmall.copyWith(
         fontSize: 26,
         fontWeight: FontWeight.bold,
@@ -1864,9 +1983,10 @@ class _AdPromptDialog extends StatelessWidget {
     );
   }
   
-  Widget _buildDescription() {
+  Widget _buildDescription(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Text(
-      '광고를 시청하고 \n타로 마스터와 대화를 이어가세요',
+      l10n.watchAdToContinue,
       style: AppTextStyles.bodyMedium.copyWith(
         color: AppColors.fogGray,
         height: 1.6,
@@ -1884,13 +2004,14 @@ class _AdPromptDialog extends StatelessWidget {
         ),
         const SizedBox(width: 20),
         Expanded(
-          child: _buildWatchAdButton(),
+          child: _buildWatchAdButton(context),
         ),
       ],
     );
   }
   
   Widget _buildCancelButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
@@ -1903,7 +2024,7 @@ class _AdPromptDialog extends StatelessWidget {
           ),
         ),
         child: Text(
-          '다음에',
+          l10n.later,
           style: AppTextStyles.buttonMedium.copyWith(
             color: AppColors.ashGray,
             fontSize: 17,
@@ -1914,7 +2035,8 @@ class _AdPromptDialog extends StatelessWidget {
     );
   }
   
-  Widget _buildWatchAdButton() {
+  Widget _buildWatchAdButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: onAdWatch,
       child: Container(
@@ -1933,7 +2055,7 @@ class _AdPromptDialog extends StatelessWidget {
           ],
         ),
         child: Text(
-          '광고 보기',
+          l10n.watchAd,
           style: AppTextStyles.buttonMedium.copyWith(
             fontSize: 17,
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/tarot_spread_model.dart';
 import '../common/glass_morphism_container.dart';
 
@@ -59,13 +60,14 @@ class _SpreadCardWidgetState extends State<SpreadCardWidget>
   }
   
   String _getDifficultyText() {
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.spread.difficulty) {
       case SpreadDifficulty.beginner:
-        return '초급';
+        return l10n.free;
       case SpreadDifficulty.intermediate:
-        return '중급';
+        return l10n.paid;
       case SpreadDifficulty.advanced:
-        return '고급';
+        return l10n.paid;
     }
   }
 
@@ -84,23 +86,47 @@ class _SpreadCardWidgetState extends State<SpreadCardWidget>
     }
   }
   
+  String _getLocalizedSpreadName(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (widget.spread.type) {
+      case SpreadType.oneCard:
+        return l10n.spreadOneCard;
+      case SpreadType.threeCard:
+        return l10n.spreadThreeCard;
+      case SpreadType.celticCross:
+        return l10n.spreadCelticCross;
+      case SpreadType.relationship:
+        return l10n.spreadRelationship;
+      case SpreadType.yesNo:
+        return l10n.spreadYesNo;
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) {
-        setState(() => _isHovered = true);
-        _hoverController.forward();
-      },
-      onTapUp: (_) {
-        setState(() => _isHovered = false);
-        _hoverController.reverse();
-      },
-      onTapCancel: () {
-        setState(() => _isHovered = false);
-        _hoverController.reverse();
-      },
-      onTap: widget.onTap,
-      child: AnimatedBuilder(
+    final l10n = AppLocalizations.of(context)!;
+    final spreadName = _getLocalizedSpreadName(context);
+    final cardCount = widget.spread.cardCount;
+    
+    return Semantics(
+      button: true,
+      label: '$spreadName - $cardCount ${l10n.cards}',
+      hint: l10n.tapToSelectSpread,
+      child: GestureDetector(
+        onTapDown: (_) {
+          setState(() => _isHovered = true);
+          _hoverController.forward();
+        },
+        onTapUp: (_) {
+          setState(() => _isHovered = false);
+          _hoverController.reverse();
+        },
+        onTapCancel: () {
+          setState(() => _isHovered = false);
+          _hoverController.reverse();
+        },
+        onTap: widget.onTap,
+        child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) {
           return Transform.scale(
@@ -181,32 +207,19 @@ class _SpreadCardWidgetState extends State<SpreadCardWidget>
                                   const SizedBox(height: 12),
                                   
                                   // Card Count
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${widget.spread.cardCount}',
-                                        style: AppTextStyles.displayLarge.copyWith(
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.ghostWhite,
-                                          shadows: [
-                                            Shadow(
-                                              color: _getDifficultyColor(),
-                                              blurRadius: 20,
-                                            ),
-                                          ],
+                                  Text(
+                                    '${widget.spread.cardCount}',
+                                    style: AppTextStyles.displayLarge.copyWith(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.ghostWhite,
+                                      shadows: [
+                                        Shadow(
+                                          color: _getDifficultyColor(),
+                                          blurRadius: 20,
                                         ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        '장',
-                                        style: AppTextStyles.bodyLarge.copyWith(
-                                          color: AppColors.fogGray,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -264,7 +277,7 @@ class _SpreadCardWidgetState extends State<SpreadCardWidget>
                           children: [
                             // Spread Name
                             Text(
-                              widget.spread.nameKr,
+                              _getLocalizedSpreadName(context),
                               style: AppTextStyles.cardName.copyWith(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -315,23 +328,25 @@ class _SpreadCardWidgetState extends State<SpreadCardWidget>
           );
         },
       ),
+      ),
     ).animate()
         .fadeIn(duration: const Duration(milliseconds: 300))
         .slideY(begin: 0.05, end: 0);
   }
 
   String _getSpreadDescription() {
+    final l10n = AppLocalizations.of(context)!;
     switch (widget.spread.type) {
       case SpreadType.oneCard:
-        return '오늘의 운세와 조언';
+        return l10n.oneCardDescription;
       case SpreadType.threeCard:
-        return '과거, 현재, 미래의 흐름';
+        return l10n.threeCardDescription;
       case SpreadType.celticCross:
-        return '상황의 모든 측면을 분석';
+        return l10n.celticCrossDescription;
       case SpreadType.relationship:
-        return '관계의 역학과 미래';
+        return l10n.relationshipDescription;
       case SpreadType.yesNo:
-        return '명확한 답을 위한 점술';
+        return l10n.yesNoDescription;
     }
   }
 }

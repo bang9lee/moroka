@@ -1,7 +1,7 @@
 class AppStrings {
   // App Info
   static const String appName = 'Moroka';
-  static const String appTagline = '불길한 속삭임';
+  static const String appTagline = 'oracle of shadows';
   static const String appVersion = '1.0.0';
   
   // Onboarding
@@ -81,7 +81,7 @@ class AppStrings {
   static const String menuSettings = '설정';
   static const String menuSettingsDesc = '앱 환경을 조정하세요';
   static const String menuAbout = '앱 정보';
-  static const String menuAboutDesc = 'Moroka - 불길한 속삭임';
+  static const String menuAboutDesc = 'Moroka - oracle of shadows';
   static const String logoutButton = '로그아웃';
   static const String logoutTitle = '정말 떠나시겠습니까?';
   static const String logoutMessage = '운명의 문이 닫히면\n다시 돌아와야 합니다';

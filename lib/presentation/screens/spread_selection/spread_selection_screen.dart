@@ -6,8 +6,10 @@ import 'package:vibration/vibration.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/tarot_spread_model.dart';
 import '../../widgets/common/animated_gradient_background.dart';
+import '../../widgets/common/accessible_icon_button.dart';
 import '../../widgets/spreads/spread_card_widget.dart';
 import 'spread_selection_viewmodel.dart';
 import '../card_selection/card_selection_viewmodel.dart';
@@ -129,6 +131,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
   
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final spreads = ref.watch(spreadSelectionViewModelProvider);
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.height < 700;
@@ -142,10 +145,10 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         child: SafeArea(
           child: Column(
             children: [
-              _buildHeader(context),
-              _buildDescription(isSmallScreen),
+              _buildHeader(context, l10n),
+              _buildDescription(isSmallScreen, l10n),
               SizedBox(height: isSmallScreen ? 16 : 20),
-              _buildTabBar(isSmallScreen),
+              _buildTabBar(isSmallScreen, l10n),
               SizedBox(height: isSmallScreen ? 16 : 20),
               Expanded(
                 child: _buildTabBarView(spreads, screenSize, isSmallScreen),
@@ -157,7 +160,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
     );
   }
   
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -169,7 +172,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  '타로 배열법',
+                  l10n.spreadSelectionTitle,
                   style: AppTextStyles.displaySmall.copyWith(
                     fontSize: 26,
                     fontWeight: FontWeight.w600,
@@ -187,6 +190,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
   }
   
   Widget _buildBackButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: 48,
       height: 48,
@@ -212,22 +216,19 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () => context.pop(),
-          borderRadius: BorderRadius.circular(16),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.ghostWhite,
-            size: 20,
-          ),
-        ),
+      child: AccessibleIconButton(
+        icon: Icons.arrow_back_ios_new,
+        onPressed: () => context.pop(),
+        semanticLabel: l10n.goBack,
+        color: AppColors.ghostWhite,
+        size: 20,
+        tooltip: l10n.goBack,
+        padding: EdgeInsets.zero,
       ),
     );
   }
   
-  Widget _buildDescription(bool isSmallScreen) {
+  Widget _buildDescription(bool isSmallScreen, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
@@ -259,9 +260,9 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
             const SizedBox(width: 8),
             Flexible(
               child: Text(
-                '현재 느끼는 감정을 생각하여 선택하세요',
+                l10n.spreadSelectionSubtitle,
                 style: AppTextStyles.whisper.copyWith(
-                  fontSize: isSmallScreen ? 14 : 16,
+                  fontSize: isSmallScreen ? 12 : 14,
                   color: AppColors.textMystic,
                   fontWeight: FontWeight.w500,
                 ),
@@ -279,7 +280,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         );
   }
   
-  Widget _buildTabBar(bool isSmallScreen) {
+  Widget _buildTabBar(bool isSmallScreen, AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(4),
@@ -322,13 +323,13 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorPadding: EdgeInsets.zero,
-        labelColor: Colors.white, // 더 밝은 흰색으로 변경
+        labelColor: Colors.white, // Brighter white for better visibility
         unselectedLabelColor: AppColors.fogGray,
         labelStyle: AppTextStyles.buttonMedium.copyWith(
           fontSize: isSmallScreen ? 14 : 15,
-          fontWeight: FontWeight.w700, // 더 두껍게
+          fontWeight: FontWeight.w700, // Bolder weight
           letterSpacing: 0.5,
-          shadows: [ // 텍스트에 그림자 추가로 가시성 향상
+          shadows: [ // Text shadow for better visibility
             const Shadow(
               offset: Offset(0, 1),
               blurRadius: 4,
@@ -342,10 +343,10 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
         ),
         splashFactory: NoSplash.splashFactory,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
-        tabs: const [
-          Tab(text: '1~3장'),
-          Tab(text: '5~7장'),
-          Tab(text: '10장'),
+        tabs: [
+          Tab(text: l10n.spreadDifficultyBeginner),
+          Tab(text: l10n.spreadDifficultyIntermediate),
+          Tab(text: l10n.spreadDifficultyAdvanced),
         ],
       ),
     ).animate()
@@ -426,7 +427,7 @@ class _SpreadSelectionScreenState extends ConsumerState<SpreadSelectionScreen>
     return AnimatedBuilder(
       animation: _cardAnimations[animationIndex],
       builder: (context, child) {
-        // opacity 값을 0.0 ~ 1.0 범위로 제한
+        // Clamp opacity value to 0.0 ~ 1.0 range
         final clampedOpacity = _cardAnimations[animationIndex].value.clamp(0.0, 1.0);
         
         return Transform.scale(

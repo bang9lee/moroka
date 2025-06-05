@@ -16,4 +16,15 @@ class SpreadPosition {
     required this.y,
     this.rotation = 0,
   });
+  
+  // 현재 로케일에 따른 제목 반환
+  String getLocalizedTitle(String locale) {
+    switch (locale) {
+      case 'ko':
+        return titleKr;
+      case 'en':
+      default:
+        return title;
+    }
+  }
 }

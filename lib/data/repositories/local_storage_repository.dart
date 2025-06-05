@@ -1,4 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import '../models/daily_draw_model.dart';
 
 class LocalStorageRepository {
   final SharedPreferences _prefs;
@@ -12,6 +14,7 @@ class LocalStorageRepository {
   static const String _keyDailyReadingCount = 'daily_reading_count';
   static const String _keySoundEnabled = 'sound_enabled';
   static const String _keyVibrationEnabled = 'vibration_enabled';
+  static const String _keyDailyDrawData = 'daily_draw_data';
   
   // First launch
   Future<bool> isFirstLaunch() async {
@@ -66,6 +69,90 @@ class LocalStorageRepository {
   
   Future<void> setVibrationEnabled(bool enabled) async {
     await _prefs.setBool(_keyVibrationEnabled, enabled);
+  }
+  
+  // Daily Draw Management
+  Future<DailyDrawData> getDailyDrawData() async {
+    final jsonString = _prefs.getString(_keyDailyDrawData);
+    if (jsonString == null) {
+      // 처음이면 기본값 반환
+      final defaultData = DailyDrawData(
+        lastResetDate: DateTime.now(),
+        freeDrawsRemaining: DrawLimits.dailyFreeDraws,
+      );
+      await saveDailyDrawData(defaultData);
+      return defaultData;
+    }
+    
+    try {
+      final jsonMap = json.decode(jsonString) as Map<String, dynamic>;
+      var data = DailyDrawData.fromJson(jsonMap);
+      
+      // 날짜가 바뀌었으면 리셋
+      if (data.needsReset(DateTime.now())) {
+        data = DailyDrawData(
+          lastResetDate: DateTime.now(),
+          freeDrawsRemaining: DrawLimits.dailyFreeDraws,
+          adDrawsRemaining: 0,
+          totalDrawsToday: 0,
+          adsWatchedToday: 0,
+        );
+        await saveDailyDrawData(data);
+      }
+      
+      return data;
+    } catch (e) {
+      // 파싱 실패시 기본값
+      final defaultData = DailyDrawData(
+        lastResetDate: DateTime.now(),
+        freeDrawsRemaining: DrawLimits.dailyFreeDraws,
+      );
+      await saveDailyDrawData(defaultData);
+      return defaultData;
+    }
+  }
+  
+  Future<void> saveDailyDrawData(DailyDrawData data) async {
+    final jsonString = json.encode(data.toJson());
+    await _prefs.setString(_keyDailyDrawData, jsonString);
+  }
+  
+  // 카드 뽑기 사용
+  Future<DailyDrawData> useCardDraw() async {
+    var data = await getDailyDrawData();
+    
+    if (data.freeDrawsRemaining > 0) {
+      // 무료 뽑기 사용
+      data = data.copyWith(
+        freeDrawsRemaining: data.freeDrawsRemaining - 1,
+        totalDrawsToday: data.totalDrawsToday + 1,
+      );
+    } else if (data.adDrawsRemaining > 0) {
+      // 광고 뽑기 사용
+      data = data.copyWith(
+        adDrawsRemaining: data.adDrawsRemaining - 1,
+        totalDrawsToday: data.totalDrawsToday + 1,
+      );
+    }
+    
+    await saveDailyDrawData(data);
+    return data;
+  }
+  
+  // 광고 시청 후 뽑기 횟수 추가
+  Future<DailyDrawData> addAdDraw() async {
+    var data = await getDailyDrawData();
+    
+    // 오늘 광고 시청 횟수가 최대치 미만인 경우만
+    if (data.adsWatchedToday < DrawLimits.maxAdDraws) {
+      data = data.copyWith(
+        adDrawsRemaining: data.adDrawsRemaining + DrawLimits.drawsPerAd,
+        adsWatchedToday: data.adsWatchedToday + 1,
+      );
+      await saveDailyDrawData(data);
+    }
+    
+    return data;
   }
   
   // Clear all data

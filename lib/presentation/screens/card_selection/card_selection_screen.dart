@@ -9,7 +9,11 @@ import 'dart:ui' as ui;
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/app_logger.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/tarot_card_model.dart';
+import '../../../providers.dart';
+import '../../widgets/common/accessible_icon_button.dart';
 import '../main/main_viewmodel.dart';
 import '../spread_selection/spread_selection_viewmodel.dart';
 import 'card_selection_viewmodel.dart';
@@ -33,9 +37,10 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
   late final AnimationController _particleController;
   
   // ===== Card State =====
-  late final List<TarotCardModel> _shuffledCards;
+  List<TarotCardModel> _shuffledCards = [];
   final Set<int> _selectedCardIds = {};
   final Map<int, CardAnimationState> _cardAnimations = {};
+  bool _isLoadingCards = true;
   
   // ===== Interaction State =====
   final ScrollController _scrollController = ScrollController();
@@ -61,7 +66,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
   void initState() {
     super.initState();
     _initializeAnimations();
-    _shuffleCards();
+    _loadAndShuffleCards();
     _checkVibration();
     _startCallingEffect();
     
@@ -98,15 +103,27 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     )..repeat();
   }
   
-  void _shuffleCards() {
-    // 78장 타로 카드를 섞기
-    _shuffledCards = List<TarotCardModel>.from(TarotCardModel.fullDeck)
-      ..shuffle(math.Random());
-    
-    // Initialize card animations
-    for (int i = 0; i < _shuffledCards.length; i++) {
-      _cardAnimations[i] = CardAnimationState();
-      _cardCallingIntensity[i] = 0.3 + math.Random().nextDouble() * 0.4;
+  Future<void> _loadAndShuffleCards() async {
+    try {
+      // 78장 타로 카드를 로드하고 섞기
+      final allCards = await TarotCardModel.getAllCards();
+      
+      setState(() {
+        _shuffledCards = List<TarotCardModel>.from(allCards)
+          ..shuffle(math.Random());
+        _isLoadingCards = false;
+      });
+      
+      // Initialize card animations
+      for (int i = 0; i < _shuffledCards.length; i++) {
+        _cardAnimations[i] = CardAnimationState();
+        _cardCallingIntensity[i] = 0.3 + math.Random().nextDouble() * 0.4;
+      }
+    } catch (e) {
+      AppLogger.error('Error loading tarot cards', e);
+      setState(() {
+        _isLoadingCards = false;
+      });
     }
   }
   
@@ -236,9 +253,14 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     if (updatedSelections >= requiredCards) {
       await Future.delayed(const Duration(milliseconds: 800));
       if (mounted) {
-        final selectedCardIndices = ref.read(cardSelectionViewModelProvider)
-            .selectedCards.map((c) => c.id).toList();
-        context.push('/result-chat', extra: selectedCardIndices);
+        // 카드 뽑기 횟수 차감
+        await ref.read(dailyDrawDataProvider.notifier).useCardDraw();
+        
+        if (mounted) {
+          final selectedCardIndices = ref.read(cardSelectionViewModelProvider)
+              .selectedCards.map((c) => c.id).toList();
+          await context.push('/result-chat', extra: selectedCardIndices);
+        }
       }
     }
     
@@ -257,6 +279,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
   @override
   Widget build(BuildContext context) {
     _screenSize = MediaQuery.of(context).size;
+    final l10n = AppLocalizations.of(context)!;
     
     final state = ref.watch(cardSelectionViewModelProvider);
     final userMood = ref.watch(userMoodProvider) ?? '';
@@ -276,7 +299,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
             child: Column(
               children: [
                 // 헤더 영역
-                _buildHeader(userMood, remainingCards),
+                _buildHeader(userMood, remainingCards, l10n),
                 
                 // 선택된 카드 표시 영역 - 여기를 최적화
                 if (state.selectedCards.isNotEmpty)
@@ -284,13 +307,15 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                 
                 // 카드 스크롤 영역
                 Expanded(
-                  child: state.showingCards
-                      ? _buildCardScrollSection()
-                      : _buildShufflingAnimation(),
+                  child: _isLoadingCards
+                      ? _buildShufflingAnimation(l10n)
+                      : state.showingCards
+                          ? _buildCardScrollSection()
+                          : _buildShufflingAnimation(l10n),
                 ),
                 
                 // 하단 정보 영역
-                _buildBottomSection(state.selectedCards.length, requiredCards, remainingCards),
+                _buildBottomSection(state.selectedCards.length, requiredCards, remainingCards, l10n),
               ],
             ),
           ),
@@ -300,7 +325,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           
           // 확인 다이얼로그
           if (_showConfirmDialog && _pendingCard != null)
-            _buildConfirmationDialog(),
+            _buildConfirmationDialog(l10n),
         ],
       ),
     );
@@ -379,9 +404,13 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredCardIndex = index),
       onExit: (_) => setState(() => _hoveredCardIndex = null),
-      child: GestureDetector(
-        onTap: () => _onCardTap(index),
-        child: AnimatedContainer(
+      child: Semantics(
+        button: true,
+        label: '${card.name} ${card.isMajor ? '(${card.number})' : ''}',
+        hint: 'Tap to select this card',
+        child: GestureDetector(
+          onTap: () => _onCardTap(index),
+          child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
           width: _cardWidth,
@@ -469,6 +498,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
               curve: Curves.easeOut,
             ),
       ),
+      ),
     );
   }
   
@@ -547,7 +577,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
-  Widget _buildConfirmationDialog() {
+  Widget _buildConfirmationDialog(AppLocalizations l10n) {
     return GestureDetector(
       onTap: _cancelSelection,
       child: Container(
@@ -703,9 +733,8 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                             child: Column(
                               children: [
                                 Text(
-                                  '운명의 카드',
-                                  style: AppTextStyles.displaySmall.copyWith(
-                                    fontSize: 26,
+                                  l10n.cardOfFate,
+                                  style: AppTextStyles.dialogTitle.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.ghostWhite,
                                     letterSpacing: 1.5,
@@ -719,9 +748,8 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  '이 카드가 당신을 부르고 있습니다',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    fontSize: 16,
+                                  l10n.cardCallingYou,
+                                  style: AppTextStyles.dialogContent.copyWith(
                                     color: AppColors.fogGray,
                                     height: 1.5,
                                     letterSpacing: 0.5,
@@ -730,9 +758,8 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  '선택하시겠습니까?',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    fontSize: 15,
+                                  l10n.willYouSelectIt,
+                                  style: AppTextStyles.dialogContent.copyWith(
                                     color: AppColors.fogGray.withAlpha(180),
                                     height: 1.3,
                                   ),
@@ -750,18 +777,26 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: _buildDialogButton(
-                                    text: '다시 보기',
-                                    onTap: _cancelSelection,
-                                    isPrimary: false,
+                                  child: AccessibleTextButton(
+                                    text: l10n.viewAgain,
+                                    onPressed: _cancelSelection,
+                                    backgroundColor: AppColors.blackOverlay40,
+                                    semanticLabel: '${l10n.viewAgain} - ${l10n.cancelCardSelection}',
+                                    style: AppTextStyles.dialogButton.copyWith(
+                                      color: AppColors.fogGray,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
-                                  child: _buildDialogButton(
-                                    text: '선택',
-                                    onTap: _confirmSelection,
-                                    isPrimary: true,
+                                  child: AccessibleTextButton(
+                                    text: l10n.select,
+                                    onPressed: _confirmSelection,
+                                    backgroundColor: AppColors.mysticPurple,
+                                    semanticLabel: '${l10n.select} - ${l10n.confirmCardSelection}',
+                                    style: AppTextStyles.dialogButton.copyWith(
+                                      color: AppColors.ghostWhite,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -784,70 +819,6 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
           ),
         ),
       ),
-    );
-  }
-  
-  Widget _buildDialogButton({
-    required String text,
-    required VoidCallback onTap,
-    required bool isPrimary,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          gradient: isPrimary 
-              ? const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.mysticPurple,
-                    AppColors.evilGlow,
-                  ],
-                )
-              : null,
-          color: isPrimary 
-              ? null
-              : AppColors.obsidianBlack,
-          borderRadius: BorderRadius.circular(26),
-          border: Border.all(
-            color: isPrimary 
-                ? AppColors.evilGlow.withAlpha(100)
-                : AppColors.whiteOverlay20,
-            width: 1.5,
-          ),
-          boxShadow: isPrimary
-              ? [
-                  BoxShadow(
-                    color: AppColors.evilGlow.withAlpha(40),
-                    blurRadius: 20,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : [],
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: AppTextStyles.buttonMedium.copyWith(
-              color: isPrimary 
-                  ? AppColors.ghostWhite 
-                  : AppColors.fogGray,
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ),
-      ).animate()
-          .scale(
-            begin: const Offset(0.95, 0.95),
-            end: const Offset(1, 1),
-            duration: const Duration(milliseconds: 200),
-            delay: Duration(milliseconds: isPrimary ? 100 : 0),
-          ),
     );
   }
   
@@ -960,7 +931,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
         );
   }
   
-  Widget _buildShufflingAnimation() {
+  Widget _buildShufflingAnimation(AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1040,8 +1011,8 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
             ),
           ),
           const SizedBox(height: 40),
-          const Text(
-            '운명의 카드를 섞고 있습니다...',
+          Text(
+            l10n.shufflingCards,
             style: AppTextStyles.whisper,
           ).animate(
             onPlay: (controller) => controller.repeat(),
@@ -1080,24 +1051,30 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
-  Widget _buildHeader(String userMood, int remainingCards) {
+  Widget _buildHeader(String userMood, int remainingCards, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back),
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.blackOverlay40,
-                  foregroundColor: AppColors.ghostWhite,
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.blackOverlay40,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: AccessibleIconButton(
+                  icon: Icons.arrow_back,
+                  onPressed: () => context.pop(),
+                  semanticLabel: l10n.goBack,
+                  color: AppColors.ghostWhite,
+                  size: 24,
+                  tooltip: l10n.goBack,
                 ),
               ),
               Expanded(
                 child: Text(
-                  '마음이 끌리는 카드를 선택하세요',
+                  l10n.selectCardByHeart,
                   style: AppTextStyles.displaySmall.copyWith(
                     fontSize: 18,
                   ),
@@ -1124,8 +1101,8 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
                     ? Icons.style 
                     : Icons.check_circle,
                 label: remainingCards > 0
-                    ? '$remainingCards장 더 선택'
-                    : '선택 완료!',
+                    ? l10n.moreToSelect(remainingCards)
+                    : l10n.selectionComplete,
                 color: remainingCards > 0
                     ? AppColors.evilGlow
                     : AppColors.spiritGlow,
@@ -1169,7 +1146,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
-  Widget _buildBottomSection(int selectedCount, int requiredCount, int remainingCards) {
+  Widget _buildBottomSection(int selectedCount, int requiredCount, int remainingCards, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
       child: Column(
@@ -1216,7 +1193,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
               
               if (remainingCards > 0)
                 Text(
-                  '카드를 탭하여 선택하세요',
+                  l10n.tapToSelectCard,
                   style: AppTextStyles.whisper.copyWith(
                     color: AppColors.fogGray,
                     fontSize: 14,

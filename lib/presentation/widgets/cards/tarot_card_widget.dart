@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'dart:math' as math;
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import 'cached_tarot_card_image.dart';
+import 'card_flip_animation.dart';
 
 /// 타로 카드 뒷면 위젯
 class TarotCardBack extends StatelessWidget {
@@ -205,15 +208,12 @@ class CardPatternPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
   
-  // 간단한 삼각함수 구현 (실제로는 dart:math 사용 권장)
   double _cos(double radians) {
-    // 실제 프로덕션에서는 import 'dart:math' as math; 후 math.cos 사용
-    return 1.0 * (radians < 1.5708 ? 1 : -1);
+    return math.cos(radians);
   }
   
   double _sin(double radians) {
-    // 실제 프로덕션에서는 import 'dart:math' as math; 후 math.sin 사용
-    return 1.0 * (radians < 3.14159 ? 1 : -1);
+    return math.sin(radians);
   }
 }
 
@@ -279,41 +279,13 @@ class TarotCardFront extends StatelessWidget {
   }
   
   Widget _buildCardImage() {
-    return Image.asset(
-      imagePath,
+    // Use CachedTarotCardImage for automatic caching
+    return CachedTarotCardImage(
+      imagePath: imagePath,
+      width: width,
+      height: height,
       fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        debugPrint('Failed to load image: $imagePath');
-        debugPrint('Error: $error');
-        
-        return Container(
-          color: AppColors.shadowGray,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.image_not_supported,
-                size: width < 100 ? 30 : 40,
-                color: AppColors.ashGray,
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  cardName,
-                  style: TextStyle(
-                    fontSize: width < 100 ? 8 : 10,
-                    color: AppColors.fogGray,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+      cardId: cardName.replaceAll(' ', '_').toLowerCase(), // Generate card ID from name
     );
   }
   
@@ -376,5 +348,127 @@ class TarotCardFront extends StatelessWidget {
     if (width < 120) return 10;
     if (width < 160) return 12;
     return 14;
+  }
+}
+
+/// 타로 카드 위젯 (뒤집기 애니메이션 포함)
+class TarotCardWidget extends StatefulWidget {
+  final String imagePath;
+  final String? cardName;
+  final bool isFlipped;
+  final double width;
+  final double height;
+  final VoidCallback? onTap;
+  final bool showDetails;
+  final int cardIndex;
+
+  const TarotCardWidget({
+    super.key,
+    required this.imagePath,
+    this.cardName,
+    this.isFlipped = false,
+    this.width = 200,
+    this.height = 300,
+    this.onTap,
+    this.showDetails = true,
+    this.cardIndex = 0,
+  });
+
+  @override
+  State<TarotCardWidget> createState() => _TarotCardWidgetState();
+}
+
+class _TarotCardWidgetState extends State<TarotCardWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _flipController;
+  late bool _isFlipped;
+
+  @override
+  void initState() {
+    super.initState();
+    _flipController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _isFlipped = widget.isFlipped;
+    if (_isFlipped) {
+      _flipController.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(TarotCardWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFlipped != widget.isFlipped) {
+      _toggleCard();
+    }
+  }
+
+  @override
+  void dispose() {
+    _flipController.dispose();
+    super.dispose();
+  }
+
+  void _toggleCard() {
+    if (_isFlipped) {
+      _flipController.reverse();
+    } else {
+      _flipController.forward();
+    }
+    setState(() {
+      _isFlipped = !_isFlipped;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Extract card name from image path if not provided
+    String displayName = widget.cardName ?? '';
+    if (displayName.isEmpty && widget.imagePath.isNotEmpty) {
+      displayName = _extractCardName(widget.imagePath);
+    }
+
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: CardFlipAnimation(
+        controller: _flipController,
+        front: TarotCardBack(
+          index: widget.cardIndex,
+          width: widget.width,
+          height: widget.height,
+        ),
+        back: TarotCardFront(
+          cardName: displayName,
+          imagePath: widget.imagePath,
+          showDetails: widget.showDetails,
+          width: widget.width,
+          height: widget.height,
+        ),
+      ),
+    );
+  }
+
+  String _extractCardName(String imagePath) {
+    // Extract card name from image path
+    // Example: "assets/images/cards/major/00_fool.png" -> "The Fool"
+    final fileName = imagePath.split('/').last.split('.').first;
+    final parts = fileName.split('_');
+    
+    if (parts.length >= 2) {
+      // Remove number prefix and format name
+      final name = parts.sublist(1).join(' ');
+      return _formatCardName(name);
+    }
+    
+    return fileName;
+  }
+
+  String _formatCardName(String name) {
+    // Capitalize each word
+    return name.split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
   }
 }

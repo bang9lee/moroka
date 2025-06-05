@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/glass_morphism_container.dart';
 import 'login_viewmodel.dart';
@@ -74,6 +75,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   void _showPasswordResetDialog() {
+    final l10n = AppLocalizations.of(context)!;
     final emailController = TextEditingController(text: _emailController.text);
     
     showDialog(
@@ -88,15 +90,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           ),
         ),
         title: Text(
-          '비밀번호 재설정',
-          style: AppTextStyles.displaySmall.copyWith(fontSize: 20),
+          l10n.passwordResetTitle,
+          style: AppTextStyles.dialogTitle,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '가입하신 이메일 주소를 입력해주세요.\n비밀번호 재설정 링크를 보내드립니다.',
-              style: AppTextStyles.bodySmall.copyWith(
+              l10n.passwordResetMessage,
+              style: AppTextStyles.dialogContent.copyWith(
                 color: AppColors.fogGray,
               ),
               textAlign: TextAlign.center,
@@ -109,7 +111,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 color: AppColors.ghostWhite,
               ),
               decoration: InputDecoration(
-                hintText: 'your@email.com',
+                hintText: l10n.emailPlaceholder,
                 hintStyle: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.ashGray,
                 ),
@@ -141,8 +143,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              '취소',
-              style: AppTextStyles.buttonMedium.copyWith(
+              l10n.cancel,
+              style: AppTextStyles.dialogButton.copyWith(
                 color: AppColors.fogGray,
               ),
             ),
@@ -158,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: const Text('비밀번호 재설정 이메일을 발송했습니다.'),
+                    content: Text(l10n.passwordResetSuccess),
                     backgroundColor: AppColors.spiritGlow,
                     behavior: SnackBarBehavior.floating,
                     shape: RoundedRectangleBorder(
@@ -169,8 +171,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               }
             },
             child: Text(
-              '전송',
-              style: AppTextStyles.buttonMedium.copyWith(
+              l10n.send,
+              style: AppTextStyles.dialogButton.copyWith(
                 color: AppColors.mysticPurple,
               ),
             ),
@@ -338,10 +340,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildWelcomeText() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Text(
-          'MOROKA',
+          l10n.appBrandName,
           style: AppTextStyles.mysticTitle.copyWith(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -353,7 +356,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             .slideY(begin: 0.3, end: 0),
         const SizedBox(height: 8),
         Text(
-          '운명의 문이 열리길 기다립니다',
+          l10n.appBrandTagline,
           style: AppTextStyles.whisper.copyWith(
             color: AppColors.fogGray,
             fontSize: 14,
@@ -365,6 +368,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildLoginForm(LoginState state) {
+    final l10n = AppLocalizations.of(context)!;
     return GlassMorphismContainer(
       padding: const EdgeInsets.all(20),
       borderRadius: 20,
@@ -374,16 +378,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         children: [
           _buildTextField(
             controller: _emailController,
-            label: '이메일',
-            hint: 'your@email.com',
+            label: l10n.emailLabel,
+            hint: l10n.emailPlaceholder,
             icon: Icons.email_outlined,
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '이메일을 입력해주세요';
+                return l10n.errorEmailEmpty;
               }
               if (!value.contains('@')) {
-                return '올바른 이메일 형식이 아닙니다';
+                return l10n.errorEmailInvalid;
               }
               return null;
             },
@@ -395,8 +399,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           
           _buildTextField(
             controller: _passwordController,
-            label: '비밀번호',
-            hint: '6자 이상 입력',
+            label: l10n.passwordLabel,
+            hint: l10n.passwordPlaceholder,
             icon: Icons.lock_outline,
             obscureText: _obscurePassword,
             suffixIcon: IconButton(
@@ -415,10 +419,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '비밀번호를 입력해주세요';
+                return l10n.errorPasswordEmpty;
               }
               if (value.length < 6) {
-                return '비밀번호는 6자 이상이어야 합니다';
+                return l10n.errorPasswordShort;
               }
               return null;
             },
@@ -437,7 +441,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               ),
               child: Text(
-                '비밀번호를 잊으셨나요?',
+                l10n.forgotPassword,
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.textMystic,
                   fontSize: 12,
@@ -485,14 +489,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             strokeWidth: 2,
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.login, size: 18),
-                            SizedBox(width: 8),
+                            const Icon(Icons.login, size: 18),
+                            const SizedBox(width: 8),
                             Text(
-                              '로그인',
-                              style: TextStyle(
+                              l10n.login,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
@@ -515,6 +519,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildDivider() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
@@ -533,7 +538,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            '또는',
+            l10n.or,
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.fogGray,
               fontSize: 12,
@@ -602,7 +607,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Google로 계속하기',
+                  AppLocalizations.of(context)!.continueWithGoogle,
                   style: AppTextStyles.buttonMedium.copyWith(
                     color: AppColors.ghostWhite,
                     fontWeight: FontWeight.w500,
@@ -623,11 +628,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildSignUpPrompt() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          '아직 계정이 없으신가요?',
+          l10n.noAccount,
           style: AppTextStyles.bodySmall.copyWith(
             color: AppColors.fogGray,
             fontSize: 13,
@@ -639,7 +645,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             padding: const EdgeInsets.symmetric(horizontal: 8),
           ),
           child: Text(
-            '회원가입',
+            l10n.signUp,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textMystic,
               fontWeight: FontWeight.w600,

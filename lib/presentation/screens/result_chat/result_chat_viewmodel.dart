@@ -7,6 +7,7 @@ import '../../../data/models/tarot_spread_model.dart';
 import '../../../data/models/chat_message_model.dart';
 import '../../../data/models/tarot_reading_model.dart';
 import '../../../providers.dart';
+import '../../../providers/locale_provider.dart';
 import '../../../core/utils/app_logger.dart';
 
 final resultChatViewModelProvider = 
@@ -16,6 +17,9 @@ final resultChatViewModelProvider =
 
 // 광고 시청 횟수 추적
 final adWatchCountProvider = StateProvider<int>((ref) => 0);
+
+// 채팅 턴 카운트 추적
+final chatTurnCountProvider = StateProvider<int>((ref) => 0);
 
 class ResultChatViewModel extends StateNotifier<ResultChatState> {
   final Ref _ref;
@@ -39,11 +43,17 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 
     try {
       final tarotAIRepo = _ref.read(tarotAIRepositoryProvider);
-      AppLogger.debug("Getting AI interpretation...");
+      
+      // 현재 언어 가져오기
+      final locale = _ref.read(localeProvider);
+      final language = locale?.languageCode ?? 'en';
+      
+      AppLogger.debug("Getting AI interpretation for language: $language");
       
       final interpretation = await tarotAIRepo.getCardInterpretation(
         card: card,
         userMood: userMood,
+        language: language, // language 파라미터 추가
       );
       
       AppLogger.debug("AI interpretation received");
@@ -81,13 +91,17 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 
     try {
       final geminiService = _ref.read(geminiServiceProvider);
-      AppLogger.debug("Getting spread interpretation...");
+      final locale = _ref.read(localeProvider);
+      final language = locale?.languageCode ?? 'en';
+      
+      AppLogger.debug("Getting spread interpretation for language: $language");
       
       final interpretation = await geminiService.generateSpreadInterpretation(
         spreadType: spread.type,
         drawnCards: cards,
         userMood: userMood,
         spread: spread,
+        language: language,
       );
       
       AppLogger.debug("Spread interpretation received");
@@ -134,13 +148,15 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 
     try {
       final geminiService = _ref.read(geminiServiceProvider);
+      final locale = _ref.read(localeProvider);
+      final language = locale?.languageCode ?? 'en';
       
-      AppLogger.debug("Getting chat response...");
+      AppLogger.debug("Getting chat response for language: $language");
       
-      // 배열법에 따라 다른 컨텍스트 제공
+      // 배열법에 따라 다른 컨텍스트 제공 - 현재 언어에 맞는 카드 이름 사용
       final cardContext = state.spreadType != null && state.selectedCards.length > 1
-          ? state.selectedCards.map((c) => c.nameKr).join(', ')
-          : state.selectedCards.first.name;
+          ? state.selectedCards.map((c) => c.getLocalizedName(language)).join(', ')
+          : state.selectedCards.first.getLocalizedName(language);
       
       final response = await geminiService.generateChatResponse(
         cardName: cardContext,
@@ -148,6 +164,7 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         previousMessages: state.messages,
         userMessage: message,
         spreadType: state.spreadType,
+        language: language,
       );
       
       AppLogger.debug("Chat response received");
@@ -174,17 +191,16 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
       // 광고 시청 횟수 확인
       final adWatchCount = _ref.read(adWatchCountProvider);
       
-      // 매 채팅 후 광고 표시 (최대 3회까지)
-      // turnCount는 방금 보낸 메시지 포함이므로 짝수일 때 광고 표시
-      // (1번째 메시지 후 = turnCount 2, 2번째 메시지 후 = turnCount 4, 3번째 메시지 후 = turnCount 6)
-      if (turnCount % 2 == 0 && turnCount <= 6 && adWatchCount < 3) {
+      // 매 메시지 후 광고 표시 (최대 3회까지)
+      // turnCount는 1부터 시작하므로 1, 2, 3번째 메시지 후에 광고 표시
+      if (turnCount <= 3 && adWatchCount < turnCount) {
         AppLogger.debug("Showing ad prompt - turn: $turnCount, adWatchCount: $adWatchCount");
         state = state.copyWith(
           showAdPrompt: true,
         );
-      } else if (turnCount > 6) {
-        // 3회 채팅 완료 후 더 이상 채팅 불가
-        AppLogger.debug("Chat limit reached");
+      } else if (turnCount > 3 && adWatchCount < 3) {
+        // 3회 채팅 완료했지만 광고를 모두 시청하지 않은 경우
+        AppLogger.debug("Chat limit reached without watching all ads");
         state = state.copyWith(
           chatLimitReached: true,
         );
@@ -252,8 +268,8 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     try {
       final firestoreService = _ref.read(firestoreServiceProvider);
       
-      // 배열법에 따른 카드 정보 저장
-      final cardNames = state.selectedCards.map((c) => c.nameKr).join(', ');
+      // 배열법에 따른 카드 정보 저장 - 영어 이름을 기본으로 저장 (범용성을 위해)
+      final cardNames = state.selectedCards.map((c) => c.name).join(', ');
       final cardImages = state.selectedCards.map((c) => c.imagePath).join(',');
       
       final reading = TarotReadingModel(

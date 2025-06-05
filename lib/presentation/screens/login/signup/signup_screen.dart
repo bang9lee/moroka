@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:async';
+import '../../../../l10n/generated/app_localizations.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
@@ -140,6 +141,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
   }
 
   void _updatePasswordStrength() {
+    final l10n = AppLocalizations.of(context)!;
     final password = _passwordController.text;
     
     setState(() {
@@ -149,19 +151,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
         _passwordStrengthColor = AppColors.ashGray;
       } else if (password.length < 6) {
         _passwordStrength = 0.25;
-        _passwordStrengthText = '약함';
+        _passwordStrengthText = l10n.passwordWeak;
         _passwordStrengthColor = AppColors.bloodMoon;
       } else if (password.length < 8) {
         _passwordStrength = 0.5;
-        _passwordStrengthText = '보통';
+        _passwordStrengthText = l10n.passwordFair;
         _passwordStrengthColor = AppColors.omenGlow;
       } else if (_isStrongPassword(password)) {
         _passwordStrength = 1.0;
-        _passwordStrengthText = '강함';
+        _passwordStrengthText = l10n.passwordVeryStrong;
         _passwordStrengthColor = AppColors.spiritGlow;
       } else {
         _passwordStrength = 0.75;
-        _passwordStrengthText = '좋음';
+        _passwordStrengthText = l10n.passwordStrong;
         _passwordStrengthColor = AppColors.mysticPurple;
       }
     });
@@ -185,7 +187,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
     if (_isNameAvailable == false || _isEmailAvailable == false) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('이름과 이메일 중복 확인을 해주세요'),
+          content: Text(AppLocalizations.of(context)!.agreeToRequired),
           backgroundColor: AppColors.bloodMoon,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -211,6 +213,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(signUpViewModelProvider);
     final size = MediaQuery.of(context).size;
     final safeArea = MediaQuery.of(context).padding;
@@ -277,7 +280,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                       SizedBox(height: availableHeight * 0.1),
                       
                       // Logo and Title Section
-                      _buildLogoSection(),
+                      _buildLogoSection(l10n),
                       
                       SizedBox(height: availableHeight * 0.08),
                       
@@ -292,20 +295,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                               children: [
                                 _buildInputField(
                                   controller: _nameController,
-                                  label: '이름',
-                                  hint: '타로마스터로 불릴 이름',
+                                  label: l10n.nickname,
+                                  hint: l10n.nickname,
                                   icon: Icons.person_outline,
                                   delay: 200,
                                   suffixIcon: _buildValidationIcon(_isCheckingName, _isNameAvailable),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return '이름을 입력해주세요';
+                                      return l10n.errorNameEmpty;
                                     }
                                     if (value.length < 2) {
-                                      return '이름은 2자 이상이어야 합니다';
+                                      return l10n.errorNameTooShort;
                                     }
                                     if (_isNameAvailable == false) {
-                                      return null; // 메시지는 아래에 별도로 표시
+                                      return null; // Message shown separately below
                                     }
                                     return null;
                                   },
@@ -334,22 +337,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                               children: [
                                 _buildInputField(
                                   controller: _emailController,
-                                  label: '이메일',
-                                  hint: 'your@email.com',
+                                  label: l10n.emailLabel,
+                                  hint: l10n.emailPlaceholder,
                                   icon: Icons.email_outlined,
                                   keyboardType: TextInputType.emailAddress,
                                   delay: 300,
                                   suffixIcon: _buildValidationIcon(_isCheckingEmail, _isEmailAvailable),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return '이메일을 입력해주세요';
+                                      return l10n.errorEmailEmpty;
                                     }
                                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                                         .hasMatch(value)) {
-                                      return '올바른 이메일 형식이 아닙니다';
+                                      return l10n.errorEmailInvalid;
                                     }
                                     if (_isEmailAvailable == false) {
-                                      return null; // 메시지는 아래에 별도로 표시
+                                      return null; // Message shown separately below
                                     }
                                     return null;
                                   },
@@ -375,8 +378,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                             // Password Field
                             _buildInputField(
                               controller: _passwordController,
-                              label: '비밀번호',
-                              hint: '영혼을 지킬 암호',
+                              label: l10n.passwordLabel,
+                              hint: l10n.passwordPlaceholder,
                               icon: Icons.lock_outline,
                               obscureText: _obscurePassword,
                               delay: 400,
@@ -396,10 +399,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return '비밀번호를 입력해주세요';
+                                  return l10n.errorPasswordEmpty;
                                 }
                                 if (value.length < 6) {
-                                  return '비밀번호는 6자 이상이어야 합니다';
+                                  return l10n.errorPasswordShort;
                                 }
                                 return null;
                               },
@@ -416,8 +419,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                             // Confirm Password Field
                             _buildInputField(
                               controller: _passwordConfirmController,
-                              label: '비밀번호 확인',
-                              hint: '한 번 더 입력해주세요',
+                              label: l10n.confirmPassword,
+                              hint: l10n.confirmPassword,
                               icon: Icons.lock_outline,
                               obscureText: _obscurePasswordConfirm,
                               delay: 500,
@@ -437,10 +440,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return '비밀번호를 다시 입력해주세요';
+                                  return l10n.errorConfirmPassword;
                                 }
                                 if (value != _passwordController.text) {
-                                  return '비밀번호가 일치하지 않습니다';
+                                  return l10n.errorPasswordsDontMatch;
                                 }
                                 return null;
                               },
@@ -449,7 +452,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                             SizedBox(height: availableHeight * 0.06),
                             
                             // Submit Button
-                            _buildSubmitButton(state),
+                            _buildSubmitButton(state, l10n),
                             
                             const SizedBox(height: 40),
                           ],
@@ -466,7 +469,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
     );
   }
 
-  Widget _buildLogoSection() {
+  Widget _buildLogoSection(AppLocalizations l10n) {
     return Column(
       children: [
         // Logo Container
@@ -516,7 +519,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
         
         // Title
         Text(
-          '회원가입',
+          l10n.signupTitle,
           style: AppTextStyles.displaySmall.copyWith(
             color: AppColors.ghostWhite,
             fontSize: 28,
@@ -530,7 +533,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
         
         // Subtitle
         Text(
-          'MOROKA의 세계로 초대합니다',
+          l10n.signupSubtitle,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.fogGray,
             fontSize: 14,
@@ -709,7 +712,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
         .slideY(begin: -0.2, end: 0);
   }
 
-  Widget _buildSubmitButton(SignUpState state) {
+  Widget _buildSubmitButton(SignUpState state, AppLocalizations l10n) {
     return SizedBox(
       width: double.infinity,
       height: 56,
@@ -768,7 +771,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '다음 단계로',
+                        l10n.nextStep,
                         style: AppTextStyles.buttonLarge.copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,

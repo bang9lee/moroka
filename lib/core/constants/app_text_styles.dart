@@ -64,7 +64,7 @@ class AppTextStyles {
   // ===== Section Headers - 섹션 제목용 =====
   static const TextStyle sectionTitle = TextStyle(
     fontFamily: 'Sunbatang',
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: FontWeight.w800,
     color: AppColors.textPrimary,
     letterSpacing: 0.8,
@@ -83,7 +83,7 @@ class AppTextStyles {
   
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: 'Cinzel',
-    fontSize: 22,  // 일반 본문용
+    fontSize: 20,  // 일반 본문용
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     height: 1.6,
@@ -92,7 +92,7 @@ class AppTextStyles {
   
   static const TextStyle bodySmall = TextStyle(
     fontFamily: 'Cinzel',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
     height: 1.5,
@@ -102,7 +102,7 @@ class AppTextStyles {
   // ===== Special Text Styles =====
   static const TextStyle cardName = TextStyle(
     fontFamily: 'Cinzel',
-    fontSize: 26,
+    fontSize: 21,
     fontWeight: FontWeight.w800,
     color: AppColors.ghostWhite,
     letterSpacing: 1.8,
@@ -142,7 +142,7 @@ class AppTextStyles {
   
   static const TextStyle whisper = TextStyle(
     fontFamily: 'SunBatang',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.fogGray,
     fontStyle: FontStyle.italic,
@@ -160,7 +160,7 @@ class AppTextStyles {
   
   static const TextStyle buttonMedium = TextStyle(
     fontFamily: 'Cinzel',
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: FontWeight.w600,
     color: AppColors.ghostWhite,
     letterSpacing: 1.3,
@@ -183,6 +183,96 @@ class AppTextStyles {
     color: AppColors.textMystic,
     height: 1.6,
     letterSpacing: 0.2,
+  );
+  
+  // ===== Content & Headlines =====
+  static const TextStyle contentText = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    height: 1.5,
+    letterSpacing: 0.1,
+  );
+  
+  static const TextStyle headlineSmall = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    letterSpacing: 1.0,
+    height: 1.3,
+  );
+  
+  static const TextStyle headlineMedium = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+    letterSpacing: 1.2,
+    height: 1.3,
+  );
+  
+  static const TextStyle headlineLarge = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 32,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textPrimary,
+    letterSpacing: 1.4,
+    height: 1.3,
+  );
+  
+  // ===== Label Styles =====
+  static const TextStyle labelLarge = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    letterSpacing: 0.5,
+  );
+  
+  static const TextStyle labelMedium = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+    letterSpacing: 0.4,
+  );
+  
+  static const TextStyle labelSmall = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+    letterSpacing: 0.3,
+  );
+  
+  // ===== Title Styles =====
+  static const TextStyle titleLarge = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+    letterSpacing: 0.8,
+    height: 1.4,
+  );
+  
+  static const TextStyle titleMedium = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    letterSpacing: 0.6,
+    height: 1.4,
+  );
+  
+  static const TextStyle titleSmall = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    letterSpacing: 0.4,
+    height: 1.4,
   );
   
   // ===== Warning & Omen Text =====
@@ -219,6 +309,33 @@ class AppTextStyles {
     letterSpacing: 0.3,
   );
   
+  // ===== Dialog Styles - 다이얼로그 전용 =====
+  static const TextStyle dialogTitle = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+    letterSpacing: 0.5,
+    height: 1.3,
+  );
+  
+  static const TextStyle dialogContent = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+    height: 1.5,
+    letterSpacing: 0.1,
+  );
+  
+  static const TextStyle dialogButton = TextStyle(
+    fontFamily: 'Cinzel',
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.ghostWhite,
+    letterSpacing: 0.8,
+  );
+  
   // ===== Responsive Text Styles =====
   // 화면 크기에 따라 동적으로 조정되는 스타일
   static TextStyle getResponsiveBodyText(BuildContext context) {
@@ -227,7 +344,7 @@ class AppTextStyles {
     
     return TextStyle(
       fontFamily: 'ChosunSm',
-      fontSize: 18 * scaleFactor,
+      fontSize: 17 * scaleFactor,
       fontWeight: FontWeight.w500,
       color: AppColors.textPrimary,
       height: 1.7,

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
@@ -67,6 +68,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -80,7 +82,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
             children: [
               _buildHeader(context),
               Expanded(
-                child: _buildContent(screenSize),
+                child: _buildContent(screenSize, l10n),
               ),
             ],
           ),
@@ -139,7 +141,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'MOROKA - 불길한 속삭임',
+                  'MOROKA - oracle of shadows',
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.fogGray,
                     fontSize: 14,
@@ -156,7 +158,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         .slideY(begin: -0.2, end: 0);
   }
 
-  Widget _buildContent(Size screenSize) {
+  Widget _buildContent(Size screenSize, AppLocalizations l10n) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(20),
@@ -167,7 +169,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           const SizedBox(height: 32),
 
           // App Info Section
-          _buildAppInfoSection(),
+          _buildAppInfoSection(l10n),
           const SizedBox(height: 40),
 
           // Description Section
@@ -175,19 +177,19 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           const SizedBox(height: 32),
 
           // Features Section
-          _buildFeaturesSection(),
+          _buildFeaturesSection(l10n),
           const SizedBox(height: 40),
 
           // Legal Section
-          _buildLegalSection(),
+          _buildLegalSection(l10n),
           const SizedBox(height: 40),
 
           // Contact Section
-          _buildContactSection(),
+          _buildContactSection(l10n),
           const SizedBox(height: 40),
 
           // Developer Section
-          _buildDeveloperSection(),
+          _buildDeveloperSection(l10n),
           const SizedBox(height: 40),
         ],
       ),
@@ -263,7 +265,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         .fadeIn();
   }
 
-  Widget _buildAppInfoSection() {
+  Widget _buildAppInfoSection(AppLocalizations l10n) {
     return Column(
       children: [
         AnimatedBuilder(
@@ -287,7 +289,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
                 ).createShader(bounds);
               },
               child: Text(
-                'MOROKA',
+                l10n.appBrandName,
                 style: AppTextStyles.displayLarge.copyWith(
                   fontSize: 42,
                   letterSpacing: 10,
@@ -299,7 +301,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         ),
         const SizedBox(height: 8),
         Text(
-          '불길한 속삭임',
+          'oracle of shadows',
           style: AppTextStyles.mysticTitle.copyWith(
             fontSize: 22,
             color: AppColors.fogGray,
@@ -385,30 +387,30 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         .slideY(begin: 0.1, end: 0);
   }
 
-  Widget _buildFeaturesSection() {
+  Widget _buildFeaturesSection(AppLocalizations l10n) {
     final features = [
       {
         'icon': Icons.style_outlined,
-        'title': '78장의 전통 타로 카드',
-        'description': '메이저 아르카나 22장과 마이너 아르카나 56장의 완전한 덱',
+        'title': l10n.feature78Cards,
+        'description': l10n.feature78CardsDesc,
         'gradient': [AppColors.mysticPurple, AppColors.deepViolet],
       },
       {
         'icon': Icons.dashboard_outlined,
-        'title': '5가지 전문 배열법',
-        'description': '원카드부터 켈틱 크로스까지 다양한 리딩 방법 제공',
+        'title': l10n.feature5Spreads,
+        'description': l10n.feature5SpreadsDesc,
         'gradient': [AppColors.evilGlow, AppColors.mysticPurple],
       },
       {
         'icon': Icons.psychology_outlined,
-        'title': 'AI 타로 마스터',
-        'description': '100년 경력의 타로 마스터처럼 깊이 있는 해석 제공',
+        'title': l10n.featureAI,
+        'description': l10n.featureAIDesc,
         'gradient': [AppColors.crimsonGlow, AppColors.bloodMoon],
       },
       {
         'icon': Icons.chat_bubble_outline,
-        'title': '대화형 상담',
-        'description': '카드에 대해 궁금한 점을 자유롭게 질문하세요',
+        'title': l10n.featureChat,
+        'description': l10n.featureChatDesc,
         'gradient': [AppColors.spiritGlow, AppColors.omenGlow],
       },
     ];
@@ -419,7 +421,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 16),
           child: Text(
-            '주요 기능',
+            l10n.featuresTitle,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -513,14 +515,14 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         );
   }
 
-  Widget _buildLegalSection() {
+  Widget _buildLegalSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 16),
           child: Text(
-            '약관 및 정책',
+            l10n.termsAndPolicies,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -529,33 +531,33 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         ),
         _buildLegalTile(
           icon: Icons.article_outlined,
-          title: '서비스 이용약관',
+          title: l10n.termsOfService,
           onTap: () => _showLegalDocument('service'),
         ),
         const SizedBox(height: 12),
         _buildLegalTile(
           icon: Icons.privacy_tip_outlined,
-          title: '개인정보 처리방침',
+          title: l10n.privacyPolicy,
           onTap: () => _showLegalDocument('privacy'),
         ),
         const SizedBox(height: 12),
         _buildLegalTile(
           icon: Icons.campaign_outlined,
-          title: '마케팅 정보 수신',
+          title: l10n.marketingConsent,
           onTap: () => _showLegalDocument('marketing'),
         ),
       ],
     ).animate().fadeIn(delay: const Duration(milliseconds: 900));
   }
 
-  Widget _buildContactSection() {
+  Widget _buildContactSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 16),
           child: Text(
-            '고객 지원',
+            l10n.customerSupport,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -564,14 +566,14 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         ),
         _buildContactTile(
           icon: Icons.mail_outline,
-          title: '이메일 문의',
+          title: l10n.emailSupport,
           subtitle: 'chchleeshop@gmail.com',
           onTap: () => _launchUrl('chchleeshop@gmail.com'),
         ),
         const SizedBox(height: 12),
         _buildContactTile(
           icon: Icons.language,
-          title: '웹사이트',
+          title: l10n.website,
           subtitle: 'www.moroka.app',
           onTap: () => _launchUrl('https://moroka.app'),
         ),
@@ -579,7 +581,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
     ).animate().fadeIn(delay: const Duration(milliseconds: 1000));
   }
 
-  Widget _buildDeveloperSection() {
+  Widget _buildDeveloperSection(AppLocalizations l10n) {
     return GlassMorphismContainer(
       padding: const EdgeInsets.all(24),
       backgroundColor: AppColors.blackOverlay20,
@@ -619,7 +621,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            'Today`s Studio',
+            l10n.companyName,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -627,7 +629,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ),
           const SizedBox(height: 12),
           Text(
-            'Creating mystical experiences',
+            l10n.companyTagline,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textSecondary,
               fontSize: 14,
@@ -646,7 +648,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
               ),
             ),
             child: Text(
-              '© 2025 Today`s Studio. All rights reserved.',
+              l10n.copyright,
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.ashGray,
                 fontSize: 12,
@@ -1038,7 +1040,7 @@ Today's Studio
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '최종 수정일: 2025년 7월 3일',
+                            AppLocalizations.of(context)!.lastModified,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.textSecondary,
                               fontSize: 13,
@@ -1108,7 +1110,7 @@ Today's Studio
                       elevation: 0,
                     ),
                     child: Text(
-                      '확인',
+                      AppLocalizations.of(context)!.confirm,
                       style: AppTextStyles.buttonLarge.copyWith(
                         color: AppColors.ghostWhite,
                         fontSize: 16,

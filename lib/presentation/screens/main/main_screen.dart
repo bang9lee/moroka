@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:vibration/vibration.dart';
 import 'dart:math' as math;
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../core/utils/animation_controller_manager.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
@@ -11,6 +13,7 @@ import '../../../providers.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/glass_morphism_container.dart';
 import '../../widgets/common/menu_bottom_sheet.dart';
+import '../../widgets/common/accessible_icon_button.dart';
 import 'main_viewmodel.dart';
 
 /// 메인 스크린 - 사용자의 현재 감정 상태를 선택하는 첫 화면
@@ -23,7 +26,7 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, ManagedAnimationControllerMixin<MainScreen> {
   // Animation Controllers
   late AnimationController _floatingController;
   late AnimationController _pulseController;
@@ -32,18 +35,21 @@ class _MainScreenState extends ConsumerState<MainScreen>
   late Animation<double> _floatingAnimation;
   late Animation<double> _pulseAnimation;
   
-  // 감정 상태 목록 - 이모지와 색상 매핑
-  static const List<Map<String, dynamic>> _moods = [
-    {'name': '불안해요', 'color': AppColors.bloodMoon, 'emoji': '😟'},
-    {'name': '외로워요', 'color': AppColors.deepViolet, 'emoji': '😔'},
-    {'name': '궁금해요', 'color': AppColors.mysticPurple, 'emoji': '🤔'},
-    {'name': '두려워요', 'color': AppColors.shadowGray, 'emoji': '😨'},
-    {'name': '희망적이에요', 'color': AppColors.spiritGlow, 'emoji': '😊'},
-    {'name': '혼란스러워요', 'color': AppColors.omenGlow, 'emoji': '😕'},
-    {'name': '간절해요', 'color': AppColors.crimsonGlow, 'emoji': '🙏'},
-    {'name': '기대돼요', 'color': AppColors.evilGlow, 'emoji': '😄'},
-    {'name': '신비로워요', 'color': AppColors.textMystic, 'emoji': '🔮'},
-  ];
+  // Mood states list - emoji and color mapping
+  List<Map<String, dynamic>> _getMoods(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [
+      {'name': l10n.moodAnxious, 'color': AppColors.bloodMoon, 'emoji': '😟'},
+      {'name': l10n.moodLonely, 'color': AppColors.deepViolet, 'emoji': '😔'},
+      {'name': l10n.moodCurious, 'color': AppColors.mysticPurple, 'emoji': '🤔'},
+      {'name': l10n.moodFearful, 'color': AppColors.shadowGray, 'emoji': '😨'},
+      {'name': l10n.moodHopeful, 'color': AppColors.spiritGlow, 'emoji': '😊'},
+      {'name': l10n.moodConfused, 'color': AppColors.omenGlow, 'emoji': '😕'},
+      {'name': l10n.moodDesperate, 'color': AppColors.crimsonGlow, 'emoji': '🙏'},
+      {'name': l10n.moodExpectant, 'color': AppColors.evilGlow, 'emoji': '😄'},
+      {'name': l10n.moodMystical, 'color': AppColors.textMystic, 'emoji': '🔮'},
+    ];
+  }
   
   // State
   String? _selectedMood;
@@ -60,9 +66,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
   void _initializeAnimations() {
     try {
       // Floating animation for logo
-      _floatingController = AnimationController(
+      _floatingController = createManagedRepeatingController(
+        tag: 'main_floating',
         duration: const Duration(seconds: 5),
-        vsync: this,
+        reverse: true,
       );
       
       _floatingAnimation = Tween<double>(
@@ -74,9 +81,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
       ));
       
       // Pulse animation for selected items
-      _pulseController = AnimationController(
+      _pulseController = createManagedRepeatingController(
+        tag: 'main_pulse',
         duration: const Duration(milliseconds: 1500),
-        vsync: this,
+        reverse: true,
       );
       
       _pulseAnimation = Tween<double>(
@@ -96,8 +104,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
   }
 
   void _startAnimations() {
-    _floatingController.repeat(reverse: true);
-    _pulseController.repeat(reverse: true);
+    // 애니메이션은 ManagedAnimationControllerMixin에서 자동 관리
   }
 
   Future<void> _initializeScreen() async {
@@ -109,8 +116,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   void dispose() {
-    _floatingController.dispose();
-    _pulseController.dispose();
+    // AnimationController는 ManagedAnimationControllerMixin에서 자동 정리
     super.dispose();
   }
 
@@ -126,6 +132,39 @@ class _MainScreenState extends ConsumerState<MainScreen>
   Future<void> _proceedToSpreadSelection() async {
     if (_selectedMood == null) return;
     
+    // Check daily draw limit
+    final dailyDrawData = ref.read(dailyDrawDataProvider);
+    
+    dailyDrawData.when(
+      data: (data) async {
+        if (data.totalDrawsRemaining <= 0) {
+          // 횟수가 없으면 광고 시청 유도
+          _showDrawLimitDialog();
+          return;
+        }
+        
+        // Strong haptic feedback
+        if (await Vibration.hasVibrator() == true) {
+          await Vibration.vibrate(duration: 100);
+        }
+        
+        // Save mood to state
+        ref.read(mainViewModelProvider.notifier).setUserMood(_selectedMood!);
+        
+        // Navigate to spread selection
+        if (mounted) {
+          await context.push('/spread-selection');
+        }
+      },
+      loading: () {},
+      error: (_, __) {
+        // 에러시에도 진행 가능하도록
+        _navigateToSpreadSelection();
+      },
+    );
+  }
+  
+  Future<void> _navigateToSpreadSelection() async {
     // Strong haptic feedback
     if (await Vibration.hasVibrator() == true) {
       await Vibration.vibrate(duration: 100);
@@ -137,6 +176,112 @@ class _MainScreenState extends ConsumerState<MainScreen>
     // Navigate to spread selection
     if (mounted) {
       await context.push('/spread-selection');
+    }
+  }
+  
+  void _showDrawLimitDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: GlassMorphismContainer(
+          padding: const EdgeInsets.all(24),
+          borderRadius: 20,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.hourglass_empty,
+                color: AppColors.crimsonGlow,
+                size: 48,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                AppLocalizations.of(context)!.dailyLimitReached,
+                style: AppTextStyles.dialogTitle.copyWith(
+                  color: AppColors.ghostWhite,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                AppLocalizations.of(context)!.watchAdForMore,
+                style: AppTextStyles.dialogContent.copyWith(
+                  color: AppColors.fogGray,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: AppTextStyles.dialogButton.copyWith(
+                          color: AppColors.fogGray,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _watchAdForDraw();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.crimsonGlow,
+                        foregroundColor: AppColors.ghostWhite,
+                        textStyle: AppTextStyles.dialogButton.copyWith(
+                          fontSize: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(AppLocalizations.of(context)!.watchAd),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Future<void> _watchAdForDraw() async {
+    final adRepository = ref.read(adRepositoryProvider);
+    final l10n = AppLocalizations.of(context)!;
+    
+    final success = await adRepository.showRewardedAd(
+      onRewarded: () async {
+        // 광고 시청 성공시 뽑기 횟수 추가
+        await ref.read(dailyDrawDataProvider.notifier).addAdDraw();
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.drawAddedMessage),
+              backgroundColor: AppColors.spiritGlow,
+            ),
+          );
+        }
+      },
+    );
+    
+    if (!success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.adLoadFailed),
+          backgroundColor: AppColors.crimsonGlow,
+        ),
+      );
     }
   }
 
@@ -202,62 +347,75 @@ class _MainScreenState extends ConsumerState<MainScreen>
   }
 
   Widget _buildAppBar(AsyncValue<dynamic> currentUser) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // User info
-          Flexible(
-            child: _buildUserInfo(currentUser),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // User info
+              Flexible(
+                child: _buildUserInfo(currentUser, context),
+              ),
+              
+              // Menu button
+              _buildMenuButton(),
+            ],
           ),
-          
-          // Menu button
-          _buildMenuButton(),
-        ],
-      ),
+        ),
+        // 남은 횟수 표시를 여기로 이동
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: _buildDrawCountIndicator(),
+        ),
+      ],
     );
   }
 
-  Widget _buildUserInfo(AsyncValue<dynamic> currentUser) {
+  Widget _buildUserInfo(AsyncValue<dynamic> currentUser, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return currentUser.when(
       data: (user) {
         if (user == null) return const SizedBox.shrink();
         
         final displayName = user.displayName ?? 
             user.email?.split('@').first ?? 
-            '영혼';
+            l10n.anonymousSoul;
             
-        return GlassMorphismContainer(
-          height: 45,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          backgroundColor: AppColors.blackOverlay40,
-          borderColor: AppColors.whiteOverlay10,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildUserAvatar(),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Text(
-                  displayName,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.ghostWhite,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+        return Semantics(
+          label: '${l10n.currentUser}: $displayName',
+          child: GlassMorphismContainer(
+            height: 48,  // Minimum touch target height
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            backgroundColor: AppColors.blackOverlay40,
+            borderColor: AppColors.whiteOverlay10,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildUserAvatar(),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    displayName,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.ghostWhite,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ).animate()
             .fadeIn(duration: const Duration(milliseconds: 600))
             .slideX(begin: -0.2, end: 0);
       },
       loading: () => const SizedBox(
-        height: 45,
+        height: 48,
         width: 100,
         child: Center(
           child: SizedBox(
@@ -296,17 +454,21 @@ class _MainScreenState extends ConsumerState<MainScreen>
   }
 
   Widget _buildMenuButton() {
+    final l10n = AppLocalizations.of(context)!;
     return GlassMorphismContainer(
-      width: 45,
-      height: 45,
+      width: 48,  // Increased to ensure minimum touch target
+      height: 48,
       backgroundColor: AppColors.blackOverlay40,
       borderColor: AppColors.whiteOverlay10,
-      child: IconButton(
-        onPressed: _showMenu,
-        icon: const Icon(
-          Icons.menu,
+      child: Center(
+        child: AccessibleIconButton(
+          icon: Icons.menu,
+          onPressed: _showMenu,
+          semanticLabel: l10n.openMenu,
           color: AppColors.ghostWhite,
           size: 22,
+          tooltip: l10n.openMenu,
+          padding: EdgeInsets.zero,  // Container already provides padding
         ),
       ),
     ).animate()
@@ -404,6 +566,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isSmallScreen,
     required bool isTinyScreen,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     // 화면 크기에 따라 동적으로 조정되는 로고 크기
     final logoSize = isTinyScreen ? 60.0 : (isSmallScreen ? 70.0 : 85.0);
     final titleFontSize = isTinyScreen ? 24.0 : (isSmallScreen ? 28.0 : 34.0);
@@ -454,7 +617,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
               
               // Title
               Text(
-                'MOROKA',
+                l10n.appBrandName,
                 style: TextStyle(
                   fontFamily: 'Arial',
                   fontSize: titleFontSize,
@@ -484,7 +647,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
               
               // Subtitle
               Text(
-                'Oracle of Shadows',
+                l10n.appTagline,
                 style: TextStyle(
                   fontSize: subtitleFontSize,
                   fontWeight: FontWeight.w300,
@@ -533,12 +696,13 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required bool isSmallScreen,
     required bool isTinyScreen,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     final fontSize = isTinyScreen ? 16.0 : (isSmallScreen ? 18.0 : 22.0);
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        '지금 어떤 마음이신가요?',
+        l10n.moodQuestion,
         style: AppTextStyles.mysticTitle.copyWith(
           fontSize: fontSize,
           height: 1.3,
@@ -589,9 +753,9 @@ class _MainScreenState extends ConsumerState<MainScreen>
           crossAxisSpacing: gridParams['spacing']!,
           mainAxisSpacing: gridParams['spacing']!,
         ),
-        itemCount: _moods.length,
+        itemCount: _getMoods(context).length,
         itemBuilder: (context, index) => _buildMoodItem(
-          mood: _moods[index],
+          mood: _getMoods(context)[index],
           index: index,
           gridParams: gridParams,
         ),
@@ -613,7 +777,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     
     if (screenWidth < 320 || availableHeight < 250) {
       return {
-        'fontSize': 8,
+        'fontSize': 13,
         'emojiSize': 18,
         'padding': 3,
         'spacing': 6,
@@ -621,7 +785,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       };
     } else if (screenWidth < 375 || availableHeight < 300) {
       return {
-        'fontSize': 9,
+        'fontSize': 13,
         'emojiSize': 20,
         'padding': 4,
         'spacing': 8,
@@ -629,7 +793,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       };
     } else if (isTinyScreen || availableHeight < 350) {
       return {
-        'fontSize': 10,
+        'fontSize': 13,
         'emojiSize': 22,
         'padding': 5,
         'spacing': 8,
@@ -637,7 +801,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       };
     } else if (isSmallScreen || availableHeight < 400) {
       return {
-        'fontSize': 11,
+        'fontSize': 13,
         'emojiSize': 24,
         'padding': 6,
         'spacing': 10,
@@ -645,7 +809,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       };
     } else {
       return {
-        'fontSize': 12,
+        'fontSize': 13,
         'emojiSize': 26,
         'padding': 8,
         'spacing': 10,
@@ -660,10 +824,16 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required Map<String, double> gridParams,
   }) {
     final isSelected = _selectedMood == mood['name'];
+    final l10n = AppLocalizations.of(context)!;
     
-    return GestureDetector(
-      onTap: () => _selectMood(mood['name']),
-      child: AnimatedBuilder(
+    return Semantics(
+      button: true,
+      label: '${mood['name']} ${mood['emoji']}',
+      selected: isSelected,
+      hint: isSelected ? l10n.currentlySelected : l10n.tapToSelect,
+      child: GestureDetector(
+        onTap: () => _selectMood(mood['name']),
+        child: AnimatedBuilder(
         animation: isSelected && _animationsInitialized ? _pulseAnimation : const AlwaysStoppedAnimation(1.0),
         builder: (context, child) {
           final scale = isSelected && _animationsInitialized ? _pulseAnimation.value : 1.0;
@@ -749,6 +919,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
           );
         },
       ),
+      ),
     ).animate()
         .scale(
           duration: const Duration(milliseconds: 200),
@@ -760,22 +931,101 @@ class _MainScreenState extends ConsumerState<MainScreen>
         );
   }
 
+  Widget _buildDrawCountIndicator() {
+    final l10n = AppLocalizations.of(context)!;
+    final dailyDrawData = ref.watch(dailyDrawDataProvider);
+    
+    return dailyDrawData.when(
+      data: (data) {
+        final totalRemaining = data.totalDrawsRemaining;
+        final adRemaining = data.adDrawsRemaining;
+        
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.blackOverlay40,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: totalRemaining > 0 
+                  ? AppColors.spiritGlow.withAlpha(100)
+                  : AppColors.crimsonGlow.withAlpha(100),
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                totalRemaining > 0 ? Icons.style : Icons.hourglass_empty,
+                color: totalRemaining > 0 
+                    ? AppColors.spiritGlow
+                    : AppColors.crimsonGlow,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                totalRemaining > 0
+                    ? '${l10n.remainingDraws}: $totalRemaining'
+                    : l10n.noDrawsRemaining,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: totalRemaining > 0 
+                      ? AppColors.ghostWhite
+                      : AppColors.crimsonGlow,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (totalRemaining > 0 && adRemaining > 0) ...[
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.omenGlow.withAlpha(30),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '${l10n.adDraws}: $adRemaining',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.omenGlow,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ).animate()
+          .fadeIn(duration: const Duration(milliseconds: 600))
+          .slideY(begin: 0.2, end: 0);
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
   Widget _buildContinueButton({
     required Size screenSize,
     required bool isSmallScreen,
     required bool isTinyScreen,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     final buttonWidth = math.min(screenSize.width * 0.85, 320.0);
     final buttonHeight = isTinyScreen ? 44.0 : (isSmallScreen ? 52.0 : 60.0);
     final fontSize = isTinyScreen ? 14.0 : (isSmallScreen ? 15.0 : 17.0);
     final iconSize = isTinyScreen ? 16.0 : (isSmallScreen ? 18.0 : 22.0);
     
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300),
-      opacity: _selectedMood != null ? 1.0 : 0.5,
-      child: GestureDetector(
-        onTap: _selectedMood != null ? _proceedToSpreadSelection : null,
-        child: Container(
+          duration: const Duration(milliseconds: 300),
+          opacity: _selectedMood != null ? 1.0 : 0.5,
+          child: Semantics(
+            button: true,
+            label: l10n.selectSpreadButton,
+            enabled: _selectedMood != null,
+            hint: _selectedMood != null 
+                ? l10n.proceedToSpreadSelection 
+                : l10n.selectMoodFirst,
+            child: GestureDetector(
+              onTap: _selectedMood != null ? _proceedToSpreadSelection : null,
+              child: Container(
           width: buttonWidth,
           height: buttonHeight,
           decoration: BoxDecoration(
@@ -825,7 +1075,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
               ),
               SizedBox(width: isSmallScreen ? 8 : 10),
               Text(
-                '타로 카드 펼치기',
+                l10n.selectSpreadButton,
                 style: AppTextStyles.buttonLarge.copyWith(
                   color: _selectedMood != null
                       ? AppColors.ghostWhite
@@ -846,6 +1096,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
           curve: Curves.easeOutBack,
         ),
       ),
+          ),
     ).animate()
         .fadeIn(
           duration: const Duration(milliseconds: 1000),

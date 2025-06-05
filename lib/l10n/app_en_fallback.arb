@@ -1,0 +1,102 @@
+{
+  "cardShowingNewPerspective": "card is showing you a new perspective.",
+  "moodIsSignOfChange": "mood is a sign of change.",
+  "nowIsTurningPoint": "Now is the turning point.",
+  "tryDifferentChoiceToday": "Try making a different choice today",
+  "talkWithSomeoneSpecial": "Have a conversation with someone special",
+  "setSmallGoalAndStart": "Set a small goal and start",
+  "positiveChangeInWeeks": "You'll feel positive changes within 2-3 weeks.",
+  
+  "flowFromPastToFuture": "The flow from past to present to future is visible.",
+  "lessonsFromPast": "Lessons from past experiences",
+  "upcomingPossibilities": "Upcoming possibilities",
+  "acceptPastFocusPresentPrepareFuture": "Accept the past, focus on the present, prepare for the future.",
+  "mostImportantIsCurrentChoice": "state, the most important thing is your current choice.",
+  
+  "conditionalYes": "Conditional Yes",
+  "no": "No",
+  "finalAnswer": "Final Answer",
+  "positiveSignals": "Positive signals",
+  "cautionSignals": "Caution signals",
+  "cards": " cards",
+  "cardHoldsImportantKey": "card holds the important key.",
+  "needCarefulPreparationAndTiming": "Careful preparation and proper timing are needed.",
+  "oneToTwoWeeks": "1-2 weeks",
+  "oneToTwoMonths": "1-2 months",
+  "checkResults": "to check results",
+  "doBestRegardlessOfResult": "Do your best to prepare regardless of the outcome.",
+  
+  "you": "You",
+  "partner": "Partner",
+  "importantRoleInRelationship": "Important role in the relationship",
+  "partnersCurrentState": "Partner's current state",
+  "temperatureDifferenceButUnderstandable": "There's a temperature difference in hearts, but it's understandable.",
+  "showingChallenges": " showing challenges ahead.",
+  "possibilityWithEffort": "With effort, there's over 60% possibility of progress.",
+  "needConversationUnderstandingTime": "Conversation, understanding, and time are needed.",
+  "loveIsMirrorReflectingEachOther": "Love is like a mirror reflecting each other.",
+  
+  "cardsShowingComplexSituation": " cards are showing a complex situation.",
+  "conflictBetweenConsciousUnconscious": "There's conflict between conscious and unconscious.",
+  "pastInfluenceContinuesToPresent": "The influence of the past continues to the present.",
+  "surroundingEnvironmentImportant": "The surrounding environment has important influence.",
+  "positiveChangePossibility70Percent": "There's about 70% possibility of positive change.",
+  "thisWeek": "This week",
+  "thisMonth": "This month", 
+  "threeMonthsLater": "3 months later",
+  "organizeSituation": "Organize the situation",
+  "startConcreteAction": "Start concrete action",
+  "youHavePowerToOvercome": "You have the power within to overcome your current state.",
+  
+  "when": "when",
+  "timing": "timing",
+  "how": "how",
+  "method": "method",
+  "why": "why",
+  "reason": "reason",
+  
+  "tarotTimingAnswer": "Tarot typically shows timing between 1-3 months. Looking at the {cardName} card's energy, it might be sooner. The best time is when you're ready.",
+  "@tarotTimingAnswer": {
+    "placeholders": {
+      "cardName": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tarotMethodAnswer": "The {cardName} card says to follow your intuition. Don't overthink it, just take one step at a time following your heart. Small beginnings create big changes.",
+  "@tarotMethodAnswer": {
+    "placeholders": {
+      "cardName": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tarotReasonAnswer": "The reason is, as the {cardName} card suggests, now is the time for change. It's time to break free from past patterns and open new possibilities.",
+  "@tarotReasonAnswer": {
+    "placeholders": {
+      "cardName": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tarotGeneralAnswer": "Good question. From the {cardName} card's perspective, now is the time to move forward carefully yet courageously. What aspect are you most curious about?",
+  "@tarotGeneralAnswer": {
+    "placeholders": {
+      "cardName": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "startChatMessage": "Ask me anything about your tarot reading",
+  "@startChatMessage": {},
+  
+  "chatHistory": "Chat History",
+  "@chatHistory": {},
+  
+  "chatHistoryDescription": "Your conversation with the Tarot Master",
+  "@chatHistoryDescription": {}
+}

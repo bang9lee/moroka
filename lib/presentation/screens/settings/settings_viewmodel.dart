@@ -8,19 +8,22 @@ import 'package:timezone/data/latest.dart' as tz;
 
 import '../../../core/utils/app_logger.dart';
 import '../../../data/services/firestore_service.dart';
+import '../../../data/repositories/cache_repository.dart';
 import '../../../providers.dart';
 
 final settingsViewModelProvider = 
     StateNotifierProvider<SettingsViewModel, SettingsState>((ref) {
   final firestoreService = ref.watch(firestoreServiceProvider);
-  return SettingsViewModel(firestoreService);
+  final cacheRepository = ref.watch(cacheRepositoryProvider);
+  return SettingsViewModel(firestoreService, cacheRepository);
 });
 
 class SettingsViewModel extends StateNotifier<SettingsState> {
   final FirestoreService _firestoreService;
+  final CacheRepository _cacheRepository;
   final FlutterLocalNotificationsPlugin _notifications = FlutterLocalNotificationsPlugin();
   
-  SettingsViewModel(this._firestoreService) : super(SettingsState()) {
+  SettingsViewModel(this._firestoreService, this._cacheRepository) : super(SettingsState()) {
     _initNotifications();
     _loadSettings();
   }
@@ -120,24 +123,15 @@ class SettingsViewModel extends StateNotifier<SettingsState> {
 
   Future<void> clearCache() async {
     try {
-      // Clear SharedPreferences cache
+      // Clear all cache using the cache repository
+      await _cacheRepository.clearAllCache();
+      
+      // Re-save current settings after clearing cache
       final prefs = await SharedPreferences.getInstance();
-      
-      // Preserve settings while clearing other data
-      final settings = {
-        'daily_notification': state.dailyNotification,
-        'weekly_report': state.weeklyReport,
-        'vibration_enabled': state.vibrationEnabled,
-        'animations_enabled': state.animationsEnabled,
-      };
-      
-      // Clear all preferences
-      await prefs.clear();
-      
-      // Restore settings
-      for (final entry in settings.entries) {
-        await prefs.setBool(entry.key, entry.value);
-      }
+      await prefs.setBool('daily_notification', state.dailyNotification);
+      await prefs.setBool('weekly_report', state.weeklyReport);
+      await prefs.setBool('vibration_enabled', state.vibrationEnabled);
+      await prefs.setBool('animations_enabled', state.animationsEnabled);
       
       AppLogger.debug('Cache cleared successfully');
     } catch (e) {
@@ -249,6 +243,15 @@ class SettingsViewModel extends StateNotifier<SettingsState> {
     } catch (e) {
       AppLogger.error('Error deleting account', e);
       rethrow;
+    }
+  }
+  
+  Future<Map<String, dynamic>> getCacheStatistics() async {
+    try {
+      return await _cacheRepository.getCacheStatistics();
+    } catch (e) {
+      AppLogger.error('Error getting cache statistics', e);
+      return {};
     }
   }
 

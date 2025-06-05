@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
@@ -79,7 +80,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
     if (!_serviceTermsAccepted || !_privacyPolicyAccepted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('필수 약관에 동의해주세요'),
+          content: Text(AppLocalizations.of(context)!.agreeToRequired),
           backgroundColor: AppColors.bloodMoon,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -119,6 +120,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(termsViewModelProvider);
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
@@ -191,11 +193,11 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                         child: Column(
                           children: [
                             SizedBox(height: screenHeight * 0.08),
-                            _buildHeader(),
+                            _buildHeader(l10n),
                             SizedBox(height: screenHeight * 0.04),
-                            _buildTermsSection(state),
+                            _buildTermsSection(state, l10n),
                             const SizedBox(height: 24),
-                            _buildSubmitButton(state),
+                            _buildSubmitButton(state, l10n),
                             const SizedBox(height: 40),
                           ],
                         ),
@@ -211,7 +213,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLocalizations l10n) {
     return Column(
       children: [
         // Contract icon
@@ -259,7 +261,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
         const SizedBox(height: 20),
         
         Text(
-          '영혼의 계약',
+          l10n.soulContract,
           style: AppTextStyles.displaySmall.copyWith(
             fontSize: 26,
             fontWeight: FontWeight.bold,
@@ -272,7 +274,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
         const SizedBox(height: 8),
         
         Text(
-          '서비스 이용을 위한 약관에 동의해주세요',
+          l10n.termsAgreementMessage,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.fogGray,
             fontSize: 14,
@@ -283,7 +285,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
     );
   }
 
-  Widget _buildTermsSection(TermsState state) {
+  Widget _buildTermsSection(TermsState state, AppLocalizations l10n) {
     return GlassMorphismContainer(
       padding: const EdgeInsets.all(20),
       borderRadius: 20,
@@ -306,11 +308,12 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
               ),
             ),
             child: _buildTermsItem(
-              title: '전체 동의',
+              title: l10n.agreeAll,
               isRequired: false,
               isChecked: _allAccepted,
               onChanged: _toggleAll,
               isAllAgree: true,
+              l10n: l10n,
             ),
           ).animate(controller: _animationController)
               .fadeIn(delay: 600.ms)
@@ -345,7 +348,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
             children: [
               // 서비스 이용약관
               _buildTermsItem(
-                title: '서비스 이용약관',
+                title: l10n.termsOfService,
                 isRequired: true,
                 isChecked: _serviceTermsAccepted,
                 onChanged: (value) {
@@ -355,6 +358,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                   _updateAllAccepted();
                 },
                 onDetailTap: () => _showTermsDetail('service'),
+                l10n: l10n,
               ).animate(controller: _animationController)
                   .fadeIn(delay: 700.ms)
                   .slideX(begin: -0.1, end: 0),
@@ -363,7 +367,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
               
               // 개인정보 처리방침
               _buildTermsItem(
-                title: '개인정보 처리방침',
+                title: l10n.privacyPolicy,
                 isRequired: true,
                 isChecked: _privacyPolicyAccepted,
                 onChanged: (value) {
@@ -373,6 +377,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                   _updateAllAccepted();
                 },
                 onDetailTap: () => _showTermsDetail('privacy'),
+                l10n: l10n,
               ).animate(controller: _animationController)
                   .fadeIn(delay: 800.ms)
                   .slideX(begin: -0.1, end: 0),
@@ -393,7 +398,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '선택 동의',
+                    l10n.optional,
                     style: AppTextStyles.bodySmall.copyWith(
                       color: AppColors.fogGray,
                       fontSize: 11,
@@ -415,7 +420,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
           
           // 마케팅 정보 수신
           _buildTermsItem(
-            title: '마케팅 정보 수신 동의',
+            title: l10n.marketingConsent,
             isRequired: false,
             isOptional: true,
             isChecked: _marketingAccepted,
@@ -426,6 +431,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
               _updateAllAccepted();
             },
             onDetailTap: () => _showTermsDetail('marketing'),
+            l10n: l10n,
           ).animate(controller: _animationController)
               .fadeIn(delay: 900.ms)
               .slideX(begin: -0.1, end: 0),
@@ -439,6 +445,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
     required bool isRequired,
     required bool isChecked,
     required Function(bool?) onChanged,
+    required AppLocalizations l10n,
     VoidCallback? onDetailTap,
     bool isAllAgree = false,
     bool isOptional = false,
@@ -504,7 +511,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                           ),
                         ),
                         child: Text(
-                          '필수',
+                          l10n.required,
                           style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.bloodMoon,
                             fontWeight: FontWeight.w600,
@@ -525,7 +532,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                           ),
                         ),
                         child: Text(
-                          '선택',
+                          l10n.optional,
                           style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.spiritGlow,
                             fontWeight: FontWeight.w600,
@@ -573,7 +580,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
     );
   }
 
-  Widget _buildSubmitButton(TermsState state) {
+  Widget _buildSubmitButton(TermsState state, AppLocalizations l10n) {
     final isEnabled = _serviceTermsAccepted && _privacyPolicyAccepted && !state.isLoading;
     
     return SizedBox(
@@ -632,7 +639,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen>
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '동의하고 시작하기',
+                        l10n.agreeAndStart,
                         style: AppTextStyles.buttonLarge.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
@@ -656,14 +663,15 @@ class _TermsDetailSheet extends StatelessWidget {
   
   const _TermsDetailSheet({required this.type});
   
-  String get _title {
+  String _title(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (type) {
       case 'service':
-        return '서비스 이용약관';
+        return l10n.termsOfService;
       case 'privacy':
-        return '개인정보 처리방침';
+        return l10n.privacyPolicy;
       case 'marketing':
-        return '마케팅 정보 수신 동의';
+        return l10n.marketingConsent;
       default:
         return '';
     }
@@ -773,7 +781,7 @@ MOROKA는 다음의 목적을 위하여 개인정보를 수집 및 이용합니�
                   children: [
                     Expanded(
                       child: Text(
-                        _title,
+                        _title(context),
                         style: AppTextStyles.displaySmall.copyWith(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -822,7 +830,7 @@ MOROKA는 다음의 목적을 위하여 개인정보를 수집 및 이용합니�
                       ),
                     ),
                     child: Text(
-                      '확인',
+                      AppLocalizations.of(context)!.confirm,
                       style: AppTextStyles.buttonLarge.copyWith(
                         color: AppColors.ghostWhite,
                       ),

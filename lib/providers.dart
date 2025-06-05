@@ -8,11 +8,14 @@ import 'core/utils/app_logger.dart';
 import 'data/repositories/tarot_ai_repository.dart';
 import 'data/repositories/ad_repository.dart';
 import 'data/repositories/local_storage_repository.dart';
+import 'data/repositories/cache_repository.dart';
 import 'data/services/gemini_service.dart';
 import 'data/services/admob_service.dart';
 import 'data/services/auth_service.dart';
 import 'data/services/firestore_service.dart';
+import 'data/services/cache_service.dart';
 import 'data/models/user_model.dart';
+import 'data/models/daily_draw_model.dart';
 
 /// Dio HTTP 클라이언트 Provider
 final dioProvider = Provider<Dio>((ref) {
@@ -46,9 +49,9 @@ final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService();
 });
 
-/// Gemini AI 서비스 Provider
-final geminiServiceProvider = Provider<GeminiService>((ref) {
-  return GeminiService();
+/// 캐시 서비스 Provider (싱글톤)
+final cacheServiceProvider = Provider<CacheService>((ref) {
+  return CacheService();
 });
 
 /// AdMob 서비스 Provider (Singleton)
@@ -62,6 +65,18 @@ final firestoreServiceProvider = Provider<FirestoreService>((ref) {
 });
 
 // ========== Repositories ==========
+
+/// 캐시 리포지토리 Provider
+final cacheRepositoryProvider = Provider<CacheRepository>((ref) {
+  final cacheService = ref.watch(cacheServiceProvider);
+  return CacheRepository(cacheService);
+});
+
+/// Gemini AI 서비스 Provider
+final geminiServiceProvider = Provider<GeminiService>((ref) {
+  final cacheRepository = ref.watch(cacheRepositoryProvider);
+  return GeminiService(cacheRepository: cacheRepository);
+});
 
 /// 타로 AI 리포지토리 Provider
 final tarotAIRepositoryProvider = Provider<TarotAIRepository>((ref) {
@@ -137,6 +152,11 @@ final selectedCardIndexProvider = StateProvider<int?>((ref) => null);
 final chatTurnCountProvider = StateProvider<int>((ref) {
   AppLogger.debug('Chat turn count initialized');
   return 0;
+});
+
+/// 일일 카드 뽑기 데이터 Provider
+final dailyDrawDataProvider = StateNotifierProvider<DailyDrawNotifier, AsyncValue<DailyDrawData>>((ref) {
+  return DailyDrawNotifier(ref);
 });
 
 /// 글로벌 로딩 상태 Provider
@@ -229,5 +249,73 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
     } catch (e) {
       AppLogger.error('Failed to update sound setting', e);
     }
+  }
+}
+
+// ========== Daily Draw Management ==========
+
+/// 일일 카드 뽑기 관리 Notifier
+class DailyDrawNotifier extends StateNotifier<AsyncValue<DailyDrawData>> {
+  final Ref ref;
+  
+  DailyDrawNotifier(this.ref) : super(const AsyncValue.loading()) {
+    _loadData();
+  }
+  
+  Future<void> _loadData() async {
+    try {
+      final localStorage = ref.read(localStorageRepositoryProvider);
+      final data = await localStorage.getDailyDrawData();
+      state = AsyncValue.data(data);
+      AppLogger.debug('Daily draw data loaded: ${data.totalDrawsRemaining} draws remaining');
+    } catch (e, stack) {
+      AppLogger.error('Failed to load daily draw data', e, stack);
+      state = AsyncValue.error(e, stack);
+    }
+  }
+  
+  /// 카드 뽑기 사용
+  Future<bool> useCardDraw() async {
+    try {
+      final currentData = state.value;
+      if (currentData == null || currentData.totalDrawsRemaining <= 0) {
+        return false;
+      }
+      
+      state = const AsyncValue.loading();
+      
+      final localStorage = ref.read(localStorageRepositoryProvider);
+      final updatedData = await localStorage.useCardDraw();
+      
+      state = AsyncValue.data(updatedData);
+      AppLogger.debug('Card draw used. Remaining: ${updatedData.totalDrawsRemaining}');
+      
+      return true;
+    } catch (e, stack) {
+      AppLogger.error('Failed to use card draw', e, stack);
+      state = AsyncValue.error(e, stack);
+      return false;
+    }
+  }
+  
+  /// 광고 시청 후 뽑기 횟수 추가
+  Future<void> addAdDraw() async {
+    try {
+      state = const AsyncValue.loading();
+      
+      final localStorage = ref.read(localStorageRepositoryProvider);
+      final updatedData = await localStorage.addAdDraw();
+      
+      state = AsyncValue.data(updatedData);
+      AppLogger.debug('Ad draw added. Remaining: ${updatedData.totalDrawsRemaining}');
+    } catch (e, stack) {
+      AppLogger.error('Failed to add ad draw', e, stack);
+      state = AsyncValue.error(e, stack);
+    }
+  }
+  
+  /// 데이터 새로고침
+  Future<void> refresh() async {
+    await _loadData();
   }
 }

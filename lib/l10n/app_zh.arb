@@ -1,0 +1,1289 @@
+{
+  "@@locale": "zh",
+  "appName": "Moroka",
+  "@appName": {
+    "description": "Application name"
+  },
+  "appTagline": "暗影神谕",
+  "@appTagline": {
+    "description": "Application tagline. Translated as 'Oracle of Shadows', culturally adapted."
+  },
+  "appTitle": "Moroka - 不祥的低语",
+  "@appTitle": {
+    "description": "Full application title"
+  },
+  "onboardingTitle1": "命运之门开启",
+  "@onboardingTitle1": {
+    "description": "First onboarding screen title"
+  },
+  "onboardingDesc1": "古老的智慧与现代科技相遇\n向您低语未来",
+  "@onboardingDesc1": {
+    "description": "First onboarding screen description"
+  },
+  "onboardingTitle2": "黑暗中的真相",
+  "@onboardingTitle2": {
+    "description": "Second onboarding screen title"
+  },
+  "onboardingDesc2": "塔罗牌从不撒谎\n它们只展现您能承受的真相",
+  "@onboardingDesc2": {
+    "description": "Second onboarding screen description"
+  },
+  "onboardingTitle3": "AI解读命运",
+  "@onboardingTitle3": {
+    "description": "Third onboarding screen title"
+  },
+  "onboardingDesc3": "人工智能解释您的牌阵\n通过深入对话引导您的道路",
+  "@onboardingDesc3": {
+    "description": "Third onboarding screen description"
+  },
+  "onboardingTitle4": "您准备好了吗？",
+  "@onboardingTitle4": {
+    "description": "Fourth onboarding screen title"
+  },
+  "onboardingDesc4": "每个选择都有其代价\n如果您准备好面对自己的命运...",
+  "@onboardingDesc4": {
+    "description": "Fourth onboarding screen description"
+  },
+  "loginTitle": "您回来了",
+  "@loginTitle": {
+    "description": "Login screen title"
+  },
+  "loginSubtitle": "我们一直在等您",
+  "@loginSubtitle": {
+    "description": "Login screen subtitle"
+  },
+  "signupTitle": "命运契约",
+  "@signupTitle": {
+    "description": "Signup screen title"
+  },
+  "signupSubtitle": "注册您的灵魂",
+  "@signupSubtitle": {
+    "description": "Signup screen subtitle"
+  },
+  "emailLabel": "电子邮件",
+  "@emailLabel": {
+    "description": "Email input label"
+  },
+  "passwordLabel": "密码",
+  "@passwordLabel": {
+    "description": "Password input label"
+  },
+  "nameLabel": "姓名",
+  "@nameLabel": {
+    "description": "Name input label"
+  },
+  "loginButton": "进入",
+  "@loginButton": {
+    "description": "Login button text"
+  },
+  "signupButton": "灵魂注册",
+  "@signupButton": {
+    "description": "Signup button text"
+  },
+  "googleLogin": "使用Google登录",
+  "@googleLogin": {
+    "description": "Google login button text"
+  },
+  "googleSignup": "使用Google开始",
+  "@googleSignup": {
+    "description": "Google signup button text"
+  },
+  "alreadyHaveAccount": "已有账户？登录",
+  "@alreadyHaveAccount": {
+    "description": "Link to login screen"
+  },
+  "dontHaveAccount": "第一次来？注册",
+  "@dontHaveAccount": {
+    "description": "Link to signup screen"
+  },
+  "moodQuestion": "您现在感觉如何？",
+  "@moodQuestion": {
+    "description": "Question asking user's current mood"
+  },
+  "selectSpreadButton": "选择塔罗牌阵",
+  "@selectSpreadButton": {
+    "description": "Button to select tarot spread"
+  },
+  "moodAnxious": "焦虑",
+  "@moodAnxious": {
+    "description": "Mood: anxious"
+  },
+  "moodLonely": "孤独",
+  "@moodLonely": {
+    "description": "Mood: lonely"
+  },
+  "moodCurious": "好奇",
+  "@moodCurious": {
+    "description": "Mood: curious"
+  },
+  "moodFearful": "恐惧",
+  "@moodFearful": {
+    "description": "Mood: fearful"
+  },
+  "moodHopeful": "充满希望",
+  "@moodHopeful": {
+    "description": "Mood: hopeful"
+  },
+  "moodConfused": "困惑",
+  "@moodConfused": {
+    "description": "Mood: confused"
+  },
+  "moodDesperate": "绝望",
+  "@moodDesperate": {
+    "description": "Mood: desperate"
+  },
+  "moodExpectant": "期待",
+  "@moodExpectant": {
+    "description": "Mood: expectant"
+  },
+  "moodMystical": "神秘",
+  "@moodMystical": {
+    "description": "Mood: mystical"
+  },
+  "spreadSelectionTitle": "选择牌阵",
+  "@spreadSelectionTitle": {
+    "description": "Spread selection screen title"
+  },
+  "spreadSelectionSubtitle": "根据您当前的感受选择牌阵",
+  "@spreadSelectionSubtitle": {
+    "description": "Spread selection screen subtitle"
+  },
+  "spreadDifficultyBeginner": "1-3张牌",
+  "@spreadDifficultyBeginner": {
+    "description": "Beginner difficulty label"
+  },
+  "spreadDifficultyIntermediate": "5-7张牌",
+  "@spreadDifficultyIntermediate": {
+    "description": "Intermediate difficulty label"
+  },
+  "spreadDifficultyAdvanced": "10张牌",
+  "@spreadDifficultyAdvanced": {
+    "description": "Advanced difficulty label"
+  },
+  "spreadOneCard": "单牌",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  "spreadThreeCard": "三牌阵",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  "spreadCelticCross": "凯尔特十字",
+  "@spreadCelticCross": {
+    "description": "Celtic cross spread name"
+  },
+  "spreadRelationship": "关系牌阵",
+  "@spreadRelationship": {
+    "description": "Relationship spread name"
+  },
+  "spreadYesNo": "是/否",
+  "@spreadYesNo": {
+    "description": "Yes/No spread name"
+  },
+  "selectCardTitle": "选择命运之牌",
+  "@selectCardTitle": {
+    "description": "Card selection screen title"
+  },
+  "currentMoodLabel": "您当前的心情：",
+  "@currentMoodLabel": {
+    "description": "Current mood label"
+  },
+  "currentSpreadLabel": "已选牌阵：",
+  "@currentSpreadLabel": {
+    "description": "Current spread label"
+  },
+  "shufflingMessage": "命运之线正在交织...",
+  "@shufflingMessage": {
+    "description": "Message shown while shuffling"
+  },
+  "selectCardInstruction": "跟随您的直觉选择牌",
+  "@selectCardInstruction": {
+    "description": "Card selection instruction"
+  },
+  "cardsSelected": "已选{count}张",
+  "@cardsSelected": {
+    "description": "Number of cards selected",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsRemaining": "再选{count}张",
+  "@cardsRemaining": {
+    "description": "Number of cards remaining to select",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "typeMessageHint": "输入消息...",
+  "@typeMessageHint": {
+    "description": "Chat input hint"
+  },
+  "continueReading": "获得更深层的建议",
+  "@continueReading": {
+    "description": "Button to continue tarot reading"
+  },
+  "watchAdPrompt": "要聆听来自更深渊的声音，\n您必须查看来自另一个世界的讯息。",
+  "@watchAdPrompt": {
+    "description": "Prompt to watch ad for continued reading"
+  },
+  "interpretingSpread": "正在解读牌面的讯息...",
+  "@interpretingSpread": {
+    "description": "Message shown while AI interprets cards"
+  },
+  "menuHistory": "过往塔罗记录",
+  "@menuHistory": {
+    "description": "Menu item: history"
+  },
+  "menuHistoryDesc": "回顾您过去的命运",
+  "@menuHistoryDesc": {
+    "description": "Menu item description: history"
+  },
+  "menuStatistics": "统计与分析",
+  "@menuStatistics": {
+    "description": "Menu item: statistics"
+  },
+  "menuStatisticsDesc": "分析您的命运模式",
+  "@menuStatisticsDesc": {
+    "description": "Menu item description: statistics"
+  },
+  "menuSettings": "设置",
+  "@menuSettings": {
+    "description": "Menu item: settings"
+  },
+  "menuSettingsDesc": "调整应用环境",
+  "@menuSettingsDesc": {
+    "description": "Menu item description: settings"
+  },
+  "menuAbout": "关于",
+  "@menuAbout": {
+    "description": "Menu item: about"
+  },
+  "menuAboutDesc": "Moroka - 暗影神谕",
+  "@menuAboutDesc": {
+    "description": "Menu item description: about"
+  },
+  "logoutButton": "退出登录",
+  "@logoutButton": {
+    "description": "Logout button text"
+  },
+  "logoutTitle": "您真的要离开吗？",
+  "@logoutTitle": {
+    "description": "Logout dialog title"
+  },
+  "logoutMessage": "当命运之门关闭\n您必须再次归来",
+  "@logoutMessage": {
+    "description": "Logout dialog message"
+  },
+  "logoutCancel": "留下",
+  "@logoutCancel": {
+    "description": "Logout dialog cancel button"
+  },
+  "logoutConfirm": "离开",
+  "@logoutConfirm": {
+    "description": "Logout dialog confirm button"
+  },
+  "errorOccurred": "发生错误",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  "errorEmailEmpty": "请输入您的电子邮件",
+  "@errorEmailEmpty": {
+    "description": "Error: email field empty"
+  },
+  "errorEmailInvalid": "无效的电子邮件格式",
+  "@errorEmailInvalid": {
+    "description": "Error: email format invalid"
+  },
+  "errorPasswordEmpty": "请输入您的密码",
+  "@errorPasswordEmpty": {
+    "description": "Error: password field empty"
+  },
+  "errorPasswordShort": "密码必须至少6个字符",
+  "@errorPasswordShort": {
+    "description": "Error: password too short"
+  },
+  "errorNameEmpty": "请输入您的姓名",
+  "@errorNameEmpty": {
+    "description": "Error: name field empty"
+  },
+  "errorLoginFailed": "登录失败",
+  "@errorLoginFailed": {
+    "description": "Error: login failed"
+  },
+  "errorSignupFailed": "注册失败",
+  "@errorSignupFailed": {
+    "description": "Error: signup failed"
+  },
+  "errorGoogleLoginFailed": "Google登录失败",
+  "@errorGoogleLoginFailed": {
+    "description": "Error: Google login failed"
+  },
+  "errorNetworkFailed": "请检查您的网络连接",
+  "@errorNetworkFailed": {
+    "description": "Error: network connection failed"
+  },
+  "errorNotEnoughCards": "请选择更多牌",
+  "@errorNotEnoughCards": {
+    "description": "Error: not enough cards selected"
+  },
+  "successLogin": "欢迎",
+  "@successLogin": {
+    "description": "Success: login"
+  },
+  "successSignup": "您的灵魂已注册",
+  "@successSignup": {
+    "description": "Success: signup"
+  },
+  "successLogout": "再见",
+  "@successLogout": {
+    "description": "Success: logout"
+  },
+  "successCardsSelected": "所有牌已选择完毕",
+  "@successCardsSelected": {
+    "description": "Success: all cards selected"
+  },
+  
+  "noHistoryTitle": "尚无塔罗记录",
+  "@noHistoryTitle": {
+    "description": "Empty history state title"
+  },
+  
+  "noHistoryMessage": "读取您的第一个命运",
+  "@noHistoryMessage": {
+    "description": "Empty history state message"
+  },
+  
+  "startReading": "开始塔罗占卜",
+  "@startReading": {
+    "description": "Start reading button"
+  },
+  
+  "deleteReadingTitle": "删除此记录？",
+  "@deleteReadingTitle": {
+    "description": "Delete reading dialog title"
+  },
+  
+  "deleteReadingMessage": "已删除的记录无法恢复",
+  "@deleteReadingMessage": {
+    "description": "Delete reading dialog message"
+  },
+  
+  "cardOfFate": "命运之牌",
+  "@cardOfFate": {
+    "description": "Card of fate"
+  },
+  
+  "cardCallingYou": "呼唤你的牌",
+  "@cardCallingYou": {
+    "description": "The card that is calling you"
+  },
+  
+  "selectThisCard": "选择此牌",
+  "@selectThisCard": {
+    "description": "Select this card button"
+  },
+  
+  "viewAgain": "再次查看",
+  "@viewAgain": {
+    "description": "View again button"
+  },
+  
+  "select": "选择",
+  "@select": {
+    "description": "Select button"
+  },
+  
+  "shufflingCards": "洗牌中...",
+  "@shufflingCards": {
+    "description": "Shuffling cards message"
+  },
+  
+  "selectCardsIntuition": "凭直觉选择卡牌",
+  "@selectCardsIntuition": {
+    "description": "Select cards by intuition"
+  },
+  
+  "selectMoreCards": "还需选择 {count} 张牌",
+  "@selectMoreCards": {
+    "description": "Select more cards message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectionComplete": "选择完成",
+  "@selectionComplete": {
+    "description": "Selection complete message"
+  },
+  
+  "tapToSelect": "点击选择",
+  "@tapToSelect": {
+    "description": "Tap to select instruction"
+  },
+  
+  "preparingInterpretation": "准备解读...",
+  "@preparingInterpretation": {
+    "description": "Preparing interpretation message"
+  },
+  
+  "cardMessage": "卡牌讯息",
+  "@cardMessage": {
+    "description": "Card message title"
+  },
+  
+  "cardsStory": "卡牌的故事",
+  "@cardsStory": {
+    "description": "Cards story title"
+  },
+  
+  "specialInterpretation": "特别解读",
+  "@specialInterpretation": {
+    "description": "Special interpretation title"
+  },
+  
+  "interpretingCards": "解读卡牌中...",
+  "@interpretingCards": {
+    "description": "Interpreting cards message"
+  },
+  
+  "todaysChatEnded": "今日对话已结束",
+  "@todaysChatEnded": {
+    "description": "Today's chat ended message"
+  },
+  
+  "askQuestions": "提出问题",
+  "@askQuestions": {
+    "description": "Ask questions button"
+  },
+  
+  "continueConversation": "继续对话",
+  "@continueConversation": {
+    "description": "Continue conversation button"
+  },
+  
+  "wantDeeperTruth": "想要更深的真相吗？",
+  "@wantDeeperTruth": {
+    "description": "Want deeper truth prompt"
+  },
+  
+  "watchAdToContinue": "观看广告以继续",
+  "@watchAdToContinue": {
+    "description": "Watch ad to continue message"
+  },
+  
+  "later": "稍后",
+  "@later": {
+    "description": "Later button"
+  },
+  
+  "watchAd": "观看广告",
+  "@watchAd": {
+    "description": "Watch ad button"
+  },
+  
+  "emailVerification": "邮箱验证",
+  "@emailVerification": {
+    "description": "Email verification title"
+  },
+  
+  "checkYourEmail": "请查看您的邮箱",
+  "@checkYourEmail": {
+    "description": "Check your email message"
+  },
+  
+  "verificationEmailSent": "验证邮件已发送",
+  "@verificationEmailSent": {
+    "description": "Verification email sent message"
+  },
+  
+  "verifyingEmail": "验证邮箱中...",
+  "@verifyingEmail": {
+    "description": "Verifying email message"
+  },
+  
+  "noEmailReceived": "未收到邮件？",
+  "@noEmailReceived": {
+    "description": "No email received prompt"
+  },
+  
+  "checkSpamFolder": "请检查垃圾邮件文件夹",
+  "@checkSpamFolder": {
+    "description": "Check spam folder instruction"
+  },
+  
+  "resendIn": "{seconds} 秒后重新发送",
+  "@resendIn": {
+    "description": "Resend in X seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "resendVerificationEmail": "重新发送验证邮件",
+  "@resendVerificationEmail": {
+    "description": "Resend verification email button"
+  },
+  
+  "alreadyVerified": "已验证",
+  "@alreadyVerified": {
+    "description": "Already verified message"
+  },
+  
+  "openGateOfFate": "打开命运之门",
+  "@openGateOfFate": {
+    "description": "Open gate of fate button"
+  },
+  
+  "appBrandName": "MOROKA",
+  "@appBrandName": {
+    "description": "App brand name"
+  },
+  
+  "appBrandTagline": "oracle of shadows",
+  "@appBrandTagline": {
+    "description": "App brand tagline"
+  },
+  
+  "aboutTitle": "关于",
+  "@aboutTitle": {
+    "description": "About screen title"
+  },
+  
+  "aboutSubtitle": "命运之牌等待着你",
+  "@aboutSubtitle": {
+    "description": "About screen subtitle"
+  },
+  
+  "aboutDescription": "MOROKA\n\n命运之门已开启\n暗影神谕将解读你的未来\n\n传统塔罗解读与神秘AI结合\n提供深度洞察与智慧",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
+  
+  "featuresTitle": "主要功能",
+  "@featuresTitle": {
+    "description": "Features section title"
+  },
+  
+  "feature78Cards": "78张传统塔罗牌",
+  "@feature78Cards": {
+    "description": "78 cards feature"
+  },
+  
+  "feature78CardsDesc": "完整牌组，包含22张大阿尔卡纳和56张小阿尔卡纳",
+  "@feature78CardsDesc": {
+    "description": "78 cards feature description"
+  },
+  
+  "feature5Spreads": "5种专业牌阵",
+  "@feature5Spreads": {
+    "description": "5 spreads feature"
+  },
+  
+  "feature5SpreadsDesc": "从单张牌到凯尔特十字等多种占卜方法",
+  "@feature5SpreadsDesc": {
+    "description": "5 spreads feature description"
+  },
+  
+  "featureAI": "AI塔罗大师",
+  "@featureAI": {
+    "description": "AI feature"
+  },
+  
+  "featureAIDesc": "如百年经验塔罗大师般的深度解读",
+  "@featureAIDesc": {
+    "description": "AI feature description"
+  },
+  
+  "featureChat": "互动咨询",
+  "@featureChat": {
+    "description": "Chat feature"
+  },
+  
+  "featureChatDesc": "自由询问关于卡牌的任何问题",
+  "@featureChatDesc": {
+    "description": "Chat feature description"
+  },
+  
+  "termsAndPolicies": "条款与政策",
+  "@termsAndPolicies": {
+    "description": "Terms section title"
+  },
+  
+  "termsOfService": "服务条款",
+  "@termsOfService": {
+    "description": "Terms of service"
+  },
+  
+  "privacyPolicy": "隐私政策",
+  "@privacyPolicy": {
+    "description": "Privacy policy"
+  },
+  
+  "marketingConsent": "营销信息接收",
+  "@marketingConsent": {
+    "description": "Marketing consent"
+  },
+  
+  "customerSupport": "客户支持",
+  "@customerSupport": {
+    "description": "Customer support section"
+  },
+  
+  "emailSupport": "邮件支持",
+  "@emailSupport": {
+    "description": "Email support"
+  },
+  
+  "website": "官网",
+  "@website": {
+    "description": "Website"
+  },
+  
+  "cannotOpenUrl": "无法打开URL: {url}",
+  "@cannotOpenUrl": {
+    "description": "Cannot open URL error",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "lastModified": "最后修改：2025年7月3日",
+  "@lastModified": {
+    "description": "Last modified date"
+  },
+  
+  "confirm": "确认",
+  "@confirm": {
+    "description": "Confirm button"
+  },
+  
+  "companyName": "Today's Studio",
+  "@companyName": {
+    "description": "Company name"
+  },
+  
+  "companyTagline": "创造神秘体验",
+  "@companyTagline": {
+    "description": "Company tagline"
+  },
+  
+  "copyright": "© 2025 Today's Studio. 保留所有权利。",
+  "@copyright": {
+    "description": "Copyright notice"
+  },
+  
+  "anonymousSoul": "匿名灵魂",
+  "@anonymousSoul": {
+    "description": "Anonymous user name"
+  },
+  
+  "totalReadings": "总占卜次数",
+  "@totalReadings": {
+    "description": "Total readings label"
+  },
+  
+  "joinDate": "加入日期",
+  "@joinDate": {
+    "description": "Join date label"
+  },
+  
+  "backup": "备份",
+  "@backup": {
+    "description": "Backup button"
+  },
+  
+  "cancel": "取消",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  
+  "change": "更改",
+  "@change": {
+    "description": "Change button"
+  },
+  
+  "delete": "删除",
+  "@delete": {
+    "description": "Delete button"
+  },
+  
+  "send": "发送",
+  "@send": {
+    "description": "Send button"
+  },
+  
+  "login": "登录",
+  "@login": {
+    "description": "Login button"
+  },
+  
+  "signUp": "注册",
+  "@signUp": {
+    "description": "Sign up link"
+  },
+  
+  "or": "或",
+  "@or": {
+    "description": "Or divider"
+  },
+  
+  "noAccount": "没有账户？",
+  "@noAccount": {
+    "description": "No account text"
+  },
+  
+  "continueWithGoogle": "使用Google继续",
+  "@continueWithGoogle": {
+    "description": "Google login button"
+  },
+  
+  "forgotPassword": "忘记密码？",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  
+  "emailPlaceholder": "your@email.com",
+  "@emailPlaceholder": {
+    "description": "Email placeholder"
+  },
+  
+  "passwordPlaceholder": "6位以上字符",
+  "@passwordPlaceholder": {
+    "description": "Password placeholder"
+  },
+  
+  "passwordResetTitle": "重置密码",
+  "@passwordResetTitle": {
+    "description": "Password reset dialog title"
+  },
+  
+  "passwordResetMessage": "请输入您注册的邮箱地址。\n我们将为您发送密码重置链接。",
+  "@passwordResetMessage": {
+    "description": "Password reset message"
+  },
+  
+  "passwordResetSuccess": "密码重置邮件已发送",
+  "@passwordResetSuccess": {
+    "description": "Password reset success message"
+  },
+  
+  "settingsLanguageTitle": "语言设置",
+  "@settingsLanguageTitle": {
+    "description": "Language settings section title"
+  },
+  
+  "settingsLanguageLabel": "应用语言",
+  "@settingsLanguageLabel": {
+    "description": "Language selector label"
+  },
+  
+  "settingsLanguageDesc": "选择您偏好的语言",
+  "@settingsLanguageDesc": {
+    "description": "Language selector description"
+  },
+  
+  "settingsNotificationTitle": "通知设置",
+  "@settingsNotificationTitle": {
+    "description": "Notification settings section title"
+  },
+  
+  "settingsDailyNotification": "每日塔罗提醒",
+  "@settingsDailyNotification": {
+    "description": "Daily notification setting"
+  },
+  
+  "settingsDailyNotificationDesc": "每天早晨收到您的日运",
+  "@settingsDailyNotificationDesc": {
+    "description": "Daily notification description"
+  },
+  
+  "settingsWeeklyReport": "每周塔罗报告",
+  "@settingsWeeklyReport": {
+    "description": "Weekly report setting"
+  },
+  
+  "settingsWeeklyReportDesc": "每周一收到您的周运",
+  "@settingsWeeklyReportDesc": {
+    "description": "Weekly report description"
+  },
+  
+  "settingsDisplayTitle": "显示设置",
+  "@settingsDisplayTitle": {
+    "description": "Display settings section title"
+  },
+  
+  "settingsVibration": "震动效果",
+  "@settingsVibration": {
+    "description": "Vibration setting"
+  },
+  
+  "settingsVibrationDesc": "选牌时的震动反馈",
+  "@settingsVibrationDesc": {
+    "description": "Vibration description"
+  },
+  
+  "settingsAnimations": "动画效果",
+  "@settingsAnimations": {
+    "description": "Animation setting"
+  },
+  
+  "settingsAnimationsDesc": "画面转场动画",
+  "@settingsAnimationsDesc": {
+    "description": "Animation description"
+  },
+  
+  "settingsDataTitle": "数据管理",
+  "@settingsDataTitle": {
+    "description": "Data management section title"
+  },
+  
+  "settingsBackupData": "数据备份",
+  "@settingsBackupData": {
+    "description": "Backup data setting"
+  },
+  
+  "settingsBackupDataDesc": "将您的数据备份至云端",
+  "@settingsBackupDataDesc": {
+    "description": "Backup data description"
+  },
+  
+  "settingsClearCache": "清除缓存",
+  "@settingsClearCache": {
+    "description": "Clear cache setting"
+  },
+  
+  "settingsClearCacheDesc": "删除临时文件以释放空间",
+  "@settingsClearCacheDesc": {
+    "description": "Clear cache description"
+  },
+  
+  "settingsDeleteData": "删除所有数据",
+  "@settingsDeleteData": {
+    "description": "Delete all data setting"
+  },
+  
+  "settingsDeleteDataDesc": "删除所有塔罗记录和设置",
+  "@settingsDeleteDataDesc": {
+    "description": "Delete data description"
+  },
+  
+  "settingsAccountTitle": "账户",
+  "@settingsAccountTitle": {
+    "description": "Account section title"
+  },
+  
+  "settingsChangePassword": "更改密码",
+  "@settingsChangePassword": {
+    "description": "Change password setting"
+  },
+  
+  "settingsChangePasswordDesc": "为账户安全更改您的密码",
+  "@settingsChangePasswordDesc": {
+    "description": "Change password description"
+  },
+  
+  "settingsDeleteAccount": "删除账户",
+  "@settingsDeleteAccount": {
+    "description": "Delete account setting"
+  },
+  
+  "settingsDeleteAccountDesc": "永久删除您的账户",
+  "@settingsDeleteAccountDesc": {
+    "description": "Delete account description"
+  },
+  
+  "dialogBackupTitle": "数据备份",
+  "@dialogBackupTitle": {
+    "description": "Backup dialog title"
+  },
+  
+  "dialogBackupMessage": "要将您的数据备份至云端吗？",
+  "@dialogBackupMessage": {
+    "description": "Backup dialog message"
+  },
+  
+  "dialogClearCacheTitle": "清除缓存",
+  "@dialogClearCacheTitle": {
+    "description": "Clear cache dialog title"
+  },
+  
+  "dialogClearCacheMessage": "要删除临时文件吗？",
+  "@dialogClearCacheMessage": {
+    "description": "Clear cache dialog message"
+  },
+  
+  "dialogDeleteDataTitle": "删除所有数据",
+  "@dialogDeleteDataTitle": {
+    "description": "Delete data dialog title"
+  },
+  
+  "dialogDeleteDataMessage": "所有塔罗记录和设置将被永久删除。\n此操作无法撤销。",
+  "@dialogDeleteDataMessage": {
+    "description": "Delete data dialog message"
+  },
+  
+  "dialogChangePasswordTitle": "更改密码",
+  "@dialogChangePasswordTitle": {
+    "description": "Change password dialog title"
+  },
+  
+  "dialogDeleteAccountTitle": "删除账户",
+  "@dialogDeleteAccountTitle": {
+    "description": "Delete account dialog title"
+  },
+  
+  "dialogDeleteAccountMessage": "删除账户将永久删除所有数据。\n此操作无法撤销。",
+  "@dialogDeleteAccountMessage": {
+    "description": "Delete account dialog message"
+  },
+  
+  "currentPassword": "当前密码",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  
+  "newPassword": "新密码",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  
+  "confirmNewPassword": "确认新密码",
+  "@confirmNewPassword": {
+    "description": "Confirm new password label"
+  },
+  
+  "successBackup": "备份完成",
+  "@successBackup": {
+    "description": "Backup success message"
+  },
+  
+  "successClearCache": "缓存已清除",
+  "@successClearCache": {
+    "description": "Clear cache success message"
+  },
+  
+  "successDeleteData": "所有数据已删除",
+  "@successDeleteData": {
+    "description": "Delete data success message"
+  },
+  
+  "successChangePassword": "密码已更改",
+  "@successChangePassword": {
+    "description": "Change password success message"
+  },
+  
+  "successDeleteAccount": "账户已删除",
+  "@successDeleteAccount": {
+    "description": "Delete account success message"
+  },
+  
+  "errorBackup": "备份失败：{error}",
+  "@errorBackup": {
+    "description": "Backup error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteData": "删除失败：{error}",
+  "@errorDeleteData": {
+    "description": "Delete data error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorChangePassword": "密码更改失败：{error}",
+  "@errorChangePassword": {
+    "description": "Change password error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteAccount": "账户删除失败：{error}",
+  "@errorDeleteAccount": {
+    "description": "Delete account error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorPasswordMismatch": "新密码不匹配",
+  "@errorPasswordMismatch": {
+    "description": "Password mismatch error"
+  },
+  
+  "errorLogout": "退出登录时发生错误",
+  "@errorLogout": {
+    "description": "Logout error"
+  },
+  
+  "soulContract": "灵魂契约",
+  "@soulContract": {
+    "description": "Terms screen title"
+  },
+  
+  "termsAgreementMessage": "请同意服务条款以使用服务",
+  "@termsAgreementMessage": {
+    "description": "Terms agreement message"
+  },
+  
+  "agreeAll": "全部同意",
+  "@agreeAll": {
+    "description": "Agree all button"
+  },
+  
+  "required": "必需",
+  "@required": {
+    "description": "Required label"
+  },
+  
+  "optional": "可选",
+  "@optional": {
+    "description": "Optional label"
+  },
+  
+  "agreeAndStart": "同意并开始",
+  "@agreeAndStart": {
+    "description": "Agree and start button"
+  },
+  
+  "agreeToRequired": "请同意必需条款",
+  "@agreeToRequired": {
+    "description": "Required terms message"
+  },
+  
+  "nickname": "昵称",
+  "@nickname": {
+    "description": "Nickname label"
+  },
+  
+  "confirmPassword": "确认密码",
+  "@confirmPassword": {
+    "description": "Confirm password label"
+  },
+  
+  "nextStep": "下一步",
+  "@nextStep": {
+    "description": "Next step button"
+  },
+  
+  "errorNameTooShort": "请输入至少2个字符",
+  "@errorNameTooShort": {
+    "description": "Name too short error"
+  },
+  
+  "errorConfirmPassword": "请确认您的密码",
+  "@errorConfirmPassword": {
+    "description": "Confirm password error"
+  },
+  
+  "errorPasswordsDontMatch": "密码不匹配",
+  "@errorPasswordsDontMatch": {
+    "description": "Passwords don't match error"
+  },
+  
+  "emailInUse": "邮箱已被使用",
+  "@emailInUse": {
+    "description": "Email in use message"
+  },
+  
+  "emailAvailable": "邮箱可用",
+  "@emailAvailable": {
+    "description": "Email available message"
+  },
+  
+  "nicknameInUse": "昵称已被使用",
+  "@nicknameInUse": {
+    "description": "Nickname in use message"
+  },
+  
+  "nicknameAvailable": "昵称可用",
+  "@nicknameAvailable": {
+    "description": "Nickname available message"
+  },
+  
+  "passwordWeak": "弱",
+  "@passwordWeak": {
+    "description": "Weak password"
+  },
+  
+  "passwordFair": "一般",
+  "@passwordFair": {
+    "description": "Fair password"
+  },
+  
+  "passwordStrong": "强",
+  "@passwordStrong": {
+    "description": "Strong password"
+  },
+  
+  "passwordVeryStrong": "非常强",
+  "@passwordVeryStrong": {
+    "description": "Very strong password"
+  },
+  
+  "emailVerificationTitle": "邮箱验证",
+  "@emailVerificationTitle": {
+    "description": "Email verification title"
+  },
+  
+  "emailVerificationMessage": "我们已向 {email} 发送了验证邮件。\n请查看您的邮箱并点击验证链接。",
+  "@emailVerificationMessage": {
+    "description": "Email verification message",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "resendEmail": "重新发送邮件",
+  "@resendEmail": {
+    "description": "Resend email button"
+  },
+  
+  "emailResent": "验证邮件已重新发送",
+  "@emailResent": {
+    "description": "Email resent message"
+  },
+  
+  "checkEmailAndReturn": "验证后，请返回应用",
+  "@checkEmailAndReturn": {
+    "description": "Check email instruction"
+  },
+  
+  "resendCountdown": "{seconds}秒后可以重新发送",
+  "@resendCountdown": {
+    "description": "Resend countdown",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "resendVerificationEmail": "重新发送验证邮件",
+  "@resendVerificationEmail": {
+    "description": "Resend verification email button"
+  },
+  
+  "alreadyVerified": "我已经验证了",
+  "@alreadyVerified": {
+    "description": "Already verified button"
+  },
+  
+  "openGateOfFate": "打开命运之门",
+  "@openGateOfFate": {
+    "description": "Final onboarding button"
+  },
+  
+  "cardOfFate": "命运之牌",
+  "@cardOfFate": {
+    "description": "Card selection dialog title"
+  },
+  
+  "cardCallingYou": "这张牌在呼唤你",
+  "@cardCallingYou": {
+    "description": "Card selection dialog subtitle"
+  },
+  
+  "willYouSelectIt": "要选择它吗？",
+  "@willYouSelectIt": {
+    "description": "Card selection dialog question"
+  },
+  
+  "viewAgain": "再看看",
+  "@viewAgain": {
+    "description": "Card selection dialog cancel button"
+  },
+  
+  "select": "选择",
+  "@select": {
+    "description": "Card selection dialog confirm button"
+  },
+  
+  "shufflingCards": "正在洗牌命运之牌...",
+  "@shufflingCards": {
+    "description": "Message shown while shuffling cards"
+  },
+  
+  "selectCardByHeart": "选择触动你心灵的牌",
+  "@selectCardByHeart": {
+    "description": "Card selection instruction in header"
+  },
+  
+  "moreToSelect": "还需选择{count}张",
+  "@moreToSelect": {
+    "description": "Number of cards more to select",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectionComplete": "选择完成！",
+  "@selectionComplete": {
+    "description": "Message when all cards are selected"
+  },
+  
+  "tapToSelectCard": "点击卡牌进行选择",
+  "@tapToSelectCard": {
+    "description": "Instruction to tap card for selection"
+  },
+  
+  "drawAddedMessage": "增加1次抽卡机会！ ✨",
+  "@drawAddedMessage": {
+    "description": "Success message after watching ad"
+  },
+  
+  "adLoadFailed": "广告加载失败。请稍后再试。",
+  "@adLoadFailed": {
+    "description": "Error message when ad fails to load"
+  },
+  
+  "monthLabel": "{month}月",
+  "@monthLabel": {
+    "description": "Month label format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "startChatMessage": "关于您的塔罗牌解读，有任何问题都可以问我",
+  "@startChatMessage": {
+    "description": "Empty chat state message"
+  },
+  
+  "chatHistory": "聊天记录",
+  "@chatHistory": {
+    "description": "Chat history section title"
+  },
+  
+  "chatHistoryDescription": "您与塔罗大师的对话",
+  "@chatHistoryDescription": {
+    "description": "Chat history section description"
+  }
+}

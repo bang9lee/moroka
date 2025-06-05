@@ -18,6 +18,13 @@ migrate_working_dir/
 moroka-release.keystore
 firebase.json
 
+# Android signing and sensitive files
+/android/key.properties
+/android/app/upload-keystore.jks
+/android/**/*.keystore
+/android/**/*.jks
+!android/app/debug.keystore
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -47,12 +54,17 @@ app.*.map.json
 # Environment variables
 .env
 .env.*
+!.env.example
+env_config.json
+secrets/
 
 # Firebase
 google-services.json
 GoogleService-Info.plist
 firebase_app_id_file.json
 .firebase/
+/ios/Runner/GoogleService-Info.plist
+/ios/GoogleService-Info.plist
 
 # Generated files
 *.g.dart

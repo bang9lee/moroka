@@ -19,6 +19,7 @@ import '../screens/statistics/statistics_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/about/about_screen.dart';
 import '../../core/utils/app_logger.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 /// 앱 라우터 Provider
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -354,7 +355,7 @@ class AppRouter {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    '페이지를 찾을 수 없습니다',
+                    AppLocalizations.of(context)?.errorOccurred ?? 'Page not found',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -363,7 +364,7 @@ class AppRouter {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    state.error?.toString() ?? '알 수 없는 오류가 발생했습니다',
+                    state.error?.toString() ?? AppLocalizations.of(context)?.errorOccurred ?? 'An unknown error occurred',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.white70,
                     ),
@@ -381,7 +382,7 @@ class AppRouter {
                       ),
                     ),
                     icon: const Icon(Icons.home),
-                    label: const Text('홈으로 돌아가기'),
+                    label: Text(AppLocalizations.of(context)?.skip ?? 'Return Home'),
                   ),
                 ],
               ),

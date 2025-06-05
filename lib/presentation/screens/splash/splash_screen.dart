@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import 'splash_viewmodel.dart';
@@ -142,6 +143,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       body: AnimatedGradientBackground(
         enableParticles: true,
@@ -156,7 +159,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 const SizedBox(height: 60),
                 
                 // App Title
-                _buildTitle(),
+                _buildTitle(l10n),
                 
                 const SizedBox(height: 80),
                 
@@ -230,7 +233,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
   
-  Widget _buildTitle() {
+  Widget _buildTitle(AppLocalizations l10n) {
     return AnimatedBuilder(
       animation: _textAnimation,
       builder: (context, child) {
@@ -241,7 +244,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             child: Column(
               children: [
                 Text(
-                  'MOROKA',
+                  l10n.appName.toUpperCase(),
                   style: AppTextStyles.displayLarge.copyWith(
                     fontSize: 56,
                     letterSpacing: 8,
@@ -266,7 +269,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 const SizedBox(height: 10),
                 
                 Text(
-                  '불길한 속삭임',
+                  l10n.appTagline.toLowerCase(),
                   style: AppTextStyles.whisper.copyWith(
                     fontSize: 24,
                     color: AppColors.fogGray,

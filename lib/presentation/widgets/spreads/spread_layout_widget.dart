@@ -731,6 +731,9 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
         ? const EdgeInsets.symmetric(horizontal: 8, vertical: 2)
         : const EdgeInsets.symmetric(horizontal: 12, vertical: 4);
     
+    // 현재 로케일 가져오기
+    final locale = Localizations.localeOf(context).languageCode;
+    
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       padding: padding,
@@ -743,7 +746,7 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
         ),
       ),
       child: Text(
-        position.titleKr,
+        position.getLocalizedTitle(locale),
         style: AppTextStyles.bodySmall.copyWith(
           fontSize: fontSize,
           color: AppColors.fogGray,
@@ -832,11 +835,14 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
     // 카드 크기에 따른 동적 폰트 크기
     final fontSize = _calculateCardNameFontSize(cardWidth);
     
+    // 현재 로케일 가져오기
+    final locale = Localizations.localeOf(context).languageCode;
+    
     return Container(
       margin: const EdgeInsets.only(top: 6),
       constraints: BoxConstraints(maxWidth: cardWidth + 20),
       child: Text(
-        card.nameKr,
+        card.getLocalizedName(locale),
         style: AppTextStyles.bodySmall.copyWith(
           fontSize: fontSize,
           color: AppColors.textMystic,

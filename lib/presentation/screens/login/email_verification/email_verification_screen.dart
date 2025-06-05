@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../widgets/common/animated_gradient_background.dart';
 import '../../../widgets/common/glass_morphism_container.dart';
 import 'email_verification_viewmodel.dart';
@@ -58,7 +59,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
     _pulseController.repeat(reverse: true);
     _rotationController.repeat();
     
-    // 이메일 인증 확인 타이머 시작
+    // Start email verification check timer
     _startEmailVerificationCheck();
   }
 
@@ -100,14 +101,14 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
   }
 
   Future<void> _handleLogout() async {
-    // 타이머 정지
+    // Stop timers
     _checkTimer?.cancel();
     _cooldownTimer?.cancel();
     
-    // 로그아웃
+    // Sign out
     await ref.read(emailVerificationViewModelProvider.notifier).signOut();
     
-    // 로그인 화면으로 이동
+    // Navigate to login screen
     if (!mounted) return;
     context.go('/login');
   }
@@ -120,7 +121,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
     
     ref.listen<EmailVerificationState>(emailVerificationViewModelProvider, (previous, next) {
       if (next.isVerified) {
-        // 인증 완료 시 메인 화면으로 이동
+        // Navigate to main screen on verification complete
         _checkTimer?.cancel();
         context.go('/main');
       }
@@ -171,6 +172,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
   }
 
   Widget _buildAppBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -178,7 +180,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
         children: [
           const SizedBox(width: 48),
           Text(
-            '이메일 인증',
+            l10n.emailVerification,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -283,10 +285,11 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
   }
 
   Widget _buildContent(EmailVerificationState state, bool isSmallScreen) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Text(
-          '이메일을 확인해주세요',
+          l10n.checkYourEmail,
           style: AppTextStyles.mysticTitle.copyWith(
             fontSize: isSmallScreen ? 24 : 28,
             fontWeight: FontWeight.bold,
@@ -330,7 +333,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
               const SizedBox(height: 12),
               
               Text(
-                '위 이메일 주소로 인증 메일을 발송했습니다.\n메일함을 확인하고 인증 링크를 클릭해주세요.',
+                l10n.verificationEmailSent,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.textSecondary,
                   height: 1.5,
@@ -342,10 +345,10 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
               // Loading indicator
               if (state.isChecking) ...[
                 const SizedBox(height: 20),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 18,
                       height: 18,
                       child: CircularProgressIndicator(
@@ -353,10 +356,10 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                         strokeWidth: 2,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
-                      '인증 확인 중...',
-                      style: TextStyle(
+                      l10n.verifyingEmail,
+                      style: const TextStyle(
                         fontSize: 13,
                         color: AppColors.fogGray,
                       ),
@@ -397,7 +400,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '메일이 오지 않나요?',
+                      l10n.noEmailReceived,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.omenGlow,
                         fontWeight: FontWeight.w600,
@@ -406,7 +409,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '스팸 메일함을 확인해보세요.\n그래도 없다면 아래 버튼을 눌러 다시 보내세요.',
+                      l10n.checkSpamFolder,
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.textSecondary,
                         height: 1.4,
@@ -425,6 +428,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
   }
 
   Widget _buildActions(EmailVerificationState state) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // Resend email button
@@ -452,8 +456,8 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                 const SizedBox(width: 10),
                 Text(
                   _resendCooldown > 0 
-                      ? '다시 보내기 ($_resendCooldown초)'
-                      : '인증 메일 다시 보내기',
+                      ? l10n.resendIn(_resendCooldown)
+                      : l10n.resendVerificationEmail,
                   style: AppTextStyles.buttonMedium.copyWith(
                     color: (_resendCooldown > 0 || state.isLoading)
                         ? AppColors.ashGray
@@ -476,7 +480,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
             ref.read(emailVerificationViewModelProvider.notifier).checkEmailVerified();
           },
           child: Text(
-            '이미 인증했어요',
+            l10n.alreadyVerified,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textMystic,
               decoration: TextDecoration.underline,

@@ -10,11 +10,13 @@ class TarotAIRepository {
   Future<String> getCardInterpretation({
     required TarotCardModel card,
     required String userMood,
+    String language = 'en',
   }) async {
     try {
       return await _geminiService.generateTarotInterpretation(
         cardName: card.name,
         userMood: userMood,
+        language: language,
       );
     } catch (e) {
       throw Exception('카드 해석을 가져오는데 실패했습니다: $e');
@@ -26,6 +28,7 @@ class TarotAIRepository {
     required String interpretation,
     required List<ChatMessageModel> previousMessages,
     required String userMessage,
+    String language = 'en',
   }) async {
     try {
       return await _geminiService.generateChatResponse(
@@ -33,6 +36,7 @@ class TarotAIRepository {
         interpretation: interpretation,
         previousMessages: previousMessages,
         userMessage: userMessage,
+        language: language,
       );
     } catch (e) {
       throw Exception('AI 응답을 가져오는데 실패했습니다: $e');

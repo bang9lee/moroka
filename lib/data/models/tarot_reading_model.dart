@@ -58,6 +58,42 @@ class TarotReadingModel {
     };
   }
   
+  // Factory constructor for cache deserialization
+  factory TarotReadingModel.fromMap(Map<String, dynamic> map, String id) {
+    return TarotReadingModel(
+      id: id,
+      userId: map['userId'] ?? '',
+      cardName: map['cardName'] ?? '',
+      cardImage: map['cardImage'] ?? '',
+      interpretation: map['interpretation'] ?? '',
+      chatHistory: (map['chatHistory'] as List<dynamic>?)
+              ?.map((e) => ChatExchange.fromMapWithoutTimestamp(e))
+              .toList() ??
+          [],
+      createdAt: map['createdAt'] is Timestamp 
+          ? (map['createdAt'] as Timestamp).toDate()
+          : DateTime.parse(map['createdAt'] as String),
+      userMood: map['userMood'] ?? '',
+      spreadType: map['spreadType'],
+      cardCount: map['cardCount'],
+    );
+  }
+  
+  // Convert to map for caching
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'cardName': cardName,
+      'cardImage': cardImage,
+      'interpretation': interpretation,
+      'chatHistory': chatHistory.map((e) => e.toMapForCache()).toList(),
+      'createdAt': createdAt.toIso8601String(),
+      'userMood': userMood,
+      'spreadType': spreadType,
+      'cardCount': cardCount,
+    };
+  }
+  
   // 카드 이름 리스트 반환
   List<String> get cardNames => cardName.split(', ');
   
@@ -107,6 +143,24 @@ class ChatExchange {
       'userMessage': userMessage,
       'aiResponse': aiResponse,
       'timestamp': Timestamp.fromDate(timestamp),
+    };
+  }
+  
+  // Factory constructor for cache (without Timestamp)
+  factory ChatExchange.fromMapWithoutTimestamp(Map<String, dynamic> map) {
+    return ChatExchange(
+      userMessage: map['userMessage'] ?? '',
+      aiResponse: map['aiResponse'] ?? '',
+      timestamp: DateTime.parse(map['timestamp'] as String),
+    );
+  }
+  
+  // Convert to map for caching
+  Map<String, dynamic> toMapForCache() {
+    return {
+      'userMessage': userMessage,
+      'aiResponse': aiResponse,
+      'timestamp': timestamp.toIso8601String(),
     };
   }
 }

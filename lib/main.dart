@@ -1,294 +1,156 @@
-// File: lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'firebase_options.dart';
+import 'core/utils/animation_controller_manager.dart';
+import 'core/constants/app_colors.dart';
+import 'core/constants/app_strings.dart';
 import 'core/theme/app_theme.dart';
-import 'core/utils/app_logger.dart';
-import 'presentation/router/app_router.dart';
 import 'providers.dart';
+import 'providers/locale_provider.dart';
+import 'presentation/router/app_router.dart';
+import 'l10n/generated/app_localizations.dart';
+import 'core/utils/app_logger.dart';
+import 'data/services/cache_service.dart';
 
-
-/// 앱 진입점
 void main() async {
-  // 에러 핸들링
-  FlutterError.onError = (FlutterErrorDetails details) {
-    AppLogger.error('Flutter error', details.exception, details.stack);
-  };
-  
-  try {
-    await _initializeApp();
-  } catch (e, stack) {
-    AppLogger.error("Failed to initialize app", e, stack);
-    
-    // 초기화 실패 시 에러 화면 표시
-    runApp(const _ErrorApp());
-  }
-}
-
-/// 앱 초기화
-Future<void> _initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  AppLogger.debug("Starting app initialization");
-  
-  // 1. 화면 방향 설정
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  AppLogger.debug("1. Orientations set");
-  
-  // 2. 시스템 UI 스타일 설정
+  // 시스템 UI 설정
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.black,
+      systemNavigationBarColor: AppColors.mysticPurple,
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
-  AppLogger.debug("2. System UI style set");
   
-
+  // 화면 방향 고정 (세로 모드만)
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   
-  // 4. Firebase 초기화
-  await Firebase.initializeApp();
-  AppLogger.debug("4. Firebase initialized");
-  
-  // 5. Google Mobile Ads 초기화
-  await MobileAds.instance.initialize();
-  AppLogger.debug("5. Ads initialized");
-  
-  // 6. SharedPreferences 초기화
-  final sharedPreferences = await SharedPreferences.getInstance();
-  AppLogger.debug("6. SharedPreferences initialized");
-  
-  // 7. Google Fonts 설정
-  GoogleFonts.config.allowRuntimeFetching = true;
-  AppLogger.debug("7. Font config set");
-  
-  // 8. 앱 실행
-  runApp(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      ],
-      child: const MorokaApp(),
-    ),
-  );
-  
-  AppLogger.debug("8. App started successfully");
+  try {
+    // Firebase 초기화
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    
+    // Firebase App Check 초기화
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.appAttest,
+    );
+    
+    // Google Mobile Ads 초기화
+    await MobileAds.instance.initialize();
+    
+    // SharedPreferences 초기화
+    final sharedPreferences = await SharedPreferences.getInstance();
+    
+    // Google Fonts 설정
+    GoogleFonts.config.allowRuntimeFetching = true;
+    
+    // AnimationController 매니저 초기화
+    AnimationControllerManager().initialize();
+    
+    // 캐시 서비스 초기화
+    await CacheService().initialize();
+    
+    runApp(
+      ProviderScope(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        ],
+        child: const MorokaApp(),
+      ),
+    );
+  } catch (e) {
+    AppLogger.error('Failed to initialize app', e);
+    runApp(const ErrorApp());
+  }
 }
 
-/// 메인 앱 위젯
-class MorokaApp extends ConsumerStatefulWidget {
+class MorokaApp extends ConsumerWidget {
   const MorokaApp({super.key});
 
   @override
-  ConsumerState<MorokaApp> createState() => _MorokaAppState();
-}
-
-class _MorokaAppState extends ConsumerState<MorokaApp> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    
-    // AdMob 초기화
-    _initializeAds();
-  }
-  
-  Future<void> _initializeAds() async {
-    try {
-      await ref.read(adRepositoryProvider).initializeAds();
-      AppLogger.debug('Ads initialized in app');
-    } catch (e) {
-      AppLogger.error('Failed to initialize ads', e);
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    AppLogger.debug('App lifecycle state changed: $state');
-    
-    switch (state) {
-      case AppLifecycleState.resumed:
-        // 앱이 다시 활성화될 때
-        _handleAppResumed();
-        break;
-      case AppLifecycleState.paused:
-        // 앱이 백그라운드로 갈 때
-        _handleAppPaused();
-        break;
-      case AppLifecycleState.detached:
-        // 앱이 종료될 때
-        _handleAppDetached();
-        break;
-      default:
-        break;
-    }
-  }
-  
-  void _handleAppResumed() {
-    AppLogger.debug('App resumed');
-    // 광고 재로드
-    ref.read(adRepositoryProvider).preloadAds();
-  }
-  
-  void _handleAppPaused() {
-    AppLogger.debug('App paused');
-    // 필요한 경우 임시 데이터 저장
-  }
-  
-  void _handleAppDetached() {
-    AppLogger.debug('App detached');
-    // 광고 리소스 정리
-    try {
-      ref.read(adRepositoryProvider).cleanUp();
-    } catch (e) {
-      AppLogger.error('Error cleaning up ads on detach', e);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final locale = ref.watch(localeProvider);
     
     return MaterialApp.router(
-      title: 'Moroka - Ominous Whispers',
+      title: AppStrings.appName,
       theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
+      locale: locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
-        // 글로벌 에러 처리
-        ErrorWidget.builder = (FlutterErrorDetails details) {
-          return _ErrorScreen(
-            error: details.exception.toString(),
-          );
-        };
+        // 텍스트 스케일 팩터 제한 (접근성)
+        final mediaQueryData = MediaQuery.of(context);
+        final constrainedTextScaler = 
+            TextScaler.linear(mediaQueryData.textScaler.scale(1.0).clamp(0.8, 1.3));
         
-        return child ?? const SizedBox();
+        return MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaler: constrainedTextScaler,
+          ),
+          child: child!,
+        );
       },
     );
   }
 }
 
-/// 에러 앱 - 초기화 실패 시 표시
-class _ErrorApp extends StatelessWidget {
-  const _ErrorApp();
+// 에러 발생 시 표시할 앱
+class ErrorApp extends StatelessWidget {
+  const ErrorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.deepViolet,
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                  size: 80,
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  '앱을 시작할 수 없습니다',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  '잠시 후 다시 시도해주세요',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 48),
-                ElevatedButton(
-                  onPressed: () {
-                    // 앱 재시작
-                    SystemNavigator.pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                  ),
-                  child: const Text('앱 종료'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 에러 화면 - 런타임 에러 시 표시
-class _ErrorScreen extends StatelessWidget {
-  final String error;
-  
-  const _ErrorScreen({required this.error});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                Icons.warning,
-                color: Colors.orange,
-                size: 60,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                '오류가 발생했습니다',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                Icons.error_outline,
+                color: AppColors.crimsonGlow,
+                size: 64,
               ),
               const SizedBox(height: 16),
               Text(
-                error,
-                style: const TextStyle(
-                  color: Colors.white70,
+                'errorOccurred',
+                style: GoogleFonts.cinzel(
+                  color: AppColors.ghostWhite,
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'errorOccurred',
+                style: GoogleFonts.gowunBatang(
+                  color: AppColors.fogGray,
                   fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

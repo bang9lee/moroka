@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:vibration/vibration.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
@@ -19,6 +20,7 @@ class MenuBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final currentUser = ref.watch(currentUserProvider);
     
     return DraggableScrollableSheet(
@@ -80,37 +82,37 @@ class MenuBottomSheet extends ConsumerWidget {
                     const SizedBox(height: 24),
                     
                     // Menu Items
-                    const _MenuItem(
+                    _MenuItem(
                       icon: Icons.history,
-                      title: '지난 타로 기록',
-                      subtitle: '과거의 운명을 되돌아보세요',
+                      title: l10n.menuHistory,
+                      subtitle: l10n.menuHistoryDesc,
                       route: '/history',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    const _MenuItem(
+                    _MenuItem(
                       icon: Icons.analytics,
-                      title: '통계 & 분석',
-                      subtitle: '당신의 운명 패턴을 분석합니다',
+                      title: l10n.menuStatistics,
+                      subtitle: l10n.menuStatisticsDesc,
                       route: '/statistics',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    const _MenuItem(
+                    _MenuItem(
                       icon: Icons.settings,
-                      title: '설정',
-                      subtitle: '앱 환경을 조정하세요',
+                      title: l10n.menuSettings,
+                      subtitle: l10n.menuSettingsDesc,
                       route: '/settings',
                     ),
                     
                     const SizedBox(height: 12),
                     
-                    const _MenuItem(
+                    _MenuItem(
                       icon: Icons.info_outline,
-                      title: '앱 정보',
-                      subtitle: 'Moroka - 불길한 속삭임',
+                      title: l10n.menuAbout,
+                      subtitle: l10n.menuAboutDesc,
                       route: '/about',
                     ),
                     
@@ -137,6 +139,7 @@ class _UserProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GlassMorphismContainer(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -175,7 +178,7 @@ class _UserProfileSection extends StatelessWidget {
           
           // User info
           Text(
-            user?.displayName ?? '익명의 영혼',
+            user?.displayName ?? l10n.anonymousSoul,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 22,
             ),
@@ -194,7 +197,7 @@ class _UserProfileSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _StatItem(
-                label: '총 리딩',
+                label: l10n.totalReadings,
                 value: '${user?.totalReadings ?? 0}',
               ),
               Container(
@@ -203,7 +206,7 @@ class _UserProfileSection extends StatelessWidget {
                 color: AppColors.divider,
               ),
               _StatItem(
-                label: '가입일',
+                label: l10n.joinDate,
                 value: _formatDate(user?.createdAt),
               ),
             ],
@@ -252,7 +255,7 @@ class _StatItem extends StatelessWidget {
   }
 }
 
-/// 메뉴 아이템
+/// Menu item widget
 class _MenuItem extends ConsumerWidget {
   final IconData icon;
   final String title;
@@ -363,7 +366,7 @@ class _LogoutButton extends ConsumerWidget {
         ),
         child: Center(
           child: Text(
-            '로그아웃',
+            AppLocalizations.of(context)!.logoutButton,
             style: AppTextStyles.buttonMedium.copyWith(
               color: AppColors.crimsonGlow,
             ),
@@ -388,6 +391,7 @@ class _LogoutButton extends ConsumerWidget {
   }
   
   void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -398,12 +402,12 @@ class _LogoutButton extends ConsumerWidget {
           side: const BorderSide(color: AppColors.cardBorder),
         ),
         title: Text(
-          '정말 떠나시겠습니까?',
-          style: AppTextStyles.displaySmall.copyWith(fontSize: 20),
+          l10n.logoutTitle,
+          style: AppTextStyles.dialogTitle,
         ),
         content: Text(
-          '운명의 문이 닫히면\n다시 돌아와야 합니다',
-          style: AppTextStyles.bodyMedium.copyWith(
+          l10n.logoutMessage,
+          style: AppTextStyles.dialogContent.copyWith(
             color: AppColors.fogGray,
           ),
         ),
@@ -411,8 +415,8 @@ class _LogoutButton extends ConsumerWidget {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
-              '머무르기',
-              style: AppTextStyles.buttonMedium.copyWith(
+              l10n.logoutCancel,
+              style: AppTextStyles.dialogButton.copyWith(
                 color: AppColors.textMystic,
               ),
             ),
@@ -472,8 +476,8 @@ class _LogoutButton extends ConsumerWidget {
                   
                   // 에러 표시
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('로그아웃 중 오류가 발생했습니다'),
+                    SnackBar(
+                      content: Text(l10n.errorLogout),
                       backgroundColor: AppColors.bloodMoon,
                     ),
                   );
@@ -481,8 +485,8 @@ class _LogoutButton extends ConsumerWidget {
               }
             },
             child: Text(
-              '떠나기',
-              style: AppTextStyles.buttonMedium.copyWith(
+              l10n.logoutConfirm,
+              style: AppTextStyles.dialogButton.copyWith(
                 color: AppColors.crimsonGlow,
               ),
             ),

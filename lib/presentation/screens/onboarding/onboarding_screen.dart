@@ -8,6 +8,7 @@ import 'dart:math' as math;
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 /// 온보딩 스크린 - 다크 고딕 테마
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -31,6 +32,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   bool _isTransitioning = false;
   bool _hasVibrator = false;
   
+  // Pages list
+  late final List<OnboardingPageData> _pages;
+  
   // Constants
   static const Duration _pageTransitionDuration = Duration(milliseconds: 600);
   static const Duration _animationDuration = Duration(milliseconds: 1000);
@@ -41,6 +45,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     _initializeControllers();
     _checkVibrationSupport();
     _startAnimations();
+  }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize pages here to have access to context
+    _pages = OnboardingData.getPages(context);
   }
   
   void _initializeControllers() {
@@ -110,7 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     setState(() => _isTransitioning = true);
     await _triggerHaptic(duration: 40);
     
-    if (_currentPage < OnboardingData.pages.length - 1) {
+    if (_currentPage < _pages.length - 1) {
       await _pageController.nextPage(
         duration: _pageTransitionDuration,
         curve: Curves.easeInOutCubic,
@@ -248,10 +259,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 setState(() => _currentPage = index);
                 _transitionAnimationController.forward(from: 0);
               },
-              itemCount: OnboardingData.pages.length,
+              itemCount: _pages.length,
               itemBuilder: (context, index) {
                 return _OnboardingPageContent(
-                  page: OnboardingData.pages[index],
+                  page: _pages[index],
                   animation: _transitionAnimationController,
                   pulseAnimation: _pulseAnimationController,
                 );
@@ -280,7 +291,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             child: Row(
               children: [
                 Text(
-                  'SKIP',
+                  AppLocalizations.of(context)!.skip,
                   style: AppTextStyles.buttonMedium.copyWith(
                     color: AppColors.fogGray,
                     letterSpacing: 1.2,
@@ -323,7 +334,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        OnboardingData.pages.length,
+        _pages.length,
         (index) => _PageIndicator(
           isActive: index == _currentPage,
           index: index,
@@ -333,7 +344,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
   
   Widget _buildNavigationButtons() {
-    final isLastPage = _currentPage == OnboardingData.pages.length - 1;
+    final isLastPage = _currentPage == _pages.length - 1;
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -348,7 +359,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         // Next/Start button
         _PrimaryNavigationButton(
           onTap: _navigateToNext,
-          text: isLastPage ? '운명의 문을 열다' : 'NEXT',
+          text: isLastPage 
+              ? AppLocalizations.of(context)!.openGateOfFate 
+              : AppLocalizations.of(context)!.nextStep,
           isExpanded: isLastPage,
           pulseAnimation: isLastPage ? _pulseAnimationController : null,
         ),
@@ -762,36 +775,40 @@ class MysticalSymbolPainter extends CustomPainter {
 
 /// 온보딩 데이터
 class OnboardingData {
-  static final List<OnboardingPageData> pages = [
-    const OnboardingPageData(
-      title: '운명의 문이 열립니다',
-      description: '고대의 지혜와 현대의 기술이 만나\n당신의 미래를 속삭입니다',
-      icon: Icons.auto_fix_high,
-      iconGradient: [AppColors.mysticPurple, AppColors.deepViolet],
-      glowColor: AppColors.mysticPurple,
-    ),
-    const OnboardingPageData(
-      title: '어둠 속의 진실',
-      description: '타로 카드는 거짓말을 하지 않습니다\n당신이 감당할 수 있는 진실만을 보여줄 뿐',
-      icon: Icons.remove_red_eye,
-      iconGradient: [AppColors.crimsonGlow, AppColors.bloodMoon],
-      glowColor: AppColors.crimsonGlow,
-    ),
-    const OnboardingPageData(
-      title: 'AI가 읽는 운명',
-      description: '인공지능이 당신의 카드를 해석하고\n깊은 대화를 통해 길을 안내합니다',
-      icon: Icons.psychology_alt,
-      iconGradient: [AppColors.evilGlow, AppColors.omenGlow],
-      glowColor: AppColors.evilGlow,
-    ),
-    const OnboardingPageData(
-      title: '준비되셨나요?',
-      description: '모든 선택에는 대가가 따릅니다\n당신의 운명을 마주할 준비가 되셨다면...',
-      icon: Icons.warning_amber_rounded,
-      iconGradient: [AppColors.spiritGlow, AppColors.mysticPurple],
-      glowColor: AppColors.spiritGlow,
-    ),
-  ];
+  static List<OnboardingPageData> getPages(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    return [
+      OnboardingPageData(
+        title: l10n.onboardingTitle1,
+        description: l10n.onboardingDesc1,
+        icon: Icons.auto_fix_high,
+        iconGradient: const [AppColors.mysticPurple, AppColors.deepViolet],
+        glowColor: AppColors.mysticPurple,
+      ),
+      OnboardingPageData(
+        title: l10n.onboardingTitle2,
+        description: l10n.onboardingDesc2,
+        icon: Icons.remove_red_eye,
+        iconGradient: const [AppColors.crimsonGlow, AppColors.bloodMoon],
+        glowColor: AppColors.crimsonGlow,
+      ),
+      OnboardingPageData(
+        title: l10n.onboardingTitle3,
+        description: l10n.onboardingDesc3,
+        icon: Icons.psychology_alt,
+        iconGradient: const [AppColors.evilGlow, AppColors.omenGlow],
+        glowColor: AppColors.evilGlow,
+      ),
+      OnboardingPageData(
+        title: l10n.onboardingTitle4,
+        description: l10n.onboardingDesc4,
+        icon: Icons.warning_amber_rounded,
+        iconGradient: const [AppColors.spiritGlow, AppColors.mysticPurple],
+        glowColor: AppColors.spiritGlow,
+      ),
+    ];
+  }
 }
 
 /// 온보딩 페이지 데이터
@@ -802,7 +819,7 @@ class OnboardingPageData {
   final List<Color> iconGradient;
   final Color glowColor;
   
-  const OnboardingPageData({
+  OnboardingPageData({
     required this.title,
     required this.description,
     required this.icon,

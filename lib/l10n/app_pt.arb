@@ -1,0 +1,1293 @@
+{
+  "@@locale": "pt",
+  
+  "appName": "Moroka",
+  "@appName": {
+    "description": "Application name"
+  },
+  
+  "appTagline": "Oráculo das Sombras",
+  "@appTagline": {
+    "description": "Application tagline"
+  },
+  
+  "appTitle": "Moroka - Sussurros Sinistros",
+  "@appTitle": {
+    "description": "Full application title"
+  },
+  
+  "onboardingTitle1": "O Portal do Destino se Abre",
+  "@onboardingTitle1": {
+    "description": "First onboarding screen title"
+  },
+  
+  "onboardingDesc1": "A sabedoria antiga encontra a tecnologia moderna\npara sussurrar seu futuro",
+  "@onboardingDesc1": {
+    "description": "First onboarding screen description"
+  },
+  
+  "onboardingTitle2": "Verdade na Escuridão",
+  "@onboardingTitle2": {
+    "description": "Second onboarding screen title"
+  },
+  
+  "onboardingDesc2": "As cartas de tarô nunca mentem\nElas apenas mostram a verdade que você pode suportar",
+  "@onboardingDesc2": {
+    "description": "Second onboarding screen description"
+  },
+  
+  "onboardingTitle3": "IA Lê seu Destino",
+  "@onboardingTitle3": {
+    "description": "Third onboarding screen title"
+  },
+  
+  "onboardingDesc3": "A inteligência artificial interpreta suas cartas\ne guia seu caminho através de conversas profundas",
+  "@onboardingDesc3": {
+    "description": "Third onboarding screen description"
+  },
+  
+  "onboardingTitle4": "Você Está Pronto?",
+  "@onboardingTitle4": {
+    "description": "Fourth onboarding screen title"
+  },
+  
+  "onboardingDesc4": "Toda escolha tem seu preço\nSe você está pronto para enfrentar seu destino...",
+  "@onboardingDesc4": {
+    "description": "Fourth onboarding screen description"
+  },
+  
+  "loginTitle": "Você Retornou",
+  "@loginTitle": {
+    "description": "Login screen title"
+  },
+  
+  "loginSubtitle": "Estávamos esperando por você",
+  "@loginSubtitle": {
+    "description": "Login screen subtitle"
+  },
+  
+  "signupTitle": "Contrato do Destino",
+  "@signupTitle": {
+    "description": "Signup screen title"
+  },
+  
+  "signupSubtitle": "Registre sua alma",
+  "@signupSubtitle": {
+    "description": "Signup screen subtitle"
+  },
+  
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Email input label"
+  },
+  
+  "passwordLabel": "Senha",
+  "@passwordLabel": {
+    "description": "Password input label"
+  },
+  
+  "nameLabel": "Nome",
+  "@nameLabel": {
+    "description": "Name input label"
+  },
+  
+  "loginButton": "Entrar",
+  "@loginButton": {
+    "description": "Login button text"
+  },
+  
+  "signupButton": "Registrar Alma",
+  "@signupButton": {
+    "description": "Signup button text"
+  },
+  
+  "googleLogin": "Entrar com Google",
+  "@googleLogin": {
+    "description": "Google login button text"
+  },
+  
+  "googleSignup": "Começar com Google",
+  "@googleSignup": {
+    "description": "Google signup button text"
+  },
+  
+  "alreadyHaveAccount": "Já tem uma conta? Entrar",
+  "@alreadyHaveAccount": {
+    "description": "Link to login screen"
+  },
+  
+  "dontHaveAccount": "Primeira vez? Cadastre-se",
+  "@dontHaveAccount": {
+    "description": "Link to signup screen"
+  },
+  
+  "moodQuestion": "Como você se sente agora?",
+  "@moodQuestion": {
+    "description": "Question asking user's current mood"
+  },
+  
+  "selectSpreadButton": "Selecionar Tiragem de Tarô",
+  "@selectSpreadButton": {
+    "description": "Button to select tarot spread"
+  },
+  
+  "moodAnxious": "Ansioso",
+  "@moodAnxious": {
+    "description": "Mood: anxious"
+  },
+  
+  "moodLonely": "Solitário",
+  "@moodLonely": {
+    "description": "Mood: lonely"
+  },
+  
+  "moodCurious": "Curioso",
+  "@moodCurious": {
+    "description": "Mood: curious"
+  },
+  
+  "moodFearful": "Temeroso",
+  "@moodFearful": {
+    "description": "Mood: fearful"
+  },
+  
+  "moodHopeful": "Esperançoso",
+  "@moodHopeful": {
+    "description": "Mood: hopeful"
+  },
+  
+  "moodConfused": "Confuso",
+  "@moodConfused": {
+    "description": "Mood: confused"
+  },
+  
+  "moodDesperate": "Desesperado",
+  "@moodDesperate": {
+    "description": "Mood: desperate"
+  },
+  
+  "moodExpectant": "Expectante",
+  "@moodExpectant": {
+    "description": "Mood: expectant"
+  },
+  
+  "moodMystical": "Místico",
+  "@moodMystical": {
+    "description": "Mood: mystical"
+  },
+  
+  "spreadSelectionTitle": "Selecionar Tiragem",
+  "@spreadSelectionTitle": {
+    "description": "Spread selection screen title"
+  },
+  
+  "spreadSelectionSubtitle": "Escolha uma tiragem baseada em seus sentimentos atuais",
+  "@spreadSelectionSubtitle": {
+    "description": "Spread selection screen subtitle"
+  },
+  
+  "spreadDifficultyBeginner": "1-3 cartas",
+  "@spreadDifficultyBeginner": {
+    "description": "Beginner difficulty label"
+  },
+  
+  "spreadDifficultyIntermediate": "5-7 cartas",
+  "@spreadDifficultyIntermediate": {
+    "description": "Intermediate difficulty label"
+  },
+  
+  "spreadDifficultyAdvanced": "10 cartas",
+  "@spreadDifficultyAdvanced": {
+    "description": "Advanced difficulty label"
+  },
+  
+  "spreadOneCard": "Uma Carta",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  
+  "spreadThreeCard": "Três Cartas",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  
+  "spreadCelticCross": "Cruz Celta",
+  "@spreadCelticCross": {
+    "description": "Celtic cross spread name"
+  },
+  
+  "spreadRelationship": "Tiragem de Relacionamento",
+  "@spreadRelationship": {
+    "description": "Relationship spread name"
+  },
+  
+  "spreadYesNo": "Sim/Não",
+  "@spreadYesNo": {
+    "description": "Yes/No spread name"
+  },
+  
+  "selectCardTitle": "Selecione as cartas do destino",
+  "@selectCardTitle": {
+    "description": "Card selection screen title"
+  },
+  
+  "currentMoodLabel": "Seu humor atual: ",
+  "@currentMoodLabel": {
+    "description": "Current mood label"
+  },
+  
+  "currentSpreadLabel": "Tiragem selecionada: ",
+  "@currentSpreadLabel": {
+    "description": "Current spread label"
+  },
+  
+  "shufflingMessage": "Os fios do destino estão se entrelaçando...",
+  "@shufflingMessage": {
+    "description": "Message shown while shuffling"
+  },
+  
+  "selectCardInstruction": "Siga sua intuição e selecione as cartas",
+  "@selectCardInstruction": {
+    "description": "Card selection instruction"
+  },
+  
+  "cardsSelected": "{count} selecionadas",
+  "@cardsSelected": {
+    "description": "Number of cards selected",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "cardsRemaining": "Selecione mais {count}",
+  "@cardsRemaining": {
+    "description": "Number of cards remaining to select",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "typeMessageHint": "Digite uma mensagem...",
+  "@typeMessageHint": {
+    "description": "Chat input hint"
+  },
+  
+  "continueReading": "Obter conselhos mais profundos",
+  "@continueReading": {
+    "description": "Button to continue tarot reading"
+  },
+  
+  "watchAdPrompt": "Para ouvir a voz do abismo mais profundo,\nvocê deve verificar mensagens de outro mundo.",
+  "@watchAdPrompt": {
+    "description": "Prompt to watch ad for continued reading"
+  },
+  
+  "interpretingSpread": "Interpretando as mensagens das cartas...",
+  "@interpretingSpread": {
+    "description": "Message shown while AI interprets cards"
+  },
+  
+  "menuHistory": "Registros Passados de Tarô",
+  "@menuHistory": {
+    "description": "Menu item: history"
+  },
+  
+  "menuHistoryDesc": "Reveja seus destinos passados",
+  "@menuHistoryDesc": {
+    "description": "Menu item description: history"
+  },
+  
+  "menuStatistics": "Estatísticas e Análises",
+  "@menuStatistics": {
+    "description": "Menu item: statistics"
+  },
+  
+  "menuStatisticsDesc": "Analise seus padrões de destino",
+  "@menuStatisticsDesc": {
+    "description": "Menu item description: statistics"
+  },
+  
+  "menuSettings": "Configurações",
+  "@menuSettings": {
+    "description": "Menu item: settings"
+  },
+  
+  "menuSettingsDesc": "Ajustar ambiente do aplicativo",
+  "@menuSettingsDesc": {
+    "description": "Menu item description: settings"
+  },
+  
+  "menuAbout": "Sobre",
+  "@menuAbout": {
+    "description": "Menu item: about"
+  },
+  
+  "menuAboutDesc": "Moroka - Oráculo das Sombras",
+  "@menuAboutDesc": {
+    "description": "Menu item description: about"
+  },
+  
+  "logoutButton": "Sair",
+  "@logoutButton": {
+    "description": "Logout button text"
+  },
+  
+  "logoutTitle": "Você realmente vai embora?",
+  "@logoutTitle": {
+    "description": "Logout dialog title"
+  },
+  
+  "logoutMessage": "Quando o portal do destino se fecha\nvocê deve retornar novamente",
+  "@logoutMessage": {
+    "description": "Logout dialog message"
+  },
+  
+  "logoutCancel": "Ficar",
+  "@logoutCancel": {
+    "description": "Logout dialog cancel button"
+  },
+  
+  "logoutConfirm": "Partir",
+  "@logoutConfirm": {
+    "description": "Logout dialog confirm button"
+  },
+  
+  "errorOccurred": "Ocorreu um erro",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "errorEmailEmpty": "Por favor, insira seu email",
+  "@errorEmailEmpty": {
+    "description": "Error: email field empty"
+  },
+  
+  "errorEmailInvalid": "Formato de email inválido",
+  "@errorEmailInvalid": {
+    "description": "Error: email format invalid"
+  },
+  
+  "errorPasswordEmpty": "Por favor, insira sua senha",
+  "@errorPasswordEmpty": {
+    "description": "Error: password field empty"
+  },
+  
+  "errorPasswordShort": "A senha deve ter pelo menos 6 caracteres",
+  "@errorPasswordShort": {
+    "description": "Error: password too short"
+  },
+  
+  "errorNameEmpty": "Por favor, insira seu nome",
+  "@errorNameEmpty": {
+    "description": "Error: name field empty"
+  },
+  
+  "errorLoginFailed": "Falha no login",
+  "@errorLoginFailed": {
+    "description": "Error: login failed"
+  },
+  
+  "errorSignupFailed": "Falha no cadastro",
+  "@errorSignupFailed": {
+    "description": "Error: signup failed"
+  },
+  
+  "errorGoogleLoginFailed": "Falha no login com Google",
+  "@errorGoogleLoginFailed": {
+    "description": "Error: Google login failed"
+  },
+  
+  "errorNetworkFailed": "Por favor, verifique sua conexão com a internet",
+  "@errorNetworkFailed": {
+    "description": "Error: network connection failed"
+  },
+  
+  "errorNotEnoughCards": "Por favor, selecione mais cartas",
+  "@errorNotEnoughCards": {
+    "description": "Error: not enough cards selected"
+  },
+  
+  "successLogin": "Bem-vindo",
+  "@successLogin": {
+    "description": "Success: login"
+  },
+  
+  "successSignup": "Sua alma foi registrada",
+  "@successSignup": {
+    "description": "Success: signup"
+  },
+  
+  "successLogout": "Adeus",
+  "@successLogout": {
+    "description": "Success: logout"
+  },
+  
+  "successCardsSelected": "Todas as cartas foram selecionadas",
+  "@successCardsSelected": {
+    "description": "Success: all cards selected"
+  },
+  
+  "noHistoryTitle": "Ainda não há registros de tarô",
+  "@noHistoryTitle": {
+    "description": "Empty history state title"
+  },
+  
+  "noHistoryMessage": "Leia seu primeiro destino",
+  "@noHistoryMessage": {
+    "description": "Empty history state message"
+  },
+  
+  "startReading": "Iniciar leitura de tarô",
+  "@startReading": {
+    "description": "Start reading button"
+  },
+  
+  "deleteReadingTitle": "Excluir este registro?",
+  "@deleteReadingTitle": {
+    "description": "Delete reading dialog title"
+  },
+  
+  "deleteReadingMessage": "Registros excluídos não podem ser recuperados",
+  "@deleteReadingMessage": {
+    "description": "Delete reading dialog message"
+  },
+  
+  "cardOfFate": "Carta do Destino",
+  "@cardOfFate": {
+    "description": "Card of fate"
+  },
+  
+  "cardCallingYou": "A carta que te chama",
+  "@cardCallingYou": {
+    "description": "The card that is calling you"
+  },
+  
+  "selectThisCard": "Selecionar esta carta",
+  "@selectThisCard": {
+    "description": "Select this card button"
+  },
+  
+  "viewAgain": "Ver novamente",
+  "@viewAgain": {
+    "description": "View again button"
+  },
+  
+  "select": "Selecionar",
+  "@select": {
+    "description": "Select button"
+  },
+  
+  "shufflingCards": "Embaralhando as cartas...",
+  "@shufflingCards": {
+    "description": "Shuffling cards message"
+  },
+  
+  "selectCardsIntuition": "Selecione as cartas com sua intuição",
+  "@selectCardsIntuition": {
+    "description": "Select cards by intuition"
+  },
+  
+  "selectMoreCards": "Selecione mais {count} cartas",
+  "@selectMoreCards": {
+    "description": "Select more cards message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectionComplete": "Seleção completa",
+  "@selectionComplete": {
+    "description": "Selection complete message"
+  },
+  
+  "tapToSelect": "Toque para selecionar",
+  "@tapToSelect": {
+    "description": "Tap to select instruction"
+  },
+  
+  "preparingInterpretation": "Preparando interpretação...",
+  "@preparingInterpretation": {
+    "description": "Preparing interpretation message"
+  },
+  
+  "cardMessage": "Mensagem das cartas",
+  "@cardMessage": {
+    "description": "Card message title"
+  },
+  
+  "cardsStory": "A história das cartas",
+  "@cardsStory": {
+    "description": "Cards story title"
+  },
+  
+  "specialInterpretation": "Interpretação especial",
+  "@specialInterpretation": {
+    "description": "Special interpretation title"
+  },
+  
+  "interpretingCards": "Interpretando as cartas...",
+  "@interpretingCards": {
+    "description": "Interpreting cards message"
+  },
+  
+  "todaysChatEnded": "A conversa de hoje terminou",
+  "@todaysChatEnded": {
+    "description": "Today's chat ended message"
+  },
+  
+  "askQuestions": "Fazer perguntas",
+  "@askQuestions": {
+    "description": "Ask questions button"
+  },
+  
+  "continueConversation": "Continuar conversa",
+  "@continueConversation": {
+    "description": "Continue conversation button"
+  },
+  
+  "wantDeeperTruth": "Quer uma verdade mais profunda?",
+  "@wantDeeperTruth": {
+    "description": "Want deeper truth prompt"
+  },
+  
+  "watchAdToContinue": "Assistir anúncio para continuar",
+  "@watchAdToContinue": {
+    "description": "Watch ad to continue message"
+  },
+  
+  "later": "Mais tarde",
+  "@later": {
+    "description": "Later button"
+  },
+  
+  "watchAd": "Assistir anúncio",
+  "@watchAd": {
+    "description": "Watch ad button"
+  },
+  
+  "emailVerification": "Verificação de e-mail",
+  "@emailVerification": {
+    "description": "Email verification title"
+  },
+  
+  "checkYourEmail": "Verifique seu e-mail",
+  "@checkYourEmail": {
+    "description": "Check your email message"
+  },
+  
+  "verificationEmailSent": "E-mail de verificação enviado",
+  "@verificationEmailSent": {
+    "description": "Verification email sent message"
+  },
+  
+  "verifyingEmail": "Verificando e-mail...",
+  "@verifyingEmail": {
+    "description": "Verifying email message"
+  },
+  
+  "noEmailReceived": "Não recebeu o e-mail?",
+  "@noEmailReceived": {
+    "description": "No email received prompt"
+  },
+  
+  "checkSpamFolder": "Verifique sua pasta de spam",
+  "@checkSpamFolder": {
+    "description": "Check spam folder instruction"
+  },
+  
+  "resendIn": "Reenviar em {seconds} segundos",
+  "@resendIn": {
+    "description": "Resend in X seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "resendVerificationEmail": "Reenviar e-mail de verificação",
+  "@resendVerificationEmail": {
+    "description": "Resend verification email button"
+  },
+  
+  "alreadyVerified": "Já verificado",
+  "@alreadyVerified": {
+    "description": "Already verified message"
+  },
+  
+  "openGateOfFate": "Abrir o portão do destino",
+  "@openGateOfFate": {
+    "description": "Open gate of fate button"
+  },
+  
+  "settingsLanguageTitle": "Idioma",
+  "@settingsLanguageTitle": {
+    "description": "Language settings section title"
+  },
+  
+  "settingsLanguageLabel": "Idioma do Aplicativo",
+  "@settingsLanguageLabel": {
+    "description": "Language selector label"
+  },
+  
+  "settingsLanguageDesc": "Selecione seu idioma preferido",
+  "@settingsLanguageDesc": {
+    "description": "Language selector description"
+  },
+  
+  "settingsNotificationTitle": "Configurações de Notificação",
+  "@settingsNotificationTitle": {
+    "description": "Notification settings section title"
+  },
+  
+  "settingsDailyNotification": "Notificação Diária de Tarô",
+  "@settingsDailyNotification": {
+    "description": "Daily notification setting"
+  },
+  
+  "settingsDailyNotificationDesc": "Receba sua fortuna diária toda manhã",
+  "@settingsDailyNotificationDesc": {
+    "description": "Daily notification description"
+  },
+  
+  "settingsWeeklyReport": "Relatório Semanal de Tarô",
+  "@settingsWeeklyReport": {
+    "description": "Weekly report setting"
+  },
+  
+  "settingsWeeklyReportDesc": "Receba sua fortuna semanal toda segunda-feira",
+  "@settingsWeeklyReportDesc": {
+    "description": "Weekly report description"
+  },
+  
+  "settingsDisplayTitle": "Configurações de Exibição",
+  "@settingsDisplayTitle": {
+    "description": "Display settings section title"
+  },
+  
+  "settingsVibration": "Efeitos de Vibração",
+  "@settingsVibration": {
+    "description": "Vibration setting"
+  },
+  
+  "settingsVibrationDesc": "Feedback de vibração ao selecionar cartas",
+  "@settingsVibrationDesc": {
+    "description": "Vibration description"
+  },
+  
+  "settingsAnimations": "Efeitos de Animação",
+  "@settingsAnimations": {
+    "description": "Animation setting"
+  },
+  
+  "settingsAnimationsDesc": "Animações de transição de tela",
+  "@settingsAnimationsDesc": {
+    "description": "Animation description"
+  },
+  
+  "settingsDataTitle": "Gerenciamento de Dados",
+  "@settingsDataTitle": {
+    "description": "Data management section title"
+  },
+  
+  "settingsBackupData": "Backup de Dados",
+  "@settingsBackupData": {
+    "description": "Backup data setting"
+  },
+  
+  "settingsBackupDataDesc": "Faça backup dos seus dados na nuvem",
+  "@settingsBackupDataDesc": {
+    "description": "Backup data description"
+  },
+  
+  "settingsClearCache": "Limpar Cache",
+  "@settingsClearCache": {
+    "description": "Clear cache setting"
+  },
+  
+  "settingsClearCacheDesc": "Exclua arquivos temporários para liberar espaço",
+  "@settingsClearCacheDesc": {
+    "description": "Clear cache description"
+  },
+  
+  "settingsDeleteData": "Excluir Todos os Dados",
+  "@settingsDeleteData": {
+    "description": "Delete all data setting"
+  },
+  
+  "settingsDeleteDataDesc": "Exclua todos os registros de tarô e configurações",
+  "@settingsDeleteDataDesc": {
+    "description": "Delete data description"
+  },
+  
+  "settingsAccountTitle": "Conta",
+  "@settingsAccountTitle": {
+    "description": "Account section title"
+  },
+  
+  "settingsChangePassword": "Alterar Senha",
+  "@settingsChangePassword": {
+    "description": "Change password setting"
+  },
+  
+  "settingsChangePasswordDesc": "Altere sua senha para segurança da conta",
+  "@settingsChangePasswordDesc": {
+    "description": "Change password description"
+  },
+  
+  "settingsDeleteAccount": "Excluir Conta",
+  "@settingsDeleteAccount": {
+    "description": "Delete account setting"
+  },
+  
+  "settingsDeleteAccountDesc": "Exclua permanentemente sua conta",
+  "@settingsDeleteAccountDesc": {
+    "description": "Delete account description"
+  },
+  
+  "dialogBackupTitle": "Backup de Dados",
+  "@dialogBackupTitle": {
+    "description": "Backup dialog title"
+  },
+  
+  "dialogBackupMessage": "Fazer backup dos seus dados na nuvem?",
+  "@dialogBackupMessage": {
+    "description": "Backup dialog message"
+  },
+  
+  "dialogClearCacheTitle": "Limpar Cache",
+  "@dialogClearCacheTitle": {
+    "description": "Clear cache dialog title"
+  },
+  
+  "dialogClearCacheMessage": "Excluir arquivos temporários?",
+  "@dialogClearCacheMessage": {
+    "description": "Clear cache dialog message"
+  },
+  
+  "dialogDeleteDataTitle": "Excluir Todos os Dados",
+  "@dialogDeleteDataTitle": {
+    "description": "Delete data dialog title"
+  },
+  
+  "dialogDeleteDataMessage": "Todos os registros de tarô e configurações serão permanentemente excluídos.\nEsta ação não pode ser desfeita.",
+  "@dialogDeleteDataMessage": {
+    "description": "Delete data dialog message"
+  },
+  
+  "dialogChangePasswordTitle": "Alterar Senha",
+  "@dialogChangePasswordTitle": {
+    "description": "Change password dialog title"
+  },
+  
+  "dialogDeleteAccountTitle": "Excluir Conta",
+  "@dialogDeleteAccountTitle": {
+    "description": "Delete account dialog title"
+  },
+  
+  "dialogDeleteAccountMessage": "Excluir sua conta apagará permanentemente todos os dados.\nEsta ação não pode ser desfeita.",
+  "@dialogDeleteAccountMessage": {
+    "description": "Delete account dialog message"
+  },
+  
+  "currentPassword": "Senha Atual",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  
+  "newPassword": "Nova Senha",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  
+  "confirmNewPassword": "Confirmar Nova Senha",
+  "@confirmNewPassword": {
+    "description": "Confirm new password label"
+  },
+  
+  "cancel": "Cancelar",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  
+  "backup": "Backup",
+  "@backup": {
+    "description": "Backup button"
+  },
+  
+  "delete": "Excluir",
+  "@delete": {
+    "description": "Delete button"
+  },
+  
+  "change": "Alterar",
+  "@change": {
+    "description": "Change button"
+  },
+  
+  "successBackup": "Backup concluído",
+  "@successBackup": {
+    "description": "Backup success message"
+  },
+  
+  "successClearCache": "Cache limpo",
+  "@successClearCache": {
+    "description": "Clear cache success message"
+  },
+  
+  "successDeleteData": "Todos os dados foram excluídos",
+  "@successDeleteData": {
+    "description": "Delete data success message"
+  },
+  
+  "successChangePassword": "Senha alterada",
+  "@successChangePassword": {
+    "description": "Change password success message"
+  },
+  
+  "successDeleteAccount": "Conta excluída",
+  "@successDeleteAccount": {
+    "description": "Delete account success message"
+  },
+  
+  "errorBackup": "Falha no backup: {error}",
+  "@errorBackup": {
+    "description": "Backup error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteData": "Falha ao excluir: {error}",
+  "@errorDeleteData": {
+    "description": "Delete data error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorChangePassword": "Falha ao alterar senha: {error}",
+  "@errorChangePassword": {
+    "description": "Change password error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteAccount": "Falha ao excluir conta: {error}",
+  "@errorDeleteAccount": {
+    "description": "Delete account error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorPasswordMismatch": "As novas senhas não coincidem",
+  "@errorPasswordMismatch": {
+    "description": "Password mismatch error"
+  },
+  
+  "passwordResetTitle": "Redefinir Senha",
+  "@passwordResetTitle": {
+    "description": "Password reset dialog title"
+  },
+  
+  "passwordResetMessage": "Digite seu email cadastrado.\nEnviaremos um link para redefinir sua senha.",
+  "@passwordResetMessage": {
+    "description": "Password reset message"
+  },
+  
+  "passwordResetSuccess": "Email de redefinição de senha enviado",
+  "@passwordResetSuccess": {
+    "description": "Password reset success message"
+  },
+  
+  "send": "Enviar",
+  "@send": {
+    "description": "Send button"
+  },
+  
+  "emailPlaceholder": "seu@email.com",
+  "@emailPlaceholder": {
+    "description": "Email placeholder"
+  },
+  
+  "passwordPlaceholder": "6+ caracteres",
+  "@passwordPlaceholder": {
+    "description": "Password placeholder"
+  },
+  
+  "forgotPassword": "Esqueceu a senha?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  
+  "login": "Entrar",
+  "@login": {
+    "description": "Login button"
+  },
+  
+  "or": "ou",
+  "@or": {
+    "description": "Or divider"
+  },
+  
+  "continueWithGoogle": "Continuar com Google",
+  "@continueWithGoogle": {
+    "description": "Google login button"
+  },
+  
+  "noAccount": "Não tem uma conta?",
+  "@noAccount": {
+    "description": "No account text"
+  },
+  
+  "signUp": "Cadastre-se",
+  "@signUp": {
+    "description": "Sign up link"
+  },
+  
+  "appBrandName": "MOROKA",
+  "@appBrandName": {
+    "description": "App brand name"
+  },
+  
+  "appBrandTagline": "oráculo das sombras",
+  "@appBrandTagline": {
+    "description": "App brand tagline"
+  },
+  
+  "aboutTitle": "Sobre",
+  "@aboutTitle": {
+    "description": "About screen title"
+  },
+  
+  "aboutSubtitle": "As cartas do destino aguardam você",
+  "@aboutSubtitle": {
+    "description": "About screen subtitle"
+  },
+  
+  "aboutDescription": "MOROKA\n\nO portal do destino se abriu\nO oráculo das sombras interpretará seu futuro\n\nInterpretação tradicional de tarô com IA mística\nFornecendo insights profundos e sabedoria",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
+  
+  "featuresTitle": "Recursos Principais",
+  "@featuresTitle": {
+    "description": "Features section title"
+  },
+  
+  "feature78Cards": "78 Cartas de Tarô Tradicionais",
+  "@feature78Cards": {
+    "description": "78 cards feature"
+  },
+  
+  "feature78CardsDesc": "Baralho completo com 22 Arcanos Maiores e 56 Arcanos Menores",
+  "@feature78CardsDesc": {
+    "description": "78 cards feature description"
+  },
+  
+  "feature5Spreads": "5 Tiragens Profissionais",
+  "@feature5Spreads": {
+    "description": "5 spreads feature"
+  },
+  
+  "feature5SpreadsDesc": "Vários métodos de leitura desde Uma Carta até Cruz Celta",
+  "@feature5SpreadsDesc": {
+    "description": "5 spreads feature description"
+  },
+  
+  "featureAI": "Mestre de Tarô IA",
+  "@featureAI": {
+    "description": "AI feature"
+  },
+  
+  "featureAIDesc": "Interpretações profundas como um mestre de tarô com 100 anos de experiência",
+  "@featureAIDesc": {
+    "description": "AI feature description"
+  },
+  
+  "featureChat": "Consulta Interativa",
+  "@featureChat": {
+    "description": "Chat feature"
+  },
+  
+  "featureChatDesc": "Faça perguntas livremente sobre suas cartas",
+  "@featureChatDesc": {
+    "description": "Chat feature description"
+  },
+  
+  "termsAndPolicies": "Termos e Políticas",
+  "@termsAndPolicies": {
+    "description": "Terms section title"
+  },
+  
+  "termsOfService": "Termos de Serviço",
+  "@termsOfService": {
+    "description": "Terms of service"
+  },
+  
+  "privacyPolicy": "Política de Privacidade",
+  "@privacyPolicy": {
+    "description": "Privacy policy"
+  },
+  
+  "marketingConsent": "Informações de Marketing",
+  "@marketingConsent": {
+    "description": "Marketing consent"
+  },
+  
+  "customerSupport": "Suporte ao Cliente",
+  "@customerSupport": {
+    "description": "Customer support section"
+  },
+  
+  "emailSupport": "Suporte por Email",
+  "@emailSupport": {
+    "description": "Email support"
+  },
+  
+  "website": "Website",
+  "@website": {
+    "description": "Website"
+  },
+  
+  "cannotOpenUrl": "Não é possível abrir URL: {url}",
+  "@cannotOpenUrl": {
+    "description": "Cannot open URL error",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "lastModified": "Última modificação: 3 de julho de 2025",
+  "@lastModified": {
+    "description": "Last modified date"
+  },
+  
+  "confirm": "Confirmar",
+  "@confirm": {
+    "description": "Confirm button"
+  },
+  
+  "companyName": "Today's Studio",
+  "@companyName": {
+    "description": "Company name"
+  },
+  
+  "companyTagline": "Criando experiências místicas",
+  "@companyTagline": {
+    "description": "Company tagline"
+  },
+  
+  "copyright": "© 2025 Today's Studio. Todos os direitos reservados.",
+  "@copyright": {
+    "description": "Copyright notice"
+  },
+  
+  "anonymousSoul": "Alma Anônima",
+  "@anonymousSoul": {
+    "description": "Anonymous user name"
+  },
+  
+  "totalReadings": "Total de Leituras",
+  "@totalReadings": {
+    "description": "Total readings label"
+  },
+  
+  "joinDate": "Data de Entrada",
+  "@joinDate": {
+    "description": "Join date label"
+  },
+  
+  "errorLogout": "Erro ao sair",
+  "@errorLogout": {
+    "description": "Logout error"
+  },
+  
+  "soulContract": "Contrato da Alma",
+  "@soulContract": {
+    "description": "Terms screen title"
+  },
+  
+  "termsAgreementMessage": "Por favor, concorde com os termos para usar o serviço",
+  "@termsAgreementMessage": {
+    "description": "Terms agreement message"
+  },
+  
+  "agreeAll": "Concordar com Tudo",
+  "@agreeAll": {
+    "description": "Agree all button"
+  },
+  
+  "required": "Obrigatório",
+  "@required": {
+    "description": "Required label"
+  },
+  
+  "optional": "Opcional",
+  "@optional": {
+    "description": "Optional label"
+  },
+  
+  "agreeAndStart": "Concordar e Iniciar",
+  "@agreeAndStart": {
+    "description": "Agree and start button"
+  },
+  
+  "agreeToRequired": "Por favor, concorde com os termos obrigatórios",
+  "@agreeToRequired": {
+    "description": "Required terms message"
+  },
+  
+  "nickname": "Apelido",
+  "@nickname": {
+    "description": "Nickname label"
+  },
+  
+  "confirmPassword": "Confirmar Senha",
+  "@confirmPassword": {
+    "description": "Confirm password label"
+  },
+  
+  "nextStep": "Próximo Passo",
+  "@nextStep": {
+    "description": "Next step button"
+  },
+  
+  "errorNameTooShort": "Digite pelo menos 2 caracteres",
+  "@errorNameTooShort": {
+    "description": "Name too short error"
+  },
+  
+  "errorConfirmPassword": "Por favor, confirme sua senha",
+  "@errorConfirmPassword": {
+    "description": "Confirm password error"
+  },
+  
+  "errorPasswordsDontMatch": "As senhas não coincidem",
+  "@errorPasswordsDontMatch": {
+    "description": "Passwords don't match error"
+  },
+  
+  "emailInUse": "Email já em uso",
+  "@emailInUse": {
+    "description": "Email in use message"
+  },
+  
+  "emailAvailable": "Email disponível",
+  "@emailAvailable": {
+    "description": "Email available message"
+  },
+  
+  "nicknameInUse": "Apelido já em uso",
+  "@nicknameInUse": {
+    "description": "Nickname in use message"
+  },
+  
+  "nicknameAvailable": "Apelido disponível",
+  "@nicknameAvailable": {
+    "description": "Nickname available message"
+  },
+  
+  "passwordWeak": "Fraca",
+  "@passwordWeak": {
+    "description": "Weak password"
+  },
+  
+  "passwordFair": "Razoável",
+  "@passwordFair": {
+    "description": "Fair password"
+  },
+  
+  "passwordStrong": "Forte",
+  "@passwordStrong": {
+    "description": "Strong password"
+  },
+  
+  "passwordVeryStrong": "Muito Forte",
+  "@passwordVeryStrong": {
+    "description": "Very strong password"
+  },
+  
+  "emailVerificationTitle": "Verificação de Email",
+  "@emailVerificationTitle": {
+    "description": "Email verification title"
+  },
+  
+  "emailVerificationMessage": "Enviamos um email de verificação para {email}.\nPor favor, verifique seu email e clique no link de verificação.",
+  "@emailVerificationMessage": {
+    "description": "Email verification message",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "resendEmail": "Reenviar Email",
+  "@resendEmail": {
+    "description": "Resend email button"
+  },
+  
+  "emailResent": "Email de verificação reenviado",
+  "@emailResent": {
+    "description": "Email resent message"
+  },
+  
+  "checkEmailAndReturn": "Após a verificação, por favor retorne ao aplicativo",
+  "@checkEmailAndReturn": {
+    "description": "Check email instruction"
+  },
+  
+  "drawAddedMessage": "1 jogada adicionada! ✨",
+  "@drawAddedMessage": {
+    "description": "Success message after watching ad"
+  },
+  
+  "adLoadFailed": "Falha ao carregar o anúncio. Por favor, tente novamente mais tarde.",
+  "@adLoadFailed": {
+    "description": "Error message when ad fails to load"
+  },
+  
+  "monthLabel": "{month}",
+  "@monthLabel": {
+    "description": "Month label format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "startChatMessage": "Pergunte-me qualquer coisa sobre sua leitura de tarô",
+  "@startChatMessage": {
+    "description": "Empty chat state message"
+  },
+  
+  "chatHistory": "Histórico de Chat",
+  "@chatHistory": {
+    "description": "Chat history section title"
+  },
+  
+  "chatHistoryDescription": "Sua conversa com o Mestre do Tarô",
+  "@chatHistoryDescription": {
+    "description": "Chat history section description"
+  }
+}

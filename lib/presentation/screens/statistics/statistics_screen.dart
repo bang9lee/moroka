@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
 import 'statistics_viewmodel.dart';
@@ -130,7 +131,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '통계 & 분석',
+                  AppLocalizations.of(context)!.menuStatistics,
                   style: AppTextStyles.displaySmall.copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -139,7 +140,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '당신의 운명 패턴을 분석합니다',
+                  AppLocalizations.of(context)!.menuStatisticsDesc,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.fogGray,
                     fontSize: 14,
@@ -168,7 +169,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
             ),
             const SizedBox(height: 32),
             Text(
-              '운명을 분석하는 중...',
+              AppLocalizations.of(context)!.analyzingDestiny,
               style: AppTextStyles.bodyLarge.copyWith(
                 color: AppColors.fogGray,
                 fontSize: 18,
@@ -223,7 +224,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                 ),
             const SizedBox(height: 32),
             Text(
-              '아직 분석할 데이터가 없습니다',
+              AppLocalizations.of(context)!.noDataToAnalyze,
               style: AppTextStyles.displaySmall.copyWith(
                 fontSize: 24,
                 color: AppColors.fogGray,
@@ -232,7 +233,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
             ),
             const SizedBox(height: 12),
             Text(
-              '타로 리딩을 시작해보세요',
+              AppLocalizations.of(context)!.startTarotReading,
               style: AppTextStyles.bodyLarge.copyWith(
                 color: AppColors.ashGray,
                 fontSize: 18,
@@ -260,7 +261,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                   ],
                 ),
                 child: Text(
-                  '시작하기',
+                  AppLocalizations.of(context)!.startReading,
                   style: AppTextStyles.buttonLarge.copyWith(
                     fontSize: 18,
                   ),
@@ -285,8 +286,8 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
         children: [
           _buildAnimatedStatCard(
             index: 0,
-            title: '총 타로 리딩',
-            value: '${state.statistics!['totalReadings'] ?? 0}회',
+            title: AppLocalizations.of(context)!.totalTarotReadings,
+            value: AppLocalizations.of(context)!.timesCount(state.statistics!['totalReadings'] ?? 0),
             icon: Icons.style,
             gradient: [AppColors.mysticPurple, AppColors.deepViolet],
           ),
@@ -295,7 +296,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
           if (state.statistics!['mostFrequentCard'] != null) ...[
             _buildAnimatedStatCard(
               index: 1,
-              title: '가장 많이 나온 카드',
+              title: AppLocalizations.of(context)!.mostFrequentCard,
               value: state.statistics!['mostFrequentCard'] ?? '',
               icon: Icons.star,
               gradient: [AppColors.omenGlow, AppColors.crimsonGlow],
@@ -306,7 +307,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
           if ((state.statistics!['cardFrequency'] as Map).isNotEmpty) ...[
             _buildAnimatedChart(
               index: 2,
-              title: '카드 출현 빈도 TOP 5',
+              title: AppLocalizations.of(context)!.cardFrequencyTop5,
               child: _buildCardFrequencyChart(
                 state.statistics!['cardFrequency'] as Map<String, int>,
                 screenSize,
@@ -319,12 +320,12 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
           if ((state.statistics!['moodFrequency'] as Map).isNotEmpty) ...[
             _buildAnimatedChart(
               index: 3,
-              title: '기분별 리딩 분석',
+              title: AppLocalizations.of(context)!.moodAnalysis,
               child: _buildMoodPieChart(
                 state.statistics!['moodFrequency'] as Map<String, int>,
                 screenSize,
               ),
-              height: 577,
+              height: 700,
             ),
             const SizedBox(height: 24),
           ],
@@ -332,7 +333,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
           if (state.monthlyTrend.isNotEmpty) ...[
             _buildAnimatedChart(
               index: 4,
-              title: '월별 리딩 추이',
+              title: AppLocalizations.of(context)!.monthlyReadingTrend,
               child: _buildMonthlyTrendChart(state.monthlyTrend, screenSize),
               height: 300,
             ),
@@ -552,7 +553,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
     if (topEntries.isEmpty) {
       return Center(
         child: Text(
-          '데이터가 없습니다',
+          AppLocalizations.of(context)!.noData,
           style: AppTextStyles.bodyLarge.copyWith(
             color: AppColors.fogGray,
           ),
@@ -575,7 +576,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
             tooltipRoundedRadius: 12,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               return BarTooltipItem(
-                '${topEntries[group.x.toInt()].key}\n${rod.toY.toInt()}회',
+                '${topEntries[group.x.toInt()].key}\n${AppLocalizations.of(context)!.timesCount(rod.toY.toInt())}',
                 AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.ghostWhite,
                   fontSize: 14,
@@ -675,7 +676,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
     if (total == 0) {
       return Center(
         child: Text(
-          '데이터가 없습니다',
+          AppLocalizations.of(context)!.noData,
           style: AppTextStyles.bodyLarge.copyWith(
             color: AppColors.fogGray,
           ),
@@ -782,7 +783,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
     if (sortedEntries.isEmpty) {
       return Center(
         child: Text(
-          '데이터가 없습니다',
+          AppLocalizations.of(context)!.noData,
           style: AppTextStyles.bodyLarge.copyWith(
             color: AppColors.fogGray,
           ),
@@ -824,7 +825,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                 return Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    '${int.parse(month)}월',
+                    AppLocalizations.of(context)!.monthLabel(int.parse(month).toString()),
                     style: AppTextStyles.bodyMedium.copyWith(
                       fontSize: 11,
                       color: AppColors.fogGray,
@@ -910,7 +911,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                 final entry = sortedEntries[spot.x.toInt()];
                 final month = entry.key.split('-')[1];
                 return LineTooltipItem(
-                  '${int.parse(month)}월\n${spot.y.toInt()}회',
+                  '${AppLocalizations.of(context)!.monthLabel(int.parse(month).toString())}\n${AppLocalizations.of(context)!.timesCount(spot.y.toInt())}',
                   AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.ghostWhite,
                     fontSize: 14,
@@ -932,6 +933,9 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
   ) {
     final count = moodEntry.value;
     final percentage = (count / total * 100).toStringAsFixed(1);
+    
+    // 저장된 mood 텍스트를 현재 언어로 변환
+    final moodText = _getLocalizedMoodText(moodEntry.key);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -957,7 +961,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
           const SizedBox(width: 10),
           Flexible(
             child: Text(
-              '${moodEntry.key} ($percentage%)',
+              '$moodText ($percentage%)',
               style: AppTextStyles.bodySmall.copyWith(
                 fontSize: 15,
                 color: AppColors.ghostWhite,
@@ -969,5 +973,65 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
         ],
       ),
     );
+  }
+  
+  // 저장된 mood 텍스트를 현재 언어로 변환하는 헬퍼 함수
+  String _getLocalizedMoodText(String savedMood) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    // 각 mood 타입에 대한 모든 가능한 번역들
+    final moodMappings = {
+      'anxious': ['불안', 'Anxious', '不安', '焦虑', 'Anxieux', 'Ansioso', 'Ängstlich', 'กังวล', 'Lo lắng', 'चिंतित', 'Solo'],
+      'lonely': ['외로움', 'Lonely', '孤独', 'Seul', 'Solitario', 'Einsam', 'Solitário', 'เหงา', 'Cô đơn', 'अकेला', '寂しい'],
+      'curious': ['궁금', 'Curious', '好奇心', '好奇', 'Curieux', 'Curioso', 'Neugierig', 'อยากรู้', 'Tò mò', 'जिज्ञासु'],
+      'fearful': ['두려움', 'Fearful', '恐怖', '恐惧', 'Craintif', 'Temeroso', 'Furchtsam', 'กลัว', 'Sợ hãi', 'भयभीत'],
+      'hopeful': ['희망', 'Hopeful', '希望的', '충만희망', '充满希望', 'Plein d\'espoir', 'Esperanzado', 'Hoffnungsvoll', 'Esperançoso', 'มีความหวัง', 'Hy vọng', 'आशावान', '希望'],
+      'confused': ['혼란', 'Confused', '困惑', '混乱', 'Confus', 'Confundido', 'Verwirrt', 'Confuso', 'สับสน', 'Bối rối', 'भ्रमित'],
+      'desperate': ['간절', 'Desperate', '絶望的な', '절망적', '绝望', '迫切', '切実', 'Désespéré', 'Desesperado', 'Verzweifelt', 'สิ้นหวัง', 'Tuyệt vọng', 'निराश'],
+      'expectant': ['기대', 'Expectant', '期待', 'Dans l\'attente', 'Expectante', 'Erwartungsvoll', 'คาดหวัง', 'Mong đợi', 'प्रत्याशी'],
+      'mystical': ['신비', 'Mystical', '神秘的な', '신비로운', '神秘', 'Mystique', 'Místico', 'Mystisch', 'ลึกลับ', 'Huyền bí', 'रहस्यमय'],
+    };
+    
+    // 저장된 텍스트를 소문자로 변환하여 비교 (대소문자 무시)
+    final savedMoodLower = savedMood.toLowerCase();
+    
+    // 저장된 텍스트가 어떤 mood 타입인지 찾기
+    String? moodKey;
+    for (final entry in moodMappings.entries) {
+      if (entry.value.any((translation) => translation.toLowerCase() == savedMoodLower)) {
+        moodKey = entry.key;
+        break;
+      }
+    }
+    
+    if (moodKey == null) {
+      // 매핑을 찾을 수 없으면 원본 반환
+      debugPrint('Warning: No mood mapping found for "$savedMood". Please add this to moodMappings.');
+      return savedMood;
+    }
+    
+    // mood 키에 해당하는 현재 언어의 텍스트 반환
+    switch (moodKey) {
+      case 'anxious':
+        return l10n.moodAnxious;
+      case 'lonely':
+        return l10n.moodLonely;
+      case 'curious':
+        return l10n.moodCurious;
+      case 'fearful':
+        return l10n.moodFearful;
+      case 'hopeful':
+        return l10n.moodHopeful;
+      case 'confused':
+        return l10n.moodConfused;
+      case 'desperate':
+        return l10n.moodDesperate;
+      case 'expectant':
+        return l10n.moodExpectant;
+      case 'mystical':
+        return l10n.moodMystical;
+      default:
+        return savedMood;
+    }
   }
 }

@@ -1,7 +1,8 @@
 // File: lib/data/services/admob_service.dart
-import 'dart:io';
+import 'dart:async';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../core/utils/app_logger.dart';
+import '../../config/env_config.dart';
 
 /// AdMob 광고 서비스
 /// 전면 광고와 보상형 광고를 관리합니다.
@@ -11,26 +12,9 @@ class AdmobService {
   factory AdmobService() => _instance;
   AdmobService._internal();
 
-  // Ad Unit IDs - 테스트 ID 사용 권장
-  static String get _interstitialAdId {
-    if (Platform.isAndroid) {
-      // 테스트 ID 사용 (프로덕션 시 실제 ID로 변경)
-      return 'ca-app-pub-3940256099942544/1033173712';
-      // return 'ca-app-pub-7537131530412793/7821395051';  // 실제 ID
-    } else {
-      return 'ca-app-pub-3940256099942544/4411468910';
-    }
-  }
-  
-  static String get _rewardedAdId {
-    if (Platform.isAndroid) {
-      // 테스트 ID 사용 (프로덕션 시 실제 ID로 변경)
-      return 'ca-app-pub-3940256099942544/5224354917';
-      // return 'ca-app-pub-7537131530412793/7821395051';  // 실제 ID
-    } else {
-      return 'ca-app-pub-3940256099942544/1712485313';
-    }
-  }
+  // Ad Unit IDs - 환경별로 자동 설정
+  static String get _interstitialAdId => EnvConfig.interstitialAdUnitId;
+  static String get _rewardedAdId => EnvConfig.rewardedAdUnitId;
   
   // Ad instances
   InterstitialAd? _interstitialAd;
@@ -236,9 +220,6 @@ class AdmobService {
           _isRewardedAdReady = true;
           _rewardedRetryCount = 0;  // Reset retry count
           AppLogger.debug('Rewarded ad loaded successfully');
-          
-          // 광고 콜백 설정
-          _setupRewardedCallbacks();
         },
         onAdFailedToLoad: (LoadAdError error) {
           AppLogger.error('Failed to load rewarded ad: ${error.message}', error);
@@ -258,43 +239,6 @@ class AdmobService {
     );
   }
   
-  /// 보상형 광고 콜백 설정
-  void _setupRewardedCallbacks() {
-    _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) {
-        AppLogger.debug('Rewarded ad showed full screen content');
-      },
-      onAdDismissedFullScreenContent: (RewardedAd ad) {
-        AppLogger.debug('Rewarded ad dismissed');
-        ad.dispose();
-        _rewardedAd = null;
-        _isRewardedAdReady = false;
-        
-        // 다음 광고 미리 로드
-        if (!_isDisposed) {
-          Future.delayed(const Duration(seconds: 2), () {
-            loadRewardedAd();
-          });
-        }
-      },
-      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        AppLogger.error('Failed to show rewarded ad: ${error.message}', error);
-        ad.dispose();
-        _rewardedAd = null;
-        _isRewardedAdReady = false;
-        
-        // 재로드
-        if (!_isDisposed) {
-          Future.delayed(const Duration(seconds: 2), () {
-            loadRewardedAd();
-          });
-        }
-      },
-      onAdImpression: (RewardedAd ad) {
-        AppLogger.debug('Rewarded ad impression recorded');
-      },
-    );
-  }
   
   /// 보상형 광고 표시
   Future<bool> showRewardedAd() async {
@@ -305,9 +249,57 @@ class AdmobService {
       return false;
     }
     
+    // Use a Completer to properly handle the async callback
+    final completer = Completer<bool>();
     bool rewarded = false;
     
     try {
+      // Set up one-time callback for this specific ad show
+      _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdShowedFullScreenContent: (RewardedAd ad) {
+          AppLogger.debug('Rewarded ad showed full screen content');
+        },
+        onAdDismissedFullScreenContent: (RewardedAd ad) {
+          AppLogger.debug('Rewarded ad dismissed, rewarded: $rewarded');
+          ad.dispose();
+          _rewardedAd = null;
+          _isRewardedAdReady = false;
+          
+          // Complete with the reward status
+          if (!completer.isCompleted) {
+            completer.complete(rewarded);
+          }
+          
+          // 다음 광고 미리 로드
+          if (!_isDisposed) {
+            Future.delayed(const Duration(seconds: 2), () {
+              loadRewardedAd();
+            });
+          }
+        },
+        onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+          AppLogger.error('Failed to show rewarded ad: ${error.message}', error);
+          ad.dispose();
+          _rewardedAd = null;
+          _isRewardedAdReady = false;
+          
+          // Complete with false on error
+          if (!completer.isCompleted) {
+            completer.complete(false);
+          }
+          
+          // 재로드
+          if (!_isDisposed) {
+            Future.delayed(const Duration(seconds: 2), () {
+              loadRewardedAd();
+            });
+          }
+        },
+        onAdImpression: (RewardedAd ad) {
+          AppLogger.debug('Rewarded ad impression recorded');
+        },
+      );
+      
       await _rewardedAd?.show(
         onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
           AppLogger.debug('User earned reward: ${reward.amount} ${reward.type}');
@@ -315,12 +307,18 @@ class AdmobService {
         },
       );
       
-      return rewarded;
+      // Wait for the ad to be dismissed
+      return await completer.future;
     } catch (e) {
       AppLogger.error('Error showing rewarded ad', e);
       _rewardedAd?.dispose();
       _rewardedAd = null;
       _isRewardedAdReady = false;
+      
+      // Complete with false on exception
+      if (!completer.isCompleted) {
+        completer.complete(false);
+      }
       
       // 다시 로드
       loadRewardedAd();

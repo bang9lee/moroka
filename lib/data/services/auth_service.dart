@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../../core/utils/app_logger.dart';
+import '../../core/utils/input_validator.dart';
 
 /// Firebase 인증 서비스
 /// 이메일/구글 로그인, 회원가입, 프로필 관리 등을 담당합니다.
@@ -29,7 +30,21 @@ class AuthService {
     String? displayName,
   }) async {
     try {
-      AppLogger.debug('Attempting email sign up for: $email');
+      // 입력 유효성 검사
+      if (!InputValidator.isValidEmail(email)) {
+        throw Exception('유효하지 않은 이메일 형식입니다.');
+      }
+      
+      final passwordStrength = InputValidator.checkPasswordStrength(password);
+      if (passwordStrength == PasswordStrength.empty || passwordStrength == PasswordStrength.weak) {
+        throw Exception('비밀번호가 너무 약합니다. 대소문자, 숫자, 특수문자를 포함해 8자 이상으로 설정해주세요.');
+      }
+      
+      if (displayName != null && !InputValidator.isValidUsername(displayName)) {
+        throw Exception('사용자 이름은 3-20자의 영문, 숫자, 언더스코어만 사용 가능합니다.');
+      }
+      
+      AppLogger.debug('Attempting email sign up for: ${InputValidator.maskEmail(email)}');
       
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -75,7 +90,12 @@ class AuthService {
     required String password,
   }) async {
     try {
-      AppLogger.debug('Attempting email sign in for: $email');
+      // 입력 유효성 검사
+      if (!InputValidator.isValidEmail(email)) {
+        throw Exception('유효하지 않은 이메일 형식입니다.');
+      }
+      
+      AppLogger.debug('Attempting email sign in for: ${InputValidator.maskEmail(email)}');
       
       final credential = await _auth.signInWithEmailAndPassword(
         email: email,

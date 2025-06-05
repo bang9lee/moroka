@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../core/utils/app_logger.dart';
 import '../services/admob_service.dart';
 
@@ -57,8 +59,9 @@ class AdRepository {
   }
   
   /// 보상형 광고 표시
-  /// @return 보상 받았는지 여부
-  Future<bool> showRewardedAd() async {
+  /// @param onRewarded 보상을 받았을 때 실행할 콜백
+  /// @return 광고 표시 성공 여부
+  Future<bool> showRewardedAd({VoidCallback? onRewarded}) async {
     try {
       // 광고가 준비되지 않았으면 false 반환
       if (!_admobService.isRewardedReady) {
@@ -73,6 +76,8 @@ class AdRepository {
       if (rewarded) {
         _rewardedShowCount++;
         AppLogger.debug('User earned reward (total: $_rewardedShowCount)');
+        // 보상 콜백 실행
+        onRewarded?.call();
       }
       
       // 다음 광고 미리 로드

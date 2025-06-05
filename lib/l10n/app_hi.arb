@@ -1,0 +1,1588 @@
+{
+  "@@locale": "hi",
+  
+  "appName": "Moroka",
+  "@appName": {
+    "description": "Application name"
+  },
+  
+  "appTagline": "छायाओं का दैवज्ञ",
+  "@appTagline": {
+    "description": "Application tagline"
+  },
+  
+  "appTitle": "Moroka - अशुभ फुसफुसाहट",
+  "@appTitle": {
+    "description": "Full application title"
+  },
+  
+  "onboardingTitle1": "भाग्य का द्वार खुलता है",
+  "@onboardingTitle1": {
+    "description": "First onboarding screen title"
+  },
+  
+  "onboardingDesc1": "प्राचीन ज्ञान आधुनिक तकनीक से मिलता है\nआपके भविष्य को फुसफुसाने के लिए",
+  "@onboardingDesc1": {
+    "description": "First onboarding screen description"
+  },
+  
+  "onboardingTitle2": "अंधकार में सत्य",
+  "@onboardingTitle2": {
+    "description": "Second onboarding screen title"
+  },
+  
+  "onboardingDesc2": "टैरो कार्ड कभी झूठ नहीं बोलते\nवे केवल वह सत्य दिखाते हैं जिसे आप सह सकते हैं",
+  "@onboardingDesc2": {
+    "description": "Second onboarding screen description"
+  },
+  
+  "onboardingTitle3": "AI आपका भाग्य पढ़ता है",
+  "@onboardingTitle3": {
+    "description": "Third onboarding screen title"
+  },
+  
+  "onboardingDesc3": "कृत्रिम बुद्धिमत्ता आपके कार्डों की व्याख्या करती है\nऔर गहरी बातचीत से आपका मार्ग दिखाती है",
+  "@onboardingDesc3": {
+    "description": "Third onboarding screen description"
+  },
+  
+  "onboardingTitle4": "क्या आप तैयार हैं?",
+  "@onboardingTitle4": {
+    "description": "Fourth onboarding screen title"
+  },
+  
+  "onboardingDesc4": "हर चुनाव की अपनी कीमत होती है\nयदि आप अपने भाग्य का सामना करने के लिए तैयार हैं...",
+  "@onboardingDesc4": {
+    "description": "Fourth onboarding screen description"
+  },
+  
+  "loginTitle": "आप वापस आ गए हैं",
+  "@loginTitle": {
+    "description": "Login screen title"
+  },
+  
+  "loginSubtitle": "हम आपका इंतज़ार कर रहे थे",
+  "@loginSubtitle": {
+    "description": "Login screen subtitle"
+  },
+  
+  "signupTitle": "भाग्य का अनुबंध",
+  "@signupTitle": {
+    "description": "Signup screen title"
+  },
+  
+  "signupSubtitle": "अपनी आत्मा को पंजीकृत करें",
+  "@signupSubtitle": {
+    "description": "Signup screen subtitle"
+  },
+  
+  "emailLabel": "ईमेल",
+  "@emailLabel": {
+    "description": "Email input label"
+  },
+  
+  "passwordLabel": "पासवर्ड",
+  "@passwordLabel": {
+    "description": "Password input label"
+  },
+  
+  "nameLabel": "नाम",
+  "@nameLabel": {
+    "description": "Name input label"
+  },
+  
+  "loginButton": "प्रवेश करें",
+  "@loginButton": {
+    "description": "Login button text"
+  },
+  
+  "signupButton": "आत्मा पंजीकरण",
+  "@signupButton": {
+    "description": "Signup button text"
+  },
+  
+  "googleLogin": "Google से लॉगिन करें",
+  "@googleLogin": {
+    "description": "Google login button text"
+  },
+  
+  "googleSignup": "Google से शुरू करें",
+  "@googleSignup": {
+    "description": "Google signup button text"
+  },
+  
+  "alreadyHaveAccount": "पहले से खाता है? लॉगिन करें",
+  "@alreadyHaveAccount": {
+    "description": "Link to login screen"
+  },
+  
+  "dontHaveAccount": "पहली बार? साइन अप करें",
+  "@dontHaveAccount": {
+    "description": "Link to signup screen"
+  },
+  
+  "moodQuestion": "अभी आप कैसा महसूस कर रहे हैं?",
+  "@moodQuestion": {
+    "description": "Question asking user's current mood"
+  },
+  
+  "selectSpreadButton": "टैरो स्प्रेड चुनें",
+  "@selectSpreadButton": {
+    "description": "Button to select tarot spread"
+  },
+  
+  "moodAnxious": "चिंतित",
+  "@moodAnxious": {
+    "description": "Mood: anxious"
+  },
+  
+  "moodLonely": "अकेला",
+  "@moodLonely": {
+    "description": "Mood: lonely"
+  },
+  
+  "moodCurious": "जिज्ञासु",
+  "@moodCurious": {
+    "description": "Mood: curious"
+  },
+  
+  "moodFearful": "भयभीत",
+  "@moodFearful": {
+    "description": "Mood: fearful"
+  },
+  
+  "moodHopeful": "आशावान",
+  "@moodHopeful": {
+    "description": "Mood: hopeful"
+  },
+  
+  "moodConfused": "भ्रमित",
+  "@moodConfused": {
+    "description": "Mood: confused"
+  },
+  
+  "moodDesperate": "निराश",
+  "@moodDesperate": {
+    "description": "Mood: desperate"
+  },
+  
+  "moodExpectant": "प्रत्याशी",
+  "@moodExpectant": {
+    "description": "Mood: expectant"
+  },
+  
+  "moodMystical": "रहस्यमय",
+  "@moodMystical": {
+    "description": "Mood: mystical"
+  },
+  
+  "spreadSelectionTitle": "स्प्रेड चुनें",
+  "@spreadSelectionTitle": {
+    "description": "Spread selection screen title"
+  },
+  
+  "spreadSelectionSubtitle": "अपनी वर्तमान भावनाओं के आधार पर स्प्रेड चुनें",
+  "@spreadSelectionSubtitle": {
+    "description": "Spread selection screen subtitle"
+  },
+  
+  "spreadDifficultyBeginner": "1-3 कार्ड",
+  "@spreadDifficultyBeginner": {
+    "description": "Beginner difficulty label"
+  },
+  
+  "spreadDifficultyIntermediate": "5-7 कार्ड",
+  "@spreadDifficultyIntermediate": {
+    "description": "Intermediate difficulty label"
+  },
+  
+  "spreadDifficultyAdvanced": "10 कार्ड",
+  "@spreadDifficultyAdvanced": {
+    "description": "Advanced difficulty label"
+  },
+  
+  "spreadOneCard": "एक कार्ड",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  
+  "spreadThreeCard": "तीन कार्ड",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  
+  "spreadCelticCross": "केल्टिक क्रॉस",
+  "@spreadCelticCross": {
+    "description": "Celtic cross spread name"
+  },
+  
+  "spreadRelationship": "रिश्ता स्प्रेड",
+  "@spreadRelationship": {
+    "description": "Relationship spread name"
+  },
+  
+  "spreadYesNo": "हाँ/नहीं",
+  "@spreadYesNo": {
+    "description": "Yes/No spread name"
+  },
+  
+  "selectCardTitle": "भाग्य के कार्ड चुनें",
+  "@selectCardTitle": {
+    "description": "Card selection screen title"
+  },
+  
+  "currentMoodLabel": "आपका वर्तमान मूड: ",
+  "@currentMoodLabel": {
+    "description": "Current mood label"
+  },
+  
+  "currentSpreadLabel": "चुना गया स्प्रेड: ",
+  "@currentSpreadLabel": {
+    "description": "Current spread label"
+  },
+  
+  "shufflingMessage": "भाग्य के धागे गुंथ रहे हैं...",
+  "@shufflingMessage": {
+    "description": "Message shown while shuffling"
+  },
+  
+  "selectCardInstruction": "अपनी अंतर्दृष्टि का पालन करें और कार्ड चुनें",
+  "@selectCardInstruction": {
+    "description": "Card selection instruction"
+  },
+  
+  "cardsSelected": "{count} चुने गए",
+  "@cardsSelected": {
+    "description": "Number of cards selected",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "cardsRemaining": "{count} और चुनें",
+  "@cardsRemaining": {
+    "description": "Number of cards remaining to select",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "typeMessageHint": "संदेश टाइप करें...",
+  "@typeMessageHint": {
+    "description": "Chat input hint"
+  },
+  
+  "continueReading": "गहरी सलाह प्राप्त करें",
+  "@continueReading": {
+    "description": "Button to continue tarot reading"
+  },
+  
+  "watchAdPrompt": "गहरे रसातल से आवाज़ सुनने के लिए,\nआपको दूसरी दुनिया से संदेश देखने होंगे।",
+  "@watchAdPrompt": {
+    "description": "Prompt to watch ad for continued reading"
+  },
+  
+  "interpretingSpread": "कार्डों के संदेशों की व्याख्या कर रहा है...",
+  "@interpretingSpread": {
+    "description": "Message shown while AI interprets cards"
+  },
+  
+  "menuHistory": "पिछले टैरो रिकॉर्ड",
+  "@menuHistory": {
+    "description": "Menu item: history"
+  },
+  
+  "menuHistoryDesc": "अपने पिछले भाग्य को देखें",
+  "@menuHistoryDesc": {
+    "description": "Menu item description: history"
+  },
+  
+  "menuStatistics": "सांख्यिकी और विश्लेषण",
+  "@menuStatistics": {
+    "description": "Menu item: statistics"
+  },
+  
+  "menuStatisticsDesc": "अपने भाग्य के पैटर्न का विश्लेषण करें",
+  "@menuStatisticsDesc": {
+    "description": "Menu item description: statistics"
+  },
+  
+  "menuSettings": "सेटिंग्स",
+  "@menuSettings": {
+    "description": "Menu item: settings"
+  },
+  
+  "menuSettingsDesc": "ऐप वातावरण समायोजित करें",
+  "@menuSettingsDesc": {
+    "description": "Menu item description: settings"
+  },
+  
+  "menuAbout": "के बारे में",
+  "@menuAbout": {
+    "description": "Menu item: about"
+  },
+  
+  "menuAboutDesc": "Moroka - छायाओं का दैवज्ञ",
+  "@menuAboutDesc": {
+    "description": "Menu item description: about"
+  },
+  
+  "logoutButton": "लॉगआउट",
+  "@logoutButton": {
+    "description": "Logout button text"
+  },
+  
+  "logoutTitle": "क्या आप वास्तव में जा रहे हैं?",
+  "@logoutTitle": {
+    "description": "Logout dialog title"
+  },
+  
+  "logoutMessage": "जब भाग्य का द्वार बंद हो जाता है\nआपको फिर से वापस आना होगा",
+  "@logoutMessage": {
+    "description": "Logout dialog message"
+  },
+  
+  "logoutCancel": "रहें",
+  "@logoutCancel": {
+    "description": "Logout dialog cancel button"
+  },
+  
+  "logoutConfirm": "जाएं",
+  "@logoutConfirm": {
+    "description": "Logout dialog confirm button"
+  },
+  
+  "errorOccurred": "एक त्रुटि हुई",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "errorEmailEmpty": "कृपया अपना ईमेल दर्ज करें",
+  "@errorEmailEmpty": {
+    "description": "Error: email field empty"
+  },
+  
+  "errorEmailInvalid": "अमान्य ईमेल प्रारूप",
+  "@errorEmailInvalid": {
+    "description": "Error: email format invalid"
+  },
+  
+  "errorPasswordEmpty": "कृपया अपना पासवर्ड दर्ज करें",
+  "@errorPasswordEmpty": {
+    "description": "Error: password field empty"
+  },
+  
+  "errorPasswordShort": "पासवर्ड कम से कम 6 वर्ण का होना चाहिए",
+  "@errorPasswordShort": {
+    "description": "Error: password too short"
+  },
+  
+  "errorNameEmpty": "कृपया अपना नाम दर्ज करें",
+  "@errorNameEmpty": {
+    "description": "Error: name field empty"
+  },
+  
+  "errorLoginFailed": "लॉगिन विफल",
+  "@errorLoginFailed": {
+    "description": "Error: login failed"
+  },
+  
+  "errorSignupFailed": "साइनअप विफल",
+  "@errorSignupFailed": {
+    "description": "Error: signup failed"
+  },
+  
+  "errorGoogleLoginFailed": "Google लॉगिन विफल",
+  "@errorGoogleLoginFailed": {
+    "description": "Error: Google login failed"
+  },
+  
+  "errorNetworkFailed": "कृपया अपना नेटवर्क कनेक्शन जांचें",
+  "@errorNetworkFailed": {
+    "description": "Error: network connection failed"
+  },
+  
+  "errorNotEnoughCards": "कृपया और कार्ड चुनें",
+  "@errorNotEnoughCards": {
+    "description": "Error: not enough cards selected"
+  },
+  
+  "successLogin": "स्वागत है",
+  "@successLogin": {
+    "description": "Success: login"
+  },
+  
+  "successSignup": "आपकी आत्मा पंजीकृत हो गई है",
+  "@successSignup": {
+    "description": "Success: signup"
+  },
+  
+  "successLogout": "अलविदा",
+  "@successLogout": {
+    "description": "Success: logout"
+  },
+  
+  "successCardsSelected": "सभी कार्ड चुने गए हैं",
+  "@successCardsSelected": {
+    "description": "Success: all cards selected"
+  },
+  
+  "noHistoryTitle": "अभी तक कोई टैरो रिकॉर्ड नहीं",
+  "@noHistoryTitle": {
+    "description": "Empty history state title"
+  },
+  
+  "noHistoryMessage": "अपना पहला भाग्य पढ़ें",
+  "@noHistoryMessage": {
+    "description": "Empty history state message"
+  },
+  
+  "startReading": "टैरो रीडिंग शुरू करें",
+  "@startReading": {
+    "description": "Start reading button"
+  },
+  
+  "deleteReadingTitle": "इस रिकॉर्ड को हटाएं?",
+  "@deleteReadingTitle": {
+    "description": "Delete reading dialog title"
+  },
+  
+  "deleteReadingMessage": "हटाए गए रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते",
+  "@deleteReadingMessage": {
+    "description": "Delete reading dialog message"
+  },
+  
+  "cardOfFate": "भाग्य का कार्ड",
+  "@cardOfFate": {
+    "description": "Card of fate"
+  },
+  
+  "cardCallingYou": "आपको बुलाने वाला कार्ड",
+  "@cardCallingYou": {
+    "description": "The card that is calling you"
+  },
+  
+  "selectThisCard": "इस कार्ड को चुनें",
+  "@selectThisCard": {
+    "description": "Select this card button"
+  },
+  
+  "viewAgain": "फिर से देखें",
+  "@viewAgain": {
+    "description": "View again button"
+  },
+  
+  "select": "चुनें",
+  "@select": {
+    "description": "Select button"
+  },
+  
+  "shufflingCards": "कार्ड फेंटे जा रहे हैं...",
+  "@shufflingCards": {
+    "description": "Shuffling cards message"
+  },
+  
+  "selectCardsIntuition": "अपनी अंतर्दृष्टि से कार्ड चुनें",
+  "@selectCardsIntuition": {
+    "description": "Select cards by intuition"
+  },
+  
+  "selectMoreCards": "अभी भी {count} कार्ड चुनें",
+  "@selectMoreCards": {
+    "description": "Select more cards message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectionComplete": "चयन पूर्ण",
+  "@selectionComplete": {
+    "description": "Selection complete message"
+  },
+  
+  "tapToSelect": "चुनने के लिए टैप करें",
+  "@tapToSelect": {
+    "description": "Tap to select instruction"
+  },
+  
+  "preparingInterpretation": "व्याख्या तैयार की जा रही है...",
+  "@preparingInterpretation": {
+    "description": "Preparing interpretation message"
+  },
+  
+  "cardMessage": "कार्ड का संदेश",
+  "@cardMessage": {
+    "description": "Card message title"
+  },
+  
+  "cardsStory": "कार्डों की कहानी",
+  "@cardsStory": {
+    "description": "Cards story title"
+  },
+  
+  "specialInterpretation": "विशेष व्याख्या",
+  "@specialInterpretation": {
+    "description": "Special interpretation title"
+  },
+  
+  "interpretingCards": "कार्डों की व्याख्या की जा रही है...",
+  "@interpretingCards": {
+    "description": "Interpreting cards message"
+  },
+  
+  "todaysChatEnded": "आज की बातचीत समाप्त हो गई",
+  "@todaysChatEnded": {
+    "description": "Today's chat ended message"
+  },
+  
+  "askQuestions": "प्रश्न पूछें",
+  "@askQuestions": {
+    "description": "Ask questions button"
+  },
+  
+  "continueConversation": "बातचीत जारी रखें",
+  "@continueConversation": {
+    "description": "Continue conversation button"
+  },
+  
+  "wantDeeperTruth": "क्या आप गहरा सत्य चाहते हैं?",
+  "@wantDeeperTruth": {
+    "description": "Want deeper truth prompt"
+  },
+  
+  "watchAdToContinue": "जारी रखने के लिए विज्ञापन देखें",
+  "@watchAdToContinue": {
+    "description": "Watch ad to continue message"
+  },
+  
+  "later": "बाद में",
+  "@later": {
+    "description": "Later button"
+  },
+  
+  "watchAd": "विज्ञापन देखें",
+  "@watchAd": {
+    "description": "Watch ad button"
+  },
+  
+  "emailVerification": "ईमेल सत्यापन",
+  "@emailVerification": {
+    "description": "Email verification title"
+  },
+  
+  "checkYourEmail": "अपना ईमेल जांचें",
+  "@checkYourEmail": {
+    "description": "Check your email message"
+  },
+  
+  "verificationEmailSent": "सत्यापन ईमेल भेजा गया",
+  "@verificationEmailSent": {
+    "description": "Verification email sent message"
+  },
+  
+  "verifyingEmail": "ईमेल सत्यापित किया जा रहा है...",
+  "@verifyingEmail": {
+    "description": "Verifying email message"
+  },
+  
+  "noEmailReceived": "ईमेल प्राप्त नहीं हुआ?",
+  "@noEmailReceived": {
+    "description": "No email received prompt"
+  },
+  
+  "checkSpamFolder": "अपना स्पैम फ़ोल्डर जांचें",
+  "@checkSpamFolder": {
+    "description": "Check spam folder instruction"
+  },
+  
+  "resendIn": "{seconds} सेकंड में फिर से भेजें",
+  "@resendIn": {
+    "description": "Resend in X seconds",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "resendVerificationEmail": "सत्यापन ईमेल फिर से भेजें",
+  "@resendVerificationEmail": {
+    "description": "Resend verification email button"
+  },
+  
+  "alreadyVerified": "पहले से सत्यापित",
+  "@alreadyVerified": {
+    "description": "Already verified message"
+  },
+  
+  "openGateOfFate": "भाग्य का द्वार खोलें",
+  "@openGateOfFate": {
+    "description": "Open gate of fate button"
+  },
+  
+  "settingsLanguageTitle": "भाषा",
+  "@settingsLanguageTitle": {
+    "description": "Language settings section title"
+  },
+  
+  "settingsLanguageLabel": "ऐप की भाषा",
+  "@settingsLanguageLabel": {
+    "description": "Language selector label"
+  },
+  
+  "settingsLanguageDesc": "अपनी पसंदीदा भाषा चुनें",
+  "@settingsLanguageDesc": {
+    "description": "Language selector description"
+  },
+  
+  "settingsNotificationTitle": "सूचना सेटिंग्स",
+  "@settingsNotificationTitle": {
+    "description": "Notification settings section title"
+  },
+  
+  "settingsDailyNotification": "दैनिक टैरो सूचना",
+  "@settingsDailyNotification": {
+    "description": "Daily notification setting"
+  },
+  
+  "settingsDailyNotificationDesc": "हर सुबह अपना दैनिक भाग्य प्राप्त करें",
+  "@settingsDailyNotificationDesc": {
+    "description": "Daily notification description"
+  },
+  
+  "settingsWeeklyReport": "साप्ताहिक टैरो रिपोर्ट",
+  "@settingsWeeklyReport": {
+    "description": "Weekly report setting"
+  },
+  
+  "settingsWeeklyReportDesc": "हर सोमवार अपना साप्ताहिक भाग्य प्राप्त करें",
+  "@settingsWeeklyReportDesc": {
+    "description": "Weekly report description"
+  },
+  
+  "settingsDisplayTitle": "प्रदर्शन सेटिंग्स",
+  "@settingsDisplayTitle": {
+    "description": "Display settings section title"
+  },
+  
+  "settingsVibration": "कंपन प्रभाव",
+  "@settingsVibration": {
+    "description": "Vibration setting"
+  },
+  
+  "settingsVibrationDesc": "कार्ड चुनते समय कंपन फीडबैक",
+  "@settingsVibrationDesc": {
+    "description": "Vibration description"
+  },
+  
+  "settingsAnimations": "एनिमेशन प्रभाव",
+  "@settingsAnimations": {
+    "description": "Animation setting"
+  },
+  
+  "settingsAnimationsDesc": "स्क्रीन संक्रमण एनिमेशन",
+  "@settingsAnimationsDesc": {
+    "description": "Animation description"
+  },
+  
+  "settingsDataTitle": "डेटा प्रबंधन",
+  "@settingsDataTitle": {
+    "description": "Data management section title"
+  },
+  
+  "settingsBackupData": "डेटा बैकअप",
+  "@settingsBackupData": {
+    "description": "Backup data setting"
+  },
+  
+  "settingsBackupDataDesc": "अपना डेटा क्लाउड में बैकअप करें",
+  "@settingsBackupDataDesc": {
+    "description": "Backup data description"
+  },
+  
+  "settingsClearCache": "कैश साफ़ करें",
+  "@settingsClearCache": {
+    "description": "Clear cache setting"
+  },
+  
+  "settingsClearCacheDesc": "स्थान खाली करने के लिए अस्थायी फ़ाइलें हटाएं",
+  "@settingsClearCacheDesc": {
+    "description": "Clear cache description"
+  },
+  
+  "settingsDeleteData": "सभी डेटा हटाएं",
+  "@settingsDeleteData": {
+    "description": "Delete all data setting"
+  },
+  
+  "settingsDeleteDataDesc": "सभी टैरो रिकॉर्ड और सेटिंग्स हटाएं",
+  "@settingsDeleteDataDesc": {
+    "description": "Delete data description"
+  },
+  
+  "settingsAccountTitle": "खाता",
+  "@settingsAccountTitle": {
+    "description": "Account section title"
+  },
+  
+  "settingsChangePassword": "पासवर्ड बदलें",
+  "@settingsChangePassword": {
+    "description": "Change password setting"
+  },
+  
+  "settingsChangePasswordDesc": "खाता सुरक्षा के लिए अपना पासवर्ड बदलें",
+  "@settingsChangePasswordDesc": {
+    "description": "Change password description"
+  },
+  
+  "settingsDeleteAccount": "खाता हटाएं",
+  "@settingsDeleteAccount": {
+    "description": "Delete account setting"
+  },
+  
+  "settingsDeleteAccountDesc": "अपना खाता स्थायी रूप से हटाएं",
+  "@settingsDeleteAccountDesc": {
+    "description": "Delete account description"
+  },
+  
+  "dialogBackupTitle": "डेटा बैकअप",
+  "@dialogBackupTitle": {
+    "description": "Backup dialog title"
+  },
+  
+  "dialogBackupMessage": "अपना डेटा क्लाउड में बैकअप करें?",
+  "@dialogBackupMessage": {
+    "description": "Backup dialog message"
+  },
+  
+  "dialogClearCacheTitle": "कैश साफ़ करें",
+  "@dialogClearCacheTitle": {
+    "description": "Clear cache dialog title"
+  },
+  
+  "dialogClearCacheMessage": "अस्थायी फ़ाइलें हटाएं?",
+  "@dialogClearCacheMessage": {
+    "description": "Clear cache dialog message"
+  },
+  
+  "dialogDeleteDataTitle": "सभी डेटा हटाएं",
+  "@dialogDeleteDataTitle": {
+    "description": "Delete data dialog title"
+  },
+  
+  "dialogDeleteDataMessage": "सभी टैरो रिकॉर्ड और सेटिंग्स स्थायी रूप से हटा दिए जाएंगे।\nयह क्रिया पूर्ववत नहीं की जा सकती।",
+  "@dialogDeleteDataMessage": {
+    "description": "Delete data dialog message"
+  },
+  
+  "dialogChangePasswordTitle": "पासवर्ड बदलें",
+  "@dialogChangePasswordTitle": {
+    "description": "Change password dialog title"
+  },
+  
+  "dialogDeleteAccountTitle": "खाता हटाएं",
+  "@dialogDeleteAccountTitle": {
+    "description": "Delete account dialog title"
+  },
+  
+  "dialogDeleteAccountMessage": "अपना खाता हटाने से सभी डेटा स्थायी रूप से हटा दिया जाएगा।\nयह क्रिया पूर्ववत नहीं की जा सकती।",
+  "@dialogDeleteAccountMessage": {
+    "description": "Delete account dialog message"
+  },
+  
+  "currentPassword": "वर्तमान पासवर्ड",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  
+  "newPassword": "नया पासवर्ड",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  
+  "confirmNewPassword": "नया पासवर्ड की पुष्टि करें",
+  "@confirmNewPassword": {
+    "description": "Confirm new password label"
+  },
+  
+  "cancel": "रद्द करें",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  
+  "backup": "बैकअप",
+  "@backup": {
+    "description": "Backup button"
+  },
+  
+  "delete": "हटाएं",
+  "@delete": {
+    "description": "Delete button"
+  },
+  
+  "change": "बदलें",
+  "@change": {
+    "description": "Change button"
+  },
+  
+  "successBackup": "बैकअप पूर्ण हुआ",
+  "@successBackup": {
+    "description": "Backup success message"
+  },
+  
+  "successClearCache": "कैश साफ़ हो गया",
+  "@successClearCache": {
+    "description": "Clear cache success message"
+  },
+  
+  "successDeleteData": "सभी डेटा हटा दिया गया",
+  "@successDeleteData": {
+    "description": "Delete data success message"
+  },
+  
+  "successChangePassword": "पासवर्ड बदल दिया गया",
+  "@successChangePassword": {
+    "description": "Change password success message"
+  },
+  
+  "successDeleteAccount": "खाता हटा दिया गया",
+  "@successDeleteAccount": {
+    "description": "Delete account success message"
+  },
+  
+  "errorBackup": "बैकअप विफल: {error}",
+  "@errorBackup": {
+    "description": "Backup error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteData": "हटाना विफल: {error}",
+  "@errorDeleteData": {
+    "description": "Delete data error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorChangePassword": "पासवर्ड बदलना विफल: {error}",
+  "@errorChangePassword": {
+    "description": "Change password error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorDeleteAccount": "खाता हटाना विफल: {error}",
+  "@errorDeleteAccount": {
+    "description": "Delete account error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "errorPasswordMismatch": "नए पासवर्ड मेल नहीं खाते",
+  "@errorPasswordMismatch": {
+    "description": "Password mismatch error"
+  },
+  
+  "passwordResetTitle": "पासवर्ड रीसेट करें",
+  "@passwordResetTitle": {
+    "description": "Password reset dialog title"
+  },
+  
+  "passwordResetMessage": "अपना पंजीकृत ईमेल पता दर्ज करें।\nहम आपको पासवर्ड रीसेट लिंक भेजेंगे।",
+  "@passwordResetMessage": {
+    "description": "Password reset message"
+  },
+  
+  "passwordResetSuccess": "पासवर्ड रीसेट ईमेल भेजा गया",
+  "@passwordResetSuccess": {
+    "description": "Password reset success message"
+  },
+  
+  "send": "भेजें",
+  "@send": {
+    "description": "Send button"
+  },
+  
+  "emailPlaceholder": "your@email.com",
+  "@emailPlaceholder": {
+    "description": "Email placeholder"
+  },
+  
+  "passwordPlaceholder": "6+ वर्ण",
+  "@passwordPlaceholder": {
+    "description": "Password placeholder"
+  },
+  
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  
+  "login": "लॉगिन",
+  "@login": {
+    "description": "Login button"
+  },
+  
+  "or": "या",
+  "@or": {
+    "description": "Or divider"
+  },
+  
+  "continueWithGoogle": "Google से जारी रखें",
+  "@continueWithGoogle": {
+    "description": "Google login button"
+  },
+  
+  "noAccount": "खाता नहीं है?",
+  "@noAccount": {
+    "description": "No account text"
+  },
+  
+  "signUp": "साइन अप करें",
+  "@signUp": {
+    "description": "Sign up link"
+  },
+  
+  "appBrandName": "MOROKA",
+  "@appBrandName": {
+    "description": "App brand name"
+  },
+  
+  "appBrandTagline": "छायाओं का दैवज्ञ",
+  "@appBrandTagline": {
+    "description": "App brand tagline"
+  },
+  
+  "aboutTitle": "परिचय",
+  "@aboutTitle": {
+    "description": "About screen title"
+  },
+  
+  "aboutSubtitle": "भाग्य के पत्ते आपकी प्रतीक्षा कर रहे हैं",
+  "@aboutSubtitle": {
+    "description": "About screen subtitle"
+  },
+  
+  "aboutDescription": "MOROKA\n\nभाग्य का द्वार खुल गया है\nछाया दैवज्ञ आपके भविष्य की व्याख्या करेगा\n\nरहस्यमय AI के साथ पारंपरिक टैरो व्याख्या\nगहरी अंतर्दृष्टि और ज्ञान प्रदान करना",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
+  
+  "featuresTitle": "मुख्य विशेषताएं",
+  "@featuresTitle": {
+    "description": "Features section title"
+  },
+  
+  "feature78Cards": "78 पारंपरिक टैरो कार्ड",
+  "@feature78Cards": {
+    "description": "78 cards feature"
+  },
+  
+  "feature78CardsDesc": "22 मेजर आर्काना और 56 माइनर आर्काना के साथ पूर्ण डेक",
+  "@feature78CardsDesc": {
+    "description": "78 cards feature description"
+  },
+  
+  "feature5Spreads": "5 पेशेवर स्प्रेड",
+  "@feature5Spreads": {
+    "description": "5 spreads feature"
+  },
+  
+  "feature5SpreadsDesc": "एक कार्ड से लेकर केल्टिक क्रॉस तक विभिन्न पठन विधियां",
+  "@feature5SpreadsDesc": {
+    "description": "5 spreads feature description"
+  },
+  
+  "featureAI": "AI टैरो मास्टर",
+  "@featureAI": {
+    "description": "AI feature"
+  },
+  
+  "featureAIDesc": "100 वर्षों के अनुभव वाले टैरो मास्टर की तरह गहरी व्याख्याएं",
+  "@featureAIDesc": {
+    "description": "AI feature description"
+  },
+  
+  "featureChat": "इंटरैक्टिव परामर्श",
+  "@featureChat": {
+    "description": "Chat feature"
+  },
+  
+  "featureChatDesc": "अपने कार्डों के बारे में स्वतंत्र रूप से प्रश्न पूछें",
+  "@featureChatDesc": {
+    "description": "Chat feature description"
+  },
+  
+  "termsAndPolicies": "शर्तें और नीतियां",
+  "@termsAndPolicies": {
+    "description": "Terms section title"
+  },
+  
+  "termsOfService": "सेवा की शर्तें",
+  "@termsOfService": {
+    "description": "Terms of service"
+  },
+  
+  "privacyPolicy": "गोपनीयता नीति",
+  "@privacyPolicy": {
+    "description": "Privacy policy"
+  },
+  
+  "marketingConsent": "विपणन जानकारी",
+  "@marketingConsent": {
+    "description": "Marketing consent"
+  },
+  
+  "customerSupport": "ग्राहक सहायता",
+  "@customerSupport": {
+    "description": "Customer support section"
+  },
+  
+  "emailSupport": "ईमेल सहायता",
+  "@emailSupport": {
+    "description": "Email support"
+  },
+  
+  "website": "वेबसाइट",
+  "@website": {
+    "description": "Website"
+  },
+  
+  "cannotOpenUrl": "URL नहीं खोल सकते: {url}",
+  "@cannotOpenUrl": {
+    "description": "Cannot open URL error",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "lastModified": "अंतिम संशोधन: 3 जुलाई, 2025",
+  "@lastModified": {
+    "description": "Last modified date"
+  },
+  
+  "confirm": "पुष्टि करें",
+  "@confirm": {
+    "description": "Confirm button"
+  },
+  
+  "companyName": "Today's Studio",
+  "@companyName": {
+    "description": "Company name"
+  },
+  
+  "companyTagline": "रहस्यमय अनुभव बनाना",
+  "@companyTagline": {
+    "description": "Company tagline"
+  },
+  
+  "copyright": "© 2025 Today's Studio. सर्वाधिकार सुरक्षित।",
+  "@copyright": {
+    "description": "Copyright notice"
+  },
+  
+  "anonymousSoul": "अज्ञात आत्मा",
+  "@anonymousSoul": {
+    "description": "Anonymous user name"
+  },
+  
+  "totalReadings": "कुल रीडिंग",
+  "@totalReadings": {
+    "description": "Total readings label"
+  },
+  
+  "joinDate": "शामिल होने की तारीख",
+  "@joinDate": {
+    "description": "Join date label"
+  },
+  
+  "errorLogout": "लॉगआउट के दौरान त्रुटि हुई",
+  "@errorLogout": {
+    "description": "Logout error"
+  },
+  
+  "soulContract": "आत्मा अनुबंध",
+  "@soulContract": {
+    "description": "Terms screen title"
+  },
+  
+  "termsAgreementMessage": "सेवा उपयोग के लिए कृपया शर्तों से सहमत हों",
+  "@termsAgreementMessage": {
+    "description": "Terms agreement message"
+  },
+  
+  "agreeAll": "सभी से सहमत",
+  "@agreeAll": {
+    "description": "Agree all button"
+  },
+  
+  "required": "आवश्यक",
+  "@required": {
+    "description": "Required label"
+  },
+  
+  "optional": "वैकल्पिक",
+  "@optional": {
+    "description": "Optional label"
+  },
+  
+  "agreeAndStart": "सहमत हों और शुरू करें",
+  "@agreeAndStart": {
+    "description": "Agree and start button"
+  },
+  
+  "agreeToRequired": "कृपया आवश्यक शर्तों से सहमत हों",
+  "@agreeToRequired": {
+    "description": "Required terms message"
+  },
+  
+  "nickname": "उपनाम",
+  "@nickname": {
+    "description": "Nickname label"
+  },
+  
+  "confirmPassword": "पासवर्ड की पुष्टि करें",
+  "@confirmPassword": {
+    "description": "Confirm password label"
+  },
+  
+  "nextStep": "अगला चरण",
+  "@nextStep": {
+    "description": "Next step button"
+  },
+  
+  "errorNameTooShort": "कम से कम 2 वर्ण दर्ज करें",
+  "@errorNameTooShort": {
+    "description": "Name too short error"
+  },
+  
+  "errorConfirmPassword": "कृपया अपने पासवर्ड की पुष्टि करें",
+  "@errorConfirmPassword": {
+    "description": "Confirm password error"
+  },
+  
+  "errorPasswordsDontMatch": "पासवर्ड मेल नहीं खाते",
+  "@errorPasswordsDontMatch": {
+    "description": "Passwords don't match error"
+  },
+  
+  "emailInUse": "ईमेल पहले से उपयोग में है",
+  "@emailInUse": {
+    "description": "Email in use message"
+  },
+  
+  "emailAvailable": "ईमेल उपलब्ध है",
+  "@emailAvailable": {
+    "description": "Email available message"
+  },
+  
+  "nicknameInUse": "उपनाम पहले से उपयोग में है",
+  "@nicknameInUse": {
+    "description": "Nickname in use message"
+  },
+  
+  "nicknameAvailable": "उपनाम उपलब्ध है",
+  "@nicknameAvailable": {
+    "description": "Nickname available message"
+  },
+  
+  "passwordWeak": "कमज़ोर",
+  "@passwordWeak": {
+    "description": "Weak password"
+  },
+  
+  "passwordFair": "ठीक",
+  "@passwordFair": {
+    "description": "Fair password"
+  },
+  
+  "passwordStrong": "मज़बूत",
+  "@passwordStrong": {
+    "description": "Strong password"
+  },
+  
+  "passwordVeryStrong": "बहुत मज़बूत",
+  "@passwordVeryStrong": {
+    "description": "Very strong password"
+  },
+  
+  "emailVerificationTitle": "ईमेल सत्यापन",
+  "@emailVerificationTitle": {
+    "description": "Email verification title"
+  },
+  
+  "emailVerificationMessage": "हमने {email} पर एक सत्यापन ईमेल भेजा है।\nकृपया अपना ईमेल जांचें और सत्यापन लिंक पर क्लिक करें।",
+  "@emailVerificationMessage": {
+    "description": "Email verification message",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "resendEmail": "ईमेल फिर से भेजें",
+  "@resendEmail": {
+    "description": "Resend email button"
+  },
+  
+  "emailResent": "सत्यापन ईमेल फिर से भेजा गया",
+  "@emailResent": {
+    "description": "Email resent message"
+  },
+  
+  "checkEmailAndReturn": "सत्यापन के बाद, कृपया ऐप पर वापस आएं",
+  "@checkEmailAndReturn": {
+    "description": "Check email instruction"
+  },
+  
+  "remainingDraws": "शेष ड्रॉ",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "कोई ड्रॉ शेष नहीं",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "विज्ञापन",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "dailyLimitReached": "दैनिक ड्रॉ सीमा समाप्त",
+  "@dailyLimitReached": {
+    "description": "Title for daily limit reached dialog"
+  },
+  
+  "watchAdForMore": "अधिक कार्ड ड्रॉ के लिए विज्ञापन देखें। आप प्रति दिन 10 अतिरिक्त ड्रॉ तक प्राप्त कर सकते हैं।",
+  "@watchAdForMore": {
+    "description": "Message encouraging users to watch ads for more draws"
+  },
+  
+  "drawAddedMessage": "1 ड्रॉ जोड़ा गया! ✨",
+  "@drawAddedMessage": {
+    "description": "Success message after watching ad"
+  },
+  
+  "adLoadFailed": "विज्ञापन लोड करने में विफल। कृपया बाद में पुनः प्रयास करें।",
+  "@adLoadFailed": {
+    "description": "Error message when ad fails to load"
+  },
+  
+  "skip": "छोड़ें",
+  "@skip": {
+    "description": "Skip button text"
+  },
+  
+  "willYouSelectIt": "क्या आप इसे चुनेंगे?",
+  "@willYouSelectIt": {
+    "description": "Card selection dialog question"
+  },
+  
+  "selectCardByHeart": "वह कार्ड चुनें जो आपके दिल को आकर्षित करता है",
+  "@selectCardByHeart": {
+    "description": "Card selection instruction in header"
+  },
+  
+  "moreToSelect": "{count} और चुनना है",
+  "@moreToSelect": {
+    "description": "Number of cards more to select",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "tapToSelectCard": "चुनने के लिए कार्ड पर टैप करें",
+  "@tapToSelectCard": {
+    "description": "Instruction to tap card for selection"
+  },
+  
+  "currentSituation": "वर्तमान स्थिति",
+  "@currentSituation": {
+    "description": "Current situation section title"
+  },
+  
+  "practicalAdvice": "व्यावहारिक सलाह",
+  "@practicalAdvice": {
+    "description": "Practical advice section title"
+  },
+  
+  "futureForecast": "भविष्य की भविष्यवाणी",
+  "@futureForecast": {
+    "description": "Future forecast section title"
+  },
+  
+  "overallFlow": "समग्र प्रवाह",
+  "@overallFlow": {
+    "description": "Overall flow section title"
+  },
+  
+  "timeBasedInterpretation": "समय आधारित व्याख्या",
+  "@timeBasedInterpretation": {
+    "description": "Time-based interpretation section title"
+  },
+  
+  "pastInfluence": "अतीत का प्रभाव",
+  "@pastInfluence": {
+    "description": "Past influence section title"
+  },
+  
+  "upcomingFuture": "आगामी भविष्य",
+  "@upcomingFuture": {
+    "description": "Upcoming future section title"
+  },
+  
+  "actionGuidelines": "कार्य दिशानिर्देश",
+  "@actionGuidelines": {
+    "description": "Action guidelines section title"
+  },
+  
+  "coreAdvice": "मुख्य सलाह",
+  "@coreAdvice": {
+    "description": "Core advice section title"
+  },
+  
+  "coreSituationAnalysis": "मुख्य स्थिति विश्लेषण",
+  "@coreSituationAnalysis": {
+    "description": "Core situation analysis section title"
+  },
+  
+  "innerConflict": "आंतरिक संघर्ष",
+  "@innerConflict": {
+    "description": "Inner conflict section title"
+  },
+  
+  "timelineAnalysis": "समयरेखा विश्लेषण",
+  "@timelineAnalysis": {
+    "description": "Timeline analysis section title"
+  },
+  
+  "externalFactors": "बाहरी कारक",
+  "@externalFactors": {
+    "description": "External factors section title"
+  },
+  
+  "finalForecast": "अंतिम पूर्वानुमान",
+  "@finalForecast": {
+    "description": "Final forecast section title"
+  },
+  
+  "stepByStepPlan": "चरण-दर-चरण योजना",
+  "@stepByStepPlan": {
+    "description": "Step-by-step plan section title"
+  },
+  
+  "twoPersonEnergy": "दो व्यक्ति की ऊर्जा",
+  "@twoPersonEnergy": {
+    "description": "Two person energy section title"
+  },
+  
+  "heartTemperatureDifference": "दिल के तापमान का अंतर",
+  "@heartTemperatureDifference": {
+    "description": "Heart temperature difference section title"
+  },
+  
+  "relationshipObstacles": "संबंध बाधाएं",
+  "@relationshipObstacles": {
+    "description": "Relationship obstacles section title"
+  },
+  
+  "futurePossibility": "भविष्य की संभावना",
+  "@futurePossibility": {
+    "description": "Future possibility section title"
+  },
+  
+  "adviceForLove": "प्रेम के लिए सलाह",
+  "@adviceForLove": {
+    "description": "Advice for love section title"
+  },
+  
+  "oneLineAdvice": "एक पंक्ति की सलाह",
+  "@oneLineAdvice": {
+    "description": "One line advice section title"
+  },
+  
+  "judgmentBasis": "निर्णय आधार",
+  "@judgmentBasis": {
+    "description": "Judgment basis section title"
+  },
+  
+  "coreMessage": "मुख्य संदेश",
+  "@coreMessage": {
+    "description": "Core message section title"
+  },
+  
+  "successConditions": "सफलता की शर्तें",
+  "@successConditions": {
+    "description": "Success conditions section title"
+  },
+  
+  "timingPrediction": "समय की भविष्यवाणी",
+  "@timingPrediction": {
+    "description": "Timing prediction section title"
+  },
+  
+  "actionGuide": "कार्य मार्गदर्शक",
+  "@actionGuide": {
+    "description": "Action guide section title"
+  },
+  
+  "future": "भविष्य",
+  "@future": {
+    "description": "Future keyword"
+  },
+  
+  "advice": "सलाह",
+  "@advice": {
+    "description": "Advice keyword"
+  },
+  
+  "message": "संदेश",
+  "@message": {
+    "description": "Message keyword"
+  },
+  
+  "meaning": "अर्थ",
+  "@meaning": {
+    "description": "Meaning keyword"
+  },
+  
+  "interpretation": "व्याख्या",
+  "@interpretation": {
+    "description": "Interpretation keyword"
+  },
+  
+  "overallMeaning": "समग्र अर्थ",
+  "@overallMeaning": {
+    "description": "Overall meaning section title"
+  },
+  
+  "comprehensiveInterpretation": "व्यापक व्याख्या",
+  "@comprehensiveInterpretation": {
+    "description": "Comprehensive interpretation section title"
+  },
+  
+  "futureAdvice": "भविष्य की सलाह",
+  "@futureAdvice": {
+    "description": "Future advice section title"
+  },
+  
+  "yes": "हाँ",
+  "@yes": {
+    "description": "Yes answer"
+  },
+  
+  "no": "नहीं",
+  "@no": {
+    "description": "No answer"
+  },
+  
+  "conditionalYes": "सशर्त हाँ",
+  "@conditionalYes": {
+    "description": "Conditional yes answer"
+  },
+  
+  "analyzingDestiny": "आपके भाग्य का विश्लेषण कर रहे हैं...",
+  "@analyzingDestiny": {
+    "description": "Loading message while analyzing statistics"
+  },
+  
+  "noDataToAnalyze": "अभी तक विश्लेषण के लिए कोई डेटा नहीं",
+  "@noDataToAnalyze": {
+    "description": "Empty state message for statistics"
+  },
+  
+  "startTarotReading": "अपना टैरो रीडिंग शुरू करें",
+  "@startTarotReading": {
+    "description": "Prompt to start first reading"
+  },
+  
+  "totalTarotReadings": "कुल टैरो रीडिंग",
+  "@totalTarotReadings": {
+    "description": "Total readings statistic label"
+  },
+  
+  "mostFrequentCard": "सबसे अधिक बार आने वाला कार्ड",
+  "@mostFrequentCard": {
+    "description": "Most frequent card statistic label"
+  },
+  
+  "cardFrequencyTop5": "कार्ड आवृत्ति शीर्ष 5",
+  "@cardFrequencyTop5": {
+    "description": "Top 5 card frequency chart title"
+  },
+  
+  "moodAnalysis": "मनोदशा द्वारा रीडिंग विश्लेषण",
+  "@moodAnalysis": {
+    "description": "Mood analysis chart title"
+  },
+  
+  "monthlyReadingTrend": "मासिक रीडिंग रुझान",
+  "@monthlyReadingTrend": {
+    "description": "Monthly trend chart title"
+  },
+  
+  "noData": "कोई डेटा उपलब्ध नहीं",
+  "@noData": {
+    "description": "No data message for charts"
+  },
+  
+  "timesCount": "{count} बार",
+  "@timesCount": {
+    "description": "Times count suffix",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "monthLabel": "{month}",
+  "@monthLabel": {
+    "description": "Month label format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "startChatMessage": "अपने टैरो रीडिंग के बारे में मुझसे कुछ भी पूछें",
+  "@startChatMessage": {
+    "description": "Empty chat state message"
+  },
+  
+  "chatHistory": "चैट इतिहास",
+  "@chatHistory": {
+    "description": "Chat history section title"
+  },
+  
+  "chatHistoryDescription": "टैरो मास्टर के साथ आपकी बातचीत",
+  "@chatHistoryDescription": {
+    "description": "Chat history section description"
+  }
+}
