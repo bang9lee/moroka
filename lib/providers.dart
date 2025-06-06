@@ -1,6 +1,5 @@
 // File: lib/providers.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,25 +15,7 @@ import 'data/services/firestore_service.dart';
 import 'data/services/cache_service.dart';
 import 'data/models/user_model.dart';
 import 'data/models/daily_draw_model.dart';
-
-/// Dio HTTP 클라이언트 Provider
-final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio();
-  
-  // 타임아웃 설정
-  dio.options.connectTimeout = const Duration(seconds: 30);
-  dio.options.receiveTimeout = const Duration(seconds: 30);
-  
-  // 인터셉터 설정
-  dio.interceptors.add(LogInterceptor(
-    requestBody: true,
-    responseBody: true,
-    error: true,
-    logPrint: (log) => AppLogger.debug('[DIO] $log'),
-  ));
-  
-  return dio;
-});
+import 'data/models/tarot_spread_model.dart';
 
 /// SharedPreferences Provider
 /// main.dart에서 override 필요
@@ -145,8 +126,11 @@ final isFirstLaunchProvider = FutureProvider<bool>((ref) async {
   }
 });
 
-/// 선택된 카드 인덱스 Provider
-final selectedCardIndexProvider = StateProvider<int?>((ref) => null);
+/// 사용자가 선택한 기분 Provider
+final userMoodProvider = StateProvider<String?>((ref) => null);
+
+/// 선택된 타로 스프레드 Provider
+final selectedSpreadProvider = StateProvider<TarotSpread?>((ref) => null);
 
 /// 채팅 횟수 카운터 Provider (광고 표시용)
 final chatTurnCountProvider = StateProvider<int>((ref) {
@@ -317,5 +301,21 @@ class DailyDrawNotifier extends StateNotifier<AsyncValue<DailyDrawData>> {
   /// 데이터 새로고침
   Future<void> refresh() async {
     await _loadData();
+  }
+  
+  /// 개발/테스트용 - 무료 횟수 추가
+  Future<void> addFreeDrawsForTesting(int draws) async {
+    try {
+      state = const AsyncValue.loading();
+      
+      final localStorage = ref.read(localStorageRepositoryProvider);
+      final updatedData = await localStorage.addFreeDrawsForTesting(draws);
+      
+      state = AsyncValue.data(updatedData);
+      AppLogger.debug('Test draws added: $draws. Total remaining: ${updatedData.totalDrawsRemaining}');
+    } catch (e, stack) {
+      AppLogger.error('Failed to add test draws', e, stack);
+      state = AsyncValue.error(e, stack);
+    }
   }
 }

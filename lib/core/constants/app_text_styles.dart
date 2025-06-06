@@ -352,6 +352,14 @@ class AppTextStyles {
     );
   }
   
+  // ===== Legacy/Compatibility Styles =====
+  // These are provided for backward compatibility
+  static const TextStyle heading = headlineLarge;      // Maps to headlineLarge
+  static const TextStyle heading2 = headlineMedium;    // Maps to headlineMedium
+  static const TextStyle heading3 = headlineSmall;     // Maps to headlineSmall
+  static const TextStyle body = bodyMedium;            // Maps to bodyMedium
+  static const TextStyle body1 = bodyLarge;            // Maps to bodyLarge
+  
   // ===== Utility Methods =====
   
   /// 긴 텍스트를 위한 최적화된 스타일

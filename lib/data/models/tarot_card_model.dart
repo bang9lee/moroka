@@ -1,4 +1,5 @@
 import 'tarot_card_data.dart';
+import 'tarot_card_localizations.dart';
 
 enum CardSuit {
   major,
@@ -57,8 +58,10 @@ class TarotCardModel {
       case 'ko':
         return nameKr;
       case 'en':
-      default:
         return name;
+      default:
+        // Use TarotCardLocalizations for other languages
+        return TarotCardLocalizations.getLocalizedCardName(name, locale);
     }
   }
 

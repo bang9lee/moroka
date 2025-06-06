@@ -1,204 +1,184 @@
 {
   "@@locale": "th",
-  
   "appName": "Moroka",
   "@appName": {
     "description": "Application name"
   },
-  
   "appTagline": "คำทำนายแห่งเงามืด",
   "@appTagline": {
     "description": "Application tagline"
   },
-  
   "appTitle": "Moroka - เสียงกระซิบอันน่าสะพรึง",
   "@appTitle": {
     "description": "Full application title"
   },
-  
   "onboardingTitle1": "ประตูแห่งโชคชะตาเปิดออก",
   "@onboardingTitle1": {
     "description": "First onboarding screen title"
   },
-  
   "onboardingDesc1": "ภูมิปัญญาโบราณพบกับเทคโนโลยีสมัยใหม่\nเพื่อกระซิบบอกอนาคตของคุณ",
   "@onboardingDesc1": {
     "description": "First onboarding screen description"
   },
-  
   "onboardingTitle2": "ความจริงในความมืด",
   "@onboardingTitle2": {
     "description": "Second onboarding screen title"
   },
-  
   "onboardingDesc2": "ไพ่ทาโรต์ไม่เคยโกหก\nพวกมันแค่แสดงความจริงที่คุณรับได้",
   "@onboardingDesc2": {
     "description": "Second onboarding screen description"
   },
-  
   "onboardingTitle3": "AI อ่านโชคชะตาของคุณ",
   "@onboardingTitle3": {
     "description": "Third onboarding screen title"
   },
-  
   "onboardingDesc3": "ปัญญาประดิษฐ์ตีความไพ่ของคุณ\nและนำทางเส้นทางผ่านการสนทนาลึกซึ้ง",
   "@onboardingDesc3": {
     "description": "Third onboarding screen description"
   },
-  
   "onboardingTitle4": "คุณพร้อมหรือยัง?",
   "@onboardingTitle4": {
     "description": "Fourth onboarding screen title"
   },
-  
   "onboardingDesc4": "ทุกทางเลือกมีราคาของมัน\nหากคุณพร้อมเผชิญหน้ากับโชคชะตา...",
   "@onboardingDesc4": {
     "description": "Fourth onboarding screen description"
   },
-  
   "loginTitle": "คุณกลับมาแล้ว",
   "@loginTitle": {
     "description": "Login screen title"
   },
-  
   "loginSubtitle": "เรารอคุณอยู่",
   "@loginSubtitle": {
     "description": "Login screen subtitle"
   },
-  
   "signupTitle": "สัญญาแห่งโชคชะตา",
   "@signupTitle": {
     "description": "Signup screen title"
   },
-  
   "signupSubtitle": "ลงทะเบียนวิญญาณของคุณ",
   "@signupSubtitle": {
     "description": "Signup screen subtitle"
   },
-  
   "emailLabel": "อีเมล",
   "@emailLabel": {
     "description": "Email input label"
   },
-  
   "passwordLabel": "รหัสผ่าน",
   "@passwordLabel": {
     "description": "Password input label"
   },
-  
   "nameLabel": "ชื่อ",
   "@nameLabel": {
     "description": "Name input label"
   },
-  
   "loginButton": "เข้าสู่ระบบ",
   "@loginButton": {
     "description": "Login button text"
   },
-  
   "signupButton": "ลงทะเบียนวิญญาณ",
   "@signupButton": {
     "description": "Signup button text"
   },
-  
   "googleLogin": "เข้าสู่ระบบด้วย Google",
   "@googleLogin": {
     "description": "Google login button text"
   },
-  
   "googleSignup": "เริ่มต้นด้วย Google",
   "@googleSignup": {
     "description": "Google signup button text"
   },
-  
   "alreadyHaveAccount": "มีบัญชีแล้ว? เข้าสู่ระบบ",
   "@alreadyHaveAccount": {
     "description": "Link to login screen"
   },
-  
   "dontHaveAccount": "ครั้งแรก? ลงทะเบียน",
   "@dontHaveAccount": {
     "description": "Link to signup screen"
   },
-  
   "moodQuestion": "ตอนนี้คุณรู้สึกอย่างไร?",
   "@moodQuestion": {
     "description": "Question asking user's current mood"
   },
-  
   "selectSpreadButton": "เลือกการกางไพ่ทาโรต์",
   "@selectSpreadButton": {
     "description": "Button to select tarot spread"
   },
-  
   "moodAnxious": "กังวล",
   "@moodAnxious": {
     "description": "Mood: anxious"
   },
-  
   "moodLonely": "เหงา",
   "@moodLonely": {
     "description": "Mood: lonely"
   },
-  
   "moodCurious": "อยากรู้",
   "@moodCurious": {
     "description": "Mood: curious"
   },
-  
   "moodFearful": "หวาดกลัว",
   "@moodFearful": {
     "description": "Mood: fearful"
   },
-  
   "moodHopeful": "มีความหวัง",
   "@moodHopeful": {
     "description": "Mood: hopeful"
   },
-  
   "moodConfused": "สับสน",
   "@moodConfused": {
     "description": "Mood: confused"
   },
-  
   "moodDesperate": "สิ้นหวัง",
   "@moodDesperate": {
     "description": "Mood: desperate"
   },
-  
   "moodExpectant": "คาดหวัง",
   "@moodExpectant": {
     "description": "Mood: expectant"
   },
-  
   "moodMystical": "ลึกลับ",
   "@moodMystical": {
     "description": "Mood: mystical"
   },
-  
   "spreadSelectionTitle": "เลือกการกางไพ่",
   "@spreadSelectionTitle": {
     "description": "Spread selection screen title"
   },
-  
   "spreadSelectionSubtitle": "เลือกการกางไพ่ตามความรู้สึกปัจจุบันของคุณ",
   "@spreadSelectionSubtitle": {
     "description": "Spread selection screen subtitle"
   },
-  
   "spreadDifficultyBeginner": "1-3 ใบ",
   "@spreadDifficultyBeginner": {
     "description": "Beginner difficulty label"
   },
-  
   "spreadDifficultyIntermediate": "5-7 ใบ",
   "@spreadDifficultyIntermediate": {
     "description": "Intermediate difficulty label"
   },
-  
   "spreadDifficultyAdvanced": "10 ใบ",
   "@spreadDifficultyAdvanced": {
     "description": "Advanced difficulty label"
+  },
+  "spreadOneCard": "ไพ่หนึ่งใบ",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  "spreadThreeCard": "ไพ่สามใบ",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  "spreadCelticCross": "เซลติกครอส",
+  "@spreadCelticCross": {
+    "description": "Celtic cross spread name"
+  },
+  "spreadRelationship": "การกางไพ่ความสัมพันธ์",
+  "@spreadRelationship": {
+    "description": "Relationship spread name"
+  },
+  "spreadYesNo": "ใช่/ไม่ใช่",
+  "@spreadYesNo": {
+    "description": "Yes/No spread name"
   },
   
   "spreadOneCard": "ไพ่หนึ่งใบ",
@@ -211,46 +191,51 @@
     "description": "Three card spread name"
   },
   
-  "spreadCelticCross": "เซลติกครอส",
-  "@spreadCelticCross": {
-    "description": "Celtic cross spread name"
+  "oneCardDescription": "ดวงและคำแนะนำประจำวัน",
+  "@oneCardDescription": {
+    "description": "One card spread description"
   },
   
-  "spreadRelationship": "การกางไพ่ความสัมพันธ์",
-  "@spreadRelationship": {
-    "description": "Relationship spread name"
+  "threeCardDescription": "กระแสของอดีต ปัจจุบัน และอนาคต",
+  "@threeCardDescription": {
+    "description": "Three card spread description"
   },
   
-  "spreadYesNo": "ใช่/ไม่ใช่",
-  "@spreadYesNo": {
-    "description": "Yes/No spread name"
+  "celticCrossDescription": "วิเคราะห์ทุกแง่มุมของสถานการณ์",
+  "@celticCrossDescription": {
+    "description": "Celtic cross spread description"
+  },
+  
+  "relationshipDescription": "พลวัตและอนาคตของความสัมพันธ์",
+  "@relationshipDescription": {
+    "description": "Relationship spread description"
+  },
+  
+  "yesNoDescription": "การทำนายเพื่อคำตอบที่ชัดเจน",
+  "@yesNoDescription": {
+    "description": "Yes/No spread description"
   },
   
   "selectCardTitle": "เลือกไพ่แห่งโชคชะตา",
   "@selectCardTitle": {
     "description": "Card selection screen title"
   },
-  
   "currentMoodLabel": "อารมณ์ปัจจุบันของคุณ: ",
   "@currentMoodLabel": {
     "description": "Current mood label"
   },
-  
   "currentSpreadLabel": "การกางไพ่ที่เลือก: ",
   "@currentSpreadLabel": {
     "description": "Current spread label"
   },
-  
   "shufflingMessage": "เส้นด้ายแห่งโชคชะตากำลังพันกัน...",
   "@shufflingMessage": {
     "description": "Message shown while shuffling"
   },
-  
   "selectCardInstruction": "ใช้สัญชาตญาณของคุณและเลือกไพ่",
   "@selectCardInstruction": {
     "description": "Card selection instruction"
   },
-  
   "cardsSelected": "เลือกแล้ว {count} ใบ",
   "@cardsSelected": {
     "description": "Number of cards selected",
@@ -260,7 +245,6 @@
       }
     }
   },
-  
   "cardsRemaining": "เลือกอีก {count} ใบ",
   "@cardsRemaining": {
     "description": "Number of cards remaining to select",
@@ -270,397 +254,322 @@
       }
     }
   },
-  
   "typeMessageHint": "พิมพ์ข้อความ...",
   "@typeMessageHint": {
     "description": "Chat input hint"
   },
-  
   "continueReading": "รับคำแนะนำที่ลึกซึ้งยิ่งขึ้น",
   "@continueReading": {
     "description": "Button to continue tarot reading"
   },
-  
   "watchAdPrompt": "เพื่อฟังเสียงจากห้วงลึกที่ลึกกว่า\nคุณต้องตรวจสอบข้อความจากโลกอื่น",
   "@watchAdPrompt": {
     "description": "Prompt to watch ad for continued reading"
   },
-  
   "interpretingSpread": "กำลังตีความข้อความจากไพ่...",
   "@interpretingSpread": {
     "description": "Message shown while AI interprets cards"
   },
-  
   "menuHistory": "บันทึกไพ่ทาโรต์ที่ผ่านมา",
   "@menuHistory": {
     "description": "Menu item: history"
   },
-  
   "menuHistoryDesc": "ย้อนดูโชคชะตาที่ผ่านมาของคุณ",
   "@menuHistoryDesc": {
     "description": "Menu item description: history"
   },
-  
+  "loadingHistory": "กำลังโหลดประวัติ...",
+  "@loadingHistory": {
+    "description": "Loading message for history screen"
+  },
   "menuStatistics": "สถิติและการวิเคราะห์",
   "@menuStatistics": {
     "description": "Menu item: statistics"
   },
-  
   "menuStatisticsDesc": "วิเคราะห์รูปแบบโชคชะตาของคุณ",
   "@menuStatisticsDesc": {
     "description": "Menu item description: statistics"
   },
-  
   "menuSettings": "การตั้งค่า",
   "@menuSettings": {
     "description": "Menu item: settings"
   },
-  
   "menuSettingsDesc": "ปรับแต่งสภาพแวดล้อมแอป",
   "@menuSettingsDesc": {
     "description": "Menu item description: settings"
   },
-  
   "menuAbout": "เกี่ยวกับ",
   "@menuAbout": {
     "description": "Menu item: about"
   },
-  
   "menuAboutDesc": "Moroka - คำทำนายแห่งเงามืด",
   "@menuAboutDesc": {
     "description": "Menu item description: about"
   },
-  
   "logoutButton": "ออกจากระบบ",
   "@logoutButton": {
     "description": "Logout button text"
   },
-  
   "logoutTitle": "คุณกำลังจะจากไปจริงๆ หรือ?",
   "@logoutTitle": {
     "description": "Logout dialog title"
   },
-  
   "logoutMessage": "เมื่อประตูแห่งโชคชะตาปิดลง\nคุณจะต้องกลับมาอีกครั้ง",
   "@logoutMessage": {
     "description": "Logout dialog message"
   },
-  
   "logoutCancel": "อยู่ต่อ",
   "@logoutCancel": {
     "description": "Logout dialog cancel button"
   },
-  
   "logoutConfirm": "จากไป",
   "@logoutConfirm": {
     "description": "Logout dialog confirm button"
   },
-  
   "errorOccurred": "เกิดข้อผิดพลาด",
   "@errorOccurred": {
     "description": "Generic error message"
   },
-  
   "errorEmailEmpty": "กรุณาใส่อีเมลของคุณ",
   "@errorEmailEmpty": {
     "description": "Error: email field empty"
   },
-  
   "errorEmailInvalid": "รูปแบบอีเมลไม่ถูกต้อง",
   "@errorEmailInvalid": {
     "description": "Error: email format invalid"
   },
-  
   "errorPasswordEmpty": "กรุณาใส่รหัสผ่านของคุณ",
   "@errorPasswordEmpty": {
     "description": "Error: password field empty"
   },
-  
   "errorPasswordShort": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
   "@errorPasswordShort": {
     "description": "Error: password too short"
   },
-  
   "errorNameEmpty": "กรุณาใส่ชื่อของคุณ",
   "@errorNameEmpty": {
     "description": "Error: name field empty"
   },
-  
   "errorLoginFailed": "เข้าสู่ระบบล้มเหลว",
   "@errorLoginFailed": {
     "description": "Error: login failed"
   },
-  
   "errorSignupFailed": "ลงทะเบียนล้มเหลว",
   "@errorSignupFailed": {
     "description": "Error: signup failed"
   },
-  
   "errorGoogleLoginFailed": "เข้าสู่ระบบด้วย Google ล้มเหลว",
   "@errorGoogleLoginFailed": {
     "description": "Error: Google login failed"
   },
-  
   "errorNetworkFailed": "กรุณาตรวจสอบการเชื่อมต่อเครือข่ายของคุณ",
   "@errorNetworkFailed": {
     "description": "Error: network connection failed"
   },
-  
   "errorNotEnoughCards": "กรุณาเลือกไพ่เพิ่มเติม",
   "@errorNotEnoughCards": {
     "description": "Error: not enough cards selected"
   },
-  
   "successLogin": "ยินดีต้อนรับ",
   "@successLogin": {
     "description": "Success: login"
   },
-  
   "successSignup": "วิญญาณของคุณได้รับการลงทะเบียนแล้ว",
   "@successSignup": {
     "description": "Success: signup"
   },
-  
   "successLogout": "ลาก่อน",
   "@successLogout": {
     "description": "Success: logout"
   },
-  
   "successCardsSelected": "เลือกไพ่ทั้งหมดแล้ว",
   "@successCardsSelected": {
     "description": "Success: all cards selected"
   },
-  
   "settingsLanguageTitle": "ภาษา",
   "@settingsLanguageTitle": {
     "description": "Language settings section title"
   },
-  
   "settingsLanguageLabel": "ภาษาของแอป",
   "@settingsLanguageLabel": {
     "description": "Language selector label"
   },
-  
   "settingsLanguageDesc": "เลือกภาษาที่คุณต้องการ",
   "@settingsLanguageDesc": {
     "description": "Language selector description"
   },
-  
   "settingsNotificationTitle": "การตั้งค่าการแจ้งเตือน",
   "@settingsNotificationTitle": {
     "description": "Notification settings section title"
   },
-  
   "settingsDailyNotification": "การแจ้งเตือนไพ่ทาโรต์ประจำวัน",
   "@settingsDailyNotification": {
     "description": "Daily notification setting"
   },
-  
   "settingsDailyNotificationDesc": "รับดวงประจำวันทุกเช้า",
   "@settingsDailyNotificationDesc": {
     "description": "Daily notification description"
   },
-  
   "settingsWeeklyReport": "รายงานไพ่ทาโรต์รายสัปดาห์",
   "@settingsWeeklyReport": {
     "description": "Weekly report setting"
   },
-  
   "settingsWeeklyReportDesc": "รับดวงประจำสัปดาห์ทุกวันจันทร์",
   "@settingsWeeklyReportDesc": {
     "description": "Weekly report description"
   },
-  
   "settingsDisplayTitle": "การตั้งค่าการแสดงผล",
   "@settingsDisplayTitle": {
     "description": "Display settings section title"
   },
-  
   "settingsVibration": "เอฟเฟกต์การสั่น",
   "@settingsVibration": {
     "description": "Vibration setting"
   },
-  
   "settingsVibrationDesc": "การสั่นสะเทือนเมื่อเลือกไพ่",
   "@settingsVibrationDesc": {
     "description": "Vibration description"
   },
-  
   "settingsAnimations": "เอฟเฟกต์แอนิเมชัน",
   "@settingsAnimations": {
     "description": "Animation setting"
   },
-  
   "settingsAnimationsDesc": "แอนิเมชันเปลี่ยนหน้าจอ",
   "@settingsAnimationsDesc": {
     "description": "Animation description"
   },
-  
   "settingsDataTitle": "การจัดการข้อมูล",
   "@settingsDataTitle": {
     "description": "Data management section title"
   },
-  
   "settingsBackupData": "สำรองข้อมูล",
   "@settingsBackupData": {
     "description": "Backup data setting"
   },
-  
   "settingsBackupDataDesc": "สำรองข้อมูลของคุณไปยังคลาวด์",
   "@settingsBackupDataDesc": {
     "description": "Backup data description"
   },
-  
   "settingsClearCache": "ล้างแคช",
   "@settingsClearCache": {
     "description": "Clear cache setting"
   },
-  
   "settingsClearCacheDesc": "ลบไฟล์ชั่วคราวเพื่อเพิ่มพื้นที่ว่าง",
   "@settingsClearCacheDesc": {
     "description": "Clear cache description"
   },
-  
   "settingsDeleteData": "ลบข้อมูลทั้งหมด",
   "@settingsDeleteData": {
     "description": "Delete all data setting"
   },
-  
   "settingsDeleteDataDesc": "ลบบันทึกไพ่ทาโรต์และการตั้งค่าทั้งหมด",
   "@settingsDeleteDataDesc": {
     "description": "Delete data description"
   },
-  
   "settingsAccountTitle": "บัญชี",
   "@settingsAccountTitle": {
     "description": "Account section title"
   },
-  
   "settingsChangePassword": "เปลี่ยนรหัสผ่าน",
   "@settingsChangePassword": {
     "description": "Change password setting"
   },
-  
   "settingsChangePasswordDesc": "เปลี่ยนรหัสผ่านเพื่อความปลอดภัยของบัญชี",
   "@settingsChangePasswordDesc": {
     "description": "Change password description"
   },
-  
   "settingsDeleteAccount": "ลบบัญชี",
   "@settingsDeleteAccount": {
     "description": "Delete account setting"
   },
-  
   "settingsDeleteAccountDesc": "ลบบัญชีของคุณอย่างถาวร",
   "@settingsDeleteAccountDesc": {
     "description": "Delete account description"
   },
-  
   "dialogBackupTitle": "สำรองข้อมูล",
   "@dialogBackupTitle": {
     "description": "Backup dialog title"
   },
-  
   "dialogBackupMessage": "สำรองข้อมูลของคุณไปยังคลาวด์หรือไม่?",
   "@dialogBackupMessage": {
     "description": "Backup dialog message"
   },
-  
   "dialogClearCacheTitle": "ล้างแคช",
   "@dialogClearCacheTitle": {
     "description": "Clear cache dialog title"
   },
-  
   "dialogClearCacheMessage": "ลบไฟล์ชั่วคราวหรือไม่?",
   "@dialogClearCacheMessage": {
     "description": "Clear cache dialog message"
   },
-  
   "dialogDeleteDataTitle": "ลบข้อมูลทั้งหมด",
   "@dialogDeleteDataTitle": {
     "description": "Delete data dialog title"
   },
-  
   "dialogDeleteDataMessage": "บันทึกไพ่ทาโรต์และการตั้งค่าทั้งหมดจะถูกลบอย่างถาวร\nการกระทำนี้ไม่สามารถยกเลิกได้",
   "@dialogDeleteDataMessage": {
     "description": "Delete data dialog message"
   },
-  
   "dialogChangePasswordTitle": "เปลี่ยนรหัสผ่าน",
   "@dialogChangePasswordTitle": {
     "description": "Change password dialog title"
   },
-  
   "dialogDeleteAccountTitle": "ลบบัญชี",
   "@dialogDeleteAccountTitle": {
     "description": "Delete account dialog title"
   },
-  
   "dialogDeleteAccountMessage": "การลบบัญชีของคุณจะลบข้อมูลทั้งหมดอย่างถาวร\nการกระทำนี้ไม่สามารถยกเลิกได้",
   "@dialogDeleteAccountMessage": {
     "description": "Delete account dialog message"
   },
-  
   "currentPassword": "รหัสผ่านปัจจุบัน",
   "@currentPassword": {
     "description": "Current password label"
   },
-  
   "newPassword": "รหัสผ่านใหม่",
   "@newPassword": {
     "description": "New password label"
   },
-  
   "confirmNewPassword": "ยืนยันรหัสผ่านใหม่",
   "@confirmNewPassword": {
     "description": "Confirm new password label"
   },
-  
   "cancel": "ยกเลิก",
   "@cancel": {
     "description": "Cancel button"
   },
-  
   "backup": "สำรองข้อมูล",
   "@backup": {
     "description": "Backup button"
   },
-  
   "delete": "ลบ",
   "@delete": {
     "description": "Delete button"
   },
-  
   "change": "เปลี่ยน",
   "@change": {
     "description": "Change button"
   },
-  
   "successBackup": "สำรองข้อมูลเสร็จสิ้น",
   "@successBackup": {
     "description": "Backup success message"
   },
-  
   "successClearCache": "ล้างแคชแล้ว",
   "@successClearCache": {
     "description": "Clear cache success message"
   },
-  
   "successDeleteData": "ลบข้อมูลทั้งหมดแล้ว",
   "@successDeleteData": {
     "description": "Delete data success message"
   },
-  
   "successChangePassword": "เปลี่ยนรหัสผ่านแล้ว",
   "@successChangePassword": {
     "description": "Change password success message"
   },
-  
   "successDeleteAccount": "ลบบัญชีแล้ว",
   "@successDeleteAccount": {
     "description": "Delete account success message"
   },
-  
   "errorBackup": "การสำรองข้อมูลล้มเหลว: {error}",
   "@errorBackup": {
     "description": "Backup error message",
@@ -670,7 +579,6 @@
       }
     }
   },
-  
   "errorDeleteData": "การลบล้มเหลว: {error}",
   "@errorDeleteData": {
     "description": "Delete data error message",
@@ -680,7 +588,6 @@
       }
     }
   },
-  
   "errorChangePassword": "การเปลี่ยนรหัสผ่านล้มเหลว: {error}",
   "@errorChangePassword": {
     "description": "Change password error message",
@@ -690,7 +597,6 @@
       }
     }
   },
-  
   "errorDeleteAccount": "การลบบัญชีล้มเหลว: {error}",
   "@errorDeleteAccount": {
     "description": "Delete account error message",
@@ -700,177 +606,142 @@
       }
     }
   },
-  
   "errorPasswordMismatch": "รหัสผ่านใหม่ไม่ตรงกัน",
   "@errorPasswordMismatch": {
     "description": "Password mismatch error"
   },
-  
   "passwordResetTitle": "รีเซ็ตรหัสผ่าน",
   "@passwordResetTitle": {
     "description": "Password reset dialog title"
   },
-  
   "passwordResetMessage": "ใส่อีเมลที่ลงทะเบียนของคุณ\nเราจะส่งลิงก์รีเซ็ตรหัสผ่านให้คุณ",
   "@passwordResetMessage": {
     "description": "Password reset message"
   },
-  
   "passwordResetSuccess": "ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว",
   "@passwordResetSuccess": {
     "description": "Password reset success message"
   },
-  
   "send": "ส่ง",
   "@send": {
     "description": "Send button"
   },
-  
   "emailPlaceholder": "your@email.com",
   "@emailPlaceholder": {
     "description": "Email placeholder"
   },
-  
   "passwordPlaceholder": "6+ ตัวอักษร",
   "@passwordPlaceholder": {
     "description": "Password placeholder"
   },
-  
   "forgotPassword": "ลืมรหัสผ่าน?",
   "@forgotPassword": {
     "description": "Forgot password link"
   },
-  
   "login": "เข้าสู่ระบบ",
   "@login": {
     "description": "Login button"
   },
-  
   "or": "หรือ",
   "@or": {
     "description": "Or divider"
   },
-  
   "continueWithGoogle": "ดำเนินการต่อด้วย Google",
   "@continueWithGoogle": {
     "description": "Google login button"
   },
-  
   "noAccount": "ยังไม่มีบัญชี?",
   "@noAccount": {
     "description": "No account text"
   },
-  
   "signUp": "ลงทะเบียน",
   "@signUp": {
     "description": "Sign up link"
   },
-  
   "appBrandName": "MOROKA",
   "@appBrandName": {
     "description": "App brand name"
   },
-  
   "appBrandTagline": "คำทำนายแห่งเงามืด",
   "@appBrandTagline": {
     "description": "App brand tagline"
   },
-  
   "aboutTitle": "เกี่ยวกับ",
   "@aboutTitle": {
     "description": "About screen title"
   },
-  
   "aboutSubtitle": "ไพ่แห่งโชคชะตารอคุณอยู่",
   "@aboutSubtitle": {
     "description": "About screen subtitle"
   },
-  
   "aboutDescription": "MOROKA\n\nประตูแห่งโชคชะตาได้เปิดออกแล้ว\nคำทำนายแห่งเงามืดจะตีความอนาคตของคุณ\n\nการตีความไพ่ทาโรต์แบบดั้งเดิมด้วย AI ลึกลับ\nมอบข้อมูลเชิงลึกและภูมิปัญญา",
   "@aboutDescription": {
     "description": "About app description"
   },
-  
   "featuresTitle": "คุณสมบัติหลัก",
   "@featuresTitle": {
     "description": "Features section title"
   },
-  
   "feature78Cards": "ไพ่ทาโรต์ดั้งเดิม 78 ใบ",
   "@feature78Cards": {
     "description": "78 cards feature"
   },
-  
   "feature78CardsDesc": "สำรับไพ่สมบูรณ์พร้อม Major Arcana 22 ใบและ Minor Arcana 56 ใบ",
   "@feature78CardsDesc": {
     "description": "78 cards feature description"
   },
-  
   "feature5Spreads": "การกางไพ่มืออาชีพ 5 แบบ",
   "@feature5Spreads": {
     "description": "5 spreads feature"
   },
-  
   "feature5SpreadsDesc": "วิธีอ่านไพ่หลากหลายตั้งแต่ไพ่หนึ่งใบจนถึงเซลติกครอส",
   "@feature5SpreadsDesc": {
     "description": "5 spreads feature description"
   },
-  
   "featureAI": "ปรมาจารย์ไพ่ทาโรต์ AI",
   "@featureAI": {
     "description": "AI feature"
   },
-  
   "featureAIDesc": "การตีความลึกซึ้งราวกับปรมาจารย์ไพ่ทาโรต์ที่มีประสบการณ์ 100 ปี",
   "@featureAIDesc": {
     "description": "AI feature description"
   },
-  
   "featureChat": "การให้คำปรึกษาแบบโต้ตอบ",
   "@featureChat": {
     "description": "Chat feature"
   },
-  
   "featureChatDesc": "ถามคำถามเกี่ยวกับไพ่ของคุณได้อย่างอิสระ",
   "@featureChatDesc": {
     "description": "Chat feature description"
   },
-  
   "termsAndPolicies": "ข้อกำหนดและนโยบาย",
   "@termsAndPolicies": {
     "description": "Terms section title"
   },
-  
   "termsOfService": "ข้อกำหนดการให้บริการ",
   "@termsOfService": {
     "description": "Terms of service"
   },
-  
   "privacyPolicy": "นโยบายความเป็นส่วนตัว",
   "@privacyPolicy": {
     "description": "Privacy policy"
   },
-  
   "marketingConsent": "ข้อมูลทางการตลาด",
   "@marketingConsent": {
     "description": "Marketing consent"
   },
-  
   "customerSupport": "ฝ่ายสนับสนุนลูกค้า",
   "@customerSupport": {
     "description": "Customer support section"
   },
-  
   "emailSupport": "สนับสนุนทางอีเมล",
   "@emailSupport": {
     "description": "Email support"
   },
-  
   "website": "เว็บไซต์",
   "@website": {
     "description": "Website"
   },
-  
   "cannotOpenUrl": "ไม่สามารถเปิด URL: {url}",
   "@cannotOpenUrl": {
     "description": "Cannot open URL error",
@@ -880,162 +751,130 @@
       }
     }
   },
-  
   "lastModified": "แก้ไขล่าสุด: 3 กรกฎาคม 2568",
   "@lastModified": {
     "description": "Last modified date"
   },
-  
   "confirm": "ยืนยัน",
   "@confirm": {
     "description": "Confirm button"
   },
-  
   "companyName": "Today's Studio",
   "@companyName": {
     "description": "Company name"
   },
-  
   "companyTagline": "สร้างประสบการณ์ลึกลับ",
   "@companyTagline": {
     "description": "Company tagline"
   },
-  
   "copyright": "© 2568 Today's Studio. สงวนลิขสิทธิ์",
   "@copyright": {
     "description": "Copyright notice"
   },
-  
   "anonymousSoul": "วิญญาณนิรนาม",
   "@anonymousSoul": {
     "description": "Anonymous user name"
   },
-  
   "totalReadings": "การอ่านไพ่ทั้งหมด",
   "@totalReadings": {
     "description": "Total readings label"
   },
-  
   "joinDate": "วันที่เข้าร่วม",
   "@joinDate": {
     "description": "Join date label"
   },
-  
   "errorLogout": "เกิดข้อผิดพลาดระหว่างออกจากระบบ",
   "@errorLogout": {
     "description": "Logout error"
   },
-  
   "soulContract": "สัญญาวิญญาณ",
   "@soulContract": {
     "description": "Terms screen title"
   },
-  
   "termsAgreementMessage": "กรุณายอมรับข้อกำหนดเพื่อใช้บริการ",
   "@termsAgreementMessage": {
     "description": "Terms agreement message"
   },
-  
   "agreeAll": "ยอมรับทั้งหมด",
   "@agreeAll": {
     "description": "Agree all button"
   },
-  
   "required": "จำเป็น",
   "@required": {
     "description": "Required label"
   },
-  
   "optional": "ไม่บังคับ",
   "@optional": {
     "description": "Optional label"
   },
-  
   "agreeAndStart": "ยอมรับและเริ่มต้น",
   "@agreeAndStart": {
     "description": "Agree and start button"
   },
-  
   "agreeToRequired": "กรุณายอมรับข้อกำหนดที่จำเป็น",
   "@agreeToRequired": {
     "description": "Required terms message"
   },
-  
   "nickname": "ชื่อเล่น",
   "@nickname": {
     "description": "Nickname label"
   },
-  
   "confirmPassword": "ยืนยันรหัสผ่าน",
   "@confirmPassword": {
     "description": "Confirm password label"
   },
-  
   "nextStep": "ขั้นตอนถัดไป",
   "@nextStep": {
     "description": "Next step button"
   },
-  
   "errorNameTooShort": "ใส่อย่างน้อย 2 ตัวอักษร",
   "@errorNameTooShort": {
     "description": "Name too short error"
   },
-  
   "errorConfirmPassword": "กรุณายืนยันรหัสผ่านของคุณ",
   "@errorConfirmPassword": {
     "description": "Confirm password error"
   },
-  
   "errorPasswordsDontMatch": "รหัสผ่านไม่ตรงกัน",
   "@errorPasswordsDontMatch": {
     "description": "Passwords don't match error"
   },
-  
   "emailInUse": "อีเมลถูกใช้งานแล้ว",
   "@emailInUse": {
     "description": "Email in use message"
   },
-  
   "emailAvailable": "อีเมลพร้อมใช้งาน",
   "@emailAvailable": {
     "description": "Email available message"
   },
-  
   "nicknameInUse": "ชื่อเล่นถูกใช้งานแล้ว",
   "@nicknameInUse": {
     "description": "Nickname in use message"
   },
-  
   "nicknameAvailable": "ชื่อเล่นพร้อมใช้งาน",
   "@nicknameAvailable": {
     "description": "Nickname available message"
   },
-  
   "passwordWeak": "อ่อนแอ",
   "@passwordWeak": {
     "description": "Weak password"
   },
-  
   "passwordFair": "พอใช้",
   "@passwordFair": {
     "description": "Fair password"
   },
-  
   "passwordStrong": "แข็งแรง",
   "@passwordStrong": {
     "description": "Strong password"
   },
-  
   "passwordVeryStrong": "แข็งแรงมาก",
   "@passwordVeryStrong": {
     "description": "Very strong password"
   },
-  
   "emailVerificationTitle": "การยืนยันอีเมล",
   "@emailVerificationTitle": {
     "description": "Email verification title"
   },
-  
   "emailVerificationMessage": "เราได้ส่งอีเมลยืนยันไปที่ {email}\nกรุณาตรวจสอบอีเมลของคุณและคลิกลิงก์ยืนยัน",
   "@emailVerificationMessage": {
     "description": "Email verification message",
@@ -1045,82 +884,122 @@
       }
     }
   },
-  
   "resendEmail": "ส่งอีเมลอีกครั้ง",
   "@resendEmail": {
     "description": "Resend email button"
   },
-  
   "emailResent": "ส่งอีเมลยืนยันอีกครั้งแล้ว",
   "@emailResent": {
     "description": "Email resent message"
   },
-  
   "checkEmailAndReturn": "หลังจากยืนยันแล้ว กรุณากลับมาที่แอป",
   "@checkEmailAndReturn": {
     "description": "Check email instruction"
   },
-  
   "noHistoryTitle": "ยังไม่มีบันทึกไพ่ทาโรต์",
   "@noHistoryTitle": {
     "description": "Empty history state title"
   },
-  
   "noHistoryMessage": "อ่านโชคชะตาแรกของคุณ",
   "@noHistoryMessage": {
     "description": "Empty history state message"
   },
-  
   "startReading": "เริ่มอ่านไพ่ทาโรต์",
   "@startReading": {
     "description": "Start reading button"
   },
-  
   "deleteReadingTitle": "ลบบันทึกนี้หรือไม่?",
   "@deleteReadingTitle": {
     "description": "Delete reading dialog title"
   },
-  
   "deleteReadingMessage": "บันทึกที่ลบแล้วไม่สามารถกู้คืนได้",
   "@deleteReadingMessage": {
     "description": "Delete reading dialog message"
   },
-  
+  "deleteAll": "ลบทั้งหมด",
+  "@deleteAll": {
+    "description": "Delete all button"
+  },
+  "deleteAllConfirmTitle": "ลบบันทึกทั้งหมด?",
+  "@deleteAllConfirmTitle": {
+    "description": "Delete all confirmation dialog title"
+  },
+  "deleteAllConfirmMessage": "การอ่านไพ่ทาโรต์ทั้งหมดจะถูกลบอย่างถาวร การกระทำนี้ไม่สามารถยกเลิกได้",
+  "@deleteAllConfirmMessage": {
+    "description": "Delete all confirmation dialog message"
+  },
+  "deleteAllButton": "ลบทั้งหมด",
+  "@deleteAllButton": {
+    "description": "Delete all confirmation button"
+  },
+  "totalTarotReadings": "การอ่านไพ่ทาโรต์ทั้งหมด",
+  "@totalTarotReadings": {
+    "description": "Total tarot readings label"
+  },
+  "mostFrequentCard": "ไพ่ที่พบบ่อยที่สุด",
+  "@mostFrequentCard": {
+    "description": "Most frequent card label"
+  },
+  "cardFrequencyTop5": "ความถี่ของไพ่ - 5 อันดับแรก",
+  "@cardFrequencyTop5": {
+    "description": "Card frequency top 5 label"
+  },
+  "moodAnalysis": "การวิเคราะห์อารมณ์",
+  "@moodAnalysis": {
+    "description": "Mood analysis label"
+  },
+  "monthlyReadingTrend": "แนวโน้มการอ่านรายเดือน",
+  "@monthlyReadingTrend": {
+    "description": "Monthly reading trend label"
+  },
+  "noData": "ไม่มีข้อมูล",
+  "@noData": {
+    "description": "No data label"
+  },
+  "noDataToAnalyze": "ไม่มีข้อมูลให้วิเคราะห์",
+  "@noDataToAnalyze": {
+    "description": "No data to analyze message"
+  },
+  "startTarotReading": "เริ่มอ่านไพ่ทาโรต์เพื่อดูสถิติของคุณ",
+  "@startTarotReading": {
+    "description": "Start tarot reading prompt for statistics"
+  },
+  "aboutTagline": "ไพ่แห่งโชคชะตารอคุณอยู่",
+  "@aboutTagline": {
+    "description": "About screen tagline"
+  },
+  "aboutDescription": "MOROKA อ่านชะตาชีวิตของคุณผ่านไพ่ทาโรต์ลึกลับโบราณ ปรมาจารย์ทาโรต์ AI ของเราจะตีความข้อความจากจักรวาลที่อยู่ในไพ่ทั้ง 78 ใบ\n\nค้นพบความจริงที่ส่องแสงในความมืด และข้อความพิเศษที่มีไว้สำหรับคุณเท่านั้น",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
   "cardOfFate": "ไพ่แห่งโชคชะตา",
   "@cardOfFate": {
     "description": "Card selection dialog title"
   },
-  
   "cardCallingYou": "ไพ่ใบนี้กำลังเรียกหาคุณ",
   "@cardCallingYou": {
     "description": "Card selection dialog message"
   },
-  
   "selectThisCard": "คุณจะเลือกมันหรือไม่?",
   "@selectThisCard": {
     "description": "Card selection dialog question"
   },
-  
   "viewAgain": "ดูอีกครั้ง",
   "@viewAgain": {
     "description": "View again button"
   },
-  
   "select": "เลือก",
   "@select": {
     "description": "Select button"
   },
-  
   "shufflingCards": "กำลังสับไพ่แห่งโชคชะตา...",
   "@shufflingCards": {
     "description": "Shuffling cards message"
   },
-  
   "selectCardsIntuition": "ใช้สัญชาตญาณของคุณและเลือกไพ่",
   "@selectCardsIntuition": {
     "description": "Card selection instruction"
   },
-  
   "selectMoreCards": "เลือกไพ่อีก {count} ใบ",
   "@selectMoreCards": {
     "description": "Select more cards message",
@@ -1130,107 +1009,86 @@
       }
     }
   },
-  
   "selectionComplete": "การเลือกเสร็จสมบูรณ์!",
   "@selectionComplete": {
     "description": "Selection complete message"
   },
-  
   "tapToSelect": "แตะไพ่เพื่อเลือก",
   "@tapToSelect": {
     "description": "Tap to select instruction"
   },
-  
   "preparingInterpretation": "กำลังเตรียมการตีความ...",
   "@preparingInterpretation": {
     "description": "Preparing interpretation message"
   },
-  
   "cardMessage": "ข้อความจากไพ่",
   "@cardMessage": {
     "description": "Card message section title"
   },
-  
   "cardsStory": "เรื่องราวที่ไพ่ของคุณบอกเล่า",
   "@cardsStory": {
     "description": "Cards story header"
   },
-  
   "specialInterpretation": "การตีความพิเศษสำหรับคุณ",
   "@specialInterpretation": {
     "description": "Special interpretation subtitle"
   },
-  
   "interpretingCards": "กำลังตีความความหมายของไพ่...",
   "@interpretingCards": {
     "description": "Interpreting cards loading message"
   },
-  
   "todaysChatEnded": "การสนทนาวันนี้สิ้นสุดแล้ว",
   "@todaysChatEnded": {
     "description": "Chat limit reached message"
   },
-  
   "askQuestions": "ถามคำถามของคุณ...",
   "@askQuestions": {
     "description": "Chat input placeholder"
   },
-  
   "continueConversation": "สนทนาต่อ",
   "@continueConversation": {
     "description": "Continue conversation button"
   },
-  
   "wantDeeperTruth": "ต้องการรู้ความจริงที่ลึกซึ้งกว่านี้หรือไม่?",
   "@wantDeeperTruth": {
     "description": "Ad dialog title"
   },
-  
   "watchAdToContinue": "ดูโฆษณาเพื่อสนทนาต่อ\nกับปรมาจารย์ไพ่ทาโรต์",
   "@watchAdToContinue": {
     "description": "Ad dialog message"
   },
-  
   "later": "ภายหลัง",
   "@later": {
     "description": "Later button"
   },
-  
   "watchAd": "ดูโฆษณา",
   "@watchAd": {
     "description": "Watch ad button"
   },
-  
   "emailVerification": "การยืนยันอีเมล",
   "@emailVerification": {
     "description": "Email verification header"
   },
-  
   "checkYourEmail": "ตรวจสอบอีเมลของคุณ",
   "@checkYourEmail": {
     "description": "Check email title"
   },
-  
   "verificationEmailSent": "เราได้ส่งอีเมลยืนยันไปที่ที่อยู่ด้านบนแล้ว\nกรุณาตรวจสอบกล่องจดหมายของคุณและคลิกลิงก์ยืนยัน",
   "@verificationEmailSent": {
     "description": "Verification email sent message"
   },
-  
   "verifyingEmail": "กำลังยืนยันอีเมล...",
   "@verifyingEmail": {
     "description": "Verifying email loading text"
   },
-  
   "noEmailReceived": "ไม่ได้รับอีเมลหรือไม่?",
   "@noEmailReceived": {
     "description": "No email received title"
   },
-  
   "checkSpamFolder": "ตรวจสอบโฟลเดอร์สแปมของคุณ\nหากยังไม่พบ คลิกปุ่มด้านล่างเพื่อส่งอีกครั้ง",
   "@checkSpamFolder": {
     "description": "Check spam folder message"
   },
-  
   "resendIn": "ส่งอีกครั้งใน {seconds} วินาที",
   "@resendIn": {
     "description": "Resend cooldown message",
@@ -1240,32 +1098,26 @@
       }
     }
   },
-  
   "resendVerificationEmail": "ส่งอีเมลยืนยันอีกครั้ง",
   "@resendVerificationEmail": {
     "description": "Resend verification email button"
   },
-  
   "alreadyVerified": "ฉันยืนยันแล้ว",
   "@alreadyVerified": {
     "description": "Already verified button"
   },
-  
   "openGateOfFate": "เปิดประตูแห่งโชคชะตา",
   "@openGateOfFate": {
     "description": "Final onboarding button"
   },
-  
   "drawAddedMessage": "เพิ่มการจั่วไพ่ 1 ครั้ง! ✨",
   "@drawAddedMessage": {
     "description": "Success message after watching ad"
   },
-  
   "adLoadFailed": "ไม่สามารถโหลดโฆษณาได้ โปรดลองอีกครั้งภายหลัง",
   "@adLoadFailed": {
     "description": "Error message when ad fails to load"
   },
-  
   "monthLabel": "{month}",
   "@monthLabel": {
     "description": "Month label format",
@@ -1275,19 +1127,385 @@
       }
     }
   },
-  
   "startChatMessage": "ถามอะไรก็ได้เกี่ยวกับการอ่านไพ่ทาโรต์ของคุณ",
   "@startChatMessage": {
     "description": "Empty chat state message"
   },
-  
   "chatHistory": "ประวัติการสนทนา",
   "@chatHistory": {
     "description": "Chat history section title"
   },
-  
   "chatHistoryDescription": "การสนทนาของคุณกับปรมาจารย์ไพ่ทาโรต์",
   "@chatHistoryDescription": {
     "description": "Chat history section description"
+  },
+  "error": "ข้อผิดพลาด",
+  "@error": {
+    "description": "error - automatically added"
+  },
+  "ok": "ตกลง",
+  "@ok": {
+    "description": "ok - automatically added"
+  },
+  "errorInvalidFormat": "รูปแบบไม่ถูกต้อง",
+  "@errorInvalidFormat": {
+    "description": "errorInvalidFormat - automatically added"
+  },
+  "errorUnexpected": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
+  "@errorUnexpected": {
+    "description": "errorUnexpected - automatically added"
+  },
+  "errorUnknown": "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
+  "@errorUnknown": {
+    "description": "errorUnknown - automatically added"
+  },
+  "errorNetworkTimeout": "การเชื่อมต่อเครือข่ายหมดเวลา",
+  "@errorNetworkTimeout": {
+    "description": "errorNetworkTimeout - automatically added"
+  },
+  "errorNoInternet": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+  "@errorNoInternet": {
+    "description": "errorNoInternet - automatically added"
+  },
+  "errorServerError": "เกิดข้อผิดพลาดของเซิร์ฟเวอร์",
+  "@errorServerError": {
+    "description": "errorServerError - automatically added"
+  },
+  "errorInvalidCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+  "@errorInvalidCredentials": {
+    "description": "errorInvalidCredentials - automatically added"
+  },
+  "errorEmailNotVerified": "อีเมลยังไม่ได้รับการยืนยัน",
+  "@errorEmailNotVerified": {
+    "description": "errorEmailNotVerified - automatically added"
+  },
+  "errorSessionExpired": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง",
+  "@errorSessionExpired": {
+    "description": "errorSessionExpired - automatically added"
+  },
+  "errorQuotaExceeded": "เกินขีดจำกัดรายวัน",
+  "@errorQuotaExceeded": {
+    "description": "errorQuotaExceeded - automatically added"
+  },
+  "errorInvalidResponse": "การตอบสนองจากเซิร์ฟเวอร์ไม่ถูกต้อง",
+  "@errorInvalidResponse": {
+    "description": "errorInvalidResponse - automatically added"
+  },
+  "errorRateLimitExceeded": "คำขอมากเกินไป กรุณาลองใหม่ภายหลัง",
+  "@errorRateLimitExceeded": {
+    "description": "errorRateLimitExceeded - automatically added"
+  },
+  "errorDataNotFound": "ไม่พบข้อมูล",
+  "@errorDataNotFound": {
+    "description": "errorDataNotFound - automatically added"
+  },
+  "errorDataCorrupted": "ข้อมูลเสียหาย",
+  "@errorDataCorrupted": {
+    "description": "errorDataCorrupted - automatically added"
+  },
+  "errorSaveFailed": "บันทึกข้อมูลล้มเหลว",
+  "@errorSaveFailed": {
+    "description": "errorSaveFailed - automatically added"
+  },
+  "errorPermissionDenied": "ไม่มีสิทธิ์",
+  "@errorPermissionDenied": {
+    "description": "errorPermissionDenied - automatically added"
+  },
+  "errorPermissionRestricted": "การเข้าถึงถูกจำกัด",
+  "@errorPermissionRestricted": {
+    "description": "errorPermissionRestricted - automatically added"
+  },
+  "errorEmailAlreadyInUse": "อีเมลถูกใช้งานแล้ว",
+  "@errorEmailAlreadyInUse": {
+    "description": "errorEmailAlreadyInUse - automatically added"
+  },
+  "errorInvalidEmail": "ที่อยู่อีเมลไม่ถูกต้อง",
+  "@errorInvalidEmail": {
+    "description": "errorInvalidEmail - automatically added"
+  },
+  "errorWeakPassword": "รหัสผ่านไม่แข็งแรงพอ",
+  "@errorWeakPassword": {
+    "description": "errorWeakPassword - automatically added"
+  },
+  "errorNetworkRequestFailed": "คำขอเครือข่ายล้มเหลว",
+  "@errorNetworkRequestFailed": {
+    "description": "errorNetworkRequestFailed - automatically added"
+  },
+  "errorOperationNotAllowed": "ไม่อนุญาตให้ดำเนินการ",
+  "@errorOperationNotAllowed": {
+    "description": "errorOperationNotAllowed - automatically added"
+  },
+  "errorAuthFailed": "การยืนยันตัวตนล้มเหลว",
+  "@errorAuthFailed": {
+    "description": "errorAuthFailed - automatically added"
+  },
+  
+  "remainingDraws": "จำนวนครั้งที่เหลือ",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "ไม่มีจำนวนครั้งที่เหลือ",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "โฆษณา",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "tarotMaster": "ผู้เชี่ยวชาญไพ่ทาโรต์",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  "question": "คำถาม",
+  "@question": {
+    "description": "Label for user's question"
+  },
+  
+  "celticCrossSpread": "ไพ่กางเขนเซลติก",
+  "@celticCrossSpread": {
+    "description": "Label for celtic cross spread"
+  },
+  
+  "crossSection": "กางเขน - สถานการณ์ปัจจุบัน",
+  "@crossSection": {
+    "description": "Celtic Cross spread cross section label"
+  },
+  
+  "staffSection": "ไม้เท้า - การพัฒนาในอนาคต",
+  "@staffSection": {
+    "description": "Celtic Cross spread staff section label"
+  },
+  
+  "languageChanged": "เปลี่ยนภาษาเรียบร้อยแล้ว",
+  "@languageChanged": {
+    "description": "Language change success message"
+  },
+  
+  "notificationsEnabled": "เปิดการแจ้งเตือนแล้ว",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "ปิดการแจ้งเตือนแล้ว",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "เปิดการสั่นแล้ว",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "ปิดการสั่นแล้ว",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "เปิดภาพเคลื่อนไหวแล้ว",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "ปิดภาพเคลื่อนไหวแล้ว",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "logoutSuccess": "ออกจากระบบเรียบร้อยแล้ว",
+  "@logoutSuccess": {
+    "description": "Logout success message"
+  },
+  
+  "deleteAccountSuccess": "ลบบัญชีเรียบร้อยแล้ว",
+  "@deleteAccountSuccess": {
+    "description": "Delete account success message"
+  },
+  
+  "errorOccurred": "เกิดข้อผิดพลาด",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "notificationPermissionDenied": "ต้องการการอนุญาตแจ้งเตือน",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "generalSettings": "การตั้งค่าทั่วไป",
+  "@generalSettings": {
+    "description": "General settings section title"
+  },
+  
+  "accountSettings": "การตั้งค่าบัญชี",
+  "@accountSettings": {
+    "description": "Account settings section title"
+  },
+  
+  "moreTitle": "เพิ่มเติม",
+  "@moreTitle": {
+    "description": "More section title"
+  },
+  
+  "languageTitle": "ภาษา",
+  "@languageTitle": {
+    "description": "Language setting title"
+  },
+  
+  "notificationsTitle": "การแจ้งเตือน",
+  "@notificationsTitle": {
+    "description": "Notifications setting title"
+  },
+  
+  "vibrationTitle": "การตอบสนองแบบสัมผัส",
+  "@vibrationTitle": {
+    "description": "Vibration setting title"
+  },
+  
+  "vibrationSubtitle": "เปิดใช้งานการสั่น",
+  "@vibrationSubtitle": {
+    "description": "Vibration setting subtitle"
+  },
+  
+  "animationsTitle": "ภาพเคลื่อนไหว",
+  "@animationsTitle": {
+    "description": "Animations setting title"
+  },
+  
+  "animationsSubtitle": "เปิดใช้งานภาพเคลื่อนไหว UI",
+  "@animationsSubtitle": {
+    "description": "Animations setting subtitle"
+  },
+  
+  "dailyTarotReminder": "รับการเตือนไพ่ทาโรต์ประจำวัน",
+  "@dailyTarotReminder": {
+    "description": "Daily tarot reminder setting"
+  },
+  
+  "deleteAccountConfirmMessage": "การกระทำนี้ไม่สามารถยกเลิกได้ ข้อมูลทั้งหมดของคุณจะถูกลบอย่างถาวร",
+  "@deleteAccountConfirmMessage": {
+    "description": "Delete account confirmation message"
+  },
+  
+  "chatCount": "แชท {count} ครั้ง",
+  "@chatCount": {
+    "description": "Chat count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectedCards": "ไพ่ที่เลือก",
+  "@selectedCards": {
+    "description": "Selected cards label"
+  },
+  
+  "aiInterpretation": "การตีความ AI",
+  "@aiInterpretation": {
+    "description": "AI interpretation title"
+  },
+  
+  "invalidEmotionInput": "ข้อมูลอารมณ์ไม่ถูกต้อง",
+  "@invalidEmotionInput": {
+    "description": "Error when emotion input is invalid"
+  },
+  
+  "interpretationNotReceived": "ไม่สามารถรับผลการตีความได้",
+  "@interpretationNotReceived": {
+    "description": "Error when interpretation is not received"
+  },
+  
+  "responseGenerationFailed": "สร้างการตอบสนองล้มเหลว",
+  "@responseGenerationFailed": {
+    "description": "Error when response generation fails"
+  },
+  
+  "invalidEmailFormat": "รูปแบบอีเมลไม่ถูกต้อง",
+  "@invalidEmailFormat": {
+    "description": "Error for invalid email format"
+  },
+  
+  "weakPassword": "รหัสผ่านอ่อนแอเกินไป กรุณาใช้อย่างน้อย 8 ตัวอักษร รวมตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ",
+  "@weakPassword": {
+    "description": "Error for weak password"
+  },
+  
+  "invalidUsername": "ชื่อผู้ใช้ต้องมี 3-20 ตัวอักษร ใช้เฉพาะตัวอักษร ตัวเลข และขีดล่าง",
+  "@invalidUsername": {
+    "description": "Error for invalid username"
+  },
+  
+  "signupError": "เกิดข้อผิดพลาดระหว่างการลงทะเบียน",
+  "@signupError": {
+    "description": "General signup error"
+  },
+  
+  "loginError": "เกิดข้อผิดพลาดระหว่างการเข้าสู่ระบบ",
+  "@loginError": {
+    "description": "General login error"
+  },
+  
+  "logoutError": "เกิดข้อผิดพลาดระหว่างการออกจากระบบ",
+  "@logoutError": {
+    "description": "General logout error"
+  },
+  
+  "passwordResetEmailFailed": "ส่งอีเมลรีเซ็ตรหัสผ่านล้มเหลว",
+  "@passwordResetEmailFailed": {
+    "description": "Error when password reset email fails"
+  },
+  
+  "profileCreationFailed": "สร้างโปรไฟล์ผู้ใช้ล้มเหลว",
+  "@profileCreationFailed": {
+    "description": "Error when profile creation fails"
+  },
+  
+  "noLoggedInUser": "ไม่มีผู้ใช้ที่เข้าสู่ระบบ",
+  "@noLoggedInUser": {
+    "description": "Error when no user is logged in"
+  },
+  
+  "profileUpdateFailed": "อัปเดตโปรไฟล์ล้มเหลว",
+  "@profileUpdateFailed": {
+    "description": "Error when profile update fails"
+  },
+  
+  "cardInterpretationFailed": "การตีความไพ่ล้มเหลว: {error}",
+  "@cardInterpretationFailed": {
+    "description": "Error when card interpretation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "emailAlreadyInUse": "อีเมลนี้ถูกใช้งานแล้ว",
+  "@emailAlreadyInUse": {
+    "description": "Error when email is already registered"
+  },
+  
+  "signupErrorWithMessage": "เกิดข้อผิดพลาดระหว่างการลงทะเบียน: {message}",
+  "@signupErrorWithMessage": {
+    "description": "Signup error with specific message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tooManyRequests": "คำขอมากเกินไป กรุณาลองใหม่ภายหลัง",
+  "@tooManyRequests": {
+    "description": "Error for rate limiting"
+  },
+  
+  "verificationEmailError": "เกิดข้อผิดพลาดขณะส่งอีเมลยืนยัน",
+  "@verificationEmailError": {
+    "description": "Error when sending verification email"
   }
 }

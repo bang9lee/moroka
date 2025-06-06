@@ -207,7 +207,7 @@ class InterpretationSection extends StatelessWidget {
     // 섹션이 없으면 전체를 하나의 섹션으로
     if (sections.isEmpty) {
       sections.add({
-        'title': 'AI 해석',
+        'title': 'AI Interpretation', // Will be localized when displayed
         'content': text,
       });
     }

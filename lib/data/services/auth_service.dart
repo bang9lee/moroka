@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 import '../../core/utils/app_logger.dart';
 import '../../core/utils/input_validator.dart';
+import '../../core/errors/app_exceptions.dart';
 
 /// Firebase 인증 서비스
 /// 이메일/구글 로그인, 회원가입, 프로필 관리 등을 담당합니다.
@@ -32,16 +33,16 @@ class AuthService {
     try {
       // 입력 유효성 검사
       if (!InputValidator.isValidEmail(email)) {
-        throw Exception('유효하지 않은 이메일 형식입니다.');
+        throw Exception('Invalid email format.');
       }
       
       final passwordStrength = InputValidator.checkPasswordStrength(password);
       if (passwordStrength == PasswordStrength.empty || passwordStrength == PasswordStrength.weak) {
-        throw Exception('비밀번호가 너무 약합니다. 대소문자, 숫자, 특수문자를 포함해 8자 이상으로 설정해주세요.');
+        throw Exception('Password is too weak. Please use at least 8 characters with uppercase, lowercase, numbers, and special characters.');
       }
       
       if (displayName != null && !InputValidator.isValidUsername(displayName)) {
-        throw Exception('사용자 이름은 3-20자의 영문, 숫자, 언더스코어만 사용 가능합니다.');
+        throw Exception('Username must be 3-20 characters and contain only letters, numbers, and underscores.');
       }
       
       AppLogger.debug('Attempting email sign up for: ${InputValidator.maskEmail(email)}');
@@ -51,8 +52,8 @@ class AuthService {
         password: password,
       );
 
-      if (credential.user != null) {
-        final user = credential.user!;
+      final user = credential.user;
+      if (user != null) {
         
         // 표시 이름 업데이트
         if (displayName != null && displayName.isNotEmpty) {
@@ -80,7 +81,7 @@ class AuthService {
       throw _handleAuthException(e);
     } catch (e, stack) {
       AppLogger.error('Unexpected error during sign up', e, stack);
-      throw Exception('회원가입 중 오류가 발생했습니다.');
+      throw Exception('An error occurred during sign up.');
     }
   }
 
@@ -92,7 +93,7 @@ class AuthService {
     try {
       // 입력 유효성 검사
       if (!InputValidator.isValidEmail(email)) {
-        throw Exception('유효하지 않은 이메일 형식입니다.');
+        throw Exception('Invalid email format.');
       }
       
       AppLogger.debug('Attempting email sign in for: ${InputValidator.maskEmail(email)}');
@@ -102,8 +103,8 @@ class AuthService {
         password: password,
       );
 
-      if (credential.user != null) {
-        final user = credential.user!;
+      final user = credential.user;
+      if (user != null) {
         
         // 이메일 인증 확인
         if (!user.emailVerified) {
@@ -127,7 +128,7 @@ class AuthService {
       throw _handleAuthException(e);
     } catch (e, stack) {
       AppLogger.error('Unexpected error during sign in', e, stack);
-      throw Exception('로그인 중 오류가 발생했습니다.');
+      throw Exception('An error occurred during sign in.');
     }
   }
 
@@ -169,9 +170,16 @@ class AuthService {
         
         if (!userDoc.exists) {
           // 신규 사용자 - 프로필 생성
+          final email = user.email;
+          if (email == null) {
+            throw const AuthException(
+              code: 'no_email',
+              message: 'No email address associated with this account',
+            );
+          }
           userModel = await createUserProfile(
             uid: user.uid,
-            email: user.email!,
+            email: email,
             displayName: user.displayName,
             photoUrl: user.photoURL,
           );
@@ -188,7 +196,7 @@ class AuthService {
       return null;
     } catch (e, stack) {
       AppLogger.error('Error during Google sign in', e, stack);
-      throw Exception('Google 로그인에 실패했습니다.');
+      throw Exception('Google sign in failed.');
     }
   }
 
@@ -205,7 +213,7 @@ class AuthService {
       AppLogger.debug('User signed out successfully');
     } catch (e, stack) {
       AppLogger.error('Error during sign out', e, stack);
-      throw Exception('로그아웃 중 오류가 발생했습니다.');
+      throw Exception('An error occurred during sign out.');
     }
   }
 
@@ -222,7 +230,7 @@ class AuthService {
       throw _handleAuthException(e);
     } catch (e, stack) {
       AppLogger.error('Error sending password reset email', e, stack);
-      throw Exception('비밀번호 재설정 이메일 발송에 실패했습니다.');
+      throw Exception('Failed to send password reset email.');
     }
   }
 
@@ -256,7 +264,7 @@ class AuthService {
       return userModel;
     } catch (e, stack) {
       AppLogger.error('Error creating user profile', e, stack);
-      throw Exception('사용자 프로필 생성에 실패했습니다.');
+      throw Exception('Failed to create user profile.');
     }
   }
 
@@ -277,9 +285,14 @@ class AuthService {
       // 프로필이 없는 경우 생성 (구글 로그인 등)
       final user = _auth.currentUser;
       if (user != null && user.uid == uid) {
+        final email = user.email;
+        if (email == null) {
+          AppLogger.error('User has no email address');
+          return null;
+        }
         return await createUserProfile(
           uid: uid,
-          email: user.email!,
+          email: email,
           displayName: user.displayName,
           photoUrl: user.photoURL,
         );
@@ -301,7 +314,7 @@ class AuthService {
     try {
       final user = _auth.currentUser;
       if (user == null) {
-        throw Exception('로그인된 사용자가 없습니다.');
+        throw Exception('No logged in user.');
       }
 
       AppLogger.debug('Updating user profile: ${user.uid}');
@@ -330,7 +343,7 @@ class AuthService {
       AppLogger.debug('User profile updated successfully');
     } catch (e, stack) {
       AppLogger.error('Error updating user profile', e, stack);
-      throw Exception('프로필 업데이트에 실패했습니다.');
+      throw Exception('Failed to update profile.');
     }
   }
 
@@ -376,27 +389,27 @@ class AuthService {
     
     switch (e.code) {
       case 'weak-password':
-        return '비밀번호가 너무 약합니다. 6자 이상 입력해주세요.';
+        return 'Password is too weak. Please enter at least 6 characters.';
       case 'email-already-in-use':
-        return '이미 사용 중인 이메일입니다.';
+        return 'Email already in use.';
       case 'invalid-email':
-        return '올바르지 않은 이메일 형식입니다.';
+        return 'Invalid email format.';
       case 'user-not-found':
-        return '등록되지 않은 이메일입니다.';
+        return 'Email not registered.';
       case 'wrong-password':
-        return '비밀번호가 올바르지 않습니다.';
+        return 'Incorrect password.';
       case 'user-disabled':
-        return '비활성화된 계정입니다. 고객센터에 문의해주세요.';
+        return 'Account disabled. Please contact customer service.';
       case 'too-many-requests':
-        return '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.';
+        return 'Too many attempts. Please try again later.';
       case 'network-request-failed':
-        return '네트워크 연결을 확인해주세요.';
+        return 'Please check your network connection.';
       case 'invalid-credential':
-        return '이메일 또는 비밀번호가 올바르지 않습니다.';
+        return 'Invalid email or password.';
       case 'operation-not-allowed':
-        return '이 로그인 방식은 현재 사용할 수 없습니다.';
+        return 'This sign in method is currently unavailable.';
       default:
-        return '인증 중 오류가 발생했습니다: ${e.message ?? e.code}';
+        return 'Authentication error: ${e.message ?? e.code}';
     }
   }
 }

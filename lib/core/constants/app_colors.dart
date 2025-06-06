@@ -39,6 +39,7 @@ class AppColors {
   static const Color evilGlow = Color(0xFF9D00FF);
   static const Color spiritGlow = Color(0xFF00FFB9);
   static const Color omenGlow = Color(0xFFFF006E);
+  static const Color goldenGlow = Color(0xFFFFD700);  // Golden glow for important cards
   
   // Gradient Colors
   static const List<Color> darkGradient = [
@@ -80,6 +81,12 @@ class AppColors {
   // UI Elements
   static const Color divider = Color(0xFF2A2A2A);       // For visual separation only, not text
   static const Color shimmer = Color(0xFF3A3A3A);       // For loading effects only, not text
+  
+  // Additional UI Colors for compatibility
+  static const Color primary = deepPurple;               // Primary color alias
+  static const Color error = textDanger;                 // Error color alias
+  static const Color success = spiritGlow;               // Success color alias
+  static const Color cardBackground = cardBack;          // Card background alias
   
   // Transparency Colors (without using withOpacity)
   static const Color blackOverlay20 = Color(0x33000000);

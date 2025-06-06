@@ -98,5 +98,29 @@
   "@chatHistory": {},
   
   "chatHistoryDescription": "Your conversation with the Tarot Master",
-  "@chatHistoryDescription": {}
+  "@chatHistoryDescription": {},
+  
+  "remainingDraws": "Remaining Draws",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "No draws remaining",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "Ad",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "tarotMaster": "Tarot Master",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  "question": "Question",
+  "@question": {
+    "description": "Label for user's question"
+  }
 }

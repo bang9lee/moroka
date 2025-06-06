@@ -7,11 +7,6 @@ import '../../../data/services/auth_service.dart';
 import '../../../data/models/user_model.dart';
 import '../../../providers.dart';
 
-/// AuthService Provider
-final authServiceProvider = Provider<AuthService>((ref) {
-  return AuthService();
-});
-
 /// LoginViewModel Provider
 final loginViewModelProvider = StateNotifierProvider<LoginViewModel, LoginState>((ref) {
   final authService = ref.watch(authServiceProvider);
@@ -61,12 +56,12 @@ class LoginViewModel extends StateNotifier<LoginState> {
   }) async {
     // 유효성 검사
     if (email.trim().isEmpty) {
-      state = state.copyWith(error: '이메일을 입력해주세요.');
+      state = state.copyWith(error: 'errorEmailEmpty');
       return;
     }
     
     if (password.isEmpty) {
-      state = state.copyWith(error: '비밀번호를 입력해주세요.');
+      state = state.copyWith(error: 'errorPasswordEmpty');
       return;
     }
 
@@ -110,7 +105,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
             error: null,
           );
         } else {
-          throw Exception('사용자 정보를 불러올 수 없습니다.');
+          throw Exception('errorUserDataLoad');
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -119,25 +114,25 @@ class LoginViewModel extends StateNotifier<LoginState> {
       String errorMessage;
       switch (e.code) {
         case 'user-not-found':
-          errorMessage = '등록되지 않은 이메일입니다.';
+          errorMessage = 'errorUserNotFound';
           break;
         case 'wrong-password':
-          errorMessage = '비밀번호가 올바르지 않습니다.';
+          errorMessage = 'errorWrongPassword';
           break;
         case 'invalid-email':
-          errorMessage = '올바르지 않은 이메일 형식입니다.';
+          errorMessage = 'errorEmailInvalid';
           break;
         case 'user-disabled':
-          errorMessage = '비활성화된 계정입니다.';
+          errorMessage = 'errorUserDisabled';
           break;
         case 'too-many-requests':
-          errorMessage = '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.';
+          errorMessage = 'errorTooManyRequests';
           break;
         case 'invalid-credential':
-          errorMessage = '이메일 또는 비밀번호가 올바르지 않습니다.';
+          errorMessage = 'errorInvalidCredential';
           break;
         default:
-          errorMessage = '로그인 중 오류가 발생했습니다: ${e.message ?? e.code}';
+          errorMessage = 'errorLoginFailed|${e.code}';
       }
       
       state = state.copyWith(
@@ -149,7 +144,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
       
       state = state.copyWith(
         isLoading: false,
-        error: '로그인 중 오류가 발생했습니다. 다시 시도해주세요.',
+        error: 'errorLoginFailed',
       );
     }
   }
@@ -183,7 +178,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
       
       state = state.copyWith(
         isLoading: false,
-        error: 'Google 로그인에 실패했습니다. 다시 시도해주세요.',
+        error: 'errorGoogleLoginFailed',
       );
     }
   }
@@ -229,7 +224,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
       
       // 에러가 있어도 상태는 초기화
       state = LoginState(
-        error: '로그아웃 중 오류가 발생했습니다.',
+        error: 'errorLogoutFailed',
       );
     }
   }
@@ -237,7 +232,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
   /// 비밀번호 재설정 이메일 발송
   Future<void> sendPasswordResetEmail(String email) async {
     if (email.trim().isEmpty) {
-      state = state.copyWith(error: '이메일을 입력해주세요.');
+      state = state.copyWith(error: 'errorEmailEmpty');
       return;
     }
 
@@ -258,7 +253,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
       
       state = state.copyWith(
         isLoading: false,
-        error: '비밀번호 재설정 이메일 발송에 실패했습니다.',
+        error: 'errorPasswordResetFailed',
       );
     }
   }

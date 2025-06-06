@@ -74,6 +74,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     await ref.read(loginViewModelProvider.notifier).signInWithGoogle();
   }
 
+  String _localizeError(BuildContext context, String errorKey) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    // Check if error contains additional info (like errorLoginFailed|code)
+    if (errorKey.contains('|')) {
+      final parts = errorKey.split('|');
+      final key = parts[0];
+      final code = parts[1];
+      
+      if (key == 'errorLoginFailed') {
+        return '${l10n.errorLoginFailed}: $code';
+      }
+    }
+    
+    // Map error keys to localized messages
+    switch (errorKey) {
+      case 'errorEmailEmpty':
+        return l10n.errorEmailEmpty;
+      case 'errorPasswordEmpty':
+        return l10n.errorPasswordEmpty;
+      case 'errorUserNotFound':
+        return l10n.errorUserNotFound;
+      case 'errorWrongPassword':
+        return l10n.errorWrongPassword;
+      case 'errorEmailInvalid':
+        return l10n.errorEmailInvalid;
+      case 'errorUserDisabled':
+        return l10n.errorUserDisabled;
+      case 'errorTooManyRequests':
+        return l10n.errorTooManyRequests;
+      case 'errorInvalidCredential':
+        return l10n.errorInvalidCredential;
+      case 'errorLoginFailed':
+        return l10n.errorLoginFailed;
+      case 'errorGoogleLoginFailed':
+        return l10n.errorGoogleLoginFailed;
+      case 'errorLogoutFailed':
+        return l10n.errorLogoutFailed;
+      case 'errorPasswordResetFailed':
+        return l10n.errorPasswordResetFailed;
+      case 'errorUserDataLoad':
+        return l10n.errorUserDataLoad;
+      default:
+        return errorKey; // Fallback to key if not found
+    }
+  }
+
   void _showPasswordResetDialog() {
     final l10n = AppLocalizations.of(context)!;
     final emailController = TextEditingController(text: _emailController.text);
@@ -199,7 +246,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       if (next.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(next.error!),
+            content: Text(_localizeError(context, next.error!)),
             backgroundColor: AppColors.bloodMoon,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(

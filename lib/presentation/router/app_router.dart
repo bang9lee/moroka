@@ -79,10 +79,12 @@ class AppRouter {
           GoRoute(
             path: 'terms',
             name: 'terms',
-            pageBuilder: (context, state) => _buildPageWithSlideTransition(
-              state: state,
-              child: const TermsScreen(),
-            ),
+            pageBuilder: (context, state) {
+              return _buildPageWithSlideTransition(
+                state: state,
+                child: const TermsScreen(),
+              );
+            },
           ),
           
           // Email Verification
@@ -262,7 +264,7 @@ class AppRouter {
         const end = Offset.zero;
         const curve = Curves.easeInOutCubic;
         
-        var tween = Tween(begin: begin, end: end).chain(
+        final tween = Tween(begin: begin, end: end).chain(
           CurveTween(curve: curve),
         );
         
@@ -290,7 +292,7 @@ class AppRouter {
         const end = Offset.zero;
         const curve = Curves.easeInOutCubic;
         
-        var tween = Tween(begin: begin, end: end).chain(
+        final tween = Tween(begin: begin, end: end).chain(
           CurveTween(curve: curve),
         );
         
@@ -318,7 +320,7 @@ class AppRouter {
         const end = 1.0;
         const curve = Curves.easeInOut;
         
-        var tween = Tween(begin: begin, end: end).chain(
+        final tween = Tween(begin: begin, end: end).chain(
           CurveTween(curve: curve),
         );
         

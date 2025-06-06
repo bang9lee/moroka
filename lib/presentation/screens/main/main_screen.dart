@@ -10,6 +10,7 @@ import '../../../core/utils/animation_controller_manager.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../providers.dart';
+import '../../../data/models/user_model.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/glass_morphism_container.dart';
 import '../../widgets/common/menu_bottom_sheet.dart';
@@ -39,15 +40,15 @@ class _MainScreenState extends ConsumerState<MainScreen>
   List<Map<String, dynamic>> _getMoods(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return [
-      {'name': l10n.moodAnxious, 'color': AppColors.bloodMoon, 'emoji': '😟'},
-      {'name': l10n.moodLonely, 'color': AppColors.deepViolet, 'emoji': '😔'},
-      {'name': l10n.moodCurious, 'color': AppColors.mysticPurple, 'emoji': '🤔'},
-      {'name': l10n.moodFearful, 'color': AppColors.shadowGray, 'emoji': '😨'},
-      {'name': l10n.moodHopeful, 'color': AppColors.spiritGlow, 'emoji': '😊'},
-      {'name': l10n.moodConfused, 'color': AppColors.omenGlow, 'emoji': '😕'},
-      {'name': l10n.moodDesperate, 'color': AppColors.crimsonGlow, 'emoji': '🙏'},
-      {'name': l10n.moodExpectant, 'color': AppColors.evilGlow, 'emoji': '😄'},
-      {'name': l10n.moodMystical, 'color': AppColors.textMystic, 'emoji': '🔮'},
+      {'key': 'anxious', 'name': l10n.moodAnxious, 'color': AppColors.bloodMoon, 'emoji': '😟'},
+      {'key': 'lonely', 'name': l10n.moodLonely, 'color': AppColors.deepViolet, 'emoji': '😔'},
+      {'key': 'curious', 'name': l10n.moodCurious, 'color': AppColors.mysticPurple, 'emoji': '🤔'},
+      {'key': 'fearful', 'name': l10n.moodFearful, 'color': AppColors.shadowGray, 'emoji': '😨'},
+      {'key': 'hopeful', 'name': l10n.moodHopeful, 'color': AppColors.spiritGlow, 'emoji': '😊'},
+      {'key': 'confused', 'name': l10n.moodConfused, 'color': AppColors.omenGlow, 'emoji': '😕'},
+      {'key': 'desperate', 'name': l10n.moodDesperate, 'color': AppColors.crimsonGlow, 'emoji': '🙏'},
+      {'key': 'expectant', 'name': l10n.moodExpectant, 'color': AppColors.evilGlow, 'emoji': '😄'},
+      {'key': 'mystical', 'name': l10n.moodMystical, 'color': AppColors.textMystic, 'emoji': '🔮'},
     ];
   }
   
@@ -267,8 +268,36 @@ class _MainScreenState extends ConsumerState<MainScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(l10n.drawAddedMessage),
-              backgroundColor: AppColors.spiritGlow,
+              content: Row(
+                children: [
+                  const Icon(
+                    Icons.celebration,
+                    color: AppColors.ghostWhite,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.drawAddedMessage,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.ghostWhite,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              backgroundColor: AppColors.deepViolet,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: AppColors.mysticPurple.withAlpha(100),
+                  width: 1,
+                ),
+              ),
+              margin: const EdgeInsets.all(20),
+              duration: const Duration(seconds: 3),
             ),
           );
         }
@@ -278,8 +307,36 @@ class _MainScreenState extends ConsumerState<MainScreen>
     if (!success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.adLoadFailed),
-          backgroundColor: AppColors.crimsonGlow,
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline,
+                color: AppColors.ghostWhite,
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l10n.adLoadFailed,
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.ghostWhite,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.bloodMoon,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: AppColors.crimsonGlow.withAlpha(100),
+              width: 1,
+            ),
+          ),
+          margin: const EdgeInsets.all(20),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -346,7 +403,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     );
   }
 
-  Widget _buildAppBar(AsyncValue<dynamic> currentUser) {
+  Widget _buildAppBar(AsyncValue<UserModel?> currentUser) {
     return Column(
       children: [
         Container(
@@ -373,15 +430,14 @@ class _MainScreenState extends ConsumerState<MainScreen>
     );
   }
 
-  Widget _buildUserInfo(AsyncValue<dynamic> currentUser, BuildContext context) {
+  Widget _buildUserInfo(AsyncValue<UserModel?> currentUser, BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return currentUser.when(
       data: (user) {
         if (user == null) return const SizedBox.shrink();
         
         final displayName = user.displayName ?? 
-            user.email?.split('@').first ?? 
-            l10n.anonymousSoul;
+            user.email.split('@').first;
             
         return Semantics(
           label: '${l10n.currentUser}: $displayName',
@@ -823,7 +879,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     required int index,
     required Map<String, double> gridParams,
   }) {
-    final isSelected = _selectedMood == mood['name'];
+    final isSelected = _selectedMood == mood['key'];
     final l10n = AppLocalizations.of(context)!;
     
     return Semantics(
@@ -832,7 +888,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       selected: isSelected,
       hint: isSelected ? l10n.currentlySelected : l10n.tapToSelect,
       child: GestureDetector(
-        onTap: () => _selectMood(mood['name']),
+        onTap: () => _selectMood(mood['key']),
         child: AnimatedBuilder(
         animation: isSelected && _animationsInitialized ? _pulseAnimation : const AlwaysStoppedAnimation(1.0),
         builder: (context, child) {

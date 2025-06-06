@@ -42,20 +42,15 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
       }
 
       // If no cache, fetch from Firestore
-      final readings = await _firestoreService.getUserReadings(
+      final result = await _firestoreService.getUserReadings(
         userId: user.uid,
         limit: 10,
       );
 
+      final readings = result.readings;
+      _lastDocument = result.lastDoc;
+
       if (readings.isNotEmpty) {
-        // Get last document for pagination
-        final lastReadingId = readings.last.id;
-        final lastDoc = await FirebaseFirestore.instance
-            .collection('readings')
-            .doc(lastReadingId)
-            .get();
-        _lastDocument = lastDoc;
-        
         // Cache the readings
         await _cacheRepository.cacheUserReadingHistory(
           userId: user.uid,
@@ -86,21 +81,14 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
     state = state.copyWith(isLoadingMore: true);
 
     try {
-      final moreReadings = await _firestoreService.getUserReadings(
+      final result = await _firestoreService.getUserReadings(
         userId: user.uid,
         limit: 10,
         lastDocument: _lastDocument,
       );
 
-      if (moreReadings.isNotEmpty) {
-        // Update last document
-        final lastReadingId = moreReadings.last.id;
-        final lastDoc = await FirebaseFirestore.instance
-            .collection('readings')
-            .doc(lastReadingId)
-            .get();
-        _lastDocument = lastDoc;
-      }
+      final moreReadings = result.readings;
+      _lastDocument = result.lastDoc;
 
       final updatedReadings = [...state.readings, ...moreReadings];
       
@@ -143,6 +131,36 @@ class HistoryViewModel extends StateNotifier<HistoryState> {
     } catch (e) {
       AppLogger.error('Error deleting reading', e);
       state = state.copyWith(error: e.toString());
+    }
+  }
+
+  Future<void> deleteAllReadings() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    state = state.copyWith(isLoading: true);
+
+    try {
+      // Delete all readings from Firestore
+      await _firestoreService.deleteAllUserReadings(user.uid);
+      
+      // Clear cache
+      await _cacheRepository.clearUserReadingHistory(user.uid);
+      
+      // Clear local state
+      state = state.copyWith(
+        readings: [],
+        isLoading: false,
+        hasMore: false,
+      );
+      
+      AppLogger.debug('All readings deleted for user: ${user.uid}');
+    } catch (e) {
+      AppLogger.error('Error deleting all readings', e);
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
     }
   }
 }

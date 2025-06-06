@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class TypingIndicator extends StatelessWidget {
   const TypingIndicator({super.key});
@@ -105,9 +106,9 @@ class TypingIndicator extends StatelessWidget {
                               curve: Curves.easeInOut,
                             ),
                             const SizedBox(width: 4),
-                            const Text(
-                              '해석 중',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.interpretingCards,
+                              style: const TextStyle(
                                 fontSize: 10,
                                 color: AppColors.crimsonGlow,
                                 fontWeight: FontWeight.w600,

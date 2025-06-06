@@ -175,7 +175,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => '켈틱 크로스 스프레드';
+
+  @override
+  String get crossSection => '십자가 - 현재 상황';
+
+  @override
+  String get staffSection => '지팡이 - 미래 전개';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -224,6 +230,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => '과거의 운명을 되돌아보세요';
+
+  @override
+  String get loadingHistory => '기록을 불러오는 중...';
 
   @override
   String get menuStatistics => '통계 & 분석';
@@ -287,6 +296,30 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => '네트워크 연결을 확인해주세요';
+
+  @override
+  String get errorUserDataLoad => '사용자 정보를 불러올 수 없습니다';
+
+  @override
+  String get errorUserNotFound => '등록되지 않은 이메일입니다';
+
+  @override
+  String get errorWrongPassword => '비밀번호가 올바르지 않습니다';
+
+  @override
+  String get errorUserDisabled => '비활성화된 계정입니다';
+
+  @override
+  String get errorTooManyRequests => '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요';
+
+  @override
+  String get errorInvalidCredential => '이메일 또는 비밀번호가 올바르지 않습니다';
+
+  @override
+  String get errorLogoutFailed => '로그아웃 중 오류가 발생했습니다';
+
+  @override
+  String get errorPasswordResetFailed => '비밀번호 재설정 이메일 발송에 실패했습니다';
 
   @override
   String get errorNotEnoughCards => '카드를 더 선택해주세요';
@@ -516,6 +549,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get aboutSubtitle => '운명의 카드가 당신을 기다립니다';
 
   @override
+  String get aboutTagline => '운명의 카드가 당신을 기다립니다';
+
+  @override
   String get aboutDescription =>
       'MOROKA는 고대의 신비로운 타로 카드를 통해 당신의 운명을 읽어드립니다. 78장의 카드 하나하나에 담긴 우주의 메시지를 AI 타로 마스터가 해석해 드립니다.\n\n어둠 속에서 빛나는 진실, 그리고 당신만을 위한 특별한 메시지를 만나보세요.';
 
@@ -630,7 +666,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nextStep => '다음 단계';
 
   @override
-  String get errorNameTooShort => '2자 이상 입력해주세요';
+  String get errorNameTooShort => '이름은 2자 이상이어야 합니다';
 
   @override
   String get errorConfirmPassword => '비밀번호를 다시 입력해주세요';
@@ -693,6 +729,43 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get deleteReadingMessage => '삭제된 기록은 복구할 수 없습니다';
+
+  @override
+  String get deleteAll => '전체 삭제';
+
+  @override
+  String get deleteAllConfirmTitle => '모든 기록을 삭제하시겠습니까?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      '모든 타로 리딩 기록이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.';
+
+  @override
+  String get deleteAllButton => '전체 삭제';
+
+  @override
+  String get totalTarotReadings => '총 타로 리딩';
+
+  @override
+  String get mostFrequentCard => '가장 많이 나온 카드';
+
+  @override
+  String get cardFrequencyTop5 => '카드 출현 빈도 TOP 5';
+
+  @override
+  String get moodAnalysis => '기분별 리딩 분석';
+
+  @override
+  String get monthlyReadingTrend => '월별 리딩 추이';
+
+  @override
+  String get noData => '데이터가 없습니다';
+
+  @override
+  String get noDataToAnalyze => '아직 분석할 데이터가 없습니다';
+
+  @override
+  String get startTarotReading => '타로 리딩을 시작해보세요';
 
   @override
   String get cardOfFate => '운명의 카드';
@@ -797,6 +870,36 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get skip => '건너뛰기';
+
+  @override
+  String get languageChanged => '언어가 성공적으로 변경되었습니다';
+
+  @override
+  String get notificationsEnabled => '알림이 활성화되었습니다';
+
+  @override
+  String get notificationsDisabled => '알림이 비활성화되었습니다';
+
+  @override
+  String get vibrationEnabled => '진동이 활성화되었습니다';
+
+  @override
+  String get vibrationDisabled => '진동이 비활성화되었습니다';
+
+  @override
+  String get animationsEnabled => '애니메이션이 활성화되었습니다';
+
+  @override
+  String get animationsDisabled => '애니메이션이 비활성화되었습니다';
+
+  @override
+  String get notificationPermissionDenied => '알림 권한이 필요합니다';
+
+  @override
+  String get errorWeakPassword => '비밀번호가 너무 약합니다';
+
+  @override
+  String get moreTitle => '더보기';
 
   @override
   String get willYouSelectIt => '선택하시겠습니까?';
@@ -927,30 +1030,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get analyzingDestiny => '운명을 분석하는 중...';
 
   @override
-  String get noDataToAnalyze => '아직 분석할 데이터가 없습니다';
-
-  @override
-  String get startTarotReading => '타로 리딩을 시작해보세요';
-
-  @override
-  String get totalTarotReadings => '총 타로 리딩';
-
-  @override
-  String get mostFrequentCard => '가장 많이 나온 카드';
-
-  @override
-  String get cardFrequencyTop5 => '카드 출현 빈도 TOP 5';
-
-  @override
-  String get moodAnalysis => '기분별 리딩 분석';
-
-  @override
-  String get monthlyReadingTrend => '월별 리딩 추이';
-
-  @override
-  String get noData => '데이터가 없습니다';
-
-  @override
   String timesCount(int count) {
     return '$count회';
   }
@@ -1025,6 +1104,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get yourQuestion => '당신의 질문';
 
   @override
+  String get tarotMaster => '타로 마스터';
+
+  @override
+  String get question => '질문';
+
+  @override
   String get tarotMasterResponse => '타로 마스터의 답변';
 
   @override
@@ -1040,7 +1125,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get card => '카드';
 
   @override
-  String get chatCount => '대화 횟수';
+  String chatCount(int count) {
+    return '대화 $count회';
+  }
 
   @override
   String get deleteReading => '기록 삭제';
@@ -1259,4 +1346,242 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get yesNoDescription => '명확한 답을 위한 점술';
+
+  @override
+  String get errorApiMessage => '죄송합니다. 운명의 실이 잠시 엉켜버렸네요. 다시 시도해 주세요.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return '$spreadName 배열이 펼쳐졌습니다.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return '선택하신 카드들: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return '이 카드들이 만들어내는 에너지가 당신의 $mood 마음과 공명하고 있습니다.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      '각 카드가 전하는 메시지들이 서로 연결되어 더 큰 그림을 그리고 있네요.\n\n잠시 후 더 깊은 해석을 전해드리겠습니다...';
+
+  @override
+  String get waitingMessage => '기다리는 중...';
+
+  @override
+  String get nameAvailable => '사용 가능한 이름입니다';
+
+  @override
+  String get nameAlreadyTaken => '이미 사용 중인 이름입니다';
+
+  @override
+  String get errorNameCheckFailed => '이름 확인 중 오류가 발생했습니다';
+
+  @override
+  String get emailAlreadyRegistered => '이미 가입된 이메일입니다';
+
+  @override
+  String get errorEmailCheckFailed => '이메일 확인 중 오류가 발생했습니다';
+
+  @override
+  String get messageRequired => '메시지를 입력해주세요';
+
+  @override
+  String get messageTooLong => '메시지는 500자 이내로 입력해주세요';
+
+  @override
+  String get messageInvalidCharacters => '허용되지 않은 문자가 포함되어 있습니다';
+
+  @override
+  String get messageInvalidScript => '허용되지 않은 스크립트가 포함되어 있습니다';
+
+  @override
+  String get passwordRequired => '비밀번호를 입력해주세요';
+
+  @override
+  String get passwordStrengthWeak => '약함';
+
+  @override
+  String get passwordStrengthMedium => '보통';
+
+  @override
+  String get passwordStrengthStrong => '강함';
+
+  @override
+  String get error => '오류';
+
+  @override
+  String get ok => '확인';
+
+  @override
+  String get errorInvalidFormat => '잘못된 형식';
+
+  @override
+  String get errorUnexpected => '예기치 않은 오류가 발생했습니다';
+
+  @override
+  String get errorUnknown => '알 수 없는 오류가 발생했습니다';
+
+  @override
+  String get errorNetworkTimeout => '네트워크 연결 시간이 초과되었습니다';
+
+  @override
+  String get errorNoInternet => '인터넷 연결 없음';
+
+  @override
+  String get errorServerError => '서버 오류가 발생했습니다';
+
+  @override
+  String get errorInvalidCredentials => '잘못된 이메일 또는 비밀번호';
+
+  @override
+  String get errorEmailNotVerified => '이메일이 인증되지 않았습니다';
+
+  @override
+  String get errorSessionExpired => '세션이 만료되었습니다. 다시 로그인해주세요';
+
+  @override
+  String get errorQuotaExceeded => '일일 한도를 초과했습니다';
+
+  @override
+  String get errorInvalidResponse => '서버로부터 잘못된 응답을 받았습니다';
+
+  @override
+  String get errorRateLimitExceeded => '요청이 너무 많습니다. 나중에 다시 시도해주세요';
+
+  @override
+  String get errorDataNotFound => '데이터를 찾을 수 없습니다';
+
+  @override
+  String get errorDataCorrupted => '데이터가 손상되었습니다';
+
+  @override
+  String get errorSaveFailed => '데이터 저장에 실패했습니다';
+
+  @override
+  String get errorPermissionDenied => '권한이 거부되었습니다';
+
+  @override
+  String get errorPermissionRestricted => '접근이 제한되었습니다';
+
+  @override
+  String get errorEmailAlreadyInUse => '이미 사용 중인 이메일입니다';
+
+  @override
+  String get errorInvalidEmail => '잘못된 이메일 주소';
+
+  @override
+  String get errorNetworkRequestFailed => '네트워크 요청에 실패했습니다';
+
+  @override
+  String get errorOperationNotAllowed => '허용되지 않는 작업입니다';
+
+  @override
+  String get errorAuthFailed => '인증에 실패했습니다';
+
+  @override
+  String get logoutSuccess => '성공적으로 로그아웃되었습니다';
+
+  @override
+  String get deleteAccountSuccess => '계정이 성공적으로 삭제되었습니다';
+
+  @override
+  String get generalSettings => '일반 설정';
+
+  @override
+  String get accountSettings => '계정 설정';
+
+  @override
+  String get languageTitle => '언어';
+
+  @override
+  String get notificationsTitle => '알림';
+
+  @override
+  String get vibrationTitle => '햅틱 피드백';
+
+  @override
+  String get vibrationSubtitle => '진동 피드백 활성화';
+
+  @override
+  String get animationsTitle => '애니메이션';
+
+  @override
+  String get animationsSubtitle => 'UI 애니메이션 활성화';
+
+  @override
+  String get dailyTarotReminder => '매일 타로 알림 받기';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      '이 작업은 되돌릴 수 없습니다. 모든 데이터가 영구적으로 삭제됩니다.';
+
+  @override
+  String get selectedCards => '선택된 카드';
+
+  @override
+  String get aiInterpretation => 'AI 해석';
+
+  @override
+  String get invalidEmotionInput => '유효하지 않은 감정 입력입니다.';
+
+  @override
+  String get interpretationNotReceived => '해석 결과를 받지 못했습니다.';
+
+  @override
+  String get responseGenerationFailed => '응답을 생성하지 못했습니다.';
+
+  @override
+  String get invalidEmailFormat => '유효하지 않은 이메일 형식입니다.';
+
+  @override
+  String get weakPassword =>
+      '비밀번호가 너무 약합니다. 대소문자, 숫자, 특수문자를 포함해 8자 이상으로 설정해주세요.';
+
+  @override
+  String get invalidUsername => '사용자 이름은 3-20자의 영문, 숫자, 언더스코어만 사용 가능합니다.';
+
+  @override
+  String get signupError => '회원가입 중 오류가 발생했습니다.';
+
+  @override
+  String get loginError => '로그인 중 오류가 발생했습니다.';
+
+  @override
+  String get logoutError => '로그아웃 중 오류가 발생했습니다.';
+
+  @override
+  String get passwordResetEmailFailed => '비밀번호 재설정 이메일 발송에 실패했습니다.';
+
+  @override
+  String get profileCreationFailed => '사용자 프로필 생성에 실패했습니다.';
+
+  @override
+  String get noLoggedInUser => '로그인된 사용자가 없습니다.';
+
+  @override
+  String get profileUpdateFailed => '프로필 업데이트에 실패했습니다.';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return '카드 해석을 가져오는데 실패했습니다: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse => '이미 사용 중인 이메일입니다.';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return '회원가입 중 오류가 발생했습니다: $message';
+  }
+
+  @override
+  String get tooManyRequests => '너무 많은 요청이 있었습니다. 잠시 후 다시 시도해주세요.';
+
+  @override
+  String get verificationEmailError => '인증 메일 발송 중 오류가 발생했습니다.';
 }

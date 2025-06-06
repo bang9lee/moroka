@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_constants.dart';
 
 class GlassMorphismContainer extends StatelessWidget {
   final Widget child;
@@ -21,12 +22,12 @@ class GlassMorphismContainer extends StatelessWidget {
     this.width,  // Removed default value
     this.height, // Removed default value
     this.borderRadius = 16,
-    this.blur = 10,
+    this.blur = AppConstants.glassBlur,
     this.padding,
     this.margin,
     this.backgroundColor,
     this.borderColor,
-    this.borderWidth = 1,
+    this.borderWidth = AppConstants.glassBorderWidth,
     this.boxShadow,
   });
 

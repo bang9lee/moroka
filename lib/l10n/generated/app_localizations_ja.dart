@@ -175,7 +175,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => 'ケルト十字スプレッド';
+
+  @override
+  String get crossSection => '十字 - 現在の状況';
+
+  @override
+  String get staffSection => '杖 - 未来の展開';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -224,6 +230,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => 'あなたの過去の運命を振り返る';
+
+  @override
+  String get loadingHistory => '履歴を読み込み中...';
 
   @override
   String get menuStatistics => '統計と分析';
@@ -287,6 +296,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'ネットワーク接続を確認してください';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'もっとカードを選んでください';
@@ -516,8 +550,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get aboutSubtitle => '運命のカードがあなたを待っている';
 
   @override
+  String get aboutTagline => '運命のカードがあなたを待っています';
+
+  @override
   String get aboutDescription =>
-      'MOROKA\n\n運命の扉が開かれました\n影の神託があなたの未来を解釈します\n\n神秘的なAIによる伝統的なタロット解釈\n深い洞察と叡智を提供';
+      'MOROKAは古代の神秘的なタロットカードを通じてあなたの運命を読み解きます。78枚のカード一枚一枚に込められた宇宙のメッセージをAIタロットマスターが解釈します。\n\n闇の中で輝く真実、そしてあなただけのための特別なメッセージをお届けします。';
 
   @override
   String get featuresTitle => '主な機能';
@@ -695,6 +732,43 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteReadingMessage => '削除された記録は復元できません';
 
   @override
+  String get deleteAll => 'すべて削除';
+
+  @override
+  String get deleteAllConfirmTitle => 'すべての記録を削除しますか？';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'すべてのタロットリーディングが完全に削除されます。この操作は元に戻せません。';
+
+  @override
+  String get deleteAllButton => 'すべて削除';
+
+  @override
+  String get totalTarotReadings => 'タロットリーディング総数';
+
+  @override
+  String get mostFrequentCard => '最も頻繁なカード';
+
+  @override
+  String get cardFrequencyTop5 => 'カード頻度 - トップ5';
+
+  @override
+  String get moodAnalysis => '気分分析';
+
+  @override
+  String get monthlyReadingTrend => '月別リーディング傾向';
+
+  @override
+  String get noData => 'データなし';
+
+  @override
+  String get noDataToAnalyze => '分析するデータがありません';
+
+  @override
+  String get startTarotReading => '統計を見るためにタロットリーディングを始めてください';
+
+  @override
   String get cardOfFate => '運命のカード';
 
   @override
@@ -798,6 +872,36 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => '言語が正常に変更されました';
+
+  @override
+  String get notificationsEnabled => '通知が有効になりました';
+
+  @override
+  String get notificationsDisabled => '通知が無効になりました';
+
+  @override
+  String get vibrationEnabled => '振動が有効になりました';
+
+  @override
+  String get vibrationDisabled => '振動が無効になりました';
+
+  @override
+  String get animationsEnabled => 'アニメーションが有効になりました';
+
+  @override
+  String get animationsDisabled => 'アニメーションが無効になりました';
+
+  @override
+  String get notificationPermissionDenied => '通知の許可が必要です';
+
+  @override
+  String get errorWeakPassword => 'パスワードが弱すぎます';
+
+  @override
+  String get moreTitle => 'その他';
 
   @override
   String get willYouSelectIt => '選択しますか？';
@@ -928,30 +1032,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -962,13 +1042,13 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get remainingDraws => 'Remaining Draws';
+  String get remainingDraws => '残り回数';
 
   @override
-  String get noDrawsRemaining => 'No draws remaining';
+  String get noDrawsRemaining => '残り回数がありません';
 
   @override
-  String get adDraws => 'Ad';
+  String get adDraws => '広告';
 
   @override
   String get dailyLimitReached => '1日の引き制限に達しました';
@@ -1025,6 +1105,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'タロットマスター';
+
+  @override
+  String get question => '質問';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1040,7 +1126,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'チャット$count回';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1263,17 +1351,254 @@ class AppLocalizationsJa extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => '今日の運勢とアドバイス';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription => '過去・現在・未来の流れ';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => '状況のすべての側面を分析';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => '関係の力学と未来';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => '明確な答えのための占い';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'エラー';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get errorInvalidFormat => '無効な形式';
+
+  @override
+  String get errorUnexpected => '予期しないエラーが発生しました';
+
+  @override
+  String get errorUnknown => '不明なエラーが発生しました';
+
+  @override
+  String get errorNetworkTimeout => 'ネットワーク接続がタイムアウトしました';
+
+  @override
+  String get errorNoInternet => 'インターネット接続がありません';
+
+  @override
+  String get errorServerError => 'サーバーエラーが発生しました';
+
+  @override
+  String get errorInvalidCredentials => 'メールアドレスまたはパスワードが無効です';
+
+  @override
+  String get errorEmailNotVerified => 'メールアドレスが確認されていません';
+
+  @override
+  String get errorSessionExpired => 'セッションの有効期限が切れました。再度ログインしてください';
+
+  @override
+  String get errorQuotaExceeded => '1日の上限を超えました';
+
+  @override
+  String get errorInvalidResponse => 'サーバーからの応答が無効です';
+
+  @override
+  String get errorRateLimitExceeded => 'リクエストが多すぎます。後でもう一度お試しください';
+
+  @override
+  String get errorDataNotFound => 'データが見つかりません';
+
+  @override
+  String get errorDataCorrupted => 'データが破損しています';
+
+  @override
+  String get errorSaveFailed => 'データの保存に失敗しました';
+
+  @override
+  String get errorPermissionDenied => '権限がありません';
+
+  @override
+  String get errorPermissionRestricted => 'アクセスが制限されています';
+
+  @override
+  String get errorEmailAlreadyInUse => 'このメールアドレスは既に使用されています';
+
+  @override
+  String get errorInvalidEmail => '無効なメールアドレス';
+
+  @override
+  String get errorNetworkRequestFailed => 'ネットワークリクエストが失敗しました';
+
+  @override
+  String get errorOperationNotAllowed => 'この操作は許可されていません';
+
+  @override
+  String get errorAuthFailed => '認証に失敗しました';
+
+  @override
+  String get logoutSuccess => 'ログアウトしました';
+
+  @override
+  String get deleteAccountSuccess => 'アカウントが削除されました';
+
+  @override
+  String get generalSettings => '一般設定';
+
+  @override
+  String get accountSettings => 'アカウント設定';
+
+  @override
+  String get languageTitle => '言語';
+
+  @override
+  String get notificationsTitle => '通知';
+
+  @override
+  String get vibrationTitle => '触覚フィードバック';
+
+  @override
+  String get vibrationSubtitle => '振動フィードバックを有効にする';
+
+  @override
+  String get animationsTitle => 'アニメーション';
+
+  @override
+  String get animationsSubtitle => 'UIアニメーションを有効にする';
+
+  @override
+  String get dailyTarotReminder => '毎日のタロットリマインダーを受け取る';
+
+  @override
+  String get deleteAccountConfirmMessage => 'この操作は元に戻せません。すべてのデータが完全に削除されます。';
+
+  @override
+  String get selectedCards => '選択されたカード';
+
+  @override
+  String get aiInterpretation => 'AI解釈';
+
+  @override
+  String get invalidEmotionInput => '無効な感情入力です。';
+
+  @override
+  String get interpretationNotReceived => '解釈結果を受信できませんでした。';
+
+  @override
+  String get responseGenerationFailed => '応答の生成に失敗しました。';
+
+  @override
+  String get invalidEmailFormat => '無効なメールアドレス形式です。';
+
+  @override
+  String get weakPassword => 'パスワードが弱すぎます。大文字、小文字、数字、特殊文字を含む8文字以上を使用してください。';
+
+  @override
+  String get invalidUsername => 'ユーザー名は英数字とアンダースコアのみを使用して3〜20文字である必要があります。';
+
+  @override
+  String get signupError => 'サインアップ中にエラーが発生しました。';
+
+  @override
+  String get loginError => 'ログイン中にエラーが発生しました。';
+
+  @override
+  String get logoutError => 'ログアウト中にエラーが発生しました。';
+
+  @override
+  String get passwordResetEmailFailed => 'パスワードリセットメールの送信に失敗しました。';
+
+  @override
+  String get profileCreationFailed => 'ユーザープロファイルの作成に失敗しました。';
+
+  @override
+  String get noLoggedInUser => 'ログインしているユーザーがいません。';
+
+  @override
+  String get profileUpdateFailed => 'プロファイルの更新に失敗しました。';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'カードの解釈に失敗しました：$error';
+  }
+
+  @override
+  String get emailAlreadyInUse => 'このメールアドレスは既に使用されています。';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'サインアップ中にエラーが発生しました：$message';
+  }
+
+  @override
+  String get tooManyRequests => 'リクエストが多すぎます。後でもう一度お試しください。';
+
+  @override
+  String get verificationEmailError => '確認メールの送信中にエラーが発生しました。';
 }

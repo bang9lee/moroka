@@ -129,10 +129,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get spreadDifficultyAdvanced => '10张牌';
 
   @override
-  String get spreadOneCard => '单牌';
+  String get spreadOneCard => '单张牌';
 
   @override
-  String get spreadThreeCard => '三牌阵';
+  String get spreadThreeCard => '三张牌';
 
   @override
   String get spreadCelticCross => '凯尔特十字';
@@ -175,7 +175,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => '凯尔特十字牌阵';
+
+  @override
+  String get crossSection => '十字 - 当前情况';
+
+  @override
+  String get staffSection => '权杖 - 未来发展';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -224,6 +230,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => '回顾您过去的命运';
+
+  @override
+  String get loadingHistory => '正在加载历史记录...';
 
   @override
   String get menuStatistics => '统计与分析';
@@ -287,6 +296,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => '请检查您的网络连接';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => '请选择更多牌';
@@ -513,6 +547,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutSubtitle => '命运之牌等待着你';
 
   @override
+  String get aboutTagline => '命运之牌在等待着你';
+
+  @override
   String get aboutDescription =>
       'MOROKA\n\n命运之门已开启\n暗影神谕将解读你的未来\n\n传统塔罗解读与神秘AI结合\n提供深度洞察与智慧';
 
@@ -692,6 +729,42 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteReadingMessage => '已删除的记录无法恢复';
 
   @override
+  String get deleteAll => '删除全部';
+
+  @override
+  String get deleteAllConfirmTitle => '删除所有记录？';
+
+  @override
+  String get deleteAllConfirmMessage => '所有塔罗牌阅读将被永久删除。此操作无法撤销。';
+
+  @override
+  String get deleteAllButton => '删除全部';
+
+  @override
+  String get totalTarotReadings => '塔罗牌阅读总数';
+
+  @override
+  String get mostFrequentCard => '最常见的牌';
+
+  @override
+  String get cardFrequencyTop5 => '牌频率 - 前5名';
+
+  @override
+  String get moodAnalysis => '情绪分析';
+
+  @override
+  String get monthlyReadingTrend => '每月阅读趋势';
+
+  @override
+  String get noData => '无数据';
+
+  @override
+  String get noDataToAnalyze => '没有数据可分析';
+
+  @override
+  String get startTarotReading => '开始塔罗牌阅读以查看您的统计数据';
+
+  @override
   String get cardOfFate => '命运之牌';
 
   @override
@@ -793,6 +866,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => '语言更改成功';
+
+  @override
+  String get notificationsEnabled => '通知已启用';
+
+  @override
+  String get notificationsDisabled => '通知已禁用';
+
+  @override
+  String get vibrationEnabled => '振动已启用';
+
+  @override
+  String get vibrationDisabled => '振动已禁用';
+
+  @override
+  String get animationsEnabled => '动画已启用';
+
+  @override
+  String get animationsDisabled => '动画已禁用';
+
+  @override
+  String get notificationPermissionDenied => '需要通知权限';
+
+  @override
+  String get errorWeakPassword => '密码太弱';
+
+  @override
+  String get moreTitle => '更多';
 
   @override
   String get willYouSelectIt => '要选择它吗？';
@@ -923,30 +1026,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -957,13 +1036,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get remainingDraws => 'Remaining Draws';
+  String get remainingDraws => '剩余次数';
 
   @override
-  String get noDrawsRemaining => 'No draws remaining';
+  String get noDrawsRemaining => '没有剩余次数';
 
   @override
-  String get adDraws => 'Ad';
+  String get adDraws => '广告';
 
   @override
   String get dailyLimitReached => 'Daily Draw Limit Reached';
@@ -1021,6 +1100,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => '塔罗大师';
+
+  @override
+  String get question => '问题';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1036,7 +1121,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return '聊天$count次';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1259,17 +1346,254 @@ class AppLocalizationsZh extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => '今日运势与建议';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription => '过去、现在、未来的流向';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => '分析情况的各个方面';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => '关系动态与未来';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => '获得明确答案的占卜';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => '错误';
+
+  @override
+  String get ok => '确定';
+
+  @override
+  String get errorInvalidFormat => '格式无效';
+
+  @override
+  String get errorUnexpected => '发生意外错误';
+
+  @override
+  String get errorUnknown => '发生未知错误';
+
+  @override
+  String get errorNetworkTimeout => '网络连接超时';
+
+  @override
+  String get errorNoInternet => '没有网络连接';
+
+  @override
+  String get errorServerError => '服务器错误';
+
+  @override
+  String get errorInvalidCredentials => '邮箱或密码无效';
+
+  @override
+  String get errorEmailNotVerified => '邮箱未验证';
+
+  @override
+  String get errorSessionExpired => '会话已过期，请重新登录';
+
+  @override
+  String get errorQuotaExceeded => '超过每日限额';
+
+  @override
+  String get errorInvalidResponse => '服务器响应无效';
+
+  @override
+  String get errorRateLimitExceeded => '请求过多，请稍后再试';
+
+  @override
+  String get errorDataNotFound => '未找到数据';
+
+  @override
+  String get errorDataCorrupted => '数据已损坏';
+
+  @override
+  String get errorSaveFailed => '保存数据失败';
+
+  @override
+  String get errorPermissionDenied => '权限被拒绝';
+
+  @override
+  String get errorPermissionRestricted => '访问受限';
+
+  @override
+  String get errorEmailAlreadyInUse => '邮箱已被使用';
+
+  @override
+  String get errorInvalidEmail => '无效的邮箱地址';
+
+  @override
+  String get errorNetworkRequestFailed => '网络请求失败';
+
+  @override
+  String get errorOperationNotAllowed => '操作不被允许';
+
+  @override
+  String get errorAuthFailed => '认证失败';
+
+  @override
+  String get logoutSuccess => '登出成功';
+
+  @override
+  String get deleteAccountSuccess => '账号删除成功';
+
+  @override
+  String get generalSettings => '通用设置';
+
+  @override
+  String get accountSettings => '账号设置';
+
+  @override
+  String get languageTitle => '语言';
+
+  @override
+  String get notificationsTitle => '通知';
+
+  @override
+  String get vibrationTitle => '触觉反馈';
+
+  @override
+  String get vibrationSubtitle => '启用振动反馈';
+
+  @override
+  String get animationsTitle => '动画';
+
+  @override
+  String get animationsSubtitle => '启用界面动画';
+
+  @override
+  String get dailyTarotReminder => '获取每日塔罗提醒';
+
+  @override
+  String get deleteAccountConfirmMessage => '此操作无法撤销。所有数据将被永久删除。';
+
+  @override
+  String get selectedCards => '已选择的卡牌';
+
+  @override
+  String get aiInterpretation => 'AI解读';
+
+  @override
+  String get invalidEmotionInput => '无效的情绪输入。';
+
+  @override
+  String get interpretationNotReceived => '未能接收到解读结果。';
+
+  @override
+  String get responseGenerationFailed => '生成响应失败。';
+
+  @override
+  String get invalidEmailFormat => '无效的邮箱格式。';
+
+  @override
+  String get weakPassword => '密码太弱。请使用至少8个字符，包括大写字母、小写字母、数字和特殊字符。';
+
+  @override
+  String get invalidUsername => '用户名必须为3-20个字符，只能使用字母、数字和下划线。';
+
+  @override
+  String get signupError => '注册时发生错误。';
+
+  @override
+  String get loginError => '登录时发生错误。';
+
+  @override
+  String get logoutError => '登出时发生错误。';
+
+  @override
+  String get passwordResetEmailFailed => '发送密码重置邮件失败。';
+
+  @override
+  String get profileCreationFailed => '创建用户资料失败。';
+
+  @override
+  String get noLoggedInUser => '没有登录的用户。';
+
+  @override
+  String get profileUpdateFailed => '更新资料失败。';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return '卡牌解读失败：$error';
+  }
+
+  @override
+  String get emailAlreadyInUse => '此邮箱已被使用。';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return '注册时发生错误：$message';
+  }
+
+  @override
+  String get tooManyRequests => '请求过多。请稍后再试。';
+
+  @override
+  String get verificationEmailError => '发送验证邮件时发生错误。';
 }

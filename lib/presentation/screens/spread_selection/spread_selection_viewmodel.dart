@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/tarot_spread_model.dart';
-
-final selectedSpreadProvider = StateProvider<TarotSpread?>((ref) => null);
+import '../../../providers.dart';
 
 final spreadSelectionViewModelProvider = 
     StateNotifierProvider<SpreadSelectionViewModel, SpreadSelectionState>((ref) {

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/ai_interpretation_model.dart';
 import '../models/tarot_reading_model.dart';
 import '../../core/utils/app_logger.dart';
+import '../../core/constants/app_constants.dart';
 
 class CacheService {
   static const String _aiInterpretationBox = 'ai_interpretations';
@@ -111,15 +112,25 @@ class CacheService {
     required List<TarotReadingModel> readings,
   }) async {
     try {
-      final readingMaps = readings.map((r) => {
+      // Apply the same limit as Firestore
+      const int historyLimit = AppConstants.freeUserHistoryLimit; // TODO: Check premium status for premiumUserHistoryLimit
+      
+      // Sort readings by date (newest first) and limit to historyLimit
+      final sortedReadings = readings.toList()
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      
+      final limitedReadings = sortedReadings.take(historyLimit).toList();
+      
+      final readingMaps = limitedReadings.map((r) => {
         'id': r.id,
         'data': r.toMap(),
       }).toList();
+      
       await _readingHistoryCache.put(userId, {
         'readings': readingMaps,
         'cachedAt': DateTime.now().toIso8601String(),
       });
-      AppLogger.debug('Cached reading history for user: $userId');
+      AppLogger.debug('Cached reading history for user: $userId (limited to $historyLimit readings)');
     } catch (e) {
       AppLogger.error('Failed to cache reading history', e);
     }
@@ -132,9 +143,10 @@ class CacheService {
       if (cachedData == null) return null;
       
       final readingsList = cachedData['readings'] as List;
-      return readingsList.map((reading) {
-        final id = reading['id'] as String;
-        final data = Map<String, dynamic>.from(reading['data'] as Map);
+      return readingsList.map((dynamic reading) {
+        final readingMap = reading as Map<String, dynamic>;
+        final id = readingMap['id'] as String;
+        final data = Map<String, dynamic>.from(readingMap['data'] as Map);
         return TarotReadingModel.fromMap(data, id);
       }).toList();
     } catch (e) {
@@ -252,6 +264,16 @@ class CacheService {
       AppLogger.debug('All cache cleared successfully');
     } catch (e) {
       AppLogger.error('Failed to clear cache', e);
+    }
+  }
+
+  /// Remove specific cached reading
+  Future<void> removeCachedReading(String key) async {
+    try {
+      await _readingHistoryCache.delete(key);
+      AppLogger.debug('Removed cached reading: $key');
+    } catch (e) {
+      AppLogger.error('Failed to remove cached reading', e);
     }
   }
 

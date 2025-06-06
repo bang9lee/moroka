@@ -620,7 +620,7 @@ class _PrimaryNavigationButton extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final width = isExpanded ? 200.0 : 120.0;
+    final width = isExpanded ? 220.0 : 140.0;
     
     return AnimatedBuilder(
       animation: pulseAnimation ?? const AlwaysStoppedAnimation(0),
@@ -660,12 +660,18 @@ class _PrimaryNavigationButton extends StatelessWidget {
                 ],
               ),
               child: Center(
-                child: Text(
-                  text,
-                  style: AppTextStyles.buttonLarge.copyWith(
-                    color: AppColors.ghostWhite,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: isExpanded ? 0.5 : 1.2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    text,
+                    style: AppTextStyles.buttonLarge.copyWith(
+                      color: AppColors.ghostWhite,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: isExpanded ? 0.5 : 1.2,
+                      fontSize: isExpanded ? 14 : 16,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),

@@ -1,256 +1,241 @@
 {
   "@@locale": "vi",
-  
   "appName": "Moroka",
   "@appName": {
     "description": "Application name"
   },
-  
   "appTagline": "Nhà Tiên Tri Bóng Tối",
   "@appTagline": {
     "description": "Application tagline"
   },
-  
   "appTitle": "Moroka - Lời Thì Thầm Đáng Sợ",
   "@appTitle": {
     "description": "Full application title"
   },
-  
   "onboardingTitle1": "Cánh Cửa Định Mệnh Mở Ra",
   "@onboardingTitle1": {
     "description": "First onboarding screen title"
   },
-  
   "onboardingDesc1": "Trí tuệ cổ xưa gặp công nghệ hiện đại\nđể thì thầm tương lai của bạn",
   "@onboardingDesc1": {
     "description": "First onboarding screen description"
   },
-  
   "onboardingTitle2": "Sự Thật Trong Bóng Tối",
   "@onboardingTitle2": {
     "description": "Second onboarding screen title"
   },
-  
   "onboardingDesc2": "Lá bài tarot không bao giờ nói dối\nChúng chỉ cho bạn sự thật mà bạn có thể chấp nhận",
   "@onboardingDesc2": {
     "description": "Second onboarding screen description"
   },
-  
   "onboardingTitle3": "AI Đọc Vận Mệnh Của Bạn",
   "@onboardingTitle3": {
     "description": "Third onboarding screen title"
   },
-  
   "onboardingDesc3": "Trí tuệ nhân tạo giải thích lá bài của bạn\nvà dẫn đường qua những cuộc trò chuyện sâu sắc",
   "@onboardingDesc3": {
     "description": "Third onboarding screen description"
   },
-  
   "onboardingTitle4": "Bạn Đã Sẵn Sàng?",
   "@onboardingTitle4": {
     "description": "Fourth onboarding screen title"
   },
-  
   "onboardingDesc4": "Mọi lựa chọn đều có cái giá của nó\nNếu bạn sẵn sàng đối mặt với số phận...",
   "@onboardingDesc4": {
     "description": "Fourth onboarding screen description"
   },
-  
   "loginTitle": "Bạn Đã Trở Lại",
   "@loginTitle": {
     "description": "Login screen title"
   },
-  
   "loginSubtitle": "Chúng tôi đã chờ đợi bạn",
   "@loginSubtitle": {
     "description": "Login screen subtitle"
   },
-  
   "signupTitle": "Khế Ước Định Mệnh",
   "@signupTitle": {
     "description": "Signup screen title"
   },
-  
   "signupSubtitle": "Đăng ký linh hồn của bạn",
   "@signupSubtitle": {
     "description": "Signup screen subtitle"
   },
-  
   "emailLabel": "Email",
   "@emailLabel": {
     "description": "Email input label"
   },
-  
   "passwordLabel": "Mật khẩu",
   "@passwordLabel": {
     "description": "Password input label"
   },
-  
   "nameLabel": "Tên",
   "@nameLabel": {
     "description": "Name input label"
   },
-  
   "loginButton": "Vào",
   "@loginButton": {
     "description": "Login button text"
   },
-  
   "signupButton": "Đăng Ký Linh Hồn",
   "@signupButton": {
     "description": "Signup button text"
   },
-  
   "googleLogin": "Đăng nhập với Google",
   "@googleLogin": {
     "description": "Google login button text"
   },
-  
   "googleSignup": "Bắt đầu với Google",
   "@googleSignup": {
     "description": "Google signup button text"
   },
-  
   "alreadyHaveAccount": "Đã có tài khoản? Đăng nhập",
   "@alreadyHaveAccount": {
     "description": "Link to login screen"
   },
-  
   "dontHaveAccount": "Lần đầu tiên? Đăng ký",
   "@dontHaveAccount": {
     "description": "Link to signup screen"
   },
-  
   "moodQuestion": "Bạn đang cảm thấy thế nào?",
   "@moodQuestion": {
     "description": "Question asking user's current mood"
   },
-  
   "selectSpreadButton": "Chọn Cách Trải Bài Tarot",
   "@selectSpreadButton": {
     "description": "Button to select tarot spread"
   },
-  
   "moodAnxious": "Lo lắng",
   "@moodAnxious": {
     "description": "Mood: anxious"
   },
-  
   "moodLonely": "Cô đơn",
   "@moodLonely": {
     "description": "Mood: lonely"
   },
-  
   "moodCurious": "Tò mò",
   "@moodCurious": {
     "description": "Mood: curious"
   },
-  
   "moodFearful": "Sợ hãi",
   "@moodFearful": {
     "description": "Mood: fearful"
   },
-  
   "moodHopeful": "Hy vọng",
   "@moodHopeful": {
     "description": "Mood: hopeful"
   },
-  
   "moodConfused": "Bối rối",
   "@moodConfused": {
     "description": "Mood: confused"
   },
-  
   "moodDesperate": "Tuyệt vọng",
   "@moodDesperate": {
     "description": "Mood: desperate"
   },
-  
   "moodExpectant": "Mong đợi",
   "@moodExpectant": {
     "description": "Mood: expectant"
   },
-  
   "moodMystical": "Huyền bí",
   "@moodMystical": {
     "description": "Mood: mystical"
   },
-  
   "spreadSelectionTitle": "Chọn Cách Trải Bài",
   "@spreadSelectionTitle": {
     "description": "Spread selection screen title"
   },
-  
   "spreadSelectionSubtitle": "Chọn cách trải bài dựa trên cảm xúc hiện tại của bạn",
   "@spreadSelectionSubtitle": {
     "description": "Spread selection screen subtitle"
   },
-  
   "spreadDifficultyBeginner": "1-3 lá",
   "@spreadDifficultyBeginner": {
     "description": "Beginner difficulty label"
   },
-  
   "spreadDifficultyIntermediate": "5-7 lá",
   "@spreadDifficultyIntermediate": {
     "description": "Intermediate difficulty label"
   },
-  
   "spreadDifficultyAdvanced": "10 lá",
   "@spreadDifficultyAdvanced": {
     "description": "Advanced difficulty label"
   },
-  
   "spreadOneCard": "Một Lá Bài",
   "@spreadOneCard": {
     "description": "One card spread name"
   },
-  
   "spreadThreeCard": "Ba Lá Bài",
   "@spreadThreeCard": {
     "description": "Three card spread name"
   },
-  
   "spreadCelticCross": "Thập Tự Celtic",
   "@spreadCelticCross": {
     "description": "Celtic cross spread name"
   },
-  
   "spreadRelationship": "Trải Bài Tình Yêu",
   "@spreadRelationship": {
     "description": "Relationship spread name"
   },
-  
   "spreadYesNo": "Có/Không",
   "@spreadYesNo": {
     "description": "Yes/No spread name"
+  },
+  
+  "spreadOneCard": "Một Lá",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  
+  "spreadThreeCard": "Ba Lá",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  
+  "oneCardDescription": "Vận mệnh và lời khuyên hôm nay",
+  "@oneCardDescription": {
+    "description": "One card spread description"
+  },
+  
+  "threeCardDescription": "Dòng chảy quá khứ, hiện tại và tương lai",
+  "@threeCardDescription": {
+    "description": "Three card spread description"
+  },
+  
+  "celticCrossDescription": "Phân tích mọi khía cạnh của tình huống",
+  "@celticCrossDescription": {
+    "description": "Celtic cross spread description"
+  },
+  
+  "relationshipDescription": "Động lực và tương lai của mối quan hệ",
+  "@relationshipDescription": {
+    "description": "Relationship spread description"
+  },
+  
+  "yesNoDescription": "Bói toán cho câu trả lời rõ ràng",
+  "@yesNoDescription": {
+    "description": "Yes/No spread description"
   },
   
   "selectCardTitle": "Chọn lá bài định mệnh",
   "@selectCardTitle": {
     "description": "Card selection screen title"
   },
-  
   "currentMoodLabel": "Tâm trạng hiện tại của bạn: ",
   "@currentMoodLabel": {
     "description": "Current mood label"
   },
-  
   "currentSpreadLabel": "Cách trải bài đã chọn: ",
   "@currentSpreadLabel": {
     "description": "Current spread label"
   },
-  
   "shufflingMessage": "Những sợi chỉ định mệnh đang đan xen...",
   "@shufflingMessage": {
     "description": "Message shown while shuffling"
   },
-  
   "selectCardInstruction": "Theo trực giác của bạn và chọn lá bài",
   "@selectCardInstruction": {
     "description": "Card selection instruction"
   },
-  
   "cardsSelected": "{count} đã chọn",
   "@cardsSelected": {
     "description": "Number of cards selected",
@@ -260,7 +245,6 @@
       }
     }
   },
-  
   "cardsRemaining": "Chọn thêm {count} lá",
   "@cardsRemaining": {
     "description": "Number of cards remaining to select",
@@ -270,397 +254,322 @@
       }
     }
   },
-  
   "typeMessageHint": "Nhập tin nhắn...",
   "@typeMessageHint": {
     "description": "Chat input hint"
   },
-  
   "continueReading": "Nhận lời khuyên sâu sắc hơn",
   "@continueReading": {
     "description": "Button to continue tarot reading"
   },
-  
   "watchAdPrompt": "Để nghe tiếng nói từ vực thẳm sâu hơn,\nbạn phải xem tin nhắn từ thế giới khác.",
   "@watchAdPrompt": {
     "description": "Prompt to watch ad for continued reading"
   },
-  
   "interpretingSpread": "Đang giải thích thông điệp từ các lá bài...",
   "@interpretingSpread": {
     "description": "Message shown while AI interprets cards"
   },
-  
   "menuHistory": "Lịch Sử Bài Tarot",
   "@menuHistory": {
     "description": "Menu item: history"
   },
-  
   "menuHistoryDesc": "Nhìn lại những định mệnh đã qua",
   "@menuHistoryDesc": {
     "description": "Menu item description: history"
   },
-  
+  "loadingHistory": "Đang tải lịch sử...",
+  "@loadingHistory": {
+    "description": "Loading message for history screen"
+  },
   "menuStatistics": "Thống Kê & Phân Tích",
   "@menuStatistics": {
     "description": "Menu item: statistics"
   },
-  
   "menuStatisticsDesc": "Phân tích mô hình định mệnh của bạn",
   "@menuStatisticsDesc": {
     "description": "Menu item description: statistics"
   },
-  
   "menuSettings": "Cài Đặt",
   "@menuSettings": {
     "description": "Menu item: settings"
   },
-  
   "menuSettingsDesc": "Điều chỉnh môi trường ứng dụng",
   "@menuSettingsDesc": {
     "description": "Menu item description: settings"
   },
-  
   "menuAbout": "Giới Thiệu",
   "@menuAbout": {
     "description": "Menu item: about"
   },
-  
   "menuAboutDesc": "Moroka - Nhà Tiên Tri Bóng Tối",
   "@menuAboutDesc": {
     "description": "Menu item description: about"
   },
-  
   "logoutButton": "Đăng xuất",
   "@logoutButton": {
     "description": "Logout button text"
   },
-  
   "logoutTitle": "Bạn thực sự muốn rời đi?",
   "@logoutTitle": {
     "description": "Logout dialog title"
   },
-  
   "logoutMessage": "Khi cánh cửa định mệnh đóng lại\nbạn sẽ phải quay lại lần nữa",
   "@logoutMessage": {
     "description": "Logout dialog message"
   },
-  
   "logoutCancel": "Ở lại",
   "@logoutCancel": {
     "description": "Logout dialog cancel button"
   },
-  
   "logoutConfirm": "Rời đi",
   "@logoutConfirm": {
     "description": "Logout dialog confirm button"
   },
-  
   "errorOccurred": "Đã xảy ra lỗi",
   "@errorOccurred": {
     "description": "Generic error message"
   },
-  
   "errorEmailEmpty": "Vui lòng nhập email của bạn",
   "@errorEmailEmpty": {
     "description": "Error: email field empty"
   },
-  
   "errorEmailInvalid": "Định dạng email không hợp lệ",
   "@errorEmailInvalid": {
     "description": "Error: email format invalid"
   },
-  
   "errorPasswordEmpty": "Vui lòng nhập mật khẩu của bạn",
   "@errorPasswordEmpty": {
     "description": "Error: password field empty"
   },
-  
   "errorPasswordShort": "Mật khẩu phải có ít nhất 6 ký tự",
   "@errorPasswordShort": {
     "description": "Error: password too short"
   },
-  
   "errorNameEmpty": "Vui lòng nhập tên của bạn",
   "@errorNameEmpty": {
     "description": "Error: name field empty"
   },
-  
   "errorLoginFailed": "Đăng nhập thất bại",
   "@errorLoginFailed": {
     "description": "Error: login failed"
   },
-  
   "errorSignupFailed": "Đăng ký thất bại",
   "@errorSignupFailed": {
     "description": "Error: signup failed"
   },
-  
   "errorGoogleLoginFailed": "Đăng nhập Google thất bại",
   "@errorGoogleLoginFailed": {
     "description": "Error: Google login failed"
   },
-  
   "errorNetworkFailed": "Vui lòng kiểm tra kết nối mạng của bạn",
   "@errorNetworkFailed": {
     "description": "Error: network connection failed"
   },
-  
   "errorNotEnoughCards": "Vui lòng chọn thêm lá bài",
   "@errorNotEnoughCards": {
     "description": "Error: not enough cards selected"
   },
-  
   "successLogin": "Chào mừng",
   "@successLogin": {
     "description": "Success: login"
   },
-  
   "successSignup": "Linh hồn của bạn đã được đăng ký",
   "@successSignup": {
     "description": "Success: signup"
   },
-  
   "successLogout": "Tạm biệt",
   "@successLogout": {
     "description": "Success: logout"
   },
-  
   "successCardsSelected": "Tất cả lá bài đã được chọn",
   "@successCardsSelected": {
     "description": "Success: all cards selected"
   },
-  
   "settingsLanguageTitle": "Ngôn ngữ",
   "@settingsLanguageTitle": {
     "description": "Language settings section title"
   },
-  
   "settingsLanguageLabel": "Ngôn ngữ ứng dụng",
   "@settingsLanguageLabel": {
     "description": "Language selector label"
   },
-  
   "settingsLanguageDesc": "Chọn ngôn ngữ ưa thích của bạn",
   "@settingsLanguageDesc": {
     "description": "Language selector description"
   },
-  
   "settingsNotificationTitle": "Cài đặt thông báo",
   "@settingsNotificationTitle": {
     "description": "Notification settings section title"
   },
-  
   "settingsDailyNotification": "Thông báo Tarot hàng ngày",
   "@settingsDailyNotification": {
     "description": "Daily notification setting"
   },
-  
   "settingsDailyNotificationDesc": "Nhận lời tiên tri hàng ngày vào mỗi buổi sáng",
   "@settingsDailyNotificationDesc": {
     "description": "Daily notification description"
   },
-  
   "settingsWeeklyReport": "Báo cáo Tarot hàng tuần",
   "@settingsWeeklyReport": {
     "description": "Weekly report setting"
   },
-  
   "settingsWeeklyReportDesc": "Nhận lời tiên tri hàng tuần vào mỗi thứ Hai",
   "@settingsWeeklyReportDesc": {
     "description": "Weekly report description"
   },
-  
   "settingsDisplayTitle": "Cài đặt hiển thị",
   "@settingsDisplayTitle": {
     "description": "Display settings section title"
   },
-  
   "settingsVibration": "Hiệu ứng rung",
   "@settingsVibration": {
     "description": "Vibration setting"
   },
-  
   "settingsVibrationDesc": "Phản hồi rung khi chọn lá bài",
   "@settingsVibrationDesc": {
     "description": "Vibration description"
   },
-  
   "settingsAnimations": "Hiệu ứng hoạt hình",
   "@settingsAnimations": {
     "description": "Animation setting"
   },
-  
   "settingsAnimationsDesc": "Hiệu ứng chuyển cảnh màn hình",
   "@settingsAnimationsDesc": {
     "description": "Animation description"
   },
-  
   "settingsDataTitle": "Quản lý dữ liệu",
   "@settingsDataTitle": {
     "description": "Data management section title"
   },
-  
   "settingsBackupData": "Sao lưu dữ liệu",
   "@settingsBackupData": {
     "description": "Backup data setting"
   },
-  
   "settingsBackupDataDesc": "Sao lưu dữ liệu của bạn lên đám mây",
   "@settingsBackupDataDesc": {
     "description": "Backup data description"
   },
-  
   "settingsClearCache": "Xóa bộ nhớ đệm",
   "@settingsClearCache": {
     "description": "Clear cache setting"
   },
-  
   "settingsClearCacheDesc": "Xóa tệp tạm thời để giải phóng dung lượng",
   "@settingsClearCacheDesc": {
     "description": "Clear cache description"
   },
-  
   "settingsDeleteData": "Xóa tất cả dữ liệu",
   "@settingsDeleteData": {
     "description": "Delete all data setting"
   },
-  
   "settingsDeleteDataDesc": "Xóa tất cả hồ sơ tarot và cài đặt",
   "@settingsDeleteDataDesc": {
     "description": "Delete data description"
   },
-  
   "settingsAccountTitle": "Tài khoản",
   "@settingsAccountTitle": {
     "description": "Account section title"
   },
-  
   "settingsChangePassword": "Đổi mật khẩu",
   "@settingsChangePassword": {
     "description": "Change password setting"
   },
-  
   "settingsChangePasswordDesc": "Thay đổi mật khẩu để bảo mật tài khoản",
   "@settingsChangePasswordDesc": {
     "description": "Change password description"
   },
-  
   "settingsDeleteAccount": "Xóa tài khoản",
   "@settingsDeleteAccount": {
     "description": "Delete account setting"
   },
-  
   "settingsDeleteAccountDesc": "Xóa vĩnh viễn tài khoản của bạn",
   "@settingsDeleteAccountDesc": {
     "description": "Delete account description"
   },
-  
   "dialogBackupTitle": "Sao lưu dữ liệu",
   "@dialogBackupTitle": {
     "description": "Backup dialog title"
   },
-  
   "dialogBackupMessage": "Sao lưu dữ liệu của bạn lên đám mây?",
   "@dialogBackupMessage": {
     "description": "Backup dialog message"
   },
-  
   "dialogClearCacheTitle": "Xóa bộ nhớ đệm",
   "@dialogClearCacheTitle": {
     "description": "Clear cache dialog title"
   },
-  
   "dialogClearCacheMessage": "Xóa các tệp tạm thời?",
   "@dialogClearCacheMessage": {
     "description": "Clear cache dialog message"
   },
-  
   "dialogDeleteDataTitle": "Xóa tất cả dữ liệu",
   "@dialogDeleteDataTitle": {
     "description": "Delete data dialog title"
   },
-  
   "dialogDeleteDataMessage": "Tất cả hồ sơ tarot và cài đặt sẽ bị xóa vĩnh viễn.\nHành động này không thể hoàn tác.",
   "@dialogDeleteDataMessage": {
     "description": "Delete data dialog message"
   },
-  
   "dialogChangePasswordTitle": "Đổi mật khẩu",
   "@dialogChangePasswordTitle": {
     "description": "Change password dialog title"
   },
-  
   "dialogDeleteAccountTitle": "Xóa tài khoản",
   "@dialogDeleteAccountTitle": {
     "description": "Delete account dialog title"
   },
-  
   "dialogDeleteAccountMessage": "Xóa tài khoản sẽ xóa vĩnh viễn tất cả dữ liệu.\nHành động này không thể hoàn tác.",
   "@dialogDeleteAccountMessage": {
     "description": "Delete account dialog message"
   },
-  
   "currentPassword": "Mật khẩu hiện tại",
   "@currentPassword": {
     "description": "Current password label"
   },
-  
   "newPassword": "Mật khẩu mới",
   "@newPassword": {
     "description": "New password label"
   },
-  
   "confirmNewPassword": "Xác nhận mật khẩu mới",
   "@confirmNewPassword": {
     "description": "Confirm new password label"
   },
-  
   "cancel": "Hủy",
   "@cancel": {
     "description": "Cancel button"
   },
-  
   "backup": "Sao lưu",
   "@backup": {
     "description": "Backup button"
   },
-  
   "delete": "Xóa",
   "@delete": {
     "description": "Delete button"
   },
-  
   "change": "Thay đổi",
   "@change": {
     "description": "Change button"
   },
-  
   "successBackup": "Sao lưu hoàn tất",
   "@successBackup": {
     "description": "Backup success message"
   },
-  
   "successClearCache": "Đã xóa bộ nhớ đệm",
   "@successClearCache": {
     "description": "Clear cache success message"
   },
-  
   "successDeleteData": "Đã xóa tất cả dữ liệu",
   "@successDeleteData": {
     "description": "Delete data success message"
   },
-  
   "successChangePassword": "Đã đổi mật khẩu",
   "@successChangePassword": {
     "description": "Change password success message"
   },
-  
   "successDeleteAccount": "Đã xóa tài khoản",
   "@successDeleteAccount": {
     "description": "Delete account success message"
   },
-  
   "errorBackup": "Sao lưu thất bại: {error}",
   "@errorBackup": {
     "description": "Backup error message",
@@ -670,7 +579,6 @@
       }
     }
   },
-  
   "errorDeleteData": "Xóa thất bại: {error}",
   "@errorDeleteData": {
     "description": "Delete data error message",
@@ -680,7 +588,6 @@
       }
     }
   },
-  
   "errorChangePassword": "Đổi mật khẩu thất bại: {error}",
   "@errorChangePassword": {
     "description": "Change password error message",
@@ -690,7 +597,6 @@
       }
     }
   },
-  
   "errorDeleteAccount": "Xóa tài khoản thất bại: {error}",
   "@errorDeleteAccount": {
     "description": "Delete account error message",
@@ -700,177 +606,142 @@
       }
     }
   },
-  
   "errorPasswordMismatch": "Mật khẩu mới không khớp",
   "@errorPasswordMismatch": {
     "description": "Password mismatch error"
   },
-  
   "passwordResetTitle": "Đặt lại mật khẩu",
   "@passwordResetTitle": {
     "description": "Password reset dialog title"
   },
-  
   "passwordResetMessage": "Nhập địa chỉ email đã đăng ký.\nChúng tôi sẽ gửi cho bạn liên kết đặt lại mật khẩu.",
   "@passwordResetMessage": {
     "description": "Password reset message"
   },
-  
   "passwordResetSuccess": "Đã gửi email đặt lại mật khẩu",
   "@passwordResetSuccess": {
     "description": "Password reset success message"
   },
-  
   "send": "Gửi",
   "@send": {
     "description": "Send button"
   },
-  
   "emailPlaceholder": "your@email.com",
   "@emailPlaceholder": {
     "description": "Email placeholder"
   },
-  
   "passwordPlaceholder": "6+ ký tự",
   "@passwordPlaceholder": {
     "description": "Password placeholder"
   },
-  
   "forgotPassword": "Quên mật khẩu?",
   "@forgotPassword": {
     "description": "Forgot password link"
   },
-  
   "login": "Đăng nhập",
   "@login": {
     "description": "Login button"
   },
-  
   "or": "hoặc",
   "@or": {
     "description": "Or divider"
   },
-  
   "continueWithGoogle": "Tiếp tục với Google",
   "@continueWithGoogle": {
     "description": "Google login button"
   },
-  
   "noAccount": "Chưa có tài khoản?",
   "@noAccount": {
     "description": "No account text"
   },
-  
   "signUp": "Đăng ký",
   "@signUp": {
     "description": "Sign up link"
   },
-  
   "appBrandName": "MOROKA",
   "@appBrandName": {
     "description": "App brand name"
   },
-  
   "appBrandTagline": "nhà tiên tri bóng tối",
   "@appBrandTagline": {
     "description": "App brand tagline"
   },
-  
   "aboutTitle": "Giới thiệu",
   "@aboutTitle": {
     "description": "About screen title"
   },
-  
   "aboutSubtitle": "Lá bài định mệnh đang chờ đợi bạn",
   "@aboutSubtitle": {
     "description": "About screen subtitle"
   },
-  
   "aboutDescription": "MOROKA\n\nCánh cửa định mệnh đã mở\nNhà tiên tri bóng tối sẽ giải mã tương lai của bạn\n\nGiải bài tarot truyền thống với AI huyền bí\nMang đến những hiểu biết sâu sắc và trí tuệ",
   "@aboutDescription": {
     "description": "About app description"
   },
-  
   "featuresTitle": "Tính năng chính",
   "@featuresTitle": {
     "description": "Features section title"
   },
-  
   "feature78Cards": "78 lá bài Tarot truyền thống",
   "@feature78Cards": {
     "description": "78 cards feature"
   },
-  
   "feature78CardsDesc": "Bộ bài hoàn chỉnh với 22 lá Arcana Lớn và 56 lá Arcana Nhỏ",
   "@feature78CardsDesc": {
     "description": "78 cards feature description"
   },
-  
   "feature5Spreads": "5 cách trải bài chuyên nghiệp",
   "@feature5Spreads": {
     "description": "5 spreads feature"
   },
-  
   "feature5SpreadsDesc": "Nhiều phương pháp đọc bài từ Một Lá đến Thập Tự Celtic",
   "@feature5SpreadsDesc": {
     "description": "5 spreads feature description"
   },
-  
   "featureAI": "Thầy Tarot AI",
   "@featureAI": {
     "description": "AI feature"
   },
-  
   "featureAIDesc": "Giải thích sâu sắc như một thầy tarot với 100 năm kinh nghiệm",
   "@featureAIDesc": {
     "description": "AI feature description"
   },
-  
   "featureChat": "Tư vấn tương tác",
   "@featureChat": {
     "description": "Chat feature"
   },
-  
   "featureChatDesc": "Hỏi tự do về lá bài của bạn",
   "@featureChatDesc": {
     "description": "Chat feature description"
   },
-  
   "termsAndPolicies": "Điều khoản & Chính sách",
   "@termsAndPolicies": {
     "description": "Terms section title"
   },
-  
   "termsOfService": "Điều khoản dịch vụ",
   "@termsOfService": {
     "description": "Terms of service"
   },
-  
   "privacyPolicy": "Chính sách bảo mật",
   "@privacyPolicy": {
     "description": "Privacy policy"
   },
-  
   "marketingConsent": "Thông tin tiếp thị",
   "@marketingConsent": {
     "description": "Marketing consent"
   },
-  
   "customerSupport": "Hỗ trợ khách hàng",
   "@customerSupport": {
     "description": "Customer support section"
   },
-  
   "emailSupport": "Hỗ trợ qua email",
   "@emailSupport": {
     "description": "Email support"
   },
-  
   "website": "Trang web",
   "@website": {
     "description": "Website"
   },
-  
   "cannotOpenUrl": "Không thể mở URL: {url}",
   "@cannotOpenUrl": {
     "description": "Cannot open URL error",
@@ -880,162 +751,130 @@
       }
     }
   },
-  
   "lastModified": "Cập nhật lần cuối: 3 tháng 7, 2025",
   "@lastModified": {
     "description": "Last modified date"
   },
-  
   "confirm": "Xác nhận",
   "@confirm": {
     "description": "Confirm button"
   },
-  
   "companyName": "Today's Studio",
   "@companyName": {
     "description": "Company name"
   },
-  
   "companyTagline": "Tạo ra những trải nghiệm huyền bí",
   "@companyTagline": {
     "description": "Company tagline"
   },
-  
   "copyright": "© 2025 Today's Studio. Mọi quyền được bảo lưu.",
   "@copyright": {
     "description": "Copyright notice"
   },
-  
   "anonymousSoul": "Linh hồn vô danh",
   "@anonymousSoul": {
     "description": "Anonymous user name"
   },
-  
   "totalReadings": "Tổng số lần xem bài",
   "@totalReadings": {
     "description": "Total readings label"
   },
-  
   "joinDate": "Ngày tham gia",
   "@joinDate": {
     "description": "Join date label"
   },
-  
   "errorLogout": "Lỗi xảy ra khi đăng xuất",
   "@errorLogout": {
     "description": "Logout error"
   },
-  
   "soulContract": "Khế ước linh hồn",
   "@soulContract": {
     "description": "Terms screen title"
   },
-  
   "termsAgreementMessage": "Vui lòng đồng ý với các điều khoản để sử dụng dịch vụ",
   "@termsAgreementMessage": {
     "description": "Terms agreement message"
   },
-  
   "agreeAll": "Đồng ý tất cả",
   "@agreeAll": {
     "description": "Agree all button"
   },
-  
   "required": "Bắt buộc",
   "@required": {
     "description": "Required label"
   },
-  
   "optional": "Tùy chọn",
   "@optional": {
     "description": "Optional label"
   },
-  
   "agreeAndStart": "Đồng ý và bắt đầu",
   "@agreeAndStart": {
     "description": "Agree and start button"
   },
-  
   "agreeToRequired": "Vui lòng đồng ý với các điều khoản bắt buộc",
   "@agreeToRequired": {
     "description": "Required terms message"
   },
-  
   "nickname": "Biệt danh",
   "@nickname": {
     "description": "Nickname label"
   },
-  
   "confirmPassword": "Xác nhận mật khẩu",
   "@confirmPassword": {
     "description": "Confirm password label"
   },
-  
   "nextStep": "Bước tiếp theo",
   "@nextStep": {
     "description": "Next step button"
   },
-  
   "errorNameTooShort": "Nhập ít nhất 2 ký tự",
   "@errorNameTooShort": {
     "description": "Name too short error"
   },
-  
   "errorConfirmPassword": "Vui lòng xác nhận mật khẩu của bạn",
   "@errorConfirmPassword": {
     "description": "Confirm password error"
   },
-  
   "errorPasswordsDontMatch": "Mật khẩu không khớp",
   "@errorPasswordsDontMatch": {
     "description": "Passwords don't match error"
   },
-  
   "emailInUse": "Email đã được sử dụng",
   "@emailInUse": {
     "description": "Email in use message"
   },
-  
   "emailAvailable": "Email có thể sử dụng",
   "@emailAvailable": {
     "description": "Email available message"
   },
-  
   "nicknameInUse": "Biệt danh đã được sử dụng",
   "@nicknameInUse": {
     "description": "Nickname in use message"
   },
-  
   "nicknameAvailable": "Biệt danh có thể sử dụng",
   "@nicknameAvailable": {
     "description": "Nickname available message"
   },
-  
   "passwordWeak": "Yếu",
   "@passwordWeak": {
     "description": "Weak password"
   },
-  
   "passwordFair": "Trung bình",
   "@passwordFair": {
     "description": "Fair password"
   },
-  
   "passwordStrong": "Mạnh",
   "@passwordStrong": {
     "description": "Strong password"
   },
-  
   "passwordVeryStrong": "Rất mạnh",
   "@passwordVeryStrong": {
     "description": "Very strong password"
   },
-  
   "emailVerificationTitle": "Xác minh email",
   "@emailVerificationTitle": {
     "description": "Email verification title"
   },
-  
   "emailVerificationMessage": "Chúng tôi đã gửi email xác minh đến {email}.\nVui lòng kiểm tra email và nhấp vào liên kết xác minh.",
   "@emailVerificationMessage": {
     "description": "Email verification message",
@@ -1045,82 +884,122 @@
       }
     }
   },
-  
   "resendEmail": "Gửi lại email",
   "@resendEmail": {
     "description": "Resend email button"
   },
-  
   "emailResent": "Đã gửi lại email xác minh",
   "@emailResent": {
     "description": "Email resent message"
   },
-  
   "checkEmailAndReturn": "Sau khi xác minh, vui lòng quay lại ứng dụng",
   "@checkEmailAndReturn": {
     "description": "Check email instruction"
   },
-  
   "noHistoryTitle": "Chưa có hồ sơ tarot nào",
   "@noHistoryTitle": {
     "description": "Empty history state title"
   },
-  
   "noHistoryMessage": "Đọc vận mệnh đầu tiên của bạn",
   "@noHistoryMessage": {
     "description": "Empty history state message"
   },
-  
   "startReading": "Bắt đầu xem tarot",
   "@startReading": {
     "description": "Start reading button"
   },
-  
   "deleteReadingTitle": "Xóa hồ sơ này?",
   "@deleteReadingTitle": {
     "description": "Delete reading dialog title"
   },
-  
   "deleteReadingMessage": "Hồ sơ đã xóa không thể khôi phục",
   "@deleteReadingMessage": {
     "description": "Delete reading dialog message"
   },
-  
+  "deleteAll": "Xóa tất cả",
+  "@deleteAll": {
+    "description": "Delete all button"
+  },
+  "deleteAllConfirmTitle": "Xóa tất cả bản ghi?",
+  "@deleteAllConfirmTitle": {
+    "description": "Delete all confirmation dialog title"
+  },
+  "deleteAllConfirmMessage": "Tất cả các lần đọc tarot sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.",
+  "@deleteAllConfirmMessage": {
+    "description": "Delete all confirmation dialog message"
+  },
+  "deleteAllButton": "Xóa tất cả",
+  "@deleteAllButton": {
+    "description": "Delete all confirmation button"
+  },
+  "totalTarotReadings": "Tổng số lần đọc tarot",
+  "@totalTarotReadings": {
+    "description": "Total tarot readings label"
+  },
+  "mostFrequentCard": "Lá bài thường gặp nhất",
+  "@mostFrequentCard": {
+    "description": "Most frequent card label"
+  },
+  "cardFrequencyTop5": "Tần suất lá bài - Top 5",
+  "@cardFrequencyTop5": {
+    "description": "Card frequency top 5 label"
+  },
+  "moodAnalysis": "Phân tích tâm trạng",
+  "@moodAnalysis": {
+    "description": "Mood analysis label"
+  },
+  "monthlyReadingTrend": "Xu hướng đọc hàng tháng",
+  "@monthlyReadingTrend": {
+    "description": "Monthly reading trend label"
+  },
+  "noData": "Không có dữ liệu",
+  "@noData": {
+    "description": "No data label"
+  },
+  "noDataToAnalyze": "Không có dữ liệu để phân tích",
+  "@noDataToAnalyze": {
+    "description": "No data to analyze message"
+  },
+  "startTarotReading": "Bắt đầu đọc tarot để xem thống kê của bạn",
+  "@startTarotReading": {
+    "description": "Start tarot reading prompt for statistics"
+  },
+  "aboutTagline": "Lá bài định mệnh đang chờ đợi bạn",
+  "@aboutTagline": {
+    "description": "About screen tagline"
+  },
+  "aboutDescription": "MOROKA đọc vận mệnh của bạn thông qua những lá bài tarot huyền bí cổ xưa. Bậc thầy Tarot AI của chúng tôi sẽ giải thích những thông điệp vũ trụ ẩn chứa trong mỗi lá bài trong số 78 lá.\n\nKhám phá sự thật tỏa sáng trong bóng tối và thông điệp đặc biệt chỉ dành riêng cho bạn.",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
   "cardOfFate": "Lá bài định mệnh",
   "@cardOfFate": {
     "description": "Card selection dialog title"
   },
-  
   "cardCallingYou": "Lá bài này đang gọi bạn",
   "@cardCallingYou": {
     "description": "Card selection dialog message"
   },
-  
   "selectThisCard": "Bạn có muốn chọn nó không?",
   "@selectThisCard": {
     "description": "Card selection dialog question"
   },
-  
   "viewAgain": "Xem lại",
   "@viewAgain": {
     "description": "View again button"
   },
-  
   "select": "Chọn",
   "@select": {
     "description": "Select button"
   },
-  
   "shufflingCards": "Đang xáo trộn lá bài định mệnh...",
   "@shufflingCards": {
     "description": "Shuffling cards message"
   },
-  
   "selectCardsIntuition": "Hãy theo trực giác và chọn lá bài",
   "@selectCardsIntuition": {
     "description": "Card selection instruction"
   },
-  
   "selectMoreCards": "Chọn thêm {count} lá bài",
   "@selectMoreCards": {
     "description": "Select more cards message",
@@ -1130,107 +1009,86 @@
       }
     }
   },
-  
   "selectionComplete": "Hoàn tất lựa chọn!",
   "@selectionComplete": {
     "description": "Selection complete message"
   },
-  
   "tapToSelect": "Chạm để chọn lá bài",
   "@tapToSelect": {
     "description": "Tap to select instruction"
   },
-  
   "preparingInterpretation": "Đang chuẩn bị giải thích...",
   "@preparingInterpretation": {
     "description": "Preparing interpretation message"
   },
-  
   "cardMessage": "Thông điệp từ các lá bài",
   "@cardMessage": {
     "description": "Card message section title"
   },
-  
   "cardsStory": "Câu chuyện lá bài của bạn kể",
   "@cardsStory": {
     "description": "Cards story header"
   },
-  
   "specialInterpretation": "Lời giải đặc biệt dành cho bạn",
   "@specialInterpretation": {
     "description": "Special interpretation subtitle"
   },
-  
   "interpretingCards": "Đang giải mã ý nghĩa của các lá bài...",
   "@interpretingCards": {
     "description": "Interpreting cards loading message"
   },
-  
   "todaysChatEnded": "Cuộc trò chuyện hôm nay đã kết thúc",
   "@todaysChatEnded": {
     "description": "Chat limit reached message"
   },
-  
   "askQuestions": "Hãy đặt câu hỏi của bạn...",
   "@askQuestions": {
     "description": "Chat input placeholder"
   },
-  
   "continueConversation": "Tiếp tục cuộc trò chuyện",
   "@continueConversation": {
     "description": "Continue conversation button"
   },
-  
   "wantDeeperTruth": "Bạn muốn biết sự thật sâu sắc hơn?",
   "@wantDeeperTruth": {
     "description": "Ad dialog title"
   },
-  
   "watchAdToContinue": "Xem quảng cáo để tiếp tục\ncuộc trò chuyện với Thầy Tarot",
   "@watchAdToContinue": {
     "description": "Ad dialog message"
   },
-  
   "later": "Để sau",
   "@later": {
     "description": "Later button"
   },
-  
   "watchAd": "Xem quảng cáo",
   "@watchAd": {
     "description": "Watch ad button"
   },
-  
   "emailVerification": "Xác minh email",
   "@emailVerification": {
     "description": "Email verification header"
   },
-  
   "checkYourEmail": "Kiểm tra email của bạn",
   "@checkYourEmail": {
     "description": "Check email title"
   },
-  
   "verificationEmailSent": "Chúng tôi đã gửi email xác minh đến địa chỉ trên.\nVui lòng kiểm tra hộp thư và nhấp vào liên kết xác minh.",
   "@verificationEmailSent": {
     "description": "Verification email sent message"
   },
-  
   "verifyingEmail": "Đang xác minh email...",
   "@verifyingEmail": {
     "description": "Verifying email loading text"
   },
-  
   "noEmailReceived": "Không nhận được email?",
   "@noEmailReceived": {
     "description": "No email received title"
   },
-  
   "checkSpamFolder": "Kiểm tra thư mục thư rác.\nNếu vẫn không thấy, nhấp nút bên dưới để gửi lại.",
   "@checkSpamFolder": {
     "description": "Check spam folder message"
   },
-  
   "resendIn": "Gửi lại sau {seconds} giây",
   "@resendIn": {
     "description": "Resend cooldown message",
@@ -1240,32 +1098,26 @@
       }
     }
   },
-  
   "resendVerificationEmail": "Gửi lại email xác minh",
   "@resendVerificationEmail": {
     "description": "Resend verification email button"
   },
-  
   "alreadyVerified": "Tôi đã xác minh",
   "@alreadyVerified": {
     "description": "Already verified button"
   },
-  
   "openGateOfFate": "Mở cánh cửa định mệnh",
   "@openGateOfFate": {
     "description": "Final onboarding button"
   },
-  
   "drawAddedMessage": "Đã thêm 1 lượt rút! ✨",
   "@drawAddedMessage": {
     "description": "Success message after watching ad"
   },
-  
   "adLoadFailed": "Không thể tải quảng cáo. Vui lòng thử lại sau.",
   "@adLoadFailed": {
     "description": "Error message when ad fails to load"
   },
-  
   "monthLabel": "Tháng {month}",
   "@monthLabel": {
     "description": "Month label format",
@@ -1275,19 +1127,385 @@
       }
     }
   },
-  
   "startChatMessage": "Hãy hỏi tôi bất cứ điều gì về bài đọc tarot của bạn",
   "@startChatMessage": {
     "description": "Empty chat state message"
   },
-  
   "chatHistory": "Lịch sử Trò chuyện",
   "@chatHistory": {
     "description": "Chat history section title"
   },
-  
   "chatHistoryDescription": "Cuộc trò chuyện của bạn với Thầy Tarot",
   "@chatHistoryDescription": {
     "description": "Chat history section description"
+  },
+  "error": "Lỗi",
+  "@error": {
+    "description": "error - automatically added"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "ok - automatically added"
+  },
+  "errorInvalidFormat": "Định dạng không hợp lệ",
+  "@errorInvalidFormat": {
+    "description": "errorInvalidFormat - automatically added"
+  },
+  "errorUnexpected": "Đã xảy ra lỗi không mong đợi",
+  "@errorUnexpected": {
+    "description": "errorUnexpected - automatically added"
+  },
+  "errorUnknown": "Đã xảy ra lỗi không xác định",
+  "@errorUnknown": {
+    "description": "errorUnknown - automatically added"
+  },
+  "errorNetworkTimeout": "Kết nối mạng đã hết thời gian",
+  "@errorNetworkTimeout": {
+    "description": "errorNetworkTimeout - automatically added"
+  },
+  "errorNoInternet": "Không có kết nối internet",
+  "@errorNoInternet": {
+    "description": "errorNoInternet - automatically added"
+  },
+  "errorServerError": "Đã xảy ra lỗi máy chủ",
+  "@errorServerError": {
+    "description": "errorServerError - automatically added"
+  },
+  "errorInvalidCredentials": "Email hoặc mật khẩu không hợp lệ",
+  "@errorInvalidCredentials": {
+    "description": "errorInvalidCredentials - automatically added"
+  },
+  "errorEmailNotVerified": "Email chưa được xác minh",
+  "@errorEmailNotVerified": {
+    "description": "errorEmailNotVerified - automatically added"
+  },
+  "errorSessionExpired": "Phiên đã hết hạn. Vui lòng đăng nhập lại",
+  "@errorSessionExpired": {
+    "description": "errorSessionExpired - automatically added"
+  },
+  "errorQuotaExceeded": "Đã vượt quá giới hạn hàng ngày",
+  "@errorQuotaExceeded": {
+    "description": "errorQuotaExceeded - automatically added"
+  },
+  "errorInvalidResponse": "Phản hồi không hợp lệ từ máy chủ",
+  "@errorInvalidResponse": {
+    "description": "errorInvalidResponse - automatically added"
+  },
+  "errorRateLimitExceeded": "Quá nhiều yêu cầu. Vui lòng thử lại sau",
+  "@errorRateLimitExceeded": {
+    "description": "errorRateLimitExceeded - automatically added"
+  },
+  "errorDataNotFound": "Không tìm thấy dữ liệu",
+  "@errorDataNotFound": {
+    "description": "errorDataNotFound - automatically added"
+  },
+  "errorDataCorrupted": "Dữ liệu bị hỏng",
+  "@errorDataCorrupted": {
+    "description": "errorDataCorrupted - automatically added"
+  },
+  "errorSaveFailed": "Không thể lưu dữ liệu",
+  "@errorSaveFailed": {
+    "description": "errorSaveFailed - automatically added"
+  },
+  "errorPermissionDenied": "Quyền truy cập bị từ chối",
+  "@errorPermissionDenied": {
+    "description": "errorPermissionDenied - automatically added"
+  },
+  "errorPermissionRestricted": "Truy cập bị hạn chế",
+  "@errorPermissionRestricted": {
+    "description": "errorPermissionRestricted - automatically added"
+  },
+  "errorEmailAlreadyInUse": "Email đã được sử dụng",
+  "@errorEmailAlreadyInUse": {
+    "description": "errorEmailAlreadyInUse - automatically added"
+  },
+  "errorInvalidEmail": "Địa chỉ email không hợp lệ",
+  "@errorInvalidEmail": {
+    "description": "errorInvalidEmail - automatically added"
+  },
+  "errorWeakPassword": "Mật khẩu quá yếu",
+  "@errorWeakPassword": {
+    "description": "errorWeakPassword - automatically added"
+  },
+  "errorNetworkRequestFailed": "Yêu cầu mạng thất bại",
+  "@errorNetworkRequestFailed": {
+    "description": "errorNetworkRequestFailed - automatically added"
+  },
+  "errorOperationNotAllowed": "Thao tác không được phép",
+  "@errorOperationNotAllowed": {
+    "description": "errorOperationNotAllowed - automatically added"
+  },
+  "errorAuthFailed": "Xác thực thất bại",
+  "@errorAuthFailed": {
+    "description": "errorAuthFailed - automatically added"
+  },
+  
+  "remainingDraws": "Số lần còn lại",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "Không còn lượt rút bài",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "Quảng cáo",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "tarotMaster": "Thầy Tarot",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  "question": "Câu hỏi",
+  "@question": {
+    "description": "Label for user's question"
+  },
+  
+  "celticCrossSpread": "Chữ Thập Celtic",
+  "@celticCrossSpread": {
+    "description": "Label for celtic cross spread"
+  },
+  
+  "crossSection": "Chữ Thập - Tình Hình Hiện Tại",
+  "@crossSection": {
+    "description": "Celtic Cross spread cross section label"
+  },
+  
+  "staffSection": "Gậy - Phát Triển Tương Lai",
+  "@staffSection": {
+    "description": "Celtic Cross spread staff section label"
+  },
+  
+  "languageChanged": "Thay đổi ngôn ngữ thành công",
+  "@languageChanged": {
+    "description": "Language change success message"
+  },
+  
+  "notificationsEnabled": "Đã bật thông báo",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "Đã tắt thông báo",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "Đã bật rung",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "Đã tắt rung",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "Đã bật hoạt ảnh",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "Đã tắt hoạt ảnh",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "logoutSuccess": "Đăng xuất thành công",
+  "@logoutSuccess": {
+    "description": "Logout success message"
+  },
+  
+  "deleteAccountSuccess": "Xóa tài khoản thành công",
+  "@deleteAccountSuccess": {
+    "description": "Delete account success message"
+  },
+  
+  "errorOccurred": "Đã xảy ra lỗi",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "notificationPermissionDenied": "Yêu cầu quyền thông báo",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "generalSettings": "Cài đặt chung",
+  "@generalSettings": {
+    "description": "General settings section title"
+  },
+  
+  "accountSettings": "Cài đặt tài khoản",
+  "@accountSettings": {
+    "description": "Account settings section title"
+  },
+  
+  "moreTitle": "Thêm",
+  "@moreTitle": {
+    "description": "More section title"
+  },
+  
+  "languageTitle": "Ngôn ngữ",
+  "@languageTitle": {
+    "description": "Language setting title"
+  },
+  
+  "notificationsTitle": "Thông báo",
+  "@notificationsTitle": {
+    "description": "Notifications setting title"
+  },
+  
+  "vibrationTitle": "Phản hồi xúc giác",
+  "@vibrationTitle": {
+    "description": "Vibration setting title"
+  },
+  
+  "vibrationSubtitle": "Bật phản hồi rung",
+  "@vibrationSubtitle": {
+    "description": "Vibration setting subtitle"
+  },
+  
+  "animationsTitle": "Hoạt ảnh",
+  "@animationsTitle": {
+    "description": "Animations setting title"
+  },
+  
+  "animationsSubtitle": "Bật hoạt ảnh giao diện",
+  "@animationsSubtitle": {
+    "description": "Animations setting subtitle"
+  },
+  
+  "dailyTarotReminder": "Nhận nhắc nhở tarot hàng ngày",
+  "@dailyTarotReminder": {
+    "description": "Daily tarot reminder setting"
+  },
+  
+  "deleteAccountConfirmMessage": "Hành động này không thể hoàn tác. Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn.",
+  "@deleteAccountConfirmMessage": {
+    "description": "Delete account confirmation message"
+  },
+  
+  "chatCount": "Trò chuyện {count} lần",
+  "@chatCount": {
+    "description": "Chat count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectedCards": "Lá bài đã chọn",
+  "@selectedCards": {
+    "description": "Selected cards label"
+  },
+  
+  "aiInterpretation": "Diễn giải AI",
+  "@aiInterpretation": {
+    "description": "AI interpretation title"
+  },
+  
+  "invalidEmotionInput": "Dữ liệu cảm xúc không hợp lệ.",
+  "@invalidEmotionInput": {
+    "description": "Error when emotion input is invalid"
+  },
+  
+  "interpretationNotReceived": "Không thể nhận kết quả diễn giải.",
+  "@interpretationNotReceived": {
+    "description": "Error when interpretation is not received"
+  },
+  
+  "responseGenerationFailed": "Tạo phản hồi thất bại.",
+  "@responseGenerationFailed": {
+    "description": "Error when response generation fails"
+  },
+  
+  "invalidEmailFormat": "Định dạng email không hợp lệ.",
+  "@invalidEmailFormat": {
+    "description": "Error for invalid email format"
+  },
+  
+  "weakPassword": "Mật khẩu quá yếu. Vui lòng sử dụng ít nhất 8 ký tự bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.",
+  "@weakPassword": {
+    "description": "Error for weak password"
+  },
+  
+  "invalidUsername": "Tên người dùng phải có 3-20 ký tự và chỉ sử dụng chữ cái, số và dấu gạch dưới.",
+  "@invalidUsername": {
+    "description": "Error for invalid username"
+  },
+  
+  "signupError": "Đã xảy ra lỗi trong quá trình đăng ký.",
+  "@signupError": {
+    "description": "General signup error"
+  },
+  
+  "loginError": "Đã xảy ra lỗi trong quá trình đăng nhập.",
+  "@loginError": {
+    "description": "General login error"
+  },
+  
+  "logoutError": "Đã xảy ra lỗi trong quá trình đăng xuất.",
+  "@logoutError": {
+    "description": "General logout error"
+  },
+  
+  "passwordResetEmailFailed": "Gửi email đặt lại mật khẩu thất bại.",
+  "@passwordResetEmailFailed": {
+    "description": "Error when password reset email fails"
+  },
+  
+  "profileCreationFailed": "Tạo hồ sơ người dùng thất bại.",
+  "@profileCreationFailed": {
+    "description": "Error when profile creation fails"
+  },
+  
+  "noLoggedInUser": "Không có người dùng đã đăng nhập.",
+  "@noLoggedInUser": {
+    "description": "Error when no user is logged in"
+  },
+  
+  "profileUpdateFailed": "Cập nhật hồ sơ thất bại.",
+  "@profileUpdateFailed": {
+    "description": "Error when profile update fails"
+  },
+  
+  "cardInterpretationFailed": "Lấy diễn giải lá bài thất bại: {error}",
+  "@cardInterpretationFailed": {
+    "description": "Error when card interpretation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "emailAlreadyInUse": "Email này đã được sử dụng.",
+  "@emailAlreadyInUse": {
+    "description": "Error when email is already registered"
+  },
+  
+  "signupErrorWithMessage": "Đã xảy ra lỗi trong quá trình đăng ký: {message}",
+  "@signupErrorWithMessage": {
+    "description": "Signup error with specific message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tooManyRequests": "Quá nhiều yêu cầu. Vui lòng thử lại sau.",
+  "@tooManyRequests": {
+    "description": "Error for rate limiting"
+  },
+  
+  "verificationEmailError": "Đã xảy ra lỗi khi gửi email xác minh.",
+  "@verificationEmailError": {
+    "description": "Error when sending verification email"
   }
 }

@@ -10,7 +10,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'firebase_options.dart';
 import 'core/utils/animation_controller_manager.dart';
 import 'core/constants/app_colors.dart';
-import 'core/constants/app_strings.dart';
 import 'core/theme/app_theme.dart';
 import 'providers.dart';
 import 'providers/locale_provider.dart';
@@ -88,7 +87,7 @@ class MorokaApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     
     return MaterialApp.router(
-      title: AppStrings.appName,
+      title: 'Moroka',
       theme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
@@ -124,6 +123,16 @@ class ErrorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Moroka Tarot',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.darkTheme,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         backgroundColor: AppColors.deepViolet,
         body: Center(
@@ -137,7 +146,7 @@ class ErrorApp extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'errorOccurred',
+                'An error occurred',
                 style: GoogleFonts.cinzel(
                   color: AppColors.ghostWhite,
                   fontSize: 18,
@@ -145,7 +154,7 @@ class ErrorApp extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'errorOccurred',
+                'Please restart the application',
                 style: GoogleFonts.gowunBatang(
                   color: AppColors.fogGray,
                   fontSize: 14,

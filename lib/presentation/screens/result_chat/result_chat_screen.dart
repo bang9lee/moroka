@@ -18,8 +18,7 @@ import '../../widgets/spreads/spread_layout_widget.dart';
 import '../../widgets/chat/chat_bubble_widget.dart';
 import '../../widgets/chat/typing_indicator.dart';
 import '../../widgets/common/accessible_icon_button.dart';
-import '../main/main_viewmodel.dart';
-import '../spread_selection/spread_selection_viewmodel.dart';
+import '../../../providers.dart';
 import 'result_chat_viewmodel.dart';
 import '../../../data/models/tarot_spread_model.dart';
 
@@ -1333,20 +1332,20 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
     
-    // 화면 크기에 따라 동적으로 높이 조정
+    // 화면 크기에 따라 동적으로 높이 조정 - 더 넓게 설정
     switch (cardCount) {
       case 1:
-        return isSmallScreen ? 280 : 340;
-      case 3:
         return isSmallScreen ? 320 : 380;
+      case 3:
+        return isSmallScreen ? 380 : 450;
       case 5:
-        return isSmallScreen ? 360 : 420;
+        return isSmallScreen ? 450 : 550;
       case 7:
-        return isSmallScreen ? 400 : 460;
+        return isSmallScreen ? 500 : 600;
       case 10:
-        return isSmallScreen ? 480 : 580;
+        return isSmallScreen ? 600 : 700;
       default:
-        return isSmallScreen ? 380 : 440;
+        return isSmallScreen ? 450 : 550;
     }
   }
 
@@ -1505,15 +1504,26 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
           child: Semantics(
             label: l10n.selectedCardsLayout,
             container: true,
-            child: Container(
-              height: _getLayoutHeight(state.selectedCards.length),
-              margin: const EdgeInsets.only(bottom: 32),
-              child: SpreadLayoutWidget(
-                spread: selectedSpread,
-                drawnCards: state.selectedCards,
-                showCardNames: true,
-                isInteractive: false,
-              ),
+            child: Column(
+              children: [
+                Container(
+                  height: _getLayoutHeight(state.selectedCards.length),
+                  margin: const EdgeInsets.only(bottom: 32),
+                  child: SpreadLayoutWidget(
+                    spread: selectedSpread,
+                    drawnCards: state.selectedCards,
+                    showCardNames: true,
+                    isInteractive: false,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: state.selectedCards.length >= 5 ? 8 : 16,
+                      vertical: 16,
+                    ),
+                  ),
+                ),
+                // Celtic Cross 카드 목록 추가
+                if (selectedSpread.type == SpreadType.celticCross)
+                  _buildCelticCrossCardList(state, selectedSpread),
+              ],
             ),
           ),
         );
@@ -1903,6 +1913,121 @@ class _ResultChatScreenState extends ConsumerState<ResultChatScreen>
       ),
     );
   }
+  
+  // Celtic Cross 카드 목록 빌드 (여기로 이동)
+  Widget _buildCelticCrossCardList(ResultChatState state, TarotSpread selectedSpread) {
+    final locale = Localizations.localeOf(context).languageCode;
+    
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 24),
+      child: GlassMorphismContainer(
+        padding: const EdgeInsets.all(20),
+        borderRadius: 20,
+        backgroundColor: AppColors.shadowGray,
+        borderColor: AppColors.mysticPurple,
+        blur: 10,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 제목
+            Container(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                '🎴 뽑은 카드 목록',
+                style: AppTextStyles.displaySmall.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.ghostWhite,
+                ),
+              ),
+            ),
+            
+            // 카드 목록
+            ...List.generate(state.selectedCards.length, (index) {
+              final card = state.selectedCards[index];
+              final position = selectedSpread.positions[index];
+              
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  children: [
+                    // 번호
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: index < 2 
+                          ? AppColors.goldenGlow.withAlpha(80)
+                          : AppColors.mysticPurple.withAlpha(80),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: index < 2
+                            ? AppColors.goldenGlow
+                            : AppColors.mysticPurple,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.ghostWhite,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    
+                    // 위치 이름
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        position.getLocalizedTitle(locale),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          fontSize: 13,
+                          color: AppColors.fogGray,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    
+                    // 화살표
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 14,
+                      color: AppColors.fogGray.withAlpha(150),
+                    ),
+                    const SizedBox(width: 8),
+                    
+                    // 카드 이름
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        card.getLocalizedName(locale),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          fontSize: 14,
+                          color: AppColors.ghostWhite,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        textAlign: TextAlign.right,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    ).animate()
+      .fadeIn(delay: const Duration(milliseconds: 400))
+      .slideY(begin: 0.05, end: 0);
+  }
 }
 
 /// 광고 프롬프트 다이얼로그
@@ -2068,4 +2193,5 @@ class _AdPromptDialog extends StatelessWidget {
           ),
     );
   }
+
 }

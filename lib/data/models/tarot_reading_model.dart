@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../core/errors/app_exceptions.dart';
 
 class TarotReadingModel {
   final String id;
@@ -26,7 +27,15 @@ class TarotReadingModel {
   });
 
   factory TarotReadingModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+    final rawData = doc.data();
+    if (rawData == null || rawData is! Map<String, dynamic>) {
+      throw const DataException(
+        code: 'invalid_reading_data',
+        message: 'Invalid reading document data',
+      );
+    }
+    
+    final data = rawData;
     return TarotReadingModel(
       id: doc.id,
       userId: data['userId'] ?? '',
@@ -37,7 +46,9 @@ class TarotReadingModel {
               ?.map((e) => ChatExchange.fromMap(e))
               .toList() ??
           [],
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      createdAt: data['createdAt'] != null
+          ? (data['createdAt'] as Timestamp).toDate()
+          : DateTime.now(),
       userMood: data['userMood'] ?? '',
       spreadType: data['spreadType'],
       cardCount: data['cardCount'],
@@ -100,21 +111,21 @@ class TarotReadingModel {
   // 카드 이미지 리스트 반환
   List<String> get cardImages => cardImage.split(',');
   
-  // 배열법 이름 반환
-  String get spreadName {
+  // 배열법 이름 반환 (현지화 키 반환)
+  String get spreadNameKey {
     switch (spreadType) {
       case 'SpreadType.oneCard':
-        return '원 카드';
+        return 'spreadOneCard';
       case 'SpreadType.threeCard':
-        return '쓰리 카드';
+        return 'spreadThreeCard';
       case 'SpreadType.celticCross':
-        return '켈틱 크로스';
+        return 'spreadCelticCross';
       case 'SpreadType.relationship':
-        return '관계 스프레드';
+        return 'spreadRelationship';
       case 'SpreadType.yesNo':
-        return '예/아니오';
+        return 'spreadYesNo';
       default:
-        return '원 카드';
+        return 'spreadOneCard';
     }
   }
 }

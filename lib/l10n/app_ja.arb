@@ -1,204 +1,184 @@
 {
   "@@locale": "ja",
-  
   "appName": "Moroka",
   "@appName": {
     "description": "Application name"
   },
-  
   "appTagline": "影の神託",
   "@appTagline": {
     "description": "Application tagline"
   },
-  
   "appTitle": "Moroka - 不吉な囁き",
   "@appTitle": {
     "description": "Full application title"
   },
-  
   "onboardingTitle1": "運命の扉が開く",
   "@onboardingTitle1": {
     "description": "First onboarding screen title"
   },
-  
   "onboardingDesc1": "古代の叡智と現代技術が出会い\nあなたの未来を囁く",
   "@onboardingDesc1": {
     "description": "First onboarding screen description"
   },
-  
   "onboardingTitle2": "闇の中の真実",
   "@onboardingTitle2": {
     "description": "Second onboarding screen title"
   },
-  
   "onboardingDesc2": "タロットカードは嘘をつかない\nあなたが受け止められる真実だけを示す",
   "@onboardingDesc2": {
     "description": "Second onboarding screen description"
   },
-  
   "onboardingTitle3": "AIが読む運命",
   "@onboardingTitle3": {
     "description": "Third onboarding screen title"
   },
-  
   "onboardingDesc3": "人工知能があなたのカードを解釈し\n深い対話を通じて道を導く",
   "@onboardingDesc3": {
     "description": "Third onboarding screen description"
   },
-  
   "onboardingTitle4": "準備はできていますか？",
   "@onboardingTitle4": {
     "description": "Fourth onboarding screen title"
   },
-  
   "onboardingDesc4": "すべての選択には代償がある\nもし運命と向き合う準備ができたなら...",
   "@onboardingDesc4": {
     "description": "Fourth onboarding screen description"
   },
-  
   "loginTitle": "お帰りなさい",
   "@loginTitle": {
     "description": "Login screen title"
   },
-  
   "loginSubtitle": "お待ちしておりました",
   "@loginSubtitle": {
     "description": "Login screen subtitle"
   },
-  
   "signupTitle": "運命の契約",
   "@signupTitle": {
     "description": "Signup screen title"
   },
-  
   "signupSubtitle": "あなたの魂を登録する",
   "@signupSubtitle": {
     "description": "Signup screen subtitle"
   },
-  
   "emailLabel": "メールアドレス",
   "@emailLabel": {
     "description": "Email input label"
   },
-  
   "passwordLabel": "パスワード",
   "@passwordLabel": {
     "description": "Password input label"
   },
-  
   "nameLabel": "名前",
   "@nameLabel": {
     "description": "Name input label"
   },
-  
   "loginButton": "入る",
   "@loginButton": {
     "description": "Login button text"
   },
-  
   "signupButton": "魂を登録",
   "@signupButton": {
     "description": "Signup button text"
   },
-  
   "googleLogin": "Googleでログイン",
   "@googleLogin": {
     "description": "Google login button text"
   },
-  
   "googleSignup": "Googleで始める",
   "@googleSignup": {
     "description": "Google signup button text"
   },
-  
   "alreadyHaveAccount": "アカウントをお持ちですか？ログイン",
   "@alreadyHaveAccount": {
     "description": "Link to login screen"
   },
-  
   "dontHaveAccount": "初めてですか？登録",
   "@dontHaveAccount": {
     "description": "Link to signup screen"
   },
-  
   "moodQuestion": "今どんな気持ちですか？",
   "@moodQuestion": {
     "description": "Question asking user's current mood"
   },
-  
   "selectSpreadButton": "タロットスプレッドを選ぶ",
   "@selectSpreadButton": {
     "description": "Button to select tarot spread"
   },
-  
   "moodAnxious": "不安",
   "@moodAnxious": {
     "description": "Mood: anxious"
   },
-  
   "moodLonely": "孤独",
   "@moodLonely": {
     "description": "Mood: lonely"
   },
-  
   "moodCurious": "好奇心",
   "@moodCurious": {
     "description": "Mood: curious"
   },
-  
   "moodFearful": "恐怖",
   "@moodFearful": {
     "description": "Mood: fearful"
   },
-  
   "moodHopeful": "希望的",
   "@moodHopeful": {
     "description": "Mood: hopeful"
   },
-  
   "moodConfused": "困惑",
   "@moodConfused": {
     "description": "Mood: confused"
   },
-  
   "moodDesperate": "絶望的な",
   "@moodDesperate": {
     "description": "Mood: desperate"
   },
-  
   "moodExpectant": "期待",
   "@moodExpectant": {
     "description": "Mood: expectant"
   },
-  
   "moodMystical": "神秘的な",
   "@moodMystical": {
     "description": "Mood: mystical"
   },
-  
   "spreadSelectionTitle": "スプレッド選択",
   "@spreadSelectionTitle": {
     "description": "Spread selection screen title"
   },
-  
   "spreadSelectionSubtitle": "現在の気持ちに基づいてスプレッドを選んでください",
   "@spreadSelectionSubtitle": {
     "description": "Spread selection screen subtitle"
   },
-  
   "spreadDifficultyBeginner": "1～3枚",
   "@spreadDifficultyBeginner": {
     "description": "Beginner difficulty label"
   },
-  
   "spreadDifficultyIntermediate": "5～7枚",
   "@spreadDifficultyIntermediate": {
     "description": "Intermediate difficulty label"
   },
-  
   "spreadDifficultyAdvanced": "10枚",
   "@spreadDifficultyAdvanced": {
     "description": "Advanced difficulty label"
+  },
+  "spreadOneCard": "ワンカード",
+  "@spreadOneCard": {
+    "description": "One card spread name"
+  },
+  "spreadThreeCard": "スリーカード",
+  "@spreadThreeCard": {
+    "description": "Three card spread name"
+  },
+  "spreadCelticCross": "ケルト十字",
+  "@spreadCelticCross": {
+    "description": "Celtic cross spread name"
+  },
+  "spreadRelationship": "関係性スプレッド",
+  "@spreadRelationship": {
+    "description": "Relationship spread name"
+  },
+  "spreadYesNo": "はい/いいえ",
+  "@spreadYesNo": {
+    "description": "Yes/No spread name"
   },
   
   "spreadOneCard": "ワンカード",
@@ -211,46 +191,51 @@
     "description": "Three card spread name"
   },
   
-  "spreadCelticCross": "ケルト十字",
-  "@spreadCelticCross": {
-    "description": "Celtic cross spread name"
+  "oneCardDescription": "今日の運勢とアドバイス",
+  "@oneCardDescription": {
+    "description": "One card spread description"
   },
   
-  "spreadRelationship": "関係性スプレッド",
-  "@spreadRelationship": {
-    "description": "Relationship spread name"
+  "threeCardDescription": "過去・現在・未来の流れ",
+  "@threeCardDescription": {
+    "description": "Three card spread description"
   },
   
-  "spreadYesNo": "はい/いいえ",
-  "@spreadYesNo": {
-    "description": "Yes/No spread name"
+  "celticCrossDescription": "状況のすべての側面を分析",
+  "@celticCrossDescription": {
+    "description": "Celtic cross spread description"
+  },
+  
+  "relationshipDescription": "関係の力学と未来",
+  "@relationshipDescription": {
+    "description": "Relationship spread description"
+  },
+  
+  "yesNoDescription": "明確な答えのための占い",
+  "@yesNoDescription": {
+    "description": "Yes/No spread description"
   },
   
   "selectCardTitle": "運命のカードを選んでください",
   "@selectCardTitle": {
     "description": "Card selection screen title"
   },
-  
   "currentMoodLabel": "現在の気持ち：",
   "@currentMoodLabel": {
     "description": "Current mood label"
   },
-  
   "currentSpreadLabel": "選択したスプレッド：",
   "@currentSpreadLabel": {
     "description": "Current spread label"
   },
-  
   "shufflingMessage": "運命の糸が絡み合っています...",
   "@shufflingMessage": {
     "description": "Message shown while shuffling"
   },
-  
   "selectCardInstruction": "直感に従ってカードを選んでください",
   "@selectCardInstruction": {
     "description": "Card selection instruction"
   },
-  
   "cardsSelected": "{count}枚選択済み",
   "@cardsSelected": {
     "description": "Number of cards selected",
@@ -260,7 +245,6 @@
       }
     }
   },
-  
   "cardsRemaining": "あと{count}枚選んでください",
   "@cardsRemaining": {
     "description": "Number of cards remaining to select",
@@ -270,397 +254,322 @@
       }
     }
   },
-  
   "typeMessageHint": "メッセージを入力...",
   "@typeMessageHint": {
     "description": "Chat input hint"
   },
-  
   "continueReading": "より深いアドバイスを得る",
   "@continueReading": {
     "description": "Button to continue tarot reading"
   },
-  
   "watchAdPrompt": "より深淵からの声を聞くためには、\n別世界からのメッセージを確認する必要があります。",
   "@watchAdPrompt": {
     "description": "Prompt to watch ad for continued reading"
   },
-  
   "interpretingSpread": "カードのメッセージを解釈しています...",
   "@interpretingSpread": {
     "description": "Message shown while AI interprets cards"
   },
-  
   "menuHistory": "過去のタロット記録",
   "@menuHistory": {
     "description": "Menu item: history"
   },
-  
   "menuHistoryDesc": "あなたの過去の運命を振り返る",
   "@menuHistoryDesc": {
     "description": "Menu item description: history"
   },
-  
+  "loadingHistory": "履歴を読み込み中...",
+  "@loadingHistory": {
+    "description": "Loading message for history screen"
+  },
   "menuStatistics": "統計と分析",
   "@menuStatistics": {
     "description": "Menu item: statistics"
   },
-  
   "menuStatisticsDesc": "あなたの運命パターンを分析する",
   "@menuStatisticsDesc": {
     "description": "Menu item description: statistics"
   },
-  
   "menuSettings": "設定",
   "@menuSettings": {
     "description": "Menu item: settings"
   },
-  
   "menuSettingsDesc": "アプリ環境を調整する",
   "@menuSettingsDesc": {
     "description": "Menu item description: settings"
   },
-  
   "menuAbout": "アプリについて",
   "@menuAbout": {
     "description": "Menu item: about"
   },
-  
   "menuAboutDesc": "Moroka - 影の神託",
   "@menuAboutDesc": {
     "description": "Menu item description: about"
   },
-  
   "logoutButton": "ログアウト",
   "@logoutButton": {
     "description": "Logout button text"
   },
-  
   "logoutTitle": "本当に離れますか？",
   "@logoutTitle": {
     "description": "Logout dialog title"
   },
-  
   "logoutMessage": "運命の扉が閉じれば\nまた戻ってこなければならない",
   "@logoutMessage": {
     "description": "Logout dialog message"
   },
-  
   "logoutCancel": "残る",
   "@logoutCancel": {
     "description": "Logout dialog cancel button"
   },
-  
   "logoutConfirm": "離れる",
   "@logoutConfirm": {
     "description": "Logout dialog confirm button"
   },
-  
   "errorOccurred": "エラーが発生しました",
   "@errorOccurred": {
     "description": "Generic error message"
   },
-  
   "errorEmailEmpty": "メールアドレスを入力してください",
   "@errorEmailEmpty": {
     "description": "Error: email field empty"
   },
-  
   "errorEmailInvalid": "無効なメールアドレス形式です",
   "@errorEmailInvalid": {
     "description": "Error: email format invalid"
   },
-  
   "errorPasswordEmpty": "パスワードを入力してください",
   "@errorPasswordEmpty": {
     "description": "Error: password field empty"
   },
-  
   "errorPasswordShort": "パスワードは6文字以上必要です",
   "@errorPasswordShort": {
     "description": "Error: password too short"
   },
-  
   "errorNameEmpty": "名前を入力してください",
   "@errorNameEmpty": {
     "description": "Error: name field empty"
   },
-  
   "errorLoginFailed": "ログインに失敗しました",
   "@errorLoginFailed": {
     "description": "Error: login failed"
   },
-  
   "errorSignupFailed": "登録に失敗しました",
   "@errorSignupFailed": {
     "description": "Error: signup failed"
   },
-  
   "errorGoogleLoginFailed": "Googleログインに失敗しました",
   "@errorGoogleLoginFailed": {
     "description": "Error: Google login failed"
   },
-  
   "errorNetworkFailed": "ネットワーク接続を確認してください",
   "@errorNetworkFailed": {
     "description": "Error: network connection failed"
   },
-  
   "errorNotEnoughCards": "もっとカードを選んでください",
   "@errorNotEnoughCards": {
     "description": "Error: not enough cards selected"
   },
-  
   "successLogin": "ようこそ",
   "@successLogin": {
     "description": "Success: login"
   },
-  
   "successSignup": "あなたの魂が登録されました",
   "@successSignup": {
     "description": "Success: signup"
   },
-  
   "successLogout": "さようなら",
   "@successLogout": {
     "description": "Success: logout"
   },
-  
   "successCardsSelected": "すべてのカードが選択されました",
   "@successCardsSelected": {
     "description": "Success: all cards selected"
   },
-  
   "settingsLanguageTitle": "言語設定",
   "@settingsLanguageTitle": {
     "description": "Language settings section title"
   },
-  
   "settingsLanguageLabel": "アプリの言語",
   "@settingsLanguageLabel": {
     "description": "Language selector label"
   },
-  
   "settingsLanguageDesc": "お好みの言語を選択してください",
   "@settingsLanguageDesc": {
     "description": "Language selector description"
   },
-  
   "settingsNotificationTitle": "通知設定",
   "@settingsNotificationTitle": {
     "description": "Notification settings section title"
   },
-  
   "settingsDailyNotification": "デイリータロット通知",
   "@settingsDailyNotification": {
     "description": "Daily notification setting"
   },
-  
   "settingsDailyNotificationDesc": "毎朝、あなたの運勢をお届けします",
   "@settingsDailyNotificationDesc": {
     "description": "Daily notification description"
   },
-  
   "settingsWeeklyReport": "週間タロットレポート",
   "@settingsWeeklyReport": {
     "description": "Weekly report setting"
   },
-  
   "settingsWeeklyReportDesc": "毎週月曜日に運勢をお送りします",
   "@settingsWeeklyReportDesc": {
     "description": "Weekly report description"
   },
-  
   "settingsDisplayTitle": "表示設定",
   "@settingsDisplayTitle": {
     "description": "Display settings section title"
   },
-  
   "settingsVibration": "振動エフェクト",
   "@settingsVibration": {
     "description": "Vibration setting"
   },
-  
   "settingsVibrationDesc": "カード選択時の振動フィードバック",
   "@settingsVibrationDesc": {
     "description": "Vibration description"
   },
-  
   "settingsAnimations": "アニメーション効果",
   "@settingsAnimations": {
     "description": "Animation setting"
   },
-  
   "settingsAnimationsDesc": "画面遷移のアニメーション",
   "@settingsAnimationsDesc": {
     "description": "Animation description"
   },
-  
   "settingsDataTitle": "データ管理",
   "@settingsDataTitle": {
     "description": "Data management section title"
   },
-  
   "settingsBackupData": "データバックアップ",
   "@settingsBackupData": {
     "description": "Backup data setting"
   },
-  
   "settingsBackupDataDesc": "クラウドにデータをバックアップ",
   "@settingsBackupDataDesc": {
     "description": "Backup data description"
   },
-  
   "settingsClearCache": "キャッシュのクリア",
   "@settingsClearCache": {
     "description": "Clear cache setting"
   },
-  
   "settingsClearCacheDesc": "一時ファイルを削除して容量を解放",
   "@settingsClearCacheDesc": {
     "description": "Clear cache description"
   },
-  
   "settingsDeleteData": "すべてのデータを削除",
   "@settingsDeleteData": {
     "description": "Delete all data setting"
   },
-  
   "settingsDeleteDataDesc": "すべてのタロット記録と設定を削除",
   "@settingsDeleteDataDesc": {
     "description": "Delete data description"
   },
-  
   "settingsAccountTitle": "アカウント",
   "@settingsAccountTitle": {
     "description": "Account section title"
   },
-  
   "settingsChangePassword": "パスワードの変更",
   "@settingsChangePassword": {
     "description": "Change password setting"
   },
-  
   "settingsChangePasswordDesc": "アカウントセキュリティのためパスワードを変更",
   "@settingsChangePasswordDesc": {
     "description": "Change password description"
   },
-  
   "settingsDeleteAccount": "アカウントの削除",
   "@settingsDeleteAccount": {
     "description": "Delete account setting"
   },
-  
   "settingsDeleteAccountDesc": "アカウントを永久に削除",
   "@settingsDeleteAccountDesc": {
     "description": "Delete account description"
   },
-  
   "dialogBackupTitle": "データバックアップ",
   "@dialogBackupTitle": {
     "description": "Backup dialog title"
   },
-  
   "dialogBackupMessage": "クラウドにデータをバックアップしますか？",
   "@dialogBackupMessage": {
     "description": "Backup dialog message"
   },
-  
   "dialogClearCacheTitle": "キャッシュのクリア",
   "@dialogClearCacheTitle": {
     "description": "Clear cache dialog title"
   },
-  
   "dialogClearCacheMessage": "一時ファイルを削除しますか？",
   "@dialogClearCacheMessage": {
     "description": "Clear cache dialog message"
   },
-  
   "dialogDeleteDataTitle": "すべてのデータを削除",
   "@dialogDeleteDataTitle": {
     "description": "Delete data dialog title"
   },
-  
   "dialogDeleteDataMessage": "すべてのタロット記録と設定が永久に削除されます。\nこの操作は取り消せません。",
   "@dialogDeleteDataMessage": {
     "description": "Delete data dialog message"
   },
-  
   "dialogChangePasswordTitle": "パスワードの変更",
   "@dialogChangePasswordTitle": {
     "description": "Change password dialog title"
   },
-  
   "dialogDeleteAccountTitle": "アカウントの削除",
   "@dialogDeleteAccountTitle": {
     "description": "Delete account dialog title"
   },
-  
   "dialogDeleteAccountMessage": "アカウントを削除すると、すべてのデータが永久に削除されます。\nこの操作は取り消せません。",
   "@dialogDeleteAccountMessage": {
     "description": "Delete account dialog message"
   },
-  
   "currentPassword": "現在のパスワード",
   "@currentPassword": {
     "description": "Current password label"
   },
-  
   "newPassword": "新しいパスワード",
   "@newPassword": {
     "description": "New password label"
   },
-  
   "confirmNewPassword": "新しいパスワードの確認",
   "@confirmNewPassword": {
     "description": "Confirm new password label"
   },
-  
   "cancel": "キャンセル",
   "@cancel": {
     "description": "Cancel button"
   },
-  
   "backup": "バックアップ",
   "@backup": {
     "description": "Backup button"
   },
-  
   "delete": "削除",
   "@delete": {
     "description": "Delete button"
   },
-  
   "change": "変更",
   "@change": {
     "description": "Change button"
   },
-  
   "successBackup": "バックアップが完了しました",
   "@successBackup": {
     "description": "Backup success message"
   },
-  
   "successClearCache": "キャッシュをクリアしました",
   "@successClearCache": {
     "description": "Clear cache success message"
   },
-  
   "successDeleteData": "すべてのデータを削除しました",
   "@successDeleteData": {
     "description": "Delete data success message"
   },
-  
   "successChangePassword": "パスワードを変更しました",
   "@successChangePassword": {
     "description": "Change password success message"
   },
-  
   "successDeleteAccount": "アカウントを削除しました",
   "@successDeleteAccount": {
     "description": "Delete account success message"
   },
-  
   "errorBackup": "バックアップに失敗しました：{error}",
   "@errorBackup": {
     "description": "Backup error message",
@@ -670,7 +579,6 @@
       }
     }
   },
-  
   "errorDeleteData": "削除に失敗しました：{error}",
   "@errorDeleteData": {
     "description": "Delete data error message",
@@ -680,7 +588,6 @@
       }
     }
   },
-  
   "errorChangePassword": "パスワードの変更に失敗しました：{error}",
   "@errorChangePassword": {
     "description": "Change password error message",
@@ -690,7 +597,6 @@
       }
     }
   },
-  
   "errorDeleteAccount": "アカウントの削除に失敗しました：{error}",
   "@errorDeleteAccount": {
     "description": "Delete account error message",
@@ -700,177 +606,142 @@
       }
     }
   },
-  
   "errorPasswordMismatch": "新しいパスワードが一致しません",
   "@errorPasswordMismatch": {
     "description": "Password mismatch error"
   },
-  
   "passwordResetTitle": "パスワードのリセット",
   "@passwordResetTitle": {
     "description": "Password reset dialog title"
   },
-  
   "passwordResetMessage": "登録されたメールアドレスを入力してください。\nパスワードリセットリンクをお送りします。",
   "@passwordResetMessage": {
     "description": "Password reset message"
   },
-  
   "passwordResetSuccess": "パスワードリセットメールを送信しました",
   "@passwordResetSuccess": {
     "description": "Password reset success message"
   },
-  
   "send": "送信",
   "@send": {
     "description": "Send button"
   },
-  
   "emailPlaceholder": "your@email.com",
   "@emailPlaceholder": {
     "description": "Email placeholder"
   },
-  
   "passwordPlaceholder": "6文字以上",
   "@passwordPlaceholder": {
     "description": "Password placeholder"
   },
-  
   "forgotPassword": "パスワードをお忘れですか？",
   "@forgotPassword": {
     "description": "Forgot password link"
   },
-  
   "login": "ログイン",
   "@login": {
     "description": "Login button"
   },
-  
   "or": "または",
   "@or": {
     "description": "Or divider"
   },
-  
   "continueWithGoogle": "Googleで続ける",
   "@continueWithGoogle": {
     "description": "Google login button"
   },
-  
   "noAccount": "アカウントをお持ちでない方",
   "@noAccount": {
     "description": "No account text"
   },
-  
   "signUp": "新規登録",
   "@signUp": {
     "description": "Sign up link"
   },
-  
   "appBrandName": "MOROKA",
   "@appBrandName": {
     "description": "App brand name"
   },
-  
   "appBrandTagline": "影の神託",
   "@appBrandTagline": {
     "description": "App brand tagline"
   },
-  
   "aboutTitle": "アプリについて",
   "@aboutTitle": {
     "description": "About screen title"
   },
-  
   "aboutSubtitle": "運命のカードがあなたを待っている",
   "@aboutSubtitle": {
     "description": "About screen subtitle"
   },
-  
   "aboutDescription": "MOROKA\n\n運命の扉が開かれました\n影の神託があなたの未来を解釈します\n\n神秘的なAIによる伝統的なタロット解釈\n深い洞察と叡智を提供",
   "@aboutDescription": {
     "description": "About app description"
   },
-  
   "featuresTitle": "主な機能",
   "@featuresTitle": {
     "description": "Features section title"
   },
-  
   "feature78Cards": "78枚の伝統的タロットカード",
   "@feature78Cards": {
     "description": "78 cards feature"
   },
-  
   "feature78CardsDesc": "22枚の大アルカナと56枚の小アルカナの完全デッキ",
   "@feature78CardsDesc": {
     "description": "78 cards feature description"
   },
-  
   "feature5Spreads": "5つのプロフェッショナルスプレッド",
   "@feature5Spreads": {
     "description": "5 spreads feature"
   },
-  
   "feature5SpreadsDesc": "ワンカードからケルト十字まで様々な読み取り方法",
   "@feature5SpreadsDesc": {
     "description": "5 spreads feature description"
   },
-  
   "featureAI": "AIタロットマスター",
   "@featureAI": {
     "description": "AI feature"
   },
-  
   "featureAIDesc": "100年の経験を持つタロットマスターのような深い解釈",
   "@featureAIDesc": {
     "description": "AI feature description"
   },
-  
   "featureChat": "インタラクティブな相談",
   "@featureChat": {
     "description": "Chat feature"
   },
-  
   "featureChatDesc": "カードについて自由に質問できます",
   "@featureChatDesc": {
     "description": "Chat feature description"
   },
-  
   "termsAndPolicies": "利用規約とポリシー",
   "@termsAndPolicies": {
     "description": "Terms section title"
   },
-  
   "termsOfService": "利用規約",
   "@termsOfService": {
     "description": "Terms of service"
   },
-  
   "privacyPolicy": "プライバシーポリシー",
   "@privacyPolicy": {
     "description": "Privacy policy"
   },
-  
   "marketingConsent": "マーケティング情報",
   "@marketingConsent": {
     "description": "Marketing consent"
   },
-  
   "customerSupport": "カスタマーサポート",
   "@customerSupport": {
     "description": "Customer support section"
   },
-  
   "emailSupport": "メールサポート",
   "@emailSupport": {
     "description": "Email support"
   },
-  
   "website": "ウェブサイト",
   "@website": {
     "description": "Website"
   },
-  
   "cannotOpenUrl": "URLを開けません：{url}",
   "@cannotOpenUrl": {
     "description": "Cannot open URL error",
@@ -880,162 +751,130 @@
       }
     }
   },
-  
   "lastModified": "最終更新日：2025年7月3日",
   "@lastModified": {
     "description": "Last modified date"
   },
-  
   "confirm": "確認",
   "@confirm": {
     "description": "Confirm button"
   },
-  
   "companyName": "Today's Studio",
   "@companyName": {
     "description": "Company name"
   },
-  
   "companyTagline": "神秘的な体験を創造する",
   "@companyTagline": {
     "description": "Company tagline"
   },
-  
   "copyright": "© 2025 Today's Studio. All rights reserved.",
   "@copyright": {
     "description": "Copyright notice"
   },
-  
   "anonymousSoul": "名もなき魂",
   "@anonymousSoul": {
     "description": "Anonymous user name"
   },
-  
   "totalReadings": "総占い回数",
   "@totalReadings": {
     "description": "Total readings label"
   },
-  
   "joinDate": "参加日",
   "@joinDate": {
     "description": "Join date label"
   },
-  
   "errorLogout": "ログアウト中にエラーが発生しました",
   "@errorLogout": {
     "description": "Logout error"
   },
-  
   "soulContract": "魂の契約",
   "@soulContract": {
     "description": "Terms screen title"
   },
-  
   "termsAgreementMessage": "サービス利用のため規約にご同意ください",
   "@termsAgreementMessage": {
     "description": "Terms agreement message"
   },
-  
   "agreeAll": "すべてに同意",
   "@agreeAll": {
     "description": "Agree all button"
   },
-  
   "required": "必須",
   "@required": {
     "description": "Required label"
   },
-  
   "optional": "任意",
   "@optional": {
     "description": "Optional label"
   },
-  
   "agreeAndStart": "同意して始める",
   "@agreeAndStart": {
     "description": "Agree and start button"
   },
-  
   "agreeToRequired": "必須規約にご同意ください",
   "@agreeToRequired": {
     "description": "Required terms message"
   },
-  
   "nickname": "ニックネーム",
   "@nickname": {
     "description": "Nickname label"
   },
-  
   "confirmPassword": "パスワードの確認",
   "@confirmPassword": {
     "description": "Confirm password label"
   },
-  
   "nextStep": "次のステップ",
   "@nextStep": {
     "description": "Next step button"
   },
-  
   "errorNameTooShort": "2文字以上入力してください",
   "@errorNameTooShort": {
     "description": "Name too short error"
   },
-  
   "errorConfirmPassword": "パスワードを確認してください",
   "@errorConfirmPassword": {
     "description": "Confirm password error"
   },
-  
   "errorPasswordsDontMatch": "パスワードが一致しません",
   "@errorPasswordsDontMatch": {
     "description": "Passwords don't match error"
   },
-  
   "emailInUse": "このメールアドレスは既に使用されています",
   "@emailInUse": {
     "description": "Email in use message"
   },
-  
   "emailAvailable": "このメールアドレスは使用可能です",
   "@emailAvailable": {
     "description": "Email available message"
   },
-  
   "nicknameInUse": "このニックネームは既に使用されています",
   "@nicknameInUse": {
     "description": "Nickname in use message"
   },
-  
   "nicknameAvailable": "このニックネームは使用可能です",
   "@nicknameAvailable": {
     "description": "Nickname available message"
   },
-  
   "passwordWeak": "弱い",
   "@passwordWeak": {
     "description": "Weak password"
   },
-  
   "passwordFair": "普通",
   "@passwordFair": {
     "description": "Fair password"
   },
-  
   "passwordStrong": "強い",
   "@passwordStrong": {
     "description": "Strong password"
   },
-  
   "passwordVeryStrong": "非常に強い",
   "@passwordVeryStrong": {
     "description": "Very strong password"
   },
-  
   "emailVerificationTitle": "メール認証",
   "@emailVerificationTitle": {
     "description": "Email verification title"
   },
-  
   "emailVerificationMessage": "{email} に確認メールを送信しました。\nメールをご確認いただき、認証リンクをクリックしてください。",
   "@emailVerificationMessage": {
     "description": "Email verification message",
@@ -1045,82 +884,122 @@
       }
     }
   },
-  
   "resendEmail": "メールを再送信",
   "@resendEmail": {
     "description": "Resend email button"
   },
-  
   "emailResent": "確認メールを再送信しました",
   "@emailResent": {
     "description": "Email resent message"
   },
-  
   "checkEmailAndReturn": "認証後、アプリにお戻りください",
   "@checkEmailAndReturn": {
     "description": "Check email instruction"
   },
-  
   "noHistoryTitle": "タロットの記録はまだありません",
   "@noHistoryTitle": {
     "description": "Empty history state title"
   },
-  
   "noHistoryMessage": "最初の運命を読み取りましょう",
   "@noHistoryMessage": {
     "description": "Empty history state message"
   },
-  
   "startReading": "タロット占いを始める",
   "@startReading": {
     "description": "Start reading button"
   },
-  
   "deleteReadingTitle": "この記録を削除しますか？",
   "@deleteReadingTitle": {
     "description": "Delete reading dialog title"
   },
-  
   "deleteReadingMessage": "削除された記録は復元できません",
   "@deleteReadingMessage": {
     "description": "Delete reading dialog message"
   },
-  
+  "deleteAll": "すべて削除",
+  "@deleteAll": {
+    "description": "Delete all button"
+  },
+  "deleteAllConfirmTitle": "すべての記録を削除しますか？",
+  "@deleteAllConfirmTitle": {
+    "description": "Delete all confirmation dialog title"
+  },
+  "deleteAllConfirmMessage": "すべてのタロットリーディングが完全に削除されます。この操作は元に戻せません。",
+  "@deleteAllConfirmMessage": {
+    "description": "Delete all confirmation dialog message"
+  },
+  "deleteAllButton": "すべて削除",
+  "@deleteAllButton": {
+    "description": "Delete all confirmation button"
+  },
+  "totalTarotReadings": "タロットリーディング総数",
+  "@totalTarotReadings": {
+    "description": "Total tarot readings label"
+  },
+  "mostFrequentCard": "最も頻繁なカード",
+  "@mostFrequentCard": {
+    "description": "Most frequent card label"
+  },
+  "cardFrequencyTop5": "カード頻度 - トップ5",
+  "@cardFrequencyTop5": {
+    "description": "Card frequency top 5 label"
+  },
+  "moodAnalysis": "気分分析",
+  "@moodAnalysis": {
+    "description": "Mood analysis label"
+  },
+  "monthlyReadingTrend": "月別リーディング傾向",
+  "@monthlyReadingTrend": {
+    "description": "Monthly reading trend label"
+  },
+  "noData": "データなし",
+  "@noData": {
+    "description": "No data label"
+  },
+  "noDataToAnalyze": "分析するデータがありません",
+  "@noDataToAnalyze": {
+    "description": "No data to analyze message"
+  },
+  "startTarotReading": "統計を見るためにタロットリーディングを始めてください",
+  "@startTarotReading": {
+    "description": "Start tarot reading prompt for statistics"
+  },
+  "aboutTagline": "運命のカードがあなたを待っています",
+  "@aboutTagline": {
+    "description": "About screen tagline"
+  },
+  "aboutDescription": "MOROKAは古代の神秘的なタロットカードを通じてあなたの運命を読み解きます。78枚のカード一枚一枚に込められた宇宙のメッセージをAIタロットマスターが解釈します。\n\n闇の中で輝く真実、そしてあなただけのための特別なメッセージをお届けします。",
+  "@aboutDescription": {
+    "description": "About app description"
+  },
   "cardOfFate": "運命のカード",
   "@cardOfFate": {
     "description": "Card selection dialog title"
   },
-  
   "cardCallingYou": "このカードがあなたを呼んでいます",
   "@cardCallingYou": {
-    "description": "Card selection dialog message"
+    "description": "Card selection dialog subtitle"
   },
-  
   "selectThisCard": "選びますか？",
   "@selectThisCard": {
     "description": "Card selection dialog question"
   },
-  
   "viewAgain": "もう一度見る",
   "@viewAgain": {
-    "description": "View again button"
+    "description": "Card selection dialog cancel button"
   },
-  
   "select": "選択",
   "@select": {
-    "description": "Select button"
+    "description": "Card selection dialog confirm button"
   },
-  
-  "shufflingCards": "運命のカードをシャッフル中...",
+  "shufflingCards": "運命のカードをシャッフルしています...",
   "@shufflingCards": {
-    "description": "Shuffling cards message"
+    "description": "Message shown while shuffling cards"
   },
-  
   "selectCardsIntuition": "直感に従ってカードを選んでください",
   "@selectCardsIntuition": {
     "description": "Card selection instruction"
   },
-  
   "selectMoreCards": "あと{count}枚選んでください",
   "@selectMoreCards": {
     "description": "Select more cards message",
@@ -1130,127 +1009,102 @@
       }
     }
   },
-  
   "selectionComplete": "選択完了！",
   "@selectionComplete": {
-    "description": "Selection complete message"
+    "description": "Message when all cards are selected"
   },
-  
   "tapToSelect": "タップして選択",
   "@tapToSelect": {
     "description": "Tap to select instruction"
   },
-  
   "preparingInterpretation": "解釈を準備しています...",
   "@preparingInterpretation": {
     "description": "Preparing interpretation message"
   },
-  
   "cardMessage": "カードからのメッセージ",
   "@cardMessage": {
     "description": "Card message section title"
   },
-  
   "cardsStory": "あなたのカードが語る物語",
   "@cardsStory": {
     "description": "Cards story header"
   },
-  
   "specialInterpretation": "あなたのための特別な解釈",
   "@specialInterpretation": {
     "description": "Special interpretation subtitle"
   },
-  
   "interpretingCards": "カードの意味を解釈しています...",
   "@interpretingCards": {
     "description": "Interpreting cards loading message"
   },
-  
   "todaysChatEnded": "本日の対話は終了しました",
   "@todaysChatEnded": {
     "description": "Chat limit reached message"
   },
-  
   "askQuestions": "質問をどうぞ...",
   "@askQuestions": {
     "description": "Chat input placeholder"
   },
-  
   "continueConversation": "対話を続ける",
   "@continueConversation": {
     "description": "Continue conversation button"
   },
-  
   "wantDeeperTruth": "より深い真実を知りたいですか？",
   "@wantDeeperTruth": {
     "description": "Ad dialog title"
   },
-  
   "watchAdToContinue": "広告を視聴して\nタロットマスターとの対話を続けましょう",
   "@watchAdToContinue": {
     "description": "Ad dialog message"
   },
-  
   "later": "後で",
   "@later": {
     "description": "Later button"
   },
-  
   "watchAd": "広告を見る",
   "@watchAd": {
     "description": "Watch ad button"
   },
-  
   "dailyLimitReached": "1日の引き制限に達しました",
   "@dailyLimitReached": {
     "description": "Title for daily limit reached dialog"
   },
-  
   "watchAdForMore": "広告を視聴してカードを引く回数を追加しましょう。1日最大10回まで追加できます。",
   "@watchAdForMore": {
     "description": "Message encouraging users to watch ads for more draws"
   },
-  
-  "drawAddedMessage": "1回分が追加されました！ ✨",
+  "drawAddedMessage": "1回分のドローが追加されました！ ✨",
   "@drawAddedMessage": {
     "description": "Success message after watching ad"
   },
-  
-  "adLoadFailed": "広告を読み込めませんでした。後でもう一度お試しください。",
+  "adLoadFailed": "広告の読み込みに失敗しました。後でもう一度お試しください。",
   "@adLoadFailed": {
     "description": "Error message when ad fails to load"
   },
-  
   "emailVerification": "メール認証",
   "@emailVerification": {
     "description": "Email verification header"
   },
-  
   "checkYourEmail": "メールをご確認ください",
   "@checkYourEmail": {
     "description": "Check email title"
   },
-  
   "verificationEmailSent": "上記のアドレスに確認メールを送信しました。\n受信トレイをご確認いただき、認証リンクをクリックしてください。",
   "@verificationEmailSent": {
     "description": "Verification email sent message"
   },
-  
   "verifyingEmail": "メールを確認中...",
   "@verifyingEmail": {
     "description": "Verifying email loading text"
   },
-  
   "noEmailReceived": "メールが届きませんか？",
   "@noEmailReceived": {
     "description": "No email received title"
   },
-  
   "checkSpamFolder": "迷惑メールフォルダをご確認ください。\nそれでも見つからない場合は、下のボタンをクリックして再送信してください。",
   "@checkSpamFolder": {
     "description": "Check spam folder message"
   },
-  
   "resendIn": "{seconds}秒後に再送信",
   "@resendIn": {
     "description": "Resend cooldown message",
@@ -1260,57 +1114,26 @@
       }
     }
   },
-  
   "resendVerificationEmail": "確認メールを再送信",
   "@resendVerificationEmail": {
     "description": "Resend verification email button"
   },
-  
   "alreadyVerified": "既に認証済みです",
   "@alreadyVerified": {
     "description": "Already verified button"
   },
-  
   "openGateOfFate": "運命の扉を開く",
   "@openGateOfFate": {
     "description": "Final onboarding button"
   },
-  
-  "cardOfFate": "運命のカード",
-  "@cardOfFate": {
-    "description": "Card selection dialog title"
-  },
-  
-  "cardCallingYou": "このカードがあなたを呼んでいます",
-  "@cardCallingYou": {
-    "description": "Card selection dialog subtitle"
-  },
-  
   "willYouSelectIt": "選択しますか？",
   "@willYouSelectIt": {
     "description": "Card selection dialog question"
   },
-  
-  "viewAgain": "もう一度見る",
-  "@viewAgain": {
-    "description": "Card selection dialog cancel button"
-  },
-  
-  "select": "選択",
-  "@select": {
-    "description": "Card selection dialog confirm button"
-  },
-  
-  "shufflingCards": "運命のカードをシャッフルしています...",
-  "@shufflingCards": {
-    "description": "Message shown while shuffling cards"
-  },
-  
   "selectCardByHeart": "心に響くカードを選んでください",
   "@selectCardByHeart": {
     "description": "Card selection instruction in header"
   },
-  
   "moreToSelect": "あと{count}枚選択",
   "@moreToSelect": {
     "description": "Number of cards more to select",
@@ -1320,27 +1143,10 @@
       }
     }
   },
-  
-  "selectionComplete": "選択完了！",
-  "@selectionComplete": {
-    "description": "Message when all cards are selected"
-  },
-  
   "tapToSelectCard": "カードをタップして選択",
   "@tapToSelectCard": {
     "description": "Instruction to tap card for selection"
   },
-  
-  "drawAddedMessage": "1回分のドローが追加されました！ ✨",
-  "@drawAddedMessage": {
-    "description": "Success message after watching ad"
-  },
-  
-  "adLoadFailed": "広告の読み込みに失敗しました。後でもう一度お試しください。",
-  "@adLoadFailed": {
-    "description": "Error message when ad fails to load"
-  },
-  
   "monthLabel": "{month}月",
   "@monthLabel": {
     "description": "Month label format",
@@ -1350,19 +1156,385 @@
       }
     }
   },
-  
   "startChatMessage": "タロットリーディングについて何でも聞いてください",
   "@startChatMessage": {
     "description": "Empty chat state message"
   },
-  
   "chatHistory": "チャット履歴",
   "@chatHistory": {
     "description": "Chat history section title"
   },
-  
   "chatHistoryDescription": "タロットマスターとの会話",
   "@chatHistoryDescription": {
     "description": "Chat history section description"
+  },
+  "error": "エラー",
+  "@error": {
+    "description": "error - automatically added"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "ok - automatically added"
+  },
+  "errorInvalidFormat": "無効な形式",
+  "@errorInvalidFormat": {
+    "description": "errorInvalidFormat - automatically added"
+  },
+  "errorUnexpected": "予期しないエラーが発生しました",
+  "@errorUnexpected": {
+    "description": "errorUnexpected - automatically added"
+  },
+  "errorUnknown": "不明なエラーが発生しました",
+  "@errorUnknown": {
+    "description": "errorUnknown - automatically added"
+  },
+  "errorNetworkTimeout": "ネットワーク接続がタイムアウトしました",
+  "@errorNetworkTimeout": {
+    "description": "errorNetworkTimeout - automatically added"
+  },
+  "errorNoInternet": "インターネット接続がありません",
+  "@errorNoInternet": {
+    "description": "errorNoInternet - automatically added"
+  },
+  "errorServerError": "サーバーエラーが発生しました",
+  "@errorServerError": {
+    "description": "errorServerError - automatically added"
+  },
+  "errorInvalidCredentials": "メールアドレスまたはパスワードが無効です",
+  "@errorInvalidCredentials": {
+    "description": "errorInvalidCredentials - automatically added"
+  },
+  "errorEmailNotVerified": "メールアドレスが確認されていません",
+  "@errorEmailNotVerified": {
+    "description": "errorEmailNotVerified - automatically added"
+  },
+  "errorSessionExpired": "セッションの有効期限が切れました。再度ログインしてください",
+  "@errorSessionExpired": {
+    "description": "errorSessionExpired - automatically added"
+  },
+  "errorQuotaExceeded": "1日の上限を超えました",
+  "@errorQuotaExceeded": {
+    "description": "errorQuotaExceeded - automatically added"
+  },
+  "errorInvalidResponse": "サーバーからの応答が無効です",
+  "@errorInvalidResponse": {
+    "description": "errorInvalidResponse - automatically added"
+  },
+  "errorRateLimitExceeded": "リクエストが多すぎます。後でもう一度お試しください",
+  "@errorRateLimitExceeded": {
+    "description": "errorRateLimitExceeded - automatically added"
+  },
+  "errorDataNotFound": "データが見つかりません",
+  "@errorDataNotFound": {
+    "description": "errorDataNotFound - automatically added"
+  },
+  "errorDataCorrupted": "データが破損しています",
+  "@errorDataCorrupted": {
+    "description": "errorDataCorrupted - automatically added"
+  },
+  "errorSaveFailed": "データの保存に失敗しました",
+  "@errorSaveFailed": {
+    "description": "errorSaveFailed - automatically added"
+  },
+  "errorPermissionDenied": "権限がありません",
+  "@errorPermissionDenied": {
+    "description": "errorPermissionDenied - automatically added"
+  },
+  "errorPermissionRestricted": "アクセスが制限されています",
+  "@errorPermissionRestricted": {
+    "description": "errorPermissionRestricted - automatically added"
+  },
+  "errorEmailAlreadyInUse": "このメールアドレスは既に使用されています",
+  "@errorEmailAlreadyInUse": {
+    "description": "errorEmailAlreadyInUse - automatically added"
+  },
+  "errorInvalidEmail": "無効なメールアドレス",
+  "@errorInvalidEmail": {
+    "description": "errorInvalidEmail - automatically added"
+  },
+  "errorWeakPassword": "パスワードが弱すぎます",
+  "@errorWeakPassword": {
+    "description": "errorWeakPassword - automatically added"
+  },
+  "errorNetworkRequestFailed": "ネットワークリクエストが失敗しました",
+  "@errorNetworkRequestFailed": {
+    "description": "errorNetworkRequestFailed - automatically added"
+  },
+  "errorOperationNotAllowed": "この操作は許可されていません",
+  "@errorOperationNotAllowed": {
+    "description": "errorOperationNotAllowed - automatically added"
+  },
+  "errorAuthFailed": "認証に失敗しました",
+  "@errorAuthFailed": {
+    "description": "errorAuthFailed - automatically added"
+  },
+  
+  "remainingDraws": "残り回数",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "残り回数がありません",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "広告",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "tarotMaster": "タロットマスター",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  "question": "質問",
+  "@question": {
+    "description": "Label for user's question"
+  },
+  
+  "celticCrossSpread": "ケルト十字スプレッド",
+  "@celticCrossSpread": {
+    "description": "Label for celtic cross spread"
+  },
+  
+  "crossSection": "十字 - 現在の状況",
+  "@crossSection": {
+    "description": "Celtic Cross spread cross section label"
+  },
+  
+  "staffSection": "杖 - 未来の展開",
+  "@staffSection": {
+    "description": "Celtic Cross spread staff section label"
+  },
+  
+  "languageChanged": "言語が正常に変更されました",
+  "@languageChanged": {
+    "description": "Language change success message"
+  },
+  
+  "notificationsEnabled": "通知が有効になりました",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "通知が無効になりました",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "振動が有効になりました",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "振動が無効になりました",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "アニメーションが有効になりました",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "アニメーションが無効になりました",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "logoutSuccess": "ログアウトしました",
+  "@logoutSuccess": {
+    "description": "Logout success message"
+  },
+  
+  "deleteAccountSuccess": "アカウントが削除されました",
+  "@deleteAccountSuccess": {
+    "description": "Delete account success message"
+  },
+  
+  "errorOccurred": "エラーが発生しました",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "notificationPermissionDenied": "通知の許可が必要です",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "generalSettings": "一般設定",
+  "@generalSettings": {
+    "description": "General settings section title"
+  },
+  
+  "accountSettings": "アカウント設定",
+  "@accountSettings": {
+    "description": "Account settings section title"
+  },
+  
+  "moreTitle": "その他",
+  "@moreTitle": {
+    "description": "More section title"
+  },
+  
+  "languageTitle": "言語",
+  "@languageTitle": {
+    "description": "Language setting title"
+  },
+  
+  "notificationsTitle": "通知",
+  "@notificationsTitle": {
+    "description": "Notifications setting title"
+  },
+  
+  "vibrationTitle": "触覚フィードバック",
+  "@vibrationTitle": {
+    "description": "Vibration setting title"
+  },
+  
+  "vibrationSubtitle": "振動フィードバックを有効にする",
+  "@vibrationSubtitle": {
+    "description": "Vibration setting subtitle"
+  },
+  
+  "animationsTitle": "アニメーション",
+  "@animationsTitle": {
+    "description": "Animations setting title"
+  },
+  
+  "animationsSubtitle": "UIアニメーションを有効にする",
+  "@animationsSubtitle": {
+    "description": "Animations setting subtitle"
+  },
+  
+  "dailyTarotReminder": "毎日のタロットリマインダーを受け取る",
+  "@dailyTarotReminder": {
+    "description": "Daily tarot reminder setting"
+  },
+  
+  "deleteAccountConfirmMessage": "この操作は元に戻せません。すべてのデータが完全に削除されます。",
+  "@deleteAccountConfirmMessage": {
+    "description": "Delete account confirmation message"
+  },
+  
+  "chatCount": "チャット{count}回",
+  "@chatCount": {
+    "description": "Chat count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectedCards": "選択されたカード",
+  "@selectedCards": {
+    "description": "Selected cards label"
+  },
+  
+  "aiInterpretation": "AI解釈",
+  "@aiInterpretation": {
+    "description": "AI interpretation title"
+  },
+  
+  "invalidEmotionInput": "無効な感情入力です。",
+  "@invalidEmotionInput": {
+    "description": "Error when emotion input is invalid"
+  },
+  
+  "interpretationNotReceived": "解釈結果を受信できませんでした。",
+  "@interpretationNotReceived": {
+    "description": "Error when interpretation is not received"
+  },
+  
+  "responseGenerationFailed": "応答の生成に失敗しました。",
+  "@responseGenerationFailed": {
+    "description": "Error when response generation fails"
+  },
+  
+  "invalidEmailFormat": "無効なメールアドレス形式です。",
+  "@invalidEmailFormat": {
+    "description": "Error for invalid email format"
+  },
+  
+  "weakPassword": "パスワードが弱すぎます。大文字、小文字、数字、特殊文字を含む8文字以上を使用してください。",
+  "@weakPassword": {
+    "description": "Error for weak password"
+  },
+  
+  "invalidUsername": "ユーザー名は英数字とアンダースコアのみを使用して3〜20文字である必要があります。",
+  "@invalidUsername": {
+    "description": "Error for invalid username"
+  },
+  
+  "signupError": "サインアップ中にエラーが発生しました。",
+  "@signupError": {
+    "description": "General signup error"
+  },
+  
+  "loginError": "ログイン中にエラーが発生しました。",
+  "@loginError": {
+    "description": "General login error"
+  },
+  
+  "logoutError": "ログアウト中にエラーが発生しました。",
+  "@logoutError": {
+    "description": "General logout error"
+  },
+  
+  "passwordResetEmailFailed": "パスワードリセットメールの送信に失敗しました。",
+  "@passwordResetEmailFailed": {
+    "description": "Error when password reset email fails"
+  },
+  
+  "profileCreationFailed": "ユーザープロファイルの作成に失敗しました。",
+  "@profileCreationFailed": {
+    "description": "Error when profile creation fails"
+  },
+  
+  "noLoggedInUser": "ログインしているユーザーがいません。",
+  "@noLoggedInUser": {
+    "description": "Error when no user is logged in"
+  },
+  
+  "profileUpdateFailed": "プロファイルの更新に失敗しました。",
+  "@profileUpdateFailed": {
+    "description": "Error when profile update fails"
+  },
+  
+  "cardInterpretationFailed": "カードの解釈に失敗しました：{error}",
+  "@cardInterpretationFailed": {
+    "description": "Error when card interpretation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "emailAlreadyInUse": "このメールアドレスは既に使用されています。",
+  "@emailAlreadyInUse": {
+    "description": "Error when email is already registered"
+  },
+  
+  "signupErrorWithMessage": "サインアップ中にエラーが発生しました：{message}",
+  "@signupErrorWithMessage": {
+    "description": "Signup error with specific message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tooManyRequests": "リクエストが多すぎます。後でもう一度お試しください。",
+  "@tooManyRequests": {
+    "description": "Error for rate limiting"
+  },
+  
+  "verificationEmailError": "確認メールの送信中にエラーが発生しました。",
+  "@verificationEmailError": {
+    "description": "Error when sending verification email"
   }
 }

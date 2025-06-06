@@ -155,6 +155,16 @@ class LocalStorageRepository {
     return data;
   }
   
+  // 개발/테스트용 - 무료 횟수 추가
+  Future<DailyDrawData> addFreeDrawsForTesting(int draws) async {
+    var data = await getDailyDrawData();
+    data = data.copyWith(
+      freeDrawsRemaining: data.freeDrawsRemaining + draws,
+    );
+    await saveDailyDrawData(data);
+    return data;
+  }
+  
   // Clear all data
   Future<void> clearAll() async {
     await _prefs.clear();

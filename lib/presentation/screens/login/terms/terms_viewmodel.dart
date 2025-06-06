@@ -52,16 +52,16 @@ class TermsViewModel extends StateNotifier<TermsState> {
       String errorMessage;
       switch (e.code) {
         case 'weak-password':
-          errorMessage = '비밀번호가 너무 약합니다.';
+          errorMessage = 'Password is too weak.';
           break;
         case 'email-already-in-use':
-          errorMessage = '이미 사용 중인 이메일입니다.';
+          errorMessage = 'Email already in use.';
           break;
         case 'invalid-email':
-          errorMessage = '올바르지 않은 이메일 형식입니다.';
+          errorMessage = 'Invalid email format.';
           break;
         default:
-          errorMessage = '회원가입 중 오류가 발생했습니다: ${e.message}';
+          errorMessage = 'An error occurred during sign up: ${e.message}';
       }
       
       state = state.copyWith(
@@ -71,7 +71,7 @@ class TermsViewModel extends StateNotifier<TermsState> {
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: '회원가입 중 오류가 발생했습니다: $e',
+        error: 'An error occurred during sign up: $e',
       );
     }
   }

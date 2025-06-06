@@ -184,6 +184,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get celticCrossSpread => 'Celtic Cross Spread';
 
   @override
+  String get crossSection => 'Cross - Current Situation';
+
+  @override
+  String get staffSection => 'Staff - Future Development';
+
+  @override
   String get relationshipSpread => 'Relationship Spread';
 
   @override
@@ -232,6 +238,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => 'Look back at your past destinies';
+
+  @override
+  String get loadingHistory => 'Loading history...';
 
   @override
   String get menuStatistics => 'Statistics & Analysis';
@@ -296,6 +305,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'Please check your network connection';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'Please select more cards';
@@ -441,7 +475,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get change => 'Change';
 
   @override
-  String get successBackup => 'Backup completed';
+  String get successBackup => 'Data backed up successfully';
 
   @override
   String get successClearCache => 'Cache cleared';
@@ -450,7 +484,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get successDeleteData => 'All data deleted';
 
   @override
-  String get successChangePassword => 'Password changed';
+  String get successChangePassword => 'Password changed successfully';
 
   @override
   String get successDeleteAccount => 'Account deleted';
@@ -528,8 +562,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutSubtitle => 'Cards of fate await you';
 
   @override
+  String get aboutTagline => 'The cards of fate await you';
+
+  @override
   String get aboutDescription =>
-      'MOROKA\n\nThe gate of fate has opened\nThe shadow oracle will interpret your future\n\nTraditional tarot interpretation with mystical AI\nProviding deep insights and wisdom';
+      'MOROKA reads your destiny through ancient mystical tarot cards. Our AI Tarot Master interprets the cosmic messages contained in each of the 78 cards.\n\nDiscover the truth that shines in the darkness, and the special message meant just for you.';
 
   @override
   String get featuresTitle => 'Key Features';
@@ -646,7 +683,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextStep => 'Next Step';
 
   @override
-  String get errorNameTooShort => 'Enter at least 2 characters';
+  String get errorNameTooShort => 'Name must be at least 2 characters';
 
   @override
   String get errorConfirmPassword => 'Please confirm your password';
@@ -658,7 +695,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailInUse => 'Email already in use';
 
   @override
-  String get emailAvailable => 'Email available';
+  String get emailAvailable => 'Email is available';
 
   @override
   String get nicknameInUse => 'Nickname already in use';
@@ -710,6 +747,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteReadingMessage => 'Deleted records cannot be recovered';
+
+  @override
+  String get deleteAll => 'Delete All';
+
+  @override
+  String get deleteAllConfirmTitle => 'Delete All Records?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'This will permanently delete all tarot reading records. This action cannot be undone.';
+
+  @override
+  String get deleteAllButton => 'Delete All';
+
+  @override
+  String get totalTarotReadings => 'Total Tarot Readings';
+
+  @override
+  String get mostFrequentCard => 'Most Frequent Card';
+
+  @override
+  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
+
+  @override
+  String get moodAnalysis => 'Reading Analysis by Mood';
+
+  @override
+  String get monthlyReadingTrend => 'Monthly Reading Trend';
+
+  @override
+  String get noData => 'No data available';
+
+  @override
+  String get noDataToAnalyze => 'No data to analyze yet';
+
+  @override
+  String get startTarotReading => 'Start your tarot reading';
 
   @override
   String get cardOfFate => 'Card of Fate';
@@ -817,6 +891,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => 'Language changed successfully';
+
+  @override
+  String get notificationsEnabled => 'Notifications enabled';
+
+  @override
+  String get notificationsDisabled => 'Notifications disabled';
+
+  @override
+  String get vibrationEnabled => 'Vibration enabled';
+
+  @override
+  String get vibrationDisabled => 'Vibration disabled';
+
+  @override
+  String get animationsEnabled => 'Animations enabled';
+
+  @override
+  String get animationsDisabled => 'Animations disabled';
+
+  @override
+  String get notificationPermissionDenied =>
+      'Notification permission is required';
+
+  @override
+  String get errorWeakPassword => 'Password is too weak';
+
+  @override
+  String get moreTitle => 'More';
 
   @override
   String get willYouSelectIt => 'Will you select it?';
@@ -947,30 +1052,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -1045,6 +1126,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'Tarot Master';
+
+  @override
+  String get question => 'Question';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1060,7 +1147,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'Chat $count times';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1297,6 +1386,249 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yesNoDescription => 'Fortune telling for clear answers';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get errorInvalidFormat => 'Invalid format';
+
+  @override
+  String get errorUnexpected => 'An unexpected error occurred';
+
+  @override
+  String get errorUnknown => 'Unknown error occurred';
+
+  @override
+  String get errorNetworkTimeout => 'Network connection timed out';
+
+  @override
+  String get errorNoInternet => 'No internet connection';
+
+  @override
+  String get errorServerError => 'Server error occurred';
+
+  @override
+  String get errorInvalidCredentials => 'Invalid email or password';
+
+  @override
+  String get errorEmailNotVerified => 'Email not verified';
+
+  @override
+  String get errorSessionExpired => 'Session expired. Please login again';
+
+  @override
+  String get errorQuotaExceeded => 'Daily limit exceeded';
+
+  @override
+  String get errorInvalidResponse => 'Invalid response from server';
+
+  @override
+  String get errorRateLimitExceeded =>
+      'Too many requests. Please try again later';
+
+  @override
+  String get errorDataNotFound => 'Data not found';
+
+  @override
+  String get errorDataCorrupted => 'Data corrupted';
+
+  @override
+  String get errorSaveFailed => 'Failed to save data';
+
+  @override
+  String get errorPermissionDenied => 'Permission denied';
+
+  @override
+  String get errorPermissionRestricted => 'Access restricted';
+
+  @override
+  String get errorEmailAlreadyInUse => 'Email already in use';
+
+  @override
+  String get errorInvalidEmail => 'Invalid email address';
+
+  @override
+  String get errorNetworkRequestFailed => 'Network request failed';
+
+  @override
+  String get errorOperationNotAllowed => 'Operation not allowed';
+
+  @override
+  String get errorAuthFailed => 'Authentication failed';
+
+  @override
+  String get logoutSuccess => 'Logged out successfully';
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully';
+
+  @override
+  String get generalSettings => 'General Settings';
+
+  @override
+  String get accountSettings => 'Account Settings';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get vibrationTitle => 'Haptic Feedback';
+
+  @override
+  String get vibrationSubtitle => 'Enable vibration feedback';
+
+  @override
+  String get animationsTitle => 'Animations';
+
+  @override
+  String get animationsSubtitle => 'Enable UI animations';
+
+  @override
+  String get dailyTarotReminder => 'Get daily tarot reminders';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'This action cannot be undone. All your data will be permanently deleted.';
+
+  @override
+  String get selectedCards => 'Selected Cards';
+
+  @override
+  String get aiInterpretation => 'AI Interpretation';
+
+  @override
+  String get invalidEmotionInput => 'Invalid emotion input.';
+
+  @override
+  String get interpretationNotReceived =>
+      'Could not receive interpretation result.';
+
+  @override
+  String get responseGenerationFailed => 'Failed to generate response.';
+
+  @override
+  String get invalidEmailFormat => 'Invalid email format.';
+
+  @override
+  String get weakPassword =>
+      'Password is too weak. Please use at least 8 characters including uppercase, lowercase, numbers, and special characters.';
+
+  @override
+  String get invalidUsername =>
+      'Username must be 3-20 characters using only letters, numbers, and underscores.';
+
+  @override
+  String get signupError => 'An error occurred during sign up.';
+
+  @override
+  String get loginError => 'An error occurred during login.';
+
+  @override
+  String get logoutError => 'An error occurred during logout.';
+
+  @override
+  String get passwordResetEmailFailed => 'Failed to send password reset email.';
+
+  @override
+  String get profileCreationFailed => 'Failed to create user profile.';
+
+  @override
+  String get noLoggedInUser => 'No logged in user.';
+
+  @override
+  String get profileUpdateFailed => 'Failed to update profile.';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'Failed to get card interpretation: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse => 'This email is already in use.';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'An error occurred during sign up: $message';
+  }
+
+  @override
+  String get tooManyRequests => 'Too many requests. Please try again later.';
+
+  @override
+  String get verificationEmailError =>
+      'An error occurred while sending verification email.';
 }
 
 /// The translations for English (`en_fallback`).
@@ -1310,7 +1642,22 @@ class AppLocalizationsEnFallback extends AppLocalizationsEn {
   String get conditionalYes => 'Conditional Yes';
 
   @override
+  String get remainingDraws => 'Remaining Draws';
+
+  @override
+  String get noDrawsRemaining => 'No draws remaining';
+
+  @override
+  String get adDraws => 'Ad';
+
+  @override
   String get cards => ' cards';
+
+  @override
+  String get tarotMaster => 'Tarot Master';
+
+  @override
+  String get question => 'Question';
 
   @override
   String get cardShowingNewPerspective =>

@@ -134,10 +134,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get spreadDifficultyAdvanced => '10 lá';
 
   @override
-  String get spreadOneCard => 'Một Lá Bài';
+  String get spreadOneCard => 'Một Lá';
 
   @override
-  String get spreadThreeCard => 'Ba Lá Bài';
+  String get spreadThreeCard => 'Ba Lá';
 
   @override
   String get spreadCelticCross => 'Thập Tự Celtic';
@@ -180,7 +180,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => 'Chữ Thập Celtic';
+
+  @override
+  String get crossSection => 'Chữ Thập - Tình Hình Hiện Tại';
+
+  @override
+  String get staffSection => 'Gậy - Phát Triển Tương Lai';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -231,6 +237,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => 'Nhìn lại những định mệnh đã qua';
+
+  @override
+  String get loadingHistory => 'Đang tải lịch sử...';
 
   @override
   String get menuStatistics => 'Thống Kê & Phân Tích';
@@ -295,6 +304,31 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'Vui lòng kiểm tra kết nối mạng của bạn';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'Vui lòng chọn thêm lá bài';
@@ -528,8 +562,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get aboutSubtitle => 'Lá bài định mệnh đang chờ đợi bạn';
 
   @override
+  String get aboutTagline => 'Lá bài định mệnh đang chờ đợi bạn';
+
+  @override
   String get aboutDescription =>
-      'MOROKA\n\nCánh cửa định mệnh đã mở\nNhà tiên tri bóng tối sẽ giải mã tương lai của bạn\n\nGiải bài tarot truyền thống với AI huyền bí\nMang đến những hiểu biết sâu sắc và trí tuệ';
+      'MOROKA đọc vận mệnh của bạn thông qua những lá bài tarot huyền bí cổ xưa. Bậc thầy Tarot AI của chúng tôi sẽ giải thích những thông điệp vũ trụ ẩn chứa trong mỗi lá bài trong số 78 lá.\n\nKhám phá sự thật tỏa sáng trong bóng tối và thông điệp đặc biệt chỉ dành riêng cho bạn.';
 
   @override
   String get featuresTitle => 'Tính năng chính';
@@ -712,6 +749,43 @@ class AppLocalizationsVi extends AppLocalizations {
   String get deleteReadingMessage => 'Hồ sơ đã xóa không thể khôi phục';
 
   @override
+  String get deleteAll => 'Xóa tất cả';
+
+  @override
+  String get deleteAllConfirmTitle => 'Xóa tất cả bản ghi?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'Tất cả các lần đọc tarot sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.';
+
+  @override
+  String get deleteAllButton => 'Xóa tất cả';
+
+  @override
+  String get totalTarotReadings => 'Tổng số lần đọc tarot';
+
+  @override
+  String get mostFrequentCard => 'Lá bài thường gặp nhất';
+
+  @override
+  String get cardFrequencyTop5 => 'Tần suất lá bài - Top 5';
+
+  @override
+  String get moodAnalysis => 'Phân tích tâm trạng';
+
+  @override
+  String get monthlyReadingTrend => 'Xu hướng đọc hàng tháng';
+
+  @override
+  String get noData => 'Không có dữ liệu';
+
+  @override
+  String get noDataToAnalyze => 'Không có dữ liệu để phân tích';
+
+  @override
+  String get startTarotReading => 'Bắt đầu đọc tarot để xem thống kê của bạn';
+
+  @override
   String get cardOfFate => 'Lá bài định mệnh';
 
   @override
@@ -816,6 +890,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => 'Thay đổi ngôn ngữ thành công';
+
+  @override
+  String get notificationsEnabled => 'Đã bật thông báo';
+
+  @override
+  String get notificationsDisabled => 'Đã tắt thông báo';
+
+  @override
+  String get vibrationEnabled => 'Đã bật rung';
+
+  @override
+  String get vibrationDisabled => 'Đã tắt rung';
+
+  @override
+  String get animationsEnabled => 'Đã bật hoạt ảnh';
+
+  @override
+  String get animationsDisabled => 'Đã tắt hoạt ảnh';
+
+  @override
+  String get notificationPermissionDenied => 'Yêu cầu quyền thông báo';
+
+  @override
+  String get errorWeakPassword => 'Mật khẩu quá yếu';
+
+  @override
+  String get moreTitle => 'Thêm';
 
   @override
   String get willYouSelectIt => 'Will you select it?';
@@ -946,30 +1050,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -980,13 +1060,13 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get remainingDraws => 'Remaining Draws';
+  String get remainingDraws => 'Số lần còn lại';
 
   @override
-  String get noDrawsRemaining => 'No draws remaining';
+  String get noDrawsRemaining => 'Không còn lượt rút bài';
 
   @override
-  String get adDraws => 'Ad';
+  String get adDraws => 'Quảng cáo';
 
   @override
   String get dailyLimitReached => 'Daily Draw Limit Reached';
@@ -1044,6 +1124,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'Thầy Tarot';
+
+  @override
+  String get question => 'Câu hỏi';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1059,7 +1145,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'Trò chuyện $count lần';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1283,17 +1371,258 @@ class AppLocalizationsVi extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => 'Vận mệnh và lời khuyên hôm nay';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription => 'Dòng chảy quá khứ, hiện tại và tương lai';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => 'Phân tích mọi khía cạnh của tình huống';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => 'Động lực và tương lai của mối quan hệ';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => 'Bói toán cho câu trả lời rõ ràng';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'Lỗi';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get errorInvalidFormat => 'Định dạng không hợp lệ';
+
+  @override
+  String get errorUnexpected => 'Đã xảy ra lỗi không mong đợi';
+
+  @override
+  String get errorUnknown => 'Đã xảy ra lỗi không xác định';
+
+  @override
+  String get errorNetworkTimeout => 'Kết nối mạng đã hết thời gian';
+
+  @override
+  String get errorNoInternet => 'Không có kết nối internet';
+
+  @override
+  String get errorServerError => 'Đã xảy ra lỗi máy chủ';
+
+  @override
+  String get errorInvalidCredentials => 'Email hoặc mật khẩu không hợp lệ';
+
+  @override
+  String get errorEmailNotVerified => 'Email chưa được xác minh';
+
+  @override
+  String get errorSessionExpired => 'Phiên đã hết hạn. Vui lòng đăng nhập lại';
+
+  @override
+  String get errorQuotaExceeded => 'Đã vượt quá giới hạn hàng ngày';
+
+  @override
+  String get errorInvalidResponse => 'Phản hồi không hợp lệ từ máy chủ';
+
+  @override
+  String get errorRateLimitExceeded =>
+      'Quá nhiều yêu cầu. Vui lòng thử lại sau';
+
+  @override
+  String get errorDataNotFound => 'Không tìm thấy dữ liệu';
+
+  @override
+  String get errorDataCorrupted => 'Dữ liệu bị hỏng';
+
+  @override
+  String get errorSaveFailed => 'Không thể lưu dữ liệu';
+
+  @override
+  String get errorPermissionDenied => 'Quyền truy cập bị từ chối';
+
+  @override
+  String get errorPermissionRestricted => 'Truy cập bị hạn chế';
+
+  @override
+  String get errorEmailAlreadyInUse => 'Email đã được sử dụng';
+
+  @override
+  String get errorInvalidEmail => 'Địa chỉ email không hợp lệ';
+
+  @override
+  String get errorNetworkRequestFailed => 'Yêu cầu mạng thất bại';
+
+  @override
+  String get errorOperationNotAllowed => 'Thao tác không được phép';
+
+  @override
+  String get errorAuthFailed => 'Xác thực thất bại';
+
+  @override
+  String get logoutSuccess => 'Đăng xuất thành công';
+
+  @override
+  String get deleteAccountSuccess => 'Xóa tài khoản thành công';
+
+  @override
+  String get generalSettings => 'Cài đặt chung';
+
+  @override
+  String get accountSettings => 'Cài đặt tài khoản';
+
+  @override
+  String get languageTitle => 'Ngôn ngữ';
+
+  @override
+  String get notificationsTitle => 'Thông báo';
+
+  @override
+  String get vibrationTitle => 'Phản hồi xúc giác';
+
+  @override
+  String get vibrationSubtitle => 'Bật phản hồi rung';
+
+  @override
+  String get animationsTitle => 'Hoạt ảnh';
+
+  @override
+  String get animationsSubtitle => 'Bật hoạt ảnh giao diện';
+
+  @override
+  String get dailyTarotReminder => 'Nhận nhắc nhở tarot hàng ngày';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Hành động này không thể hoàn tác. Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn.';
+
+  @override
+  String get selectedCards => 'Lá bài đã chọn';
+
+  @override
+  String get aiInterpretation => 'Diễn giải AI';
+
+  @override
+  String get invalidEmotionInput => 'Dữ liệu cảm xúc không hợp lệ.';
+
+  @override
+  String get interpretationNotReceived => 'Không thể nhận kết quả diễn giải.';
+
+  @override
+  String get responseGenerationFailed => 'Tạo phản hồi thất bại.';
+
+  @override
+  String get invalidEmailFormat => 'Định dạng email không hợp lệ.';
+
+  @override
+  String get weakPassword =>
+      'Mật khẩu quá yếu. Vui lòng sử dụng ít nhất 8 ký tự bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.';
+
+  @override
+  String get invalidUsername =>
+      'Tên người dùng phải có 3-20 ký tự và chỉ sử dụng chữ cái, số và dấu gạch dưới.';
+
+  @override
+  String get signupError => 'Đã xảy ra lỗi trong quá trình đăng ký.';
+
+  @override
+  String get loginError => 'Đã xảy ra lỗi trong quá trình đăng nhập.';
+
+  @override
+  String get logoutError => 'Đã xảy ra lỗi trong quá trình đăng xuất.';
+
+  @override
+  String get passwordResetEmailFailed => 'Gửi email đặt lại mật khẩu thất bại.';
+
+  @override
+  String get profileCreationFailed => 'Tạo hồ sơ người dùng thất bại.';
+
+  @override
+  String get noLoggedInUser => 'Không có người dùng đã đăng nhập.';
+
+  @override
+  String get profileUpdateFailed => 'Cập nhật hồ sơ thất bại.';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'Lấy diễn giải lá bài thất bại: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse => 'Email này đã được sử dụng.';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'Đã xảy ra lỗi trong quá trình đăng ký: $message';
+  }
+
+  @override
+  String get tooManyRequests => 'Quá nhiều yêu cầu. Vui lòng thử lại sau.';
+
+  @override
+  String get verificationEmailError => 'Đã xảy ra lỗi khi gửi email xác minh.';
 }

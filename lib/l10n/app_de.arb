@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "aboutDescription": "MOROKA\n\nDas Tor des Schicksals hat sich geöffnet\nDas Schattenorakel wird deine Zukunft deuten\n\nTraditionelle Tarot-Deutung mit mystischer KI\nBietet tiefe Einblicke und Weisheit",
+  "aboutDescription": "MOROKA liest dein Schicksal durch uralte mystische Tarotkarten. Unser KI-Tarot-Meister interpretiert die kosmischen Botschaften, die in jeder der 78 Karten enthalten sind.\n\nEntdecke die Wahrheit, die in der Dunkelheit leuchtet, und die besondere Botschaft, die nur für dich bestimmt ist.",
   "@aboutDescription": {
     "description": "About app description"
   },
@@ -11,6 +11,10 @@
   "aboutTitle": "Über",
   "@aboutTitle": {
     "description": "About screen title"
+  },
+  "aboutTagline": "Die Karten des Schicksals erwarten dich",
+  "@aboutTagline": {
+    "description": "About screen tagline"
   },
   "agreeAll": "Allen zustimmen",
   "@agreeAll": {
@@ -187,6 +191,18 @@
   "@deleteReadingMessage": {
     "description": "Delete reading dialog message"
   },
+  "deleteAll": "Alle löschen",
+  "deleteAllConfirmTitle": "Alle Einträge löschen?",
+  "deleteAllConfirmMessage": "Alle Tarot-Lesungen werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "deleteAllButton": "Alle löschen",
+  "totalTarotReadings": "Gesamte Tarot-Lesungen",
+  "mostFrequentCard": "Häufigste Karte",
+  "cardFrequencyTop5": "Kartenhäufigkeit - Top 5",
+  "moodAnalysis": "Stimmungsanalyse",
+  "monthlyReadingTrend": "Monatlicher Lesetrend",
+  "noData": "Keine Daten",
+  "noDataToAnalyze": "Keine Daten zur Analyse",
+  "startTarotReading": "Beginnen Sie eine Tarot-Lesung, um Ihre Statistiken zu sehen",
   "deleteReadingTitle": "Diese Aufzeichnung löschen?",
   "@deleteReadingTitle": {
     "description": "Delete reading dialog title"
@@ -495,6 +511,10 @@
   "menuHistoryDesc": "Blicke auf deine vergangenen Schicksale zurück",
   "@menuHistoryDesc": {
     "description": "Menu item description: history"
+  },
+  "loadingHistory": "Verlauf wird geladen...",
+  "@loadingHistory": {
+    "description": "Loading message for history screen"
   },
   "menuSettings": "Einstellungen",
   "@menuSettings": {
@@ -914,6 +934,32 @@
   "@spreadYesNo": {
     "description": "Yes/No spread name"
   },
+  
+  "oneCardDescription": "Rat und Weisheit für heute",
+  "@oneCardDescription": {
+    "description": "One card spread description"
+  },
+  
+  "threeCardDescription": "Der Fluss von Vergangenheit, Gegenwart und Zukunft",
+  "@threeCardDescription": {
+    "description": "Three card spread description"
+  },
+  
+  "celticCrossDescription": "Analyse aller Aspekte der Situation",
+  "@celticCrossDescription": {
+    "description": "Celtic cross spread description"
+  },
+  
+  "relationshipDescription": "Beziehungsdynamik und Zukunft",
+  "@relationshipDescription": {
+    "description": "Relationship spread description"
+  },
+  
+  "yesNoDescription": "Wahrsagung für klare Antworten",
+  "@yesNoDescription": {
+    "description": "Yes/No spread description"
+  },
+  
   "startReading": "Tarot-Lesung beginnen",
   "@startReading": {
     "description": "Start reading button"
@@ -1014,17 +1060,14 @@
   "@website": {
     "description": "Website"
   },
-  
   "drawAddedMessage": "1 Ziehung hinzugefügt! ✨",
   "@drawAddedMessage": {
     "description": "Success message after watching ad"
   },
-  
   "adLoadFailed": "Werbung konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
   "@adLoadFailed": {
     "description": "Error message when ad fails to load"
   },
-  
   "monthLabel": "{month}",
   "@monthLabel": {
     "description": "Month label format",
@@ -1034,19 +1077,385 @@
       }
     }
   },
-  
   "startChatMessage": "Fragen Sie mich alles über Ihre Tarot-Lesung",
   "@startChatMessage": {
     "description": "Empty chat state message"
   },
-  
   "chatHistory": "Chat-Verlauf",
   "@chatHistory": {
     "description": "Chat history section title"
   },
-  
   "chatHistoryDescription": "Ihr Gespräch mit dem Tarot-Meister",
   "@chatHistoryDescription": {
     "description": "Chat history section description"
+  },
+  "error": "Fehler",
+  "@error": {
+    "description": "error - automatically added"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "ok - automatically added"
+  },
+  "errorInvalidFormat": "Ungültiges Format",
+  "@errorInvalidFormat": {
+    "description": "errorInvalidFormat - automatically added"
+  },
+  "errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten",
+  "@errorUnexpected": {
+    "description": "errorUnexpected - automatically added"
+  },
+  "errorUnknown": "Unbekannter Fehler aufgetreten",
+  "@errorUnknown": {
+    "description": "errorUnknown - automatically added"
+  },
+  "errorNetworkTimeout": "Netzwerkverbindung abgelaufen",
+  "@errorNetworkTimeout": {
+    "description": "errorNetworkTimeout - automatically added"
+  },
+  "errorNoInternet": "Keine Internetverbindung",
+  "@errorNoInternet": {
+    "description": "errorNoInternet - automatically added"
+  },
+  "errorServerError": "Serverfehler aufgetreten",
+  "@errorServerError": {
+    "description": "errorServerError - automatically added"
+  },
+  "errorInvalidCredentials": "Ungültige E-Mail oder Passwort",
+  "@errorInvalidCredentials": {
+    "description": "errorInvalidCredentials - automatically added"
+  },
+  "errorEmailNotVerified": "E-Mail nicht verifiziert",
+  "@errorEmailNotVerified": {
+    "description": "errorEmailNotVerified - automatically added"
+  },
+  "errorSessionExpired": "Sitzung abgelaufen. Bitte erneut anmelden",
+  "@errorSessionExpired": {
+    "description": "errorSessionExpired - automatically added"
+  },
+  "errorQuotaExceeded": "Tageslimit überschritten",
+  "@errorQuotaExceeded": {
+    "description": "errorQuotaExceeded - automatically added"
+  },
+  "errorInvalidResponse": "Ungültige Antwort vom Server",
+  "@errorInvalidResponse": {
+    "description": "errorInvalidResponse - automatically added"
+  },
+  "errorRateLimitExceeded": "Zu viele Anfragen. Bitte später erneut versuchen",
+  "@errorRateLimitExceeded": {
+    "description": "errorRateLimitExceeded - automatically added"
+  },
+  "errorDataNotFound": "Daten nicht gefunden",
+  "@errorDataNotFound": {
+    "description": "errorDataNotFound - automatically added"
+  },
+  "errorDataCorrupted": "Daten beschädigt",
+  "@errorDataCorrupted": {
+    "description": "errorDataCorrupted - automatically added"
+  },
+  "errorSaveFailed": "Daten konnten nicht gespeichert werden",
+  "@errorSaveFailed": {
+    "description": "errorSaveFailed - automatically added"
+  },
+  "errorPermissionDenied": "Berechtigung verweigert",
+  "@errorPermissionDenied": {
+    "description": "errorPermissionDenied - automatically added"
+  },
+  "errorPermissionRestricted": "Zugriff eingeschränkt",
+  "@errorPermissionRestricted": {
+    "description": "errorPermissionRestricted - automatically added"
+  },
+  "errorEmailAlreadyInUse": "E-Mail wird bereits verwendet",
+  "@errorEmailAlreadyInUse": {
+    "description": "errorEmailAlreadyInUse - automatically added"
+  },
+  "errorInvalidEmail": "Ungültige E-Mail-Adresse",
+  "@errorInvalidEmail": {
+    "description": "errorInvalidEmail - automatically added"
+  },
+  "errorWeakPassword": "Passwort ist zu schwach",
+  "@errorWeakPassword": {
+    "description": "errorWeakPassword - automatically added"
+  },
+  "errorNetworkRequestFailed": "Netzwerkanfrage fehlgeschlagen",
+  "@errorNetworkRequestFailed": {
+    "description": "errorNetworkRequestFailed - automatically added"
+  },
+  "errorOperationNotAllowed": "Vorgang nicht erlaubt",
+  "@errorOperationNotAllowed": {
+    "description": "errorOperationNotAllowed - automatically added"
+  },
+  "errorAuthFailed": "Authentifizierung fehlgeschlagen",
+  "@errorAuthFailed": {
+    "description": "errorAuthFailed - automatically added"
+  },
+  
+  "remainingDraws": "Verbleibende Ziehungen",
+  "@remainingDraws": {
+    "description": "Label for remaining card draws"
+  },
+  
+  "noDrawsRemaining": "Keine Ziehungen mehr",
+  "@noDrawsRemaining": {
+    "description": "Message when no draws are left"
+  },
+  
+  "adDraws": "Werbung",
+  "@adDraws": {
+    "description": "Label for draws obtained by watching ads"
+  },
+  
+  "tarotMaster": "Tarot-Meister",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  "question": "Frage",
+  "@question": {
+    "description": "Label for user's question"
+  },
+  
+  "celticCrossSpread": "Keltisches Kreuz",
+  "@celticCrossSpread": {
+    "description": "Label for celtic cross spread"
+  },
+  
+  "crossSection": "Kreuz - Aktuelle Situation",
+  "@crossSection": {
+    "description": "Celtic Cross spread cross section label"
+  },
+  
+  "staffSection": "Stab - Zukünftige Entwicklung",
+  "@staffSection": {
+    "description": "Celtic Cross spread staff section label"
+  },
+  
+  "languageChanged": "Sprache erfolgreich geändert",
+  "@languageChanged": {
+    "description": "Language change success message"
+  },
+  
+  "notificationsEnabled": "Benachrichtigungen aktiviert",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "Benachrichtigungen deaktiviert",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "Vibration aktiviert",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "Vibration deaktiviert",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "Animationen aktiviert",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "Animationen deaktiviert",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "logoutSuccess": "Erfolgreich abgemeldet",
+  "@logoutSuccess": {
+    "description": "Logout success message"
+  },
+  
+  "deleteAccountSuccess": "Konto erfolgreich gelöscht",
+  "@deleteAccountSuccess": {
+    "description": "Delete account success message"
+  },
+  
+  "errorOccurred": "Ein Fehler ist aufgetreten",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "notificationPermissionDenied": "Benachrichtigungsberechtigung erforderlich",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "generalSettings": "Allgemeine Einstellungen",
+  "@generalSettings": {
+    "description": "General settings section title"
+  },
+  
+  "accountSettings": "Kontoeinstellungen",
+  "@accountSettings": {
+    "description": "Account settings section title"
+  },
+  
+  "moreTitle": "Mehr",
+  "@moreTitle": {
+    "description": "More section title"
+  },
+  
+  "languageTitle": "Sprache",
+  "@languageTitle": {
+    "description": "Language setting title"
+  },
+  
+  "notificationsTitle": "Benachrichtigungen",
+  "@notificationsTitle": {
+    "description": "Notifications setting title"
+  },
+  
+  "vibrationTitle": "Haptisches Feedback",
+  "@vibrationTitle": {
+    "description": "Vibration setting title"
+  },
+  
+  "vibrationSubtitle": "Vibrationsfeedback aktivieren",
+  "@vibrationSubtitle": {
+    "description": "Vibration setting subtitle"
+  },
+  
+  "animationsTitle": "Animationen",
+  "@animationsTitle": {
+    "description": "Animations setting title"
+  },
+  
+  "animationsSubtitle": "UI-Animationen aktivieren",
+  "@animationsSubtitle": {
+    "description": "Animations setting subtitle"
+  },
+  
+  "dailyTarotReminder": "Tägliche Tarot-Erinnerungen erhalten",
+  "@dailyTarotReminder": {
+    "description": "Daily tarot reminder setting"
+  },
+  
+  "deleteAccountConfirmMessage": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.",
+  "@deleteAccountConfirmMessage": {
+    "description": "Delete account confirmation message"
+  },
+  
+  "chatCount": "Chat {count} Mal",
+  "@chatCount": {
+    "description": "Chat count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectedCards": "Ausgewählte Karten",
+  "@selectedCards": {
+    "description": "Selected cards label"
+  },
+  
+  "aiInterpretation": "KI-Interpretation",
+  "@aiInterpretation": {
+    "description": "AI interpretation title"
+  },
+  
+  "invalidEmotionInput": "Ungültige Emotionseingabe.",
+  "@invalidEmotionInput": {
+    "description": "Error when emotion input is invalid"
+  },
+  
+  "interpretationNotReceived": "Interpretationsergebnis konnte nicht empfangen werden.",
+  "@interpretationNotReceived": {
+    "description": "Error when interpretation is not received"
+  },
+  
+  "responseGenerationFailed": "Antwortgenerierung fehlgeschlagen.",
+  "@responseGenerationFailed": {
+    "description": "Error when response generation fails"
+  },
+  
+  "invalidEmailFormat": "Ungültiges E-Mail-Format.",
+  "@invalidEmailFormat": {
+    "description": "Error for invalid email format"
+  },
+  
+  "weakPassword": "Das Passwort ist zu schwach. Bitte verwenden Sie mindestens 8 Zeichen mit Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen.",
+  "@weakPassword": {
+    "description": "Error for weak password"
+  },
+  
+  "invalidUsername": "Der Benutzername muss 3-20 Zeichen lang sein und darf nur Buchstaben, Zahlen und Unterstriche enthalten.",
+  "@invalidUsername": {
+    "description": "Error for invalid username"
+  },
+  
+  "signupError": "Bei der Registrierung ist ein Fehler aufgetreten.",
+  "@signupError": {
+    "description": "General signup error"
+  },
+  
+  "loginError": "Bei der Anmeldung ist ein Fehler aufgetreten.",
+  "@loginError": {
+    "description": "General login error"
+  },
+  
+  "logoutError": "Bei der Abmeldung ist ein Fehler aufgetreten.",
+  "@logoutError": {
+    "description": "General logout error"
+  },
+  
+  "passwordResetEmailFailed": "Fehler beim Senden der Passwort-Zurücksetzen-E-Mail.",
+  "@passwordResetEmailFailed": {
+    "description": "Error when password reset email fails"
+  },
+  
+  "profileCreationFailed": "Fehler beim Erstellen des Benutzerprofils.",
+  "@profileCreationFailed": {
+    "description": "Error when profile creation fails"
+  },
+  
+  "noLoggedInUser": "Kein angemeldeter Benutzer.",
+  "@noLoggedInUser": {
+    "description": "Error when no user is logged in"
+  },
+  
+  "profileUpdateFailed": "Fehler beim Aktualisieren des Profils.",
+  "@profileUpdateFailed": {
+    "description": "Error when profile update fails"
+  },
+  
+  "cardInterpretationFailed": "Fehler beim Abrufen der Karteninterpretation: {error}",
+  "@cardInterpretationFailed": {
+    "description": "Error when card interpretation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "emailAlreadyInUse": "Diese E-Mail-Adresse wird bereits verwendet.",
+  "@emailAlreadyInUse": {
+    "description": "Error when email is already registered"
+  },
+  
+  "signupErrorWithMessage": "Bei der Registrierung ist ein Fehler aufgetreten: {message}",
+  "@signupErrorWithMessage": {
+    "description": "Signup error with specific message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tooManyRequests": "Zu viele Anfragen. Bitte versuchen Sie es später erneut.",
+  "@tooManyRequests": {
+    "description": "Error for rate limiting"
+  },
+  
+  "verificationEmailError": "Beim Senden der Verifizierungs-E-Mail ist ein Fehler aufgetreten.",
+  "@verificationEmailError": {
+    "description": "Error when sending verification email"
   }
 }

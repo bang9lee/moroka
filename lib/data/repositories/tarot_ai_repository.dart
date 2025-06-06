@@ -19,7 +19,7 @@ class TarotAIRepository {
         language: language,
       );
     } catch (e) {
-      throw Exception('카드 해석을 가져오는데 실패했습니다: $e');
+      throw Exception('Failed to get card interpretation: $e');
     }
   }
   
@@ -39,7 +39,7 @@ class TarotAIRepository {
         language: language,
       );
     } catch (e) {
-      throw Exception('AI 응답을 가져오는데 실패했습니다: $e');
+      throw Exception('Failed to get AI response: $e');
     }
   }
 }

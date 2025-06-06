@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ChatBubbleWidget extends StatefulWidget {
   final String message;
@@ -210,7 +212,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget>
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
-                                            '타로 마스터',
+                                            AppLocalizations.of(context)!.tarotMaster,
                                             style: AppTextStyles.bodySmall.copyWith(
                                               fontSize: 10,
                                               color: AppColors.crimsonGlow,
@@ -354,9 +356,8 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget>
   }
 
   String _formatTime(DateTime time) {
-    final hour = time.hour.toString().padLeft(2, '0');
-    final minute = time.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
+    final locale = Localizations.localeOf(context);
+    return DateFormat.jm(locale.toString()).format(time);
   }
 }
 

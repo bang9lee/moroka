@@ -48,7 +48,7 @@ class EmailVerificationViewModel extends StateNotifier<EmailVerificationState> {
       AppLogger.error('Error checking email verification', e);
       state = state.copyWith(
         isChecking: false,
-        error: '인증 확인 중 오류가 발생했습니다.',
+        error: 'Error checking email verification.',
       );
     }
   }
@@ -73,10 +73,10 @@ class EmailVerificationViewModel extends StateNotifier<EmailVerificationState> {
       String errorMessage;
       switch (e.code) {
         case 'too-many-requests':
-          errorMessage = '너무 많은 요청이 있었습니다. 잠시 후 다시 시도해주세요.';
+          errorMessage = 'Too many requests. Please try again later.';
           break;
         default:
-          errorMessage = '인증 메일 발송 중 오류가 발생했습니다.';
+          errorMessage = 'Error sending verification email.';
       }
       
       state = state.copyWith(
@@ -87,7 +87,7 @@ class EmailVerificationViewModel extends StateNotifier<EmailVerificationState> {
       AppLogger.error('Error resending verification email', e);
       state = state.copyWith(
         isLoading: false,
-        error: '인증 메일 발송 중 오류가 발생했습니다.',
+        error: 'Error sending verification email.',
       );
     }
   }

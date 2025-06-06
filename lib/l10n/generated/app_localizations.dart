@@ -447,6 +447,18 @@ abstract class AppLocalizations {
   /// **'Celtic Cross Spread'**
   String get celticCrossSpread;
 
+  /// Celtic Cross spread cross section label
+  ///
+  /// In en, this message translates to:
+  /// **'Cross - Current Situation'**
+  String get crossSection;
+
+  /// Celtic Cross spread staff section label
+  ///
+  /// In en, this message translates to:
+  /// **'Staff - Future Development'**
+  String get staffSection;
+
   /// Label for relationship spread
   ///
   /// In en, this message translates to:
@@ -542,6 +554,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Look back at your past destinies'**
   String get menuHistoryDesc;
+
+  /// Loading message for history screen
+  ///
+  /// In en, this message translates to:
+  /// **'Loading history...'**
+  String get loadingHistory;
 
   /// Menu item: statistics
   ///
@@ -663,11 +681,59 @@ abstract class AppLocalizations {
   /// **'Google login failed'**
   String get errorGoogleLoginFailed;
 
-  /// Error: network connection failed
+  /// Network error message
   ///
   /// In en, this message translates to:
   /// **'Please check your network connection'**
   String get errorNetworkFailed;
+
+  /// Error loading user data
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load user data'**
+  String get errorUserDataLoad;
+
+  /// User not found error
+  ///
+  /// In en, this message translates to:
+  /// **'Email not registered'**
+  String get errorUserNotFound;
+
+  /// Wrong password error
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password'**
+  String get errorWrongPassword;
+
+  /// User disabled error
+  ///
+  /// In en, this message translates to:
+  /// **'Account has been disabled'**
+  String get errorUserDisabled;
+
+  /// Too many requests error
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please try again later'**
+  String get errorTooManyRequests;
+
+  /// Invalid credential error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get errorInvalidCredential;
+
+  /// Logout failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Error occurred during logout'**
+  String get errorLogoutFailed;
+
+  /// Password reset failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send password reset email'**
+  String get errorPasswordResetFailed;
 
   /// Error: not enough cards selected
   ///
@@ -948,7 +1014,7 @@ abstract class AppLocalizations {
   /// Backup success message
   ///
   /// In en, this message translates to:
-  /// **'Backup completed'**
+  /// **'Data backed up successfully'**
   String get successBackup;
 
   /// Clear cache success message
@@ -963,10 +1029,10 @@ abstract class AppLocalizations {
   /// **'All data deleted'**
   String get successDeleteData;
 
-  /// Change password success message
+  /// Password change success message
   ///
   /// In en, this message translates to:
-  /// **'Password changed'**
+  /// **'Password changed successfully'**
   String get successChangePassword;
 
   /// Delete account success message
@@ -1101,10 +1167,16 @@ abstract class AppLocalizations {
   /// **'Cards of fate await you'**
   String get aboutSubtitle;
 
-  /// About app description
+  /// About screen tagline
   ///
   /// In en, this message translates to:
-  /// **'MOROKA\n\nThe gate of fate has opened\nThe shadow oracle will interpret your future\n\nTraditional tarot interpretation with mystical AI\nProviding deep insights and wisdom'**
+  /// **'The cards of fate await you'**
+  String get aboutTagline;
+
+  /// About screen description
+  ///
+  /// In en, this message translates to:
+  /// **'MOROKA reads your destiny through ancient mystical tarot cards. Our AI Tarot Master interprets the cosmic messages contained in each of the 78 cards.\n\nDiscover the truth that shines in the darkness, and the special message meant just for you.'**
   String get aboutDescription;
 
   /// Features section title
@@ -1326,7 +1398,7 @@ abstract class AppLocalizations {
   /// Name too short error
   ///
   /// In en, this message translates to:
-  /// **'Enter at least 2 characters'**
+  /// **'Name must be at least 2 characters'**
   String get errorNameTooShort;
 
   /// Confirm password error
@@ -1347,10 +1419,10 @@ abstract class AppLocalizations {
   /// **'Email already in use'**
   String get emailInUse;
 
-  /// Email available message
+  /// Email is available message
   ///
   /// In en, this message translates to:
-  /// **'Email available'**
+  /// **'Email is available'**
   String get emailAvailable;
 
   /// Nickname in use message
@@ -1448,6 +1520,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deleted records cannot be recovered'**
   String get deleteReadingMessage;
+
+  /// Delete all button text
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All'**
+  String get deleteAll;
+
+  /// Delete all confirmation dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Records?'**
+  String get deleteAllConfirmTitle;
+
+  /// Delete all confirmation dialog message
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete all tarot reading records. This action cannot be undone.'**
+  String get deleteAllConfirmMessage;
+
+  /// Delete all confirmation button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All'**
+  String get deleteAllButton;
+
+  /// Total readings statistic label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Tarot Readings'**
+  String get totalTarotReadings;
+
+  /// Most frequent card statistic label
+  ///
+  /// In en, this message translates to:
+  /// **'Most Frequent Card'**
+  String get mostFrequentCard;
+
+  /// Top 5 card frequency chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Card Frequency TOP 5'**
+  String get cardFrequencyTop5;
+
+  /// Mood analysis chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Reading Analysis by Mood'**
+  String get moodAnalysis;
+
+  /// Monthly trend chart title
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Reading Trend'**
+  String get monthlyReadingTrend;
+
+  /// No data message for charts
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noData;
+
+  /// Empty state message for statistics
+  ///
+  /// In en, this message translates to:
+  /// **'No data to analyze yet'**
+  String get noDataToAnalyze;
+
+  /// Prompt to start first reading
+  ///
+  /// In en, this message translates to:
+  /// **'Start your tarot reading'**
+  String get startTarotReading;
 
   /// Card selection dialog title
   ///
@@ -1646,6 +1790,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'SKIP'**
   String get skip;
+
+  /// Language change success message
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed successfully'**
+  String get languageChanged;
+
+  /// Notifications enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get notificationsEnabled;
+
+  /// Notifications disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications disabled'**
+  String get notificationsDisabled;
+
+  /// Vibration enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration enabled'**
+  String get vibrationEnabled;
+
+  /// Vibration disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration disabled'**
+  String get vibrationDisabled;
+
+  /// Animations enabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Animations enabled'**
+  String get animationsEnabled;
+
+  /// Animations disabled message
+  ///
+  /// In en, this message translates to:
+  /// **'Animations disabled'**
+  String get animationsDisabled;
+
+  /// Notification permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is required'**
+  String get notificationPermissionDenied;
+
+  /// Weak password error
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get errorWeakPassword;
+
+  /// More section title
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get moreTitle;
 
   /// Card selection dialog question
   ///
@@ -1899,54 +2103,6 @@ abstract class AppLocalizations {
   /// **'Analyzing your destiny...'**
   String get analyzingDestiny;
 
-  /// Empty state message for statistics
-  ///
-  /// In en, this message translates to:
-  /// **'No data to analyze yet'**
-  String get noDataToAnalyze;
-
-  /// Prompt to start first reading
-  ///
-  /// In en, this message translates to:
-  /// **'Start your tarot reading'**
-  String get startTarotReading;
-
-  /// Total readings statistic label
-  ///
-  /// In en, this message translates to:
-  /// **'Total Tarot Readings'**
-  String get totalTarotReadings;
-
-  /// Most frequent card statistic label
-  ///
-  /// In en, this message translates to:
-  /// **'Most Frequent Card'**
-  String get mostFrequentCard;
-
-  /// Top 5 card frequency chart title
-  ///
-  /// In en, this message translates to:
-  /// **'Card Frequency TOP 5'**
-  String get cardFrequencyTop5;
-
-  /// Mood analysis chart title
-  ///
-  /// In en, this message translates to:
-  /// **'Reading Analysis by Mood'**
-  String get moodAnalysis;
-
-  /// Monthly trend chart title
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly Reading Trend'**
-  String get monthlyReadingTrend;
-
-  /// No data message for charts
-  ///
-  /// In en, this message translates to:
-  /// **'No data available'**
-  String get noData;
-
   /// Times count suffix
   ///
   /// In en, this message translates to:
@@ -2085,6 +2241,18 @@ abstract class AppLocalizations {
   /// **'Your question'**
   String get yourQuestion;
 
+  /// Label for tarot master/AI
+  ///
+  /// In en, this message translates to:
+  /// **'Tarot Master'**
+  String get tarotMaster;
+
+  /// Label for user's question
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get question;
+
   /// Label for AI's chat response
   ///
   /// In en, this message translates to:
@@ -2115,11 +2283,11 @@ abstract class AppLocalizations {
   /// **'Card'**
   String get card;
 
-  /// Chat count label
+  /// Chat count display
   ///
   /// In en, this message translates to:
-  /// **'Chat count'**
-  String get chatCount;
+  /// **'Chat {count} times'**
+  String chatCount(int count);
 
   /// Delete reading button label
   ///
@@ -2534,6 +2702,456 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fortune telling for clear answers'**
   String get yesNoDescription;
+
+  /// Error message when AI API fails
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, the threads of fate have become tangled. Please try again.'**
+  String get errorApiMessage;
+
+  /// Default interpretation start
+  ///
+  /// In en, this message translates to:
+  /// **'The {spreadName} spread has been laid out.'**
+  String defaultInterpretationStart(String spreadName);
+
+  /// Label for selected cards
+  ///
+  /// In en, this message translates to:
+  /// **'Selected cards: {cards}'**
+  String selectedCardsLabel(String cards);
+
+  /// Card energy resonance message
+  ///
+  /// In en, this message translates to:
+  /// **'The energy created by these cards resonates with your {mood} heart.'**
+  String cardEnergyResonance(String mood);
+
+  /// Message about deeper interpretation coming
+  ///
+  /// In en, this message translates to:
+  /// **'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...'**
+  String get deeperInterpretationComing;
+
+  /// General waiting/loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get waitingMessage;
+
+  /// Name is available message
+  ///
+  /// In en, this message translates to:
+  /// **'Name is available'**
+  String get nameAvailable;
+
+  /// Name already taken error
+  ///
+  /// In en, this message translates to:
+  /// **'Name is already taken'**
+  String get nameAlreadyTaken;
+
+  /// Name check failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Error checking name availability'**
+  String get errorNameCheckFailed;
+
+  /// Email already registered error
+  ///
+  /// In en, this message translates to:
+  /// **'Email is already registered'**
+  String get emailAlreadyRegistered;
+
+  /// Email check failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Error checking email availability'**
+  String get errorEmailCheckFailed;
+
+  /// Message required error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a message'**
+  String get messageRequired;
+
+  /// Message too long error
+  ///
+  /// In en, this message translates to:
+  /// **'Message must be within 500 characters'**
+  String get messageTooLong;
+
+  /// Invalid characters error
+  ///
+  /// In en, this message translates to:
+  /// **'Message contains invalid characters'**
+  String get messageInvalidCharacters;
+
+  /// Invalid script error
+  ///
+  /// In en, this message translates to:
+  /// **'Message contains invalid script'**
+  String get messageInvalidScript;
+
+  /// Password required error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a password'**
+  String get passwordRequired;
+
+  /// Weak password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passwordStrengthWeak;
+
+  /// Medium password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get passwordStrengthMedium;
+
+  /// Strong password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passwordStrengthStrong;
+
+  /// Generic error title
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// OK button text
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// Invalid format error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid format'**
+  String get errorInvalidFormat;
+
+  /// Unexpected error message
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get errorUnexpected;
+
+  /// Unknown error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error occurred'**
+  String get errorUnknown;
+
+  /// Network timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Network connection timed out'**
+  String get errorNetworkTimeout;
+
+  /// No internet connection error
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get errorNoInternet;
+
+  /// Server error message
+  ///
+  /// In en, this message translates to:
+  /// **'Server error occurred'**
+  String get errorServerError;
+
+  /// Invalid credentials error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get errorInvalidCredentials;
+
+  /// Email not verified error
+  ///
+  /// In en, this message translates to:
+  /// **'Email not verified'**
+  String get errorEmailNotVerified;
+
+  /// Session expired error
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired. Please login again'**
+  String get errorSessionExpired;
+
+  /// Quota exceeded error
+  ///
+  /// In en, this message translates to:
+  /// **'Daily limit exceeded'**
+  String get errorQuotaExceeded;
+
+  /// Invalid response error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid response from server'**
+  String get errorInvalidResponse;
+
+  /// Rate limit exceeded error
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later'**
+  String get errorRateLimitExceeded;
+
+  /// Data not found error
+  ///
+  /// In en, this message translates to:
+  /// **'Data not found'**
+  String get errorDataNotFound;
+
+  /// Data corrupted error
+  ///
+  /// In en, this message translates to:
+  /// **'Data corrupted'**
+  String get errorDataCorrupted;
+
+  /// Save failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save data'**
+  String get errorSaveFailed;
+
+  /// Permission denied error
+  ///
+  /// In en, this message translates to:
+  /// **'Permission denied'**
+  String get errorPermissionDenied;
+
+  /// Permission restricted error
+  ///
+  /// In en, this message translates to:
+  /// **'Access restricted'**
+  String get errorPermissionRestricted;
+
+  /// Email already in use error
+  ///
+  /// In en, this message translates to:
+  /// **'Email already in use'**
+  String get errorEmailAlreadyInUse;
+
+  /// Invalid email error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email address'**
+  String get errorInvalidEmail;
+
+  /// Network request failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Network request failed'**
+  String get errorNetworkRequestFailed;
+
+  /// Operation not allowed error
+  ///
+  /// In en, this message translates to:
+  /// **'Operation not allowed'**
+  String get errorOperationNotAllowed;
+
+  /// Authentication failed error
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed'**
+  String get errorAuthFailed;
+
+  /// Logout success message
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out successfully'**
+  String get logoutSuccess;
+
+  /// Delete account success message
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted successfully'**
+  String get deleteAccountSuccess;
+
+  /// General settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'General Settings'**
+  String get generalSettings;
+
+  /// Account settings section title
+  ///
+  /// In en, this message translates to:
+  /// **'Account Settings'**
+  String get accountSettings;
+
+  /// Language setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTitle;
+
+  /// Notifications setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// Vibration setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Haptic Feedback'**
+  String get vibrationTitle;
+
+  /// Vibration setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Enable vibration feedback'**
+  String get vibrationSubtitle;
+
+  /// Animations setting title
+  ///
+  /// In en, this message translates to:
+  /// **'Animations'**
+  String get animationsTitle;
+
+  /// Animations setting subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Enable UI animations'**
+  String get animationsSubtitle;
+
+  /// Daily tarot reminder setting
+  ///
+  /// In en, this message translates to:
+  /// **'Get daily tarot reminders'**
+  String get dailyTarotReminder;
+
+  /// Delete account confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. All your data will be permanently deleted.'**
+  String get deleteAccountConfirmMessage;
+
+  /// Selected cards label
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Cards'**
+  String get selectedCards;
+
+  /// AI interpretation title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Interpretation'**
+  String get aiInterpretation;
+
+  /// Error when emotion input is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid emotion input.'**
+  String get invalidEmotionInput;
+
+  /// Error when interpretation is not received
+  ///
+  /// In en, this message translates to:
+  /// **'Could not receive interpretation result.'**
+  String get interpretationNotReceived;
+
+  /// Error when response generation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate response.'**
+  String get responseGenerationFailed;
+
+  /// Error for invalid email format
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format.'**
+  String get invalidEmailFormat;
+
+  /// Error for weak password
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak. Please use at least 8 characters including uppercase, lowercase, numbers, and special characters.'**
+  String get weakPassword;
+
+  /// Error for invalid username
+  ///
+  /// In en, this message translates to:
+  /// **'Username must be 3-20 characters using only letters, numbers, and underscores.'**
+  String get invalidUsername;
+
+  /// General signup error
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during sign up.'**
+  String get signupError;
+
+  /// General login error
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during login.'**
+  String get loginError;
+
+  /// General logout error
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during logout.'**
+  String get logoutError;
+
+  /// Error when password reset email fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send password reset email.'**
+  String get passwordResetEmailFailed;
+
+  /// Error when profile creation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create user profile.'**
+  String get profileCreationFailed;
+
+  /// Error when no user is logged in
+  ///
+  /// In en, this message translates to:
+  /// **'No logged in user.'**
+  String get noLoggedInUser;
+
+  /// Error when profile update fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile.'**
+  String get profileUpdateFailed;
+
+  /// Error when card interpretation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get card interpretation: {error}'**
+  String cardInterpretationFailed(String error);
+
+  /// Error when email is already registered
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already in use.'**
+  String get emailAlreadyInUse;
+
+  /// Signup error with specific message
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during sign up: {message}'**
+  String signupErrorWithMessage(String message);
+
+  /// Error for rate limiting
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later.'**
+  String get tooManyRequests;
+
+  /// Error when sending verification email
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while sending verification email.'**
+  String get verificationEmailError;
 }
 
 class _AppLocalizationsDelegate

@@ -180,7 +180,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => 'ไพ่กางเขนเซลติก';
+
+  @override
+  String get crossSection => 'กางเขน - สถานการณ์ปัจจุบัน';
+
+  @override
+  String get staffSection => 'ไม้เท้า - การพัฒนาในอนาคต';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -230,6 +236,9 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => 'ย้อนดูโชคชะตาที่ผ่านมาของคุณ';
+
+  @override
+  String get loadingHistory => 'กำลังโหลดประวัติ...';
 
   @override
   String get menuStatistics => 'สถิติและการวิเคราะห์';
@@ -294,6 +303,31 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'กรุณาตรวจสอบการเชื่อมต่อเครือข่ายของคุณ';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'กรุณาเลือกไพ่เพิ่มเติม';
@@ -524,8 +558,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String get aboutSubtitle => 'ไพ่แห่งโชคชะตารอคุณอยู่';
 
   @override
+  String get aboutTagline => 'ไพ่แห่งโชคชะตารอคุณอยู่';
+
+  @override
   String get aboutDescription =>
-      'MOROKA\n\nประตูแห่งโชคชะตาได้เปิดออกแล้ว\nคำทำนายแห่งเงามืดจะตีความอนาคตของคุณ\n\nการตีความไพ่ทาโรต์แบบดั้งเดิมด้วย AI ลึกลับ\nมอบข้อมูลเชิงลึกและภูมิปัญญา';
+      'MOROKA อ่านชะตาชีวิตของคุณผ่านไพ่ทาโรต์ลึกลับโบราณ ปรมาจารย์ทาโรต์ AI ของเราจะตีความข้อความจากจักรวาลที่อยู่ในไพ่ทั้ง 78 ใบ\n\nค้นพบความจริงที่ส่องแสงในความมืด และข้อความพิเศษที่มีไว้สำหรับคุณเท่านั้น';
 
   @override
   String get featuresTitle => 'คุณสมบัติหลัก';
@@ -706,6 +743,43 @@ class AppLocalizationsTh extends AppLocalizations {
   String get deleteReadingMessage => 'บันทึกที่ลบแล้วไม่สามารถกู้คืนได้';
 
   @override
+  String get deleteAll => 'ลบทั้งหมด';
+
+  @override
+  String get deleteAllConfirmTitle => 'ลบบันทึกทั้งหมด?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'การอ่านไพ่ทาโรต์ทั้งหมดจะถูกลบอย่างถาวร การกระทำนี้ไม่สามารถยกเลิกได้';
+
+  @override
+  String get deleteAllButton => 'ลบทั้งหมด';
+
+  @override
+  String get totalTarotReadings => 'การอ่านไพ่ทาโรต์ทั้งหมด';
+
+  @override
+  String get mostFrequentCard => 'ไพ่ที่พบบ่อยที่สุด';
+
+  @override
+  String get cardFrequencyTop5 => 'ความถี่ของไพ่ - 5 อันดับแรก';
+
+  @override
+  String get moodAnalysis => 'การวิเคราะห์อารมณ์';
+
+  @override
+  String get monthlyReadingTrend => 'แนวโน้มการอ่านรายเดือน';
+
+  @override
+  String get noData => 'ไม่มีข้อมูล';
+
+  @override
+  String get noDataToAnalyze => 'ไม่มีข้อมูลให้วิเคราะห์';
+
+  @override
+  String get startTarotReading => 'เริ่มอ่านไพ่ทาโรต์เพื่อดูสถิติของคุณ';
+
+  @override
   String get cardOfFate => 'ไพ่แห่งโชคชะตา';
 
   @override
@@ -809,6 +883,36 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => 'เปลี่ยนภาษาเรียบร้อยแล้ว';
+
+  @override
+  String get notificationsEnabled => 'เปิดการแจ้งเตือนแล้ว';
+
+  @override
+  String get notificationsDisabled => 'ปิดการแจ้งเตือนแล้ว';
+
+  @override
+  String get vibrationEnabled => 'เปิดการสั่นแล้ว';
+
+  @override
+  String get vibrationDisabled => 'ปิดการสั่นแล้ว';
+
+  @override
+  String get animationsEnabled => 'เปิดภาพเคลื่อนไหวแล้ว';
+
+  @override
+  String get animationsDisabled => 'ปิดภาพเคลื่อนไหวแล้ว';
+
+  @override
+  String get notificationPermissionDenied => 'ต้องการการอนุญาตแจ้งเตือน';
+
+  @override
+  String get errorWeakPassword => 'รหัสผ่านไม่แข็งแรงพอ';
+
+  @override
+  String get moreTitle => 'เพิ่มเติม';
 
   @override
   String get willYouSelectIt => 'Will you select it?';
@@ -939,30 +1043,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -973,13 +1053,13 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get remainingDraws => 'Remaining Draws';
+  String get remainingDraws => 'จำนวนครั้งที่เหลือ';
 
   @override
-  String get noDrawsRemaining => 'No draws remaining';
+  String get noDrawsRemaining => 'ไม่มีจำนวนครั้งที่เหลือ';
 
   @override
-  String get adDraws => 'Ad';
+  String get adDraws => 'โฆษณา';
 
   @override
   String get dailyLimitReached => 'Daily Draw Limit Reached';
@@ -1037,6 +1117,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'ผู้เชี่ยวชาญไพ่ทาโรต์';
+
+  @override
+  String get question => 'คำถาม';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1052,7 +1138,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'แชท $count ครั้ง';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1275,17 +1363,257 @@ class AppLocalizationsTh extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => 'ดวงและคำแนะนำประจำวัน';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription => 'กระแสของอดีต ปัจจุบัน และอนาคต';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => 'วิเคราะห์ทุกแง่มุมของสถานการณ์';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => 'พลวัตและอนาคตของความสัมพันธ์';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => 'การทำนายเพื่อคำตอบที่ชัดเจน';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'ข้อผิดพลาด';
+
+  @override
+  String get ok => 'ตกลง';
+
+  @override
+  String get errorInvalidFormat => 'รูปแบบไม่ถูกต้อง';
+
+  @override
+  String get errorUnexpected => 'เกิดข้อผิดพลาดที่ไม่คาดคิด';
+
+  @override
+  String get errorUnknown => 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+
+  @override
+  String get errorNetworkTimeout => 'การเชื่อมต่อเครือข่ายหมดเวลา';
+
+  @override
+  String get errorNoInternet => 'ไม่มีการเชื่อมต่ออินเทอร์เน็ต';
+
+  @override
+  String get errorServerError => 'เกิดข้อผิดพลาดของเซิร์ฟเวอร์';
+
+  @override
+  String get errorInvalidCredentials => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+
+  @override
+  String get errorEmailNotVerified => 'อีเมลยังไม่ได้รับการยืนยัน';
+
+  @override
+  String get errorSessionExpired => 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';
+
+  @override
+  String get errorQuotaExceeded => 'เกินขีดจำกัดรายวัน';
+
+  @override
+  String get errorInvalidResponse => 'การตอบสนองจากเซิร์ฟเวอร์ไม่ถูกต้อง';
+
+  @override
+  String get errorRateLimitExceeded => 'คำขอมากเกินไป กรุณาลองใหม่ภายหลัง';
+
+  @override
+  String get errorDataNotFound => 'ไม่พบข้อมูล';
+
+  @override
+  String get errorDataCorrupted => 'ข้อมูลเสียหาย';
+
+  @override
+  String get errorSaveFailed => 'บันทึกข้อมูลล้มเหลว';
+
+  @override
+  String get errorPermissionDenied => 'ไม่มีสิทธิ์';
+
+  @override
+  String get errorPermissionRestricted => 'การเข้าถึงถูกจำกัด';
+
+  @override
+  String get errorEmailAlreadyInUse => 'อีเมลถูกใช้งานแล้ว';
+
+  @override
+  String get errorInvalidEmail => 'ที่อยู่อีเมลไม่ถูกต้อง';
+
+  @override
+  String get errorNetworkRequestFailed => 'คำขอเครือข่ายล้มเหลว';
+
+  @override
+  String get errorOperationNotAllowed => 'ไม่อนุญาตให้ดำเนินการ';
+
+  @override
+  String get errorAuthFailed => 'การยืนยันตัวตนล้มเหลว';
+
+  @override
+  String get logoutSuccess => 'ออกจากระบบเรียบร้อยแล้ว';
+
+  @override
+  String get deleteAccountSuccess => 'ลบบัญชีเรียบร้อยแล้ว';
+
+  @override
+  String get generalSettings => 'การตั้งค่าทั่วไป';
+
+  @override
+  String get accountSettings => 'การตั้งค่าบัญชี';
+
+  @override
+  String get languageTitle => 'ภาษา';
+
+  @override
+  String get notificationsTitle => 'การแจ้งเตือน';
+
+  @override
+  String get vibrationTitle => 'การตอบสนองแบบสัมผัส';
+
+  @override
+  String get vibrationSubtitle => 'เปิดใช้งานการสั่น';
+
+  @override
+  String get animationsTitle => 'ภาพเคลื่อนไหว';
+
+  @override
+  String get animationsSubtitle => 'เปิดใช้งานภาพเคลื่อนไหว UI';
+
+  @override
+  String get dailyTarotReminder => 'รับการเตือนไพ่ทาโรต์ประจำวัน';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'การกระทำนี้ไม่สามารถยกเลิกได้ ข้อมูลทั้งหมดของคุณจะถูกลบอย่างถาวร';
+
+  @override
+  String get selectedCards => 'ไพ่ที่เลือก';
+
+  @override
+  String get aiInterpretation => 'การตีความ AI';
+
+  @override
+  String get invalidEmotionInput => 'ข้อมูลอารมณ์ไม่ถูกต้อง';
+
+  @override
+  String get interpretationNotReceived => 'ไม่สามารถรับผลการตีความได้';
+
+  @override
+  String get responseGenerationFailed => 'สร้างการตอบสนองล้มเหลว';
+
+  @override
+  String get invalidEmailFormat => 'รูปแบบอีเมลไม่ถูกต้อง';
+
+  @override
+  String get weakPassword =>
+      'รหัสผ่านอ่อนแอเกินไป กรุณาใช้อย่างน้อย 8 ตัวอักษร รวมตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก ตัวเลข และอักขระพิเศษ';
+
+  @override
+  String get invalidUsername =>
+      'ชื่อผู้ใช้ต้องมี 3-20 ตัวอักษร ใช้เฉพาะตัวอักษร ตัวเลข และขีดล่าง';
+
+  @override
+  String get signupError => 'เกิดข้อผิดพลาดระหว่างการลงทะเบียน';
+
+  @override
+  String get loginError => 'เกิดข้อผิดพลาดระหว่างการเข้าสู่ระบบ';
+
+  @override
+  String get logoutError => 'เกิดข้อผิดพลาดระหว่างการออกจากระบบ';
+
+  @override
+  String get passwordResetEmailFailed => 'ส่งอีเมลรีเซ็ตรหัสผ่านล้มเหลว';
+
+  @override
+  String get profileCreationFailed => 'สร้างโปรไฟล์ผู้ใช้ล้มเหลว';
+
+  @override
+  String get noLoggedInUser => 'ไม่มีผู้ใช้ที่เข้าสู่ระบบ';
+
+  @override
+  String get profileUpdateFailed => 'อัปเดตโปรไฟล์ล้มเหลว';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'การตีความไพ่ล้มเหลว: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse => 'อีเมลนี้ถูกใช้งานแล้ว';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'เกิดข้อผิดพลาดระหว่างการลงทะเบียน: $message';
+  }
+
+  @override
+  String get tooManyRequests => 'คำขอมากเกินไป กรุณาลองใหม่ภายหลัง';
+
+  @override
+  String get verificationEmailError => 'เกิดข้อผิดพลาดขณะส่งอีเมลยืนยัน';
 }

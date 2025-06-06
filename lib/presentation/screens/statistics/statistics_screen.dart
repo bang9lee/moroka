@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../data/models/tarot_card_model.dart';
 import '../../widgets/common/animated_gradient_background.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
 import 'statistics_viewmodel.dart';
@@ -297,7 +298,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
             _buildAnimatedStatCard(
               index: 1,
               title: AppLocalizations.of(context)!.mostFrequentCard,
-              value: state.statistics!['mostFrequentCard'] ?? '',
+              value: _getLocalizedCardName(state.statistics!['mostFrequentCard'] ?? ''),
               icon: Icons.star,
               gradient: [AppColors.omenGlow, AppColors.crimsonGlow],
             ),
@@ -325,7 +326,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
                 state.statistics!['moodFrequency'] as Map<String, int>,
                 screenSize,
               ),
-              height: 700,
+              height: 849,
             ),
             const SizedBox(height: 24),
           ],
@@ -360,7 +361,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
         return Transform.scale(
           scale: _animations[index].value,
           child: Opacity(
-            opacity: _animations[index].value,
+            opacity: _animations[index].value.clamp(0.0, 1.0),
             child: _buildStatCard(
               title: title,
               value: value,
@@ -385,7 +386,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
         return Transform.scale(
           scale: _animations[index].value,
           child: Opacity(
-            opacity: _animations[index].value,
+            opacity: _animations[index].value.clamp(0.0, 1.0),
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -575,8 +576,10 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
             ),
             tooltipRoundedRadius: 12,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final englishCardName = topEntries[group.x.toInt()].key;
+              final localizedCardName = _getLocalizedCardName(englishCardName);
               return BarTooltipItem(
-                '${topEntries[group.x.toInt()].key}\n${AppLocalizations.of(context)!.timesCount(rod.toY.toInt())}',
+                '$localizedCardName\n${AppLocalizations.of(context)!.timesCount(rod.toY.toInt())}',
                 AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.ghostWhite,
                   fontSize: 14,
@@ -592,13 +595,14 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 if (value.toInt() >= topEntries.length) return const SizedBox();
-                final cardName = topEntries[value.toInt()].key;
+                final englishCardName = topEntries[value.toInt()].key;
+                final localizedCardName = _getLocalizedCardName(englishCardName);
                 return Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    cardName.length > 6
-                        ? '${cardName.substring(0, 6)}...'
-                        : cardName,
+                    localizedCardName.length > 6
+                        ? '${localizedCardName.substring(0, 6)}...'
+                        : localizedCardName,
                     style: AppTextStyles.bodyMedium.copyWith(
                       fontSize: 11,
                       color: AppColors.fogGray,
@@ -672,7 +676,16 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
   }
 
   Widget _buildMoodPieChart(Map<String, int> moodFrequency, Size screenSize) {
-    final total = moodFrequency.values.fold(0, (sum, value) => sum + value);
+    // 중복 제거를 위해 mood를 영어 키로 정규화
+    final normalizedMoodFrequency = <String, int>{};
+    moodFrequency.forEach((key, value) {
+      final normalizedKey = _getNormalizedMoodKey(key);
+      normalizedMoodFrequency[normalizedKey] = 
+          (normalizedMoodFrequency[normalizedKey] ?? 0) + value;
+    });
+    
+    // 정규화된 데이터로 total 계산
+    final total = normalizedMoodFrequency.values.fold(0, (sum, value) => sum + value);
     if (total == 0) {
       return Center(
         child: Text(
@@ -695,7 +708,7 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
     ];
 
     // 값이 큰 순서대로 정렬
-    final sortedMoodEntries = moodFrequency.entries.toList()
+    final sortedMoodEntries = normalizedMoodFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return Column(
@@ -975,40 +988,85 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
     );
   }
   
+  // 영어 카드 이름을 현재 언어로 변환하는 헬퍼 함수
+  String _getLocalizedCardName(String englishCardName) {
+    // 현재 로케일 가져오기
+    final locale = Localizations.localeOf(context);
+    final languageCode = locale.languageCode;
+    
+    // 타로 카드 데이터에서 카드 찾기
+    final allCards = TarotCardModel.getAllCardsSync();
+    final card = allCards.firstWhere(
+      (c) => c.name == englishCardName,
+      orElse: () => TarotCardModel(
+        id: 0,
+        name: englishCardName,
+        nameKr: englishCardName,
+        imagePath: '',
+        suit: CardSuit.major,
+        keywords: [],
+        element: '',
+        uprightMeanings: [],
+        reversedMeanings: [],
+      ),
+    );
+    
+    return card.getLocalizedName(languageCode);
+  }
+
+  // mood를 영어 키로 정규화하는 헬퍼 함수
+  String _getNormalizedMoodKey(String savedMood) {
+    // 모든 언어의 mood를 영어 키로 매핑
+    final l10n = AppLocalizations.of(context)!;
+    
+    // 각 mood의 모든 언어 번역을 수집하여 영어 키로 매핑
+    final moodMappings = <String, String>{};
+    
+    // 각 mood에 대해 모든 번역을 수집
+    final moods = <Map<String, dynamic>>[
+      {'key': 'anxious', 'getter': () => l10n.moodAnxious},
+      {'key': 'lonely', 'getter': () => l10n.moodLonely},
+      {'key': 'curious', 'getter': () => l10n.moodCurious},
+      {'key': 'fearful', 'getter': () => l10n.moodFearful},
+      {'key': 'hopeful', 'getter': () => l10n.moodHopeful},
+      {'key': 'confused', 'getter': () => l10n.moodConfused},
+      {'key': 'desperate', 'getter': () => l10n.moodDesperate},
+      {'key': 'expectant', 'getter': () => l10n.moodExpectant},
+      {'key': 'mystical', 'getter': () => l10n.moodMystical},
+    ];
+    
+    // 현재 언어의 mood 텍스트를 영어 키로 매핑
+    for (final mood in moods) {
+      final getter = mood['getter'] as String Function();
+      final localizedText = getter();
+      final key = mood['key'] as String;
+      moodMappings[localizedText] = key;
+      // 대소문자 변형도 추가
+      moodMappings[localizedText.toLowerCase()] = key;
+      moodMappings[localizedText.toUpperCase()] = key;
+    }
+    
+    // 추가로 영어 키들도 직접 매핑 (이미 영어로 저장된 경우)
+    final englishKeys = ['anxious', 'lonely', 'curious', 'fearful', 'hopeful', 
+                        'confused', 'desperate', 'expectant', 'mystical'];
+    for (final key in englishKeys) {
+      moodMappings[key] = key;
+      moodMappings[key.toLowerCase()] = key;
+      moodMappings[key.toUpperCase()] = key;
+    }
+    
+    // 저장된 mood를 영어 키로 변환
+    return moodMappings[savedMood] ?? 
+           moodMappings[savedMood.toLowerCase()] ?? 
+           savedMood.toLowerCase();
+  }
+
   // 저장된 mood 텍스트를 현재 언어로 변환하는 헬퍼 함수
   String _getLocalizedMoodText(String savedMood) {
     final l10n = AppLocalizations.of(context)!;
     
-    // 각 mood 타입에 대한 모든 가능한 번역들
-    final moodMappings = {
-      'anxious': ['불안', 'Anxious', '不安', '焦虑', 'Anxieux', 'Ansioso', 'Ängstlich', 'กังวล', 'Lo lắng', 'चिंतित', 'Solo'],
-      'lonely': ['외로움', 'Lonely', '孤独', 'Seul', 'Solitario', 'Einsam', 'Solitário', 'เหงา', 'Cô đơn', 'अकेला', '寂しい'],
-      'curious': ['궁금', 'Curious', '好奇心', '好奇', 'Curieux', 'Curioso', 'Neugierig', 'อยากรู้', 'Tò mò', 'जिज्ञासु'],
-      'fearful': ['두려움', 'Fearful', '恐怖', '恐惧', 'Craintif', 'Temeroso', 'Furchtsam', 'กลัว', 'Sợ hãi', 'भयभीत'],
-      'hopeful': ['희망', 'Hopeful', '希望的', '충만희망', '充满希望', 'Plein d\'espoir', 'Esperanzado', 'Hoffnungsvoll', 'Esperançoso', 'มีความหวัง', 'Hy vọng', 'आशावान', '希望'],
-      'confused': ['혼란', 'Confused', '困惑', '混乱', 'Confus', 'Confundido', 'Verwirrt', 'Confuso', 'สับสน', 'Bối rối', 'भ्रमित'],
-      'desperate': ['간절', 'Desperate', '絶望的な', '절망적', '绝望', '迫切', '切実', 'Désespéré', 'Desesperado', 'Verzweifelt', 'สิ้นหวัง', 'Tuyệt vọng', 'निराश'],
-      'expectant': ['기대', 'Expectant', '期待', 'Dans l\'attente', 'Expectante', 'Erwartungsvoll', 'คาดหวัง', 'Mong đợi', 'प्रत्याशी'],
-      'mystical': ['신비', 'Mystical', '神秘的な', '신비로운', '神秘', 'Mystique', 'Místico', 'Mystisch', 'ลึกลับ', 'Huyền bí', 'रहस्यमय'],
-    };
-    
-    // 저장된 텍스트를 소문자로 변환하여 비교 (대소문자 무시)
-    final savedMoodLower = savedMood.toLowerCase();
-    
-    // 저장된 텍스트가 어떤 mood 타입인지 찾기
-    String? moodKey;
-    for (final entry in moodMappings.entries) {
-      if (entry.value.any((translation) => translation.toLowerCase() == savedMoodLower)) {
-        moodKey = entry.key;
-        break;
-      }
-    }
-    
-    if (moodKey == null) {
-      // 매핑을 찾을 수 없으면 원본 반환
-      debugPrint('Warning: No mood mapping found for "$savedMood". Please add this to moodMappings.');
-      return savedMood;
-    }
+    // 먼저 정규화된 키를 가져옴
+    final moodKey = _getNormalizedMoodKey(savedMood);
     
     // mood 키에 해당하는 현재 언어의 텍스트 반환
     switch (moodKey) {
@@ -1031,7 +1089,8 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen>
       case 'mystical':
         return l10n.moodMystical;
       default:
-        return savedMood;
+        // 매핑을 찾을 수 없는 경우 기본값 반환
+        return l10n.moodMystical;
     }
   }
 }

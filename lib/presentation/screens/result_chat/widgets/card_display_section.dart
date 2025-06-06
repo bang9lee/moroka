@@ -7,6 +7,7 @@ import '../../../../data/models/tarot_card_model.dart';
 import '../../../../data/models/tarot_spread_model.dart';
 import '../../../widgets/cards/tarot_card_widget.dart';
 import '../../../widgets/spreads/spread_layout_widget.dart';
+import 'celtic_cross_display.dart';
 
 /// 카드 표시 섹션 위젯
 class CardDisplaySection extends StatelessWidget {
@@ -148,8 +149,23 @@ class CardDisplaySection extends StatelessWidget {
   }
 
   Widget _buildSpreadLayout(BuildContext context) {
+    // Use specialized layout for Celtic Cross
+    if (spreadType == SpreadType.celticCross) {
+      return CelticCrossDisplay(
+        spread: selectedSpread!,
+        drawnCards: drawnCards!,
+        onCardTap: (index) {
+          final card = drawnCards![index];
+          final locale = Localizations.localeOf(context).languageCode;
+          final imagePath = card.imagePath;
+          _showCardDetail(context, card.getLocalizedName(locale), imagePath);
+        },
+      );
+    }
+    
+    // Use default layout for other spreads
     return Container(
-      height: 400,
+      height: spreadType == SpreadType.relationship ? 500 : 400,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SpreadLayoutWidget(
         spread: selectedSpread!,
@@ -266,4 +282,5 @@ class CardDisplaySection extends StatelessWidget {
       ),
     );
   }
+
 }

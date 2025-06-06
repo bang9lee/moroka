@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../core/errors/app_exceptions.dart';
 
 class UserModel {
   final String uid;
@@ -22,14 +23,26 @@ class UserModel {
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+    final rawData = doc.data();
+    if (rawData == null || rawData is! Map<String, dynamic>) {
+      throw const DataException(
+        code: 'invalid_user_data',
+        message: 'Invalid user document data',
+      );
+    }
+    
+    final data = rawData;
     return UserModel(
       uid: doc.id,
       email: data['email'] ?? '',
       displayName: data['displayName'],
       photoUrl: data['photoUrl'],
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      lastLoginAt: (data['lastLoginAt'] as Timestamp).toDate(),
+      createdAt: data['createdAt'] != null 
+          ? (data['createdAt'] as Timestamp).toDate()
+          : DateTime.now(),
+      lastLoginAt: data['lastLoginAt'] != null
+          ? (data['lastLoginAt'] as Timestamp).toDate()
+          : DateTime.now(),
       totalReadings: data['totalReadings'] ?? 0,
       hasCompletedOnboarding: data['hasCompletedOnboarding'] ?? false,
     );

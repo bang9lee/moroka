@@ -45,11 +45,12 @@ class StatisticsViewModel extends StateNotifier<StatisticsState> {
   }
 
   Future<Map<String, int>> _calculateMonthlyTrend(String userId) async {
-    final readings = await _firestoreService.getUserReadings(
+    final result = await _firestoreService.getUserReadings(
       userId: userId,
       limit: 100, // Get last 100 readings for trend
     );
     
+    final readings = result.readings;
     final monthlyCount = <String, int>{};
     final dateFormat = DateFormat('yyyy-MM');
     

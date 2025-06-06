@@ -181,7 +181,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => 'Keltisches Kreuz';
+
+  @override
+  String get crossSection => 'Kreuz - Aktuelle Situation';
+
+  @override
+  String get staffSection => 'Stab - Zukünftige Entwicklung';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -233,6 +239,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get menuHistoryDesc =>
       'Blicke auf deine vergangenen Schicksale zurück';
+
+  @override
+  String get loadingHistory => 'Verlauf wird geladen...';
 
   @override
   String get menuStatistics => 'Statistiken & Analysen';
@@ -298,6 +307,31 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'Bitte überprüfe deine Internetverbindung';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'Bitte wähle mehr Karten';
@@ -534,8 +568,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get aboutSubtitle => 'Die Karten des Schicksals erwarten dich';
 
   @override
+  String get aboutTagline => 'Die Karten des Schicksals erwarten dich';
+
+  @override
   String get aboutDescription =>
-      'MOROKA\n\nDas Tor des Schicksals hat sich geöffnet\nDas Schattenorakel wird deine Zukunft deuten\n\nTraditionelle Tarot-Deutung mit mystischer KI\nBietet tiefe Einblicke und Weisheit';
+      'MOROKA liest dein Schicksal durch uralte mystische Tarotkarten. Unser KI-Tarot-Meister interpretiert die kosmischen Botschaften, die in jeder der 78 Karten enthalten sind.\n\nEntdecke die Wahrheit, die in der Dunkelheit leuchtet, und die besondere Botschaft, die nur für dich bestimmt ist.';
 
   @override
   String get featuresTitle => 'Hauptfunktionen';
@@ -720,6 +757,44 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gelöschte Aufzeichnungen können nicht wiederhergestellt werden';
 
   @override
+  String get deleteAll => 'Alle löschen';
+
+  @override
+  String get deleteAllConfirmTitle => 'Alle Einträge löschen?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'Alle Tarot-Lesungen werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get deleteAllButton => 'Alle löschen';
+
+  @override
+  String get totalTarotReadings => 'Gesamte Tarot-Lesungen';
+
+  @override
+  String get mostFrequentCard => 'Häufigste Karte';
+
+  @override
+  String get cardFrequencyTop5 => 'Kartenhäufigkeit - Top 5';
+
+  @override
+  String get moodAnalysis => 'Stimmungsanalyse';
+
+  @override
+  String get monthlyReadingTrend => 'Monatlicher Lesetrend';
+
+  @override
+  String get noData => 'Keine Daten';
+
+  @override
+  String get noDataToAnalyze => 'Keine Daten zur Analyse';
+
+  @override
+  String get startTarotReading =>
+      'Beginnen Sie eine Tarot-Lesung, um Ihre Statistiken zu sehen';
+
+  @override
   String get cardOfFate => 'Karte des Schicksals';
 
   @override
@@ -821,6 +896,37 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get skip => 'SKIP';
+
+  @override
+  String get languageChanged => 'Sprache erfolgreich geändert';
+
+  @override
+  String get notificationsEnabled => 'Benachrichtigungen aktiviert';
+
+  @override
+  String get notificationsDisabled => 'Benachrichtigungen deaktiviert';
+
+  @override
+  String get vibrationEnabled => 'Vibration aktiviert';
+
+  @override
+  String get vibrationDisabled => 'Vibration deaktiviert';
+
+  @override
+  String get animationsEnabled => 'Animationen aktiviert';
+
+  @override
+  String get animationsDisabled => 'Animationen deaktiviert';
+
+  @override
+  String get notificationPermissionDenied =>
+      'Benachrichtigungsberechtigung erforderlich';
+
+  @override
+  String get errorWeakPassword => 'Passwort ist zu schwach';
+
+  @override
+  String get moreTitle => 'Mehr';
 
   @override
   String get willYouSelectIt => 'Will you select it?';
@@ -951,30 +1057,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analyzingDestiny => 'Analyzing your destiny...';
 
   @override
-  String get noDataToAnalyze => 'No data to analyze yet';
-
-  @override
-  String get startTarotReading => 'Start your tarot reading';
-
-  @override
-  String get totalTarotReadings => 'Total Tarot Readings';
-
-  @override
-  String get mostFrequentCard => 'Most Frequent Card';
-
-  @override
-  String get cardFrequencyTop5 => 'Card Frequency TOP 5';
-
-  @override
-  String get moodAnalysis => 'Reading Analysis by Mood';
-
-  @override
-  String get monthlyReadingTrend => 'Monthly Reading Trend';
-
-  @override
-  String get noData => 'No data available';
-
-  @override
   String timesCount(int count) {
     return '$count times';
   }
@@ -985,13 +1067,13 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get remainingDraws => 'Remaining Draws';
+  String get remainingDraws => 'Verbleibende Ziehungen';
 
   @override
-  String get noDrawsRemaining => 'No draws remaining';
+  String get noDrawsRemaining => 'Keine Ziehungen mehr';
 
   @override
-  String get adDraws => 'Ad';
+  String get adDraws => 'Werbung';
 
   @override
   String get dailyLimitReached => 'Daily Draw Limit Reached';
@@ -1050,6 +1132,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'Tarot-Meister';
+
+  @override
+  String get question => 'Frage';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1065,7 +1153,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'Chat $count Mal';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1288,17 +1378,265 @@ class AppLocalizationsDe extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => 'Rat und Weisheit für heute';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription =>
+      'Der Fluss von Vergangenheit, Gegenwart und Zukunft';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => 'Analyse aller Aspekte der Situation';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => 'Beziehungsdynamik und Zukunft';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => 'Wahrsagung für klare Antworten';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'Fehler';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get errorInvalidFormat => 'Ungültiges Format';
+
+  @override
+  String get errorUnexpected => 'Ein unerwarteter Fehler ist aufgetreten';
+
+  @override
+  String get errorUnknown => 'Unbekannter Fehler aufgetreten';
+
+  @override
+  String get errorNetworkTimeout => 'Netzwerkverbindung abgelaufen';
+
+  @override
+  String get errorNoInternet => 'Keine Internetverbindung';
+
+  @override
+  String get errorServerError => 'Serverfehler aufgetreten';
+
+  @override
+  String get errorInvalidCredentials => 'Ungültige E-Mail oder Passwort';
+
+  @override
+  String get errorEmailNotVerified => 'E-Mail nicht verifiziert';
+
+  @override
+  String get errorSessionExpired => 'Sitzung abgelaufen. Bitte erneut anmelden';
+
+  @override
+  String get errorQuotaExceeded => 'Tageslimit überschritten';
+
+  @override
+  String get errorInvalidResponse => 'Ungültige Antwort vom Server';
+
+  @override
+  String get errorRateLimitExceeded =>
+      'Zu viele Anfragen. Bitte später erneut versuchen';
+
+  @override
+  String get errorDataNotFound => 'Daten nicht gefunden';
+
+  @override
+  String get errorDataCorrupted => 'Daten beschädigt';
+
+  @override
+  String get errorSaveFailed => 'Daten konnten nicht gespeichert werden';
+
+  @override
+  String get errorPermissionDenied => 'Berechtigung verweigert';
+
+  @override
+  String get errorPermissionRestricted => 'Zugriff eingeschränkt';
+
+  @override
+  String get errorEmailAlreadyInUse => 'E-Mail wird bereits verwendet';
+
+  @override
+  String get errorInvalidEmail => 'Ungültige E-Mail-Adresse';
+
+  @override
+  String get errorNetworkRequestFailed => 'Netzwerkanfrage fehlgeschlagen';
+
+  @override
+  String get errorOperationNotAllowed => 'Vorgang nicht erlaubt';
+
+  @override
+  String get errorAuthFailed => 'Authentifizierung fehlgeschlagen';
+
+  @override
+  String get logoutSuccess => 'Erfolgreich abgemeldet';
+
+  @override
+  String get deleteAccountSuccess => 'Konto erfolgreich gelöscht';
+
+  @override
+  String get generalSettings => 'Allgemeine Einstellungen';
+
+  @override
+  String get accountSettings => 'Kontoeinstellungen';
+
+  @override
+  String get languageTitle => 'Sprache';
+
+  @override
+  String get notificationsTitle => 'Benachrichtigungen';
+
+  @override
+  String get vibrationTitle => 'Haptisches Feedback';
+
+  @override
+  String get vibrationSubtitle => 'Vibrationsfeedback aktivieren';
+
+  @override
+  String get animationsTitle => 'Animationen';
+
+  @override
+  String get animationsSubtitle => 'UI-Animationen aktivieren';
+
+  @override
+  String get dailyTarotReminder => 'Tägliche Tarot-Erinnerungen erhalten';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Diese Aktion kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.';
+
+  @override
+  String get selectedCards => 'Ausgewählte Karten';
+
+  @override
+  String get aiInterpretation => 'KI-Interpretation';
+
+  @override
+  String get invalidEmotionInput => 'Ungültige Emotionseingabe.';
+
+  @override
+  String get interpretationNotReceived =>
+      'Interpretationsergebnis konnte nicht empfangen werden.';
+
+  @override
+  String get responseGenerationFailed => 'Antwortgenerierung fehlgeschlagen.';
+
+  @override
+  String get invalidEmailFormat => 'Ungültiges E-Mail-Format.';
+
+  @override
+  String get weakPassword =>
+      'Das Passwort ist zu schwach. Bitte verwenden Sie mindestens 8 Zeichen mit Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen.';
+
+  @override
+  String get invalidUsername =>
+      'Der Benutzername muss 3-20 Zeichen lang sein und darf nur Buchstaben, Zahlen und Unterstriche enthalten.';
+
+  @override
+  String get signupError => 'Bei der Registrierung ist ein Fehler aufgetreten.';
+
+  @override
+  String get loginError => 'Bei der Anmeldung ist ein Fehler aufgetreten.';
+
+  @override
+  String get logoutError => 'Bei der Abmeldung ist ein Fehler aufgetreten.';
+
+  @override
+  String get passwordResetEmailFailed =>
+      'Fehler beim Senden der Passwort-Zurücksetzen-E-Mail.';
+
+  @override
+  String get profileCreationFailed =>
+      'Fehler beim Erstellen des Benutzerprofils.';
+
+  @override
+  String get noLoggedInUser => 'Kein angemeldeter Benutzer.';
+
+  @override
+  String get profileUpdateFailed => 'Fehler beim Aktualisieren des Profils.';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'Fehler beim Abrufen der Karteninterpretation: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse =>
+      'Diese E-Mail-Adresse wird bereits verwendet.';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'Bei der Registrierung ist ein Fehler aufgetreten: $message';
+  }
+
+  @override
+  String get tooManyRequests =>
+      'Zu viele Anfragen. Bitte versuchen Sie es später erneut.';
+
+  @override
+  String get verificationEmailError =>
+      'Beim Senden der Verifizierungs-E-Mail ist ein Fehler aufgetreten.';
 }

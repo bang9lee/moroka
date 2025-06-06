@@ -181,7 +181,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get threeCardSpread => 'Three Card Spread';
 
   @override
-  String get celticCrossSpread => 'Celtic Cross Spread';
+  String get celticCrossSpread => 'केल्टिक क्रॉस';
+
+  @override
+  String get crossSection => 'क्रॉस - वर्तमान स्थिति';
+
+  @override
+  String get staffSection => 'स्टाफ - भविष्य का विकास';
 
   @override
   String get relationshipSpread => 'Relationship Spread';
@@ -232,6 +238,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get menuHistoryDesc => 'अपने पिछले भाग्य को देखें';
+
+  @override
+  String get loadingHistory => 'इतिहास लोड हो रहा है...';
 
   @override
   String get menuStatistics => 'सांख्यिकी और विश्लेषण';
@@ -296,6 +305,31 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get errorNetworkFailed => 'कृपया अपना नेटवर्क कनेक्शन जांचें';
+
+  @override
+  String get errorUserDataLoad => 'Unable to load user data';
+
+  @override
+  String get errorUserNotFound => 'Email not registered';
+
+  @override
+  String get errorWrongPassword => 'Wrong password';
+
+  @override
+  String get errorUserDisabled => 'Account has been disabled';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later';
+
+  @override
+  String get errorInvalidCredential => 'Invalid email or password';
+
+  @override
+  String get errorLogoutFailed => 'Error occurred during logout';
+
+  @override
+  String get errorPasswordResetFailed => 'Failed to send password reset email';
 
   @override
   String get errorNotEnoughCards => 'कृपया और कार्ड चुनें';
@@ -529,6 +563,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get aboutSubtitle => 'भाग्य के पत्ते आपकी प्रतीक्षा कर रहे हैं';
 
   @override
+  String get aboutTagline => 'भाग्य के पत्ते आपका इंतज़ार कर रहे हैं';
+
+  @override
   String get aboutDescription =>
       'MOROKA\n\nभाग्य का द्वार खुल गया है\nछाया दैवज्ञ आपके भविष्य की व्याख्या करेगा\n\nरहस्यमय AI के साथ पारंपरिक टैरो व्याख्या\nगहरी अंतर्दृष्टि और ज्ञान प्रदान करना';
 
@@ -714,6 +751,43 @@ class AppLocalizationsHi extends AppLocalizations {
       'हटाए गए रिकॉर्ड पुनर्प्राप्त नहीं किए जा सकते';
 
   @override
+  String get deleteAll => 'सब कुछ हटाएं';
+
+  @override
+  String get deleteAllConfirmTitle => 'सभी रिकॉर्ड हटाएं?';
+
+  @override
+  String get deleteAllConfirmMessage =>
+      'सभी टैरो रीडिंग स्थायी रूप से हटा दी जाएंगी। यह क्रिया पूर्ववत नहीं की जा सकती।';
+
+  @override
+  String get deleteAllButton => 'सब कुछ हटाएं';
+
+  @override
+  String get totalTarotReadings => 'कुल टैरो रीडिंग';
+
+  @override
+  String get mostFrequentCard => 'सबसे अधिक बार आने वाला कार्ड';
+
+  @override
+  String get cardFrequencyTop5 => 'कार्ड आवृत्ति शीर्ष 5';
+
+  @override
+  String get moodAnalysis => 'मनोदशा द्वारा रीडिंग विश्लेषण';
+
+  @override
+  String get monthlyReadingTrend => 'मासिक रीडिंग रुझान';
+
+  @override
+  String get noData => 'कोई डेटा उपलब्ध नहीं';
+
+  @override
+  String get noDataToAnalyze => 'अभी तक विश्लेषण के लिए कोई डेटा नहीं';
+
+  @override
+  String get startTarotReading => 'अपना टैरो रीडिंग शुरू करें';
+
+  @override
   String get cardOfFate => 'भाग्य का कार्ड';
 
   @override
@@ -815,6 +889,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get skip => 'छोड़ें';
+
+  @override
+  String get languageChanged => 'भाषा सफलतापूर्वक बदली गई';
+
+  @override
+  String get notificationsEnabled => 'सूचनाएं सक्षम';
+
+  @override
+  String get notificationsDisabled => 'सूचनाएं अक्षम';
+
+  @override
+  String get vibrationEnabled => 'कंपन सक्षम';
+
+  @override
+  String get vibrationDisabled => 'कंपन अक्षम';
+
+  @override
+  String get animationsEnabled => 'एनिमेशन सक्षम';
+
+  @override
+  String get animationsDisabled => 'एनिमेशन अक्षम';
+
+  @override
+  String get notificationPermissionDenied => 'सूचना अनुमति आवश्यक है';
+
+  @override
+  String get errorWeakPassword => 'पासवर्ड बहुत कमजोर है';
+
+  @override
+  String get moreTitle => 'अधिक';
 
   @override
   String get willYouSelectIt => 'क्या आप इसे चुनेंगे?';
@@ -946,30 +1050,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get analyzingDestiny => 'आपके भाग्य का विश्लेषण कर रहे हैं...';
 
   @override
-  String get noDataToAnalyze => 'अभी तक विश्लेषण के लिए कोई डेटा नहीं';
-
-  @override
-  String get startTarotReading => 'अपना टैरो रीडिंग शुरू करें';
-
-  @override
-  String get totalTarotReadings => 'कुल टैरो रीडिंग';
-
-  @override
-  String get mostFrequentCard => 'सबसे अधिक बार आने वाला कार्ड';
-
-  @override
-  String get cardFrequencyTop5 => 'कार्ड आवृत्ति शीर्ष 5';
-
-  @override
-  String get moodAnalysis => 'मनोदशा द्वारा रीडिंग विश्लेषण';
-
-  @override
-  String get monthlyReadingTrend => 'मासिक रीडिंग रुझान';
-
-  @override
-  String get noData => 'कोई डेटा उपलब्ध नहीं';
-
-  @override
   String timesCount(int count) {
     return '$count बार';
   }
@@ -1045,6 +1125,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get yourQuestion => 'Your question';
 
   @override
+  String get tarotMaster => 'टैरो मास्टर';
+
+  @override
+  String get question => 'प्रश्न';
+
+  @override
   String get tarotMasterResponse => 'Tarot master\'s response';
 
   @override
@@ -1060,7 +1146,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get card => 'Card';
 
   @override
-  String get chatCount => 'Chat count';
+  String chatCount(int count) {
+    return 'चैट $count बार';
+  }
 
   @override
   String get deleteReading => 'Delete reading';
@@ -1284,17 +1372,261 @@ class AppLocalizationsHi extends AppLocalizations {
   String get paid => 'Paid';
 
   @override
-  String get oneCardDescription => 'Today\'s fortune and advice';
+  String get oneCardDescription => 'आज का भाग्य और सलाह';
 
   @override
-  String get threeCardDescription => 'Flow of past, present, future';
+  String get threeCardDescription => 'भूत, वर्तमान और भविष्य का प्रवाह';
 
   @override
-  String get celticCrossDescription => 'Analyze all aspects of the situation';
+  String get celticCrossDescription => 'स्थिति के सभी पहलुओं का विश्लेषण';
 
   @override
-  String get relationshipDescription => 'Dynamics and future of relationships';
+  String get relationshipDescription => 'संबंध की गतिशीलता और भविष्य';
 
   @override
-  String get yesNoDescription => 'Fortune telling for clear answers';
+  String get yesNoDescription => 'स्पष्ट उत्तर के लिए भविष्यवाणी';
+
+  @override
+  String get errorApiMessage =>
+      'Sorry, the threads of fate have become tangled. Please try again.';
+
+  @override
+  String defaultInterpretationStart(String spreadName) {
+    return 'The $spreadName spread has been laid out.';
+  }
+
+  @override
+  String selectedCardsLabel(String cards) {
+    return 'Selected cards: $cards';
+  }
+
+  @override
+  String cardEnergyResonance(String mood) {
+    return 'The energy created by these cards resonates with your $mood heart.';
+  }
+
+  @override
+  String get deeperInterpretationComing =>
+      'Each card\'s message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...';
+
+  @override
+  String get waitingMessage => 'Loading...';
+
+  @override
+  String get nameAvailable => 'Name is available';
+
+  @override
+  String get nameAlreadyTaken => 'Name is already taken';
+
+  @override
+  String get errorNameCheckFailed => 'Error checking name availability';
+
+  @override
+  String get emailAlreadyRegistered => 'Email is already registered';
+
+  @override
+  String get errorEmailCheckFailed => 'Error checking email availability';
+
+  @override
+  String get messageRequired => 'Please enter a message';
+
+  @override
+  String get messageTooLong => 'Message must be within 500 characters';
+
+  @override
+  String get messageInvalidCharacters => 'Message contains invalid characters';
+
+  @override
+  String get messageInvalidScript => 'Message contains invalid script';
+
+  @override
+  String get passwordRequired => 'Please enter a password';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get error => 'त्रुटि';
+
+  @override
+  String get ok => 'ठीक है';
+
+  @override
+  String get errorInvalidFormat => 'अमान्य प्रारूप';
+
+  @override
+  String get errorUnexpected => 'एक अप्रत्याशित त्रुटि हुई';
+
+  @override
+  String get errorUnknown => 'अज्ञात त्रुटि हुई';
+
+  @override
+  String get errorNetworkTimeout => 'नेटवर्क कनेक्शन समय समाप्त';
+
+  @override
+  String get errorNoInternet => 'इंटरनेट कनेक्शन नहीं है';
+
+  @override
+  String get errorServerError => 'सर्वर त्रुटि हुई';
+
+  @override
+  String get errorInvalidCredentials => 'अमान्य ईमेल या पासवर्ड';
+
+  @override
+  String get errorEmailNotVerified => 'ईमेल सत्यापित नहीं है';
+
+  @override
+  String get errorSessionExpired =>
+      'सत्र समाप्त हो गया। कृपया फिर से लॉगिन करें';
+
+  @override
+  String get errorQuotaExceeded => 'दैनिक सीमा पार हो गई';
+
+  @override
+  String get errorInvalidResponse => 'सर्वर से अमान्य प्रतिक्रिया';
+
+  @override
+  String get errorRateLimitExceeded =>
+      'बहुत सारे अनुरोध। कृपया बाद में पुनः प्रयास करें';
+
+  @override
+  String get errorDataNotFound => 'डेटा नहीं मिला';
+
+  @override
+  String get errorDataCorrupted => 'डेटा दूषित';
+
+  @override
+  String get errorSaveFailed => 'डेटा सहेजने में विफल';
+
+  @override
+  String get errorPermissionDenied => 'अनुमति अस्वीकृत';
+
+  @override
+  String get errorPermissionRestricted => 'पहुंच प्रतिबंधित';
+
+  @override
+  String get errorEmailAlreadyInUse => 'ईमेल पहले से उपयोग में है';
+
+  @override
+  String get errorInvalidEmail => 'अमान्य ईमेल पता';
+
+  @override
+  String get errorNetworkRequestFailed => 'नेटवर्क अनुरोध विफल';
+
+  @override
+  String get errorOperationNotAllowed => 'संचालन की अनुमति नहीं है';
+
+  @override
+  String get errorAuthFailed => 'प्रमाणीकरण विफल';
+
+  @override
+  String get logoutSuccess => 'सफलतापूर्वक लॉग आउट किया गया';
+
+  @override
+  String get deleteAccountSuccess => 'खाता सफलतापूर्वक हटाया गया';
+
+  @override
+  String get generalSettings => 'सामान्य सेटिंग्स';
+
+  @override
+  String get accountSettings => 'खाता सेटिंग्स';
+
+  @override
+  String get languageTitle => 'भाषा';
+
+  @override
+  String get notificationsTitle => 'सूचनाएं';
+
+  @override
+  String get vibrationTitle => 'हैप्टिक फीडबैक';
+
+  @override
+  String get vibrationSubtitle => 'कंपन फीडबैक सक्षम करें';
+
+  @override
+  String get animationsTitle => 'एनिमेशन';
+
+  @override
+  String get animationsSubtitle => 'UI एनिमेशन सक्षम करें';
+
+  @override
+  String get dailyTarotReminder => 'दैनिक टैरो अनुस्मारक प्राप्त करें';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'यह क्रिया पूर्ववत नहीं की जा सकती। आपका सारा डेटा स्थायी रूप से हटा दिया जाएगा।';
+
+  @override
+  String get selectedCards => 'चयनित कार्ड';
+
+  @override
+  String get aiInterpretation => 'AI व्याख्या';
+
+  @override
+  String get invalidEmotionInput => 'अमान्य भावना इनपुट।';
+
+  @override
+  String get interpretationNotReceived =>
+      'व्याख्या परिणाम प्राप्त नहीं हो सका।';
+
+  @override
+  String get responseGenerationFailed => 'प्रतिक्रिया उत्पन्न करने में विफल।';
+
+  @override
+  String get invalidEmailFormat => 'अमान्य ईमेल प्रारूप।';
+
+  @override
+  String get weakPassword =>
+      'पासवर्ड बहुत कमजोर है। कृपया कम से कम 8 वर्णों का उपयोग करें जिसमें अपरकेस, लोअरकेस, संख्याएं और विशेष वर्ण शामिल हों।';
+
+  @override
+  String get invalidUsername =>
+      'उपयोगकर्ता नाम 3-20 वर्णों का होना चाहिए और केवल अक्षर, संख्याएं और अंडरस्कोर का उपयोग करना चाहिए।';
+
+  @override
+  String get signupError => 'साइन अप के दौरान एक त्रुटि हुई।';
+
+  @override
+  String get loginError => 'लॉगिन के दौरान एक त्रुटि हुई।';
+
+  @override
+  String get logoutError => 'लॉगआउट के दौरान एक त्रुटि हुई।';
+
+  @override
+  String get passwordResetEmailFailed => 'पासवर्ड रीसेट ईमेल भेजने में विफल।';
+
+  @override
+  String get profileCreationFailed => 'उपयोगकर्ता प्रोफ़ाइल बनाने में विफल।';
+
+  @override
+  String get noLoggedInUser => 'कोई लॉग इन उपयोगकर्ता नहीं।';
+
+  @override
+  String get profileUpdateFailed => 'प्रोफ़ाइल अपडेट करने में विफल।';
+
+  @override
+  String cardInterpretationFailed(String error) {
+    return 'कार्ड व्याख्या प्राप्त करने में विफल: $error';
+  }
+
+  @override
+  String get emailAlreadyInUse => 'यह ईमेल पहले से उपयोग में है।';
+
+  @override
+  String signupErrorWithMessage(String message) {
+    return 'साइन अप के दौरान एक त्रुटि हुई: $message';
+  }
+
+  @override
+  String get tooManyRequests =>
+      'बहुत सारे अनुरोध। कृपया बाद में पुनः प्रयास करें।';
+
+  @override
+  String get verificationEmailError => 'सत्यापन ईमेल भेजते समय एक त्रुटि हुई।';
 }

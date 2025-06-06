@@ -137,6 +137,8 @@ class ChatHistorySection extends ConsumerWidget {
   }
 
   Widget _buildChatList(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Container(
       constraints: const BoxConstraints(maxHeight: 400),
       child: ListView.builder(
@@ -153,10 +155,27 @@ class ChatHistorySection extends ConsumerWidget {
           }
 
           final message = chatHistory[index];
+          
+          // Localize special messages
+          String displayMessage = message.message;
+          if (!message.isUser) {
+            if (message.message == 'errorApiMessage') {
+              displayMessage = l10n.errorApiMessage;
+            } else if (message.message.startsWith('defaultInterpretation|')) {
+              final parts = message.message.split('|');
+              if (parts.length == 4) {
+                displayMessage = '${l10n.defaultInterpretationStart(parts[1])}\n\n'
+                    '${l10n.selectedCardsLabel(parts[2])}\n\n'
+                    '${l10n.cardEnergyResonance(parts[3])}\n'
+                    '${l10n.deeperInterpretationComing}';
+              }
+            }
+          }
+          
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: ChatBubbleWidget(
-              message: message.message,
+              message: displayMessage,
               isUser: message.isUser,
               timestamp: message.timestamp,
             ).animate()

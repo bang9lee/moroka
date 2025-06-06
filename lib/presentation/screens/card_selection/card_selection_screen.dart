@@ -14,8 +14,6 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../data/models/tarot_card_model.dart';
 import '../../../providers.dart';
 import '../../widgets/common/accessible_icon_button.dart';
-import '../main/main_viewmodel.dart';
-import '../spread_selection/spread_selection_viewmodel.dart';
 import 'card_selection_viewmodel.dart';
 
 /// 프로덕션급 타로 카드 선택 화면
@@ -1051,6 +1049,31 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
     );
   }
   
+  String _getLocalizedMood(String moodKey, AppLocalizations l10n) {
+    switch (moodKey) {
+      case 'anxious':
+        return l10n.moodAnxious;
+      case 'lonely':
+        return l10n.moodLonely;
+      case 'curious':
+        return l10n.moodCurious;
+      case 'fearful':
+        return l10n.moodFearful;
+      case 'hopeful':
+        return l10n.moodHopeful;
+      case 'confused':
+        return l10n.moodConfused;
+      case 'desperate':
+        return l10n.moodDesperate;
+      case 'expectant':
+        return l10n.moodExpectant;
+      case 'mystical':
+        return l10n.moodMystical;
+      default:
+        return moodKey;
+    }
+  }
+
   Widget _buildHeader(String userMood, int remainingCards, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -1092,7 +1115,7 @@ class _CardSelectionScreenState extends ConsumerState<CardSelectionScreen>
             children: [
               _buildInfoChip(
                 icon: Icons.mood,
-                label: userMood,
+                label: _getLocalizedMood(userMood, l10n),
                 color: AppColors.fogGray,
               ),
               const SizedBox(width: 12),

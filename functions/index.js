@@ -194,6 +194,297 @@ function getSectionTitles(language, spreadType = 'single') {
     return langTitles[spreadType] || langTitles.single;
 }
 
+// Helper function to get Celtic Cross section titles by language
+function getCelticCrossSectionTitles(language) {
+    const titles = {
+        en: {
+            coreSituation: '[Core Situation Analysis]',
+            innerConflict: '[Inner Conflict]',
+            timelineAnalysis: '[Timeline Analysis]',
+            externalFactors: '[External Factors]',
+            finalForecast: '[Final Forecast]',
+            actionPlan: '[Step-by-Step Action Plan]'
+        },
+        ko: {
+            coreSituation: '[핵심 상황 분석]',
+            innerConflict: '[내면의 갈등]',
+            timelineAnalysis: '[시간축 분석]',
+            externalFactors: '[외부 요인]',
+            finalForecast: '[최종 전망]',
+            actionPlan: '[단계별 행동 계획]'
+        },
+        ja: {
+            coreSituation: '[核心状況分析]',
+            innerConflict: '[内なる葛藤]',
+            timelineAnalysis: '[タイムライン分析]',
+            externalFactors: '[外的要因]',
+            finalForecast: '[最終予測]',
+            actionPlan: '[段階的行動計画]'
+        },
+        zh: {
+            coreSituation: '[核心情况分析]',
+            innerConflict: '[内心冲突]',
+            timelineAnalysis: '[时间线分析]',
+            externalFactors: '[外部因素]',
+            finalForecast: '[最终预测]',
+            actionPlan: '[分步行动计划]'
+        },
+        es: {
+            coreSituation: '[Análisis de la Situación Central]',
+            innerConflict: '[Conflicto Interior]',
+            timelineAnalysis: '[Análisis Temporal]',
+            externalFactors: '[Factores Externos]',
+            finalForecast: '[Pronóstico Final]',
+            actionPlan: '[Plan de Acción Paso a Paso]'
+        },
+        fr: {
+            coreSituation: '[Analyse de la Situation Centrale]',
+            innerConflict: '[Conflit Intérieur]',
+            timelineAnalysis: '[Analyse Chronologique]',
+            externalFactors: '[Facteurs Externes]',
+            finalForecast: '[Prévision Finale]',
+            actionPlan: '[Plan d\'Action Étape par Étape]'
+        },
+        de: {
+            coreSituation: '[Kernsituationsanalyse]',
+            innerConflict: '[Innerer Konflikt]',
+            timelineAnalysis: '[Zeitlinienanalyse]',
+            externalFactors: '[Externe Faktoren]',
+            finalForecast: '[Endprognose]',
+            actionPlan: '[Schrittweiser Aktionsplan]'
+        },
+        pt: {
+            coreSituation: '[Análise da Situação Central]',
+            innerConflict: '[Conflito Interior]',
+            timelineAnalysis: '[Análise Temporal]',
+            externalFactors: '[Fatores Externos]',
+            finalForecast: '[Previsão Final]',
+            actionPlan: '[Plano de Ação Passo a Passo]'
+        },
+        hi: {
+            coreSituation: '[मुख्य स्थिति विश्लेषण]',
+            innerConflict: '[आंतरिक संघर्ष]',
+            timelineAnalysis: '[समयरेखा विश्लेषण]',
+            externalFactors: '[बाहरी कारक]',
+            finalForecast: '[अंतिम पूर्वानुमान]',
+            actionPlan: '[चरणबद्ध कार्य योजना]'
+        },
+        vi: {
+            coreSituation: '[Phân Tích Tình Huống Cốt Lõi]',
+            innerConflict: '[Xung Đột Nội Tâm]',
+            timelineAnalysis: '[Phân Tích Dòng Thời Gian]',
+            externalFactors: '[Yếu Tố Bên Ngoài]',
+            finalForecast: '[Dự Báo Cuối Cùng]',
+            actionPlan: '[Kế Hoạch Hành Động Từng Bước]'
+        },
+        th: {
+            coreSituation: '[การวิเคราะห์สถานการณ์หลัก]',
+            innerConflict: '[ความขัดแย้งภายใน]',
+            timelineAnalysis: '[การวิเคราะห์เส้นเวลา]',
+            externalFactors: '[ปัจจัยภายนอก]',
+            finalForecast: '[การคาดการณ์สุดท้าย]',
+            actionPlan: '[แผนปฏิบัติการทีละขั้นตอน]'
+        }
+    };
+    
+    // Default to English if language not found
+    return titles[language] || titles.en;
+}
+
+// Helper function to get Relationship spread section titles by language
+function getRelationshipSectionTitles(language) {
+    const titles = {
+        en: {
+            energyOfTwo: '[The Energy of Two People]',
+            heartTemperature: '[Heart Temperature Difference]',
+            obstacles: '[Relationship Obstacles]',
+            futurePossibilities: '[Future Possibilities]',
+            adviceForLove: '[Advice for Love]',
+            oneLineAdvice: '[One-Line Advice]'
+        },
+        ko: {
+            energyOfTwo: '[두 사람의 에너지]',
+            heartTemperature: '[마음의 온도 차이]',
+            obstacles: '[관계의 장애물]',
+            futurePossibilities: '[미래의 가능성]',
+            adviceForLove: '[사랑을 위한 조언]',
+            oneLineAdvice: '[한 줄 조언]'
+        },
+        ja: {
+            energyOfTwo: '[二人のエネルギー]',
+            heartTemperature: '[心の温度差]',
+            obstacles: '[関係の障害]',
+            futurePossibilities: '[未来の可能性]',
+            adviceForLove: '[愛のためのアドバイス]',
+            oneLineAdvice: '[一言アドバイス]'
+        },
+        zh: {
+            energyOfTwo: '[两人的能量]',
+            heartTemperature: '[心温差异]',
+            obstacles: '[关系障碍]',
+            futurePossibilities: '[未来可能性]',
+            adviceForLove: '[爱情建议]',
+            oneLineAdvice: '[一句忠告]'
+        },
+        es: {
+            energyOfTwo: '[La Energía de Dos Personas]',
+            heartTemperature: '[Diferencia de Temperatura del Corazón]',
+            obstacles: '[Obstáculos en la Relación]',
+            futurePossibilities: '[Posibilidades Futuras]',
+            adviceForLove: '[Consejo para el Amor]',
+            oneLineAdvice: '[Consejo en Una Línea]'
+        },
+        fr: {
+            energyOfTwo: '[L\'Énergie de Deux Personnes]',
+            heartTemperature: '[Différence de Température du Cœur]',
+            obstacles: '[Obstacles Relationnels]',
+            futurePossibilities: '[Possibilités Futures]',
+            adviceForLove: '[Conseils pour l\'Amour]',
+            oneLineAdvice: '[Conseil en Une Ligne]'
+        },
+        de: {
+            energyOfTwo: '[Die Energie Zweier Menschen]',
+            heartTemperature: '[Herztemperaturunterschied]',
+            obstacles: '[Beziehungshindernisse]',
+            futurePossibilities: '[Zukünftige Möglichkeiten]',
+            adviceForLove: '[Rat für die Liebe]',
+            oneLineAdvice: '[Einzeiliger Rat]'
+        },
+        pt: {
+            energyOfTwo: '[A Energia de Duas Pessoas]',
+            heartTemperature: '[Diferença de Temperatura do Coração]',
+            obstacles: '[Obstáculos do Relacionamento]',
+            futurePossibilities: '[Possibilidades Futuras]',
+            adviceForLove: '[Conselho para o Amor]',
+            oneLineAdvice: '[Conselho em Uma Linha]'
+        },
+        hi: {
+            energyOfTwo: '[दो लोगों की ऊर्जा]',
+            heartTemperature: '[दिल के तापमान का अंतर]',
+            obstacles: '[रिश्ते की बाधाएं]',
+            futurePossibilities: '[भविष्य की संभावनाएं]',
+            adviceForLove: '[प्रेम के लिए सलाह]',
+            oneLineAdvice: '[एक पंक्ति की सलाह]'
+        },
+        vi: {
+            energyOfTwo: '[Năng Lượng Của Hai Người]',
+            heartTemperature: '[Chênh Lệch Nhiệt Độ Trái Tim]',
+            obstacles: '[Rào Cản Trong Mối Quan Hệ]',
+            futurePossibilities: '[Khả Năng Tương Lai]',
+            adviceForLove: '[Lời Khuyên Cho Tình Yêu]',
+            oneLineAdvice: '[Lời Khuyên Một Dòng]'
+        },
+        th: {
+            energyOfTwo: '[พลังงานของคนสองคน]',
+            heartTemperature: '[ความแตกต่างของอุณหภูมิหัวใจ]',
+            obstacles: '[อุปสรรคในความสัมพันธ์]',
+            futurePossibilities: '[ความเป็นไปได้ในอนาคต]',
+            adviceForLove: '[คำแนะนำเพื่อความรัก]',
+            oneLineAdvice: '[คำแนะนำหนึ่งบรรทัด]'
+        }
+    };
+    
+    // Default to English if language not found
+    return titles[language] || titles.en;
+}
+
+// Helper function to get Yes/No spread section titles by language
+function getYesNoSectionTitles(language) {
+    const titles = {
+        en: {
+            finalAnswer: '[Final Answer]',
+            judgmentBasis: '[Judgment Basis]',
+            coreMessage: '[Core Message]',
+            successConditions: '[Success Conditions]',
+            timingPrediction: '[Timing Prediction]',
+            actionGuide: '[Action Guide]'
+        },
+        ko: {
+            finalAnswer: '[최종 답변]',
+            judgmentBasis: '[판단 근거]',
+            coreMessage: '[핵심 메시지]',
+            successConditions: '[성공 조건]',
+            timingPrediction: '[시기 예측]',
+            actionGuide: '[행동 가이드]'
+        },
+        ja: {
+            finalAnswer: '[最終回答]',
+            judgmentBasis: '[判断根拠]',
+            coreMessage: '[核心メッセージ]',
+            successConditions: '[成功条件]',
+            timingPrediction: '[時期予測]',
+            actionGuide: '[行動ガイド]'
+        },
+        zh: {
+            finalAnswer: '[最终答案]',
+            judgmentBasis: '[判断依据]',
+            coreMessage: '[核心信息]',
+            successConditions: '[成功条件]',
+            timingPrediction: '[时机预测]',
+            actionGuide: '[行动指南]'
+        },
+        es: {
+            finalAnswer: '[Respuesta Final]',
+            judgmentBasis: '[Base del Juicio]',
+            coreMessage: '[Mensaje Central]',
+            successConditions: '[Condiciones de Éxito]',
+            timingPrediction: '[Predicción de Tiempo]',
+            actionGuide: '[Guía de Acción]'
+        },
+        fr: {
+            finalAnswer: '[Réponse Finale]',
+            judgmentBasis: '[Base du Jugement]',
+            coreMessage: '[Message Central]',
+            successConditions: '[Conditions de Réussite]',
+            timingPrediction: '[Prédiction de Timing]',
+            actionGuide: '[Guide d\'Action]'
+        },
+        de: {
+            finalAnswer: '[Endgültige Antwort]',
+            judgmentBasis: '[Urteilsgrundlage]',
+            coreMessage: '[Kernbotschaft]',
+            successConditions: '[Erfolgsbedingungen]',
+            timingPrediction: '[Zeitvorhersage]',
+            actionGuide: '[Handlungsleitfaden]'
+        },
+        pt: {
+            finalAnswer: '[Resposta Final]',
+            judgmentBasis: '[Base do Julgamento]',
+            coreMessage: '[Mensagem Central]',
+            successConditions: '[Condições de Sucesso]',
+            timingPrediction: '[Previsão de Tempo]',
+            actionGuide: '[Guia de Ação]'
+        },
+        hi: {
+            finalAnswer: '[अंतिम उत्तर]',
+            judgmentBasis: '[निर्णय का आधार]',
+            coreMessage: '[मुख्य संदेश]',
+            successConditions: '[सफलता की शर्तें]',
+            timingPrediction: '[समय पूर्वानुमान]',
+            actionGuide: '[कार्य मार्गदर्शिका]'
+        },
+        vi: {
+            finalAnswer: '[Câu Trả Lời Cuối Cùng]',
+            judgmentBasis: '[Cơ Sở Phán Đoán]',
+            coreMessage: '[Thông Điệp Cốt Lõi]',
+            successConditions: '[Điều Kiện Thành Công]',
+            timingPrediction: '[Dự Đoán Thời Gian]',
+            actionGuide: '[Hướng Dẫn Hành Động]'
+        },
+        th: {
+            finalAnswer: '[คำตอบสุดท้าย]',
+            judgmentBasis: '[เหตุผลในการตัดสิน]',
+            coreMessage: '[ข้อความหลัก]',
+            successConditions: '[เงื่อนไขความสำเร็จ]',
+            timingPrediction: '[การคาดการณ์เวลา]',
+            actionGuide: '[คู่มือการดำเนินการ]'
+        }
+    };
+    
+    // Default to English if language not found
+    return titles[language] || titles.en;
+}
+
 // 타로 해석 함수
 exports.generateTarotInterpretation = onCall(
     { secrets: [geminiApiKey] },
@@ -347,9 +638,10 @@ ${languageInstruction}
                     break;
                     
                 case 'celticCross':
+                    const celticCrossTitles = getCelticCrossSectionTitles(language);
                     prompt = `
 You are a tarot master. Systematically analyze the 10-card Celtic Cross.
-Do not use markdown syntax. No asterisks, hashtags, or brackets.
+Do not use markdown syntax. No asterisks, hashtags, or special characters except for the section headers in square brackets.
 
 User mood: ${userMood}
 
@@ -367,33 +659,33 @@ Card Layout:
 
 Interpret cleanly in the following format:
 
-Core Situation Analysis
+${celticCrossTitles.coreSituation}
 The key issue seen through ${cards[0].name} and ${cards[1].name} in 2-3 sentences
 
-Inner Conflict
+${celticCrossTitles.innerConflict}
 Conscious: ${cards[2].name} - What you outwardly want
 Unconscious: ${cards[3].name} - Your true desire
 My Attitude: ${cards[6].name} - Actual behavior pattern
 
-Timeline Analysis
+${celticCrossTitles.timelineAnalysis}
 Past: ${cards[4].name} - Impact on present
 Present: ${cards[0].name} - Current choice faced
 Future: ${cards[5].name} - Development within 3 months
 
-External Factors
+${celticCrossTitles.externalFactors}
 The environmental influence shown by ${cards[7].name} specifically
 
-Final Forecast
+${celticCrossTitles.finalForecast}
 ${cards[8].name}: Inner expectations and anxieties
 ${cards[9].name}: Expected outcome (70% probability)
 
-Step-by-Step Action Plan
+${celticCrossTitles.actionPlan}
 1. This week: One specific action
 2. This month: Intermediate goal
 3. After 3 months: Final goal
 
 Rules:
-- Use only subheadings without special characters
+- Use the exact section headers as provided above in square brackets
 - Keep each section to 2-3 sentences
 - Repeatedly mention card names
 
@@ -402,9 +694,10 @@ ${languageInstruction}
                     break;
                     
                 case 'relationship':
+                    const relationshipTitles = getRelationshipSectionTitles(language);
                     prompt = `
 You are a tarot expert and relationship counselor. Delicately analyze relationship dynamics.
-Do not use markdown syntax. Absolutely no asterisks.
+Do not use markdown syntax. Absolutely no asterisks or special characters except for the section headers in square brackets.
 
 User mood: ${userMood}
 
@@ -419,30 +712,31 @@ Relationship Card Layout:
 
 Interpret emotionally and warmly:
 
-The Energy of Two People
+${relationshipTitles.energyOfTwo}
 You (${cards[0].name}): Your role and characteristics in the relationship
 Partner (${cards[1].name}): Their tendencies and attitudes
 Chemistry (${cards[2].name}): The synergy when you two meet
 
-Heart Temperature Difference
+${relationshipTitles.heartTemperature}
 Your True Feelings (${cards[3].name}): Hidden emotions
 Partner's Heart (${cards[4].name}): Expected emotions (Temperature: 70 degrees)
 
-Relationship Obstacles
+${relationshipTitles.obstacles}
 Core problem and solution direction indicated by ${cards[5].name}
 
-Future Possibilities
+${relationshipTitles.futurePossibilities}
 Relationship development probability seen through ${cards[6].name}: 75%
 
-Advice for Love
+${relationshipTitles.adviceForLove}
 1. Communication: "To open their heart..."
 2. Dating: Activities to do together this week
 3. Mindset: Attitude for relationship improvement
 
-One-Line Advice
+${relationshipTitles.oneLineAdvice}
 💕 A warm word that penetrates the core of the relationship
 
 Rules:
+- Use the exact section headers as provided above in square brackets
 - Emotional and empathetic tone
 - Specific action suggestions
 - Balance both perspectives
@@ -452,9 +746,10 @@ ${languageInstruction}
                     break;
                     
                 case 'yesNo':
+                    const yesNoTitles = getYesNoSectionTitles(language);
                     prompt = `
 You are a tarot expert. Make a clear yes/no judgment.
-Do not use markdown syntax like asterisks or hashtags.
+Do not use markdown syntax like asterisks or hashtags or special characters except for the section headers in square brackets.
 
 User mood: ${userMood}
 
@@ -463,31 +758,32 @@ ${cards.map(c => c.name).join(', ')}
 
 Answer exactly in the format below:
 
-Final Answer
+${yesNoTitles.finalAnswer}
 Analyze the drawn cards comprehensively and choose only one of these three:
 ⭕ Yes
 ❌ No
 ⚠️ Conditional Yes
 
-Judgment Basis
+${yesNoTitles.judgmentBasis}
 Count positive and negative cards specifically.
 Example: Positive cards: 3 (The Sun, The Star, The World)
 Negative cards: 1 (The Tower)
 Neutral cards: 1 (The Hermit)
 
-Core Message
+${yesNoTitles.coreMessage}
 The key message from the cards in 1-2 sentences
 
-Success Conditions
+${yesNoTitles.successConditions}
 To become "Yes": 1-2 specific conditions
 
-Timing Prediction
+${yesNoTitles.timingPrediction}
 Possible realization period: 2 weeks ~ 2 months
 
-Action Guide
+${yesNoTitles.actionGuide}
 1-2 things to do now regardless of the answer
 
 Rules:
+- Use the exact section headers as provided above in square brackets
 - Choose only one final answer
 - Show probability as percentage (75%)
 - Be clear without ambiguity

@@ -45,8 +45,6 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
   
   // Layout Constants
   static const _minCardWidth = 50.0;
-  static const _minLabelFontSize = 11.0;
-  static const _defaultLabelFontSize = 14.0;
   static const _minCardNameFontSize = 12.0;
   static const _defaultCardNameFontSize = 14.0;
   
@@ -185,95 +183,103 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
     });
   }
   
-  // 켈틱 크로스 배치 계산 - 반응형 개선
+  // 켈틱 크로스 배치 계산 - 정확한 켈틱 크로스 형태 (간격 넓게)
   List<CardPosition> _calculateCelticCrossPositions(Size size) {
-    final isSmallScreen = size.width < 380;
-    final cardSize = _getOptimizedCardSize(size, 10);
+    // 카드 크기
+    const cardWidth = 50.0;
+    const cardHeight = 75.0;
+    const cardSize = Size(cardWidth, cardHeight);
     
-    // 작은 화면에서는 레이아웃 조정
-    final centerX = size.width * (isSmallScreen ? 0.35 : 0.38);
-    final centerY = size.height * 0.5;
-    final spacing = cardSize.width * (isSmallScreen ? 0.12 : 0.15);
+    // Cross 섹션 중앙 (왼쪽)
+    final crossCenterX = size.width * 0.3;
+    final crossCenterY = size.height * 0.5;
     
-    // Staff 위치 계산 - 화면 크기에 따라 조정
-    final staffX = size.width * (isSmallScreen ? 0.75 : 0.72);
-    final staffSpacing = cardSize.height * (isSmallScreen ? 0.06 : 0.08);
-    final staffStartY = centerY - (cardSize.height * 1.4 + staffSpacing * 1.5);
+    // Staff 섹션 위치 (오른쪽 수직선)
+    final staffX = size.width * 0.75;
+    
+    // 카드 이름이 잘 보이도록 간격을 넓게
+    const spacing = 40.0;
     
     return [
-      // 0: 현재 상황 (중앙)
+      // 0: Present (중앙)
       CardPosition(
-        x: centerX,
-        y: centerY,
+        x: crossCenterX,
+        y: crossCenterY,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
+        hasGlow: true,
       ),
-      // 1: 도전/교차 (중앙, 회전)
+      // 1: Challenge (중앙과 겹침, 90도 회전)
       CardPosition(
-        x: centerX,
-        y: centerY,
+        x: crossCenterX,
+        y: crossCenterY,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 90,
+        hasGlow: true,
       ),
-      // 2: 의식적 목표 (위)
+      // 2: Above center (top of cross)
       CardPosition(
-        x: centerX,
-        y: centerY - cardSize.height - spacing,
+        x: crossCenterX,
+        y: crossCenterY - cardHeight - spacing,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
-      // 3: 무의식적 기반 (아래)
+      // 3: Below center (bottom of cross)
       CardPosition(
-        x: centerX,
-        y: centerY + cardSize.height + spacing,
+        x: crossCenterX,
+        y: crossCenterY + cardHeight + spacing,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
-      // 4: 과거 (왼쪽)
+      // 4: Left of center (left of cross)
       CardPosition(
-        x: centerX - cardSize.width - spacing,
-        y: centerY,
+        x: crossCenterX - cardWidth - spacing,
+        y: crossCenterY,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
-      // 5: 가능한 미래 (오른쪽)
+      // 5: Right of center (right of cross)
       CardPosition(
-        x: centerX + cardSize.width + spacing,
-        y: centerY,
+        x: crossCenterX + cardWidth + spacing,
+        y: crossCenterY,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
-      // 6-9: 오른쪽 기둥 (아래에서 위로)
+      // STAFF - 오른쪽 수직선 (간격 넓게)
+      // 6: Staff 맨 아래
       CardPosition(
         x: staffX,
-        y: staffStartY + (cardSize.height + staffSpacing) * 3,
+        y: crossCenterY + (cardHeight + spacing) * 1.5,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
+      // 7: Staff 아래에서 둘째
       CardPosition(
         x: staffX,
-        y: staffStartY + (cardSize.height + staffSpacing) * 2,
+        y: crossCenterY + (cardHeight + spacing) * 0.5,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
+      // 8: Staff 위에서 둘째
       CardPosition(
         x: staffX,
-        y: staffStartY + (cardSize.height + staffSpacing),
+        y: crossCenterY - (cardHeight + spacing) * 0.5,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
       ),
+      // 9: Staff 맨 위
       CardPosition(
         x: staffX,
-        y: staffStartY,
+        y: crossCenterY - (cardHeight + spacing) * 1.5,
         width: cardSize.width,
         height: cardSize.height,
         rotation: 0,
@@ -586,19 +592,19 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
     // 화면 크기에 따른 스케일 조정
     final screenScale = (availableSize.width / 400).clamp(0.7, 1.4);
     
-    // 카드 수에 따른 스케일 조정
+    // 카드 수에 따른 스케일 조정 - 더 크게 설정
     double countScale = 1.0;
     if (cardCount >= 10) {
-      countScale = 0.75;
+      countScale = 0.85; // 0.75 -> 0.85로 증가
     } else if (cardCount >= 7) {
-      countScale = 0.85;
+      countScale = 0.95; // 0.85 -> 0.95로 증가
     } else if (cardCount >= 5) {
       // 5장일 때 화면 크기에 따라 다르게 조정
-      countScale = availableSize.width < 380 ? 0.9 : 0.95;
+      countScale = availableSize.width < 380 ? 1.0 : 1.05; // 0.9 -> 1.0, 0.95 -> 1.05
     } else if (cardCount == 3) {
-      countScale = 1.1;
+      countScale = 1.2; // 1.1 -> 1.2
     } else if (cardCount == 1) {
-      countScale = 1.4;
+      countScale = 1.5; // 1.4 -> 1.5
     }
     
     final width = baseWidth * screenScale * countScale;
@@ -609,8 +615,8 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
   
   // 최적화된 카드 사이즈 계산 (7장, 10장용)
   Size _getOptimizedCardSize(Size availableSize, int cardCount) {
-    double baseWidth = 80;
-    double baseHeight = 120;
+    const double baseWidth = 80;
+    const double baseHeight = 120;
     
     // 화면 크기에 따른 동적 스케일
     final screenScale = (availableSize.width / 400).clamp(0.65, 1.4);
@@ -618,9 +624,9 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
     // 카드 수에 따른 최적화된 스케일
     double countScale = 1.0;
     if (cardCount == 10) {
-      countScale = 0.75; // 약간 증가
+      countScale = 0.85; // 0.75 -> 0.85로 증가
     } else if (cardCount == 7) {
-      countScale = 0.85; // 약간 증가
+      countScale = 0.95; // 0.85 -> 0.95로 증가
     }
     
     final width = baseWidth * screenScale * countScale;
@@ -703,6 +709,7 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
               index: index,
               width: cardPosition.width,
               height: cardPosition.height,
+              hasGlow: cardPosition.hasGlow,
             ),
             
             // 카드 이름 - 동적 크기 조정
@@ -715,42 +722,69 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
   }
   
   bool _shouldShowPositionLabel(double cardWidth) {
-    // 카드 크기에 따라 라벨 표시 여부 결정
-    return cardWidth >= 45;
+    // 7장, 10장 스프레드는 항상 라벨 표시
+    if (widget.spread.cardCount >= 7) return true;
+    // 다른 스프레드는 카드 크기에 따라 결정
+    return cardWidth >= 55;
   }
   
   bool _shouldShowCardName(double cardWidth) {
-    // 카드 크기에 따라 카드 이름 표시 여부 결정
-    return cardWidth >= 50;
+    // Celtic Cross는 카드 이름 숨김 (하단에 별도 표시)
+    if (widget.spread.type == SpreadType.celticCross) return false;
+    // 7장 스프레드는 카드 이름 숨김 (공간 절약)
+    if (widget.spread.cardCount >= 7) return false;
+    // 다른 스프레드는 카드 크기에 따라 결정
+    return cardWidth >= 60;
   }
   
   Widget _buildPositionLabel(SpreadPosition position, double cardWidth) {
-    // 카드 크기에 따른 동적 폰트 크기
-    final fontSize = _calculateLabelFontSize(cardWidth);
-    final padding = cardWidth < 60 
-        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 2)
-        : const EdgeInsets.symmetric(horizontal: 12, vertical: 4);
-    
     // 현재 로케일 가져오기
     final locale = Localizations.localeOf(context).languageCode;
+    final labelText = position.getLocalizedTitle(locale);
+    
+    // 텍스트 길이에 따른 동적 폰트 크기 조정
+    double fontSize;
+    if (labelText.length > 15) {
+      fontSize = 10.0;
+    } else if (labelText.length > 12) {
+      fontSize = 11.0;
+    } else {
+      fontSize = 12.0;
+    }
+    
+    const padding = EdgeInsets.symmetric(horizontal: 12, vertical: 6);
+    
+    // maxWidth를 더 넉넉하게 설정
+    final maxWidth = cardWidth * 2.0;
     
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      padding: padding,
-      decoration: BoxDecoration(
-        color: AppColors.blackOverlay60,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: AppColors.whiteOverlay20,
-          width: 1,
-        ),
-      ),
-      child: Text(
-        position.getLocalizedTitle(locale),
-        style: AppTextStyles.bodySmall.copyWith(
-          fontSize: fontSize,
-          color: AppColors.fogGray,
-          fontWeight: FontWeight.w600,
+      margin: const EdgeInsets.only(bottom: 8),
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: GlassMorphismContainer(
+        padding: padding,
+        borderRadius: 12,
+        backgroundColor: AppColors.blackOverlay40,
+        borderColor: AppColors.whiteOverlay20,
+        blur: 10,
+        child: Text(
+          labelText,
+          style: AppTextStyles.bodySmall.copyWith(
+            fontSize: fontSize,
+            color: AppColors.ghostWhite,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.3,
+            shadows: const [
+              Shadow(
+                color: AppColors.blackOverlay60,
+                blurRadius: 4,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.visible,
+          softWrap: true, // 한 단어가 쪼개지지 않게
         ),
       ),
     ).animate()
@@ -763,6 +797,7 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
     required int index,
     required double width,
     required double height,
+    bool hasGlow = false,
   }) {
     return Container(
       width: width,
@@ -770,16 +805,38 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(
-            color: AppColors.evilGlow.withAlpha(31),
-            blurRadius: 15,
-            spreadRadius: 1,
+          // 기본 그림자 효과 강화
+          const BoxShadow(
+            color: AppColors.blackOverlay60,
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: Offset(0, 4),
           ),
+          // 골든 글로우 효과 (Present/Challenge 카드용)
+          if (hasGlow) ...[
+            BoxShadow(
+              color: AppColors.goldenGlow.withAlpha(80),
+              blurRadius: 30,
+              spreadRadius: 5,
+            ),
+            BoxShadow(
+              color: AppColors.goldenGlow.withAlpha(40),
+              blurRadius: 50,
+              spreadRadius: 10,
+            ),
+          ],
+          // 일반 카드 글로우
+          if (!hasGlow)
+            BoxShadow(
+              color: AppColors.mysticPurple.withAlpha(40),
+              blurRadius: 20,
+              spreadRadius: 1,
+            ),
         ],
       ),
       child: card != null
         ? TarotCardFront(
-            cardName: card.nameKr,
+            cardName: card.getLocalizedName(Localizations.localeOf(context).languageCode),
             imagePath: card.imagePath,
             showDetails: false,
             width: width,
@@ -833,41 +890,48 @@ class _SpreadLayoutWidgetState extends State<SpreadLayoutWidget>
   
   Widget _buildCardNameLabel(TarotCardModel card, double cardWidth) {
     // 카드 크기에 따른 동적 폰트 크기
-    final fontSize = _calculateCardNameFontSize(cardWidth);
+    double fontSize = _calculateCardNameFontSize(cardWidth);
+    
+    // Celtic Cross는 더 작은 폰트 사용
+    if (widget.spread.type == SpreadType.celticCross) {
+      fontSize = 10.0;
+    }
     
     // 현재 로케일 가져오기
     final locale = Localizations.localeOf(context).languageCode;
     
     return Container(
-      margin: const EdgeInsets.only(top: 6),
-      constraints: BoxConstraints(maxWidth: cardWidth + 20),
+      margin: const EdgeInsets.only(top: 4),
+      constraints: BoxConstraints(maxWidth: cardWidth + 30),
       child: Text(
         card.getLocalizedName(locale),
         style: AppTextStyles.bodySmall.copyWith(
           fontSize: fontSize,
-          color: AppColors.textMystic,
-          fontWeight: FontWeight.w600,
+          color: AppColors.ghostWhite,
+          fontWeight: FontWeight.w700,
+          shadows: const [
+            Shadow(
+              color: AppColors.blackOverlay60,
+              blurRadius: 2,
+              offset: Offset(0, 1),
+            ),
+          ],
         ),
         textAlign: TextAlign.center,
-        maxLines: cardWidth < 60 ? 1 : 2,
-        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        overflow: TextOverflow.visible,
+        softWrap: true,
       ),
     ).animate()
         .fadeIn(delay: const Duration(milliseconds: 400))
         .slideY(begin: 0.2, end: 0);
   }
   
-  // 라벨 폰트 크기 계산
-  double _calculateLabelFontSize(double cardWidth) {
-    if (cardWidth < 55) return _minLabelFontSize;
-    if (cardWidth < 70) return 12;
-    return _defaultLabelFontSize;
-  }
   
   // 카드 이름 폰트 크기 계산
   double _calculateCardNameFontSize(double cardWidth) {
-    if (cardWidth < 60) return _minCardNameFontSize;
-    if (cardWidth < 75) return 13;
+    if (cardWidth < 70) return _minCardNameFontSize;
+    if (cardWidth < 85) return 13;
     return _defaultCardNameFontSize;
   }
 }
@@ -879,6 +943,7 @@ class CardPosition {
   final double width;
   final double height;
   final double rotation;
+  final bool hasGlow; // 골든 글로우 효과 여부
   
   const CardPosition({
     required this.x,
@@ -886,5 +951,6 @@ class CardPosition {
     required this.width,
     required this.height,
     required this.rotation,
+    this.hasGlow = false,
   });
 }

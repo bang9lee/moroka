@@ -9,17 +9,15 @@ import '../../../data/models/tarot_reading_model.dart';
 import '../../../providers.dart';
 import '../../../providers/locale_provider.dart';
 import '../../../core/utils/app_logger.dart';
+import '../../../core/constants/app_constants.dart';
 
 final resultChatViewModelProvider = 
     StateNotifierProvider<ResultChatViewModel, ResultChatState>((ref) {
   return ResultChatViewModel(ref);
 });
 
-// 광고 시청 횟수 추적
+// 광고 시청 횟수 추적 (이 화면에서만 사용)
 final adWatchCountProvider = StateProvider<int>((ref) => 0);
-
-// 채팅 턴 카운트 추적
-final chatTurnCountProvider = StateProvider<int>((ref) => 0);
 
 class ResultChatViewModel extends StateNotifier<ResultChatState> {
   final Ref _ref;
@@ -126,6 +124,28 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     if (message.trim().isEmpty) return;
     
     AppLogger.debug("Sending message: $message");
+    
+    // 채팅 가능 여부 확인
+    final turnCount = _ref.read(chatTurnCountProvider);
+    final adWatchCount = _ref.read(adWatchCountProvider);
+    
+    // 채팅 횟수가 광고 시청 횟수보다 크거나 같으면 광고를 먼저 봐야 함
+    if (turnCount >= adWatchCount && adWatchCount < AppConstants.maxChatAdWatchCount) {
+      AppLogger.debug("Need to watch ad first - turn: $turnCount, adWatchCount: $adWatchCount");
+      state = state.copyWith(
+        showAdPrompt: true,
+      );
+      return;
+    }
+    
+    // 최대 채팅 횟수 도달
+    if (turnCount >= AppConstants.maxChatTurns) {
+      AppLogger.debug("Chat limit reached");
+      state = state.copyWith(
+        chatLimitReached: true,
+      );
+      return;
+    }
 
     // Add user message
     final userMessage = ChatMessageModel(
@@ -142,9 +162,9 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
 
     // 채팅 턴 카운트 증가
     _ref.read(chatTurnCountProvider.notifier).state++;
-    final turnCount = _ref.read(chatTurnCountProvider);
+    final newTurnCount = _ref.read(chatTurnCountProvider);
     
-    AppLogger.debug("Turn count: $turnCount");
+    AppLogger.debug("Turn count: $newTurnCount");
 
     try {
       final geminiService = _ref.read(geminiServiceProvider);
@@ -188,31 +208,13 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         await _updateChatHistory(userMessage, aiMessage);
       }
       
-      // 광고 시청 횟수 확인
-      final adWatchCount = _ref.read(adWatchCountProvider);
-      
-      // 매 메시지 후 광고 표시 (최대 3회까지)
-      // turnCount는 1부터 시작하므로 1, 2, 3번째 메시지 후에 광고 표시
-      if (turnCount <= 3 && adWatchCount < turnCount) {
-        AppLogger.debug("Showing ad prompt - turn: $turnCount, adWatchCount: $adWatchCount");
-        state = state.copyWith(
-          showAdPrompt: true,
-        );
-      } else if (turnCount > 3 && adWatchCount < 3) {
-        // 3회 채팅 완료했지만 광고를 모두 시청하지 않은 경우
-        AppLogger.debug("Chat limit reached without watching all ads");
-        state = state.copyWith(
-          chatLimitReached: true,
-        );
-      }
-      
     } catch (e, stack) {
       AppLogger.error("Error in sendMessage", e, stack);
       
       // Add error message
       final errorMessage = ChatMessageModel(
         id: _uuid.v4(),
-        message: "죄송합니다. 운명의 실이 잠시 엉켜버렸네요. 다시 시도해 주세요.",
+        message: "errorApiMessage", // Will be localized in UI
         isUser: false,
       );
       
@@ -244,8 +246,8 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         showAdPrompt: false,
       );
       
-      // 3회 광고 시청 완료 시
-      if (adWatchCount >= 3) {
+      // 최대 광고 시청 완료 시
+      if (adWatchCount >= AppConstants.maxChatAdWatchCount) {
         state = state.copyWith(
           chatLimitReached: true,
         );
@@ -310,8 +312,14 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
         timestamp: DateTime.now(),
       );
 
+      final readingId = _currentReadingId;
+      if (readingId == null) {
+        AppLogger.error("No current reading ID to update chat history");
+        return;
+      }
+      
       await firestoreService.addChatExchange(
-        readingId: _currentReadingId!,
+        readingId: readingId,
         exchange: exchange,
       );
     } catch (e) {
@@ -324,17 +332,18 @@ class ResultChatViewModel extends StateNotifier<ResultChatState> {
     TarotSpread spread,
     String userMood,
   ) {
-    final cardNames = cards.map((c) => c.nameKr).join(', ');
-    return '''
-${spread.nameKr} 배열이 펼쳐졌습니다.
-
-선택하신 카드들: $cardNames
-
-이 카드들이 만들어내는 에너지가 당신의 $userMood 마음과 공명하고 있습니다.
-각 카드가 전하는 메시지들이 서로 연결되어 더 큰 그림을 그리고 있네요.
-
-잠시 후 더 깊은 해석을 전해드리겠습니다...
-''';
+    // Get current locale
+    final locale = _ref.read(localeProvider);
+    final languageCode = locale?.languageCode ?? 'en';
+    
+    // Get card names based on locale
+    final cardNames = cards.map((c) => c.getLocalizedName(languageCode)).join(', ');
+    
+    // Get spread name based on locale
+    final spreadName = languageCode == 'ko' ? spread.nameKr : spread.name;
+    
+    // Return template message for UI to localize
+    return 'defaultInterpretation|$spreadName|$cardNames|$userMood';
   }
 
   void reset() {

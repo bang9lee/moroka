@@ -1,13 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers.dart';
 import '../../../data/repositories/ad_repository.dart';
+import '../../../core/utils/app_logger.dart';
 
 final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((ref) {
   final adRepository = ref.watch(adRepositoryProvider);
   return MainViewModel(ref, adRepository);
 });
-
-final userMoodProvider = StateProvider<String?>((ref) => null);
 
 class MainViewModel extends StateNotifier<MainState> {
   final Ref _ref;
@@ -19,7 +18,7 @@ class MainViewModel extends StateNotifier<MainState> {
     try {
       await _adRepository.initializeAds();
     } catch (e) {
-      // Handle ad initialization error
+      AppLogger.error('Failed to initialize ads', e);
     }
   }
 

@@ -10,6 +10,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/app_logger.dart';
 import '../../../providers.dart';
+import '../../../data/models/user_model.dart';
 import '../../screens/login/login_viewmodel.dart';
 import 'glass_morphism_container.dart';
 
@@ -133,7 +134,7 @@ class MenuBottomSheet extends ConsumerWidget {
 
 /// 사용자 프로필 섹션
 class _UserProfileSection extends StatelessWidget {
-  final dynamic user;
+  final UserModel? user;
   
   const _UserProfileSection({required this.user});
 

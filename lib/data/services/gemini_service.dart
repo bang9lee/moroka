@@ -6,6 +6,8 @@ import '../models/ai_interpretation_model.dart';
 import '../repositories/cache_repository.dart';
 import '../../core/utils/app_logger.dart';
 import '../../core/utils/input_validator.dart';
+import '../../core/utils/retry_helper.dart';
+import '../../core/errors/app_exceptions.dart';
 import '../../core/constants/fallback_messages.dart';
 import '../../l10n/generated/app_localizations.dart';
 
@@ -42,33 +44,53 @@ class GeminiService {
 }
   
   /// Firebase Function 호출 헬퍼 메서드
+  /// Firebase Functions 호출 헬퍼 (재시도 로직 포함)
   Future<T> _callFunction<T>(String functionName, Map<String, dynamic> data) async {
-    try {
-      final callable = _functions.httpsCallable(
-        functionName,
-        options: HttpsCallableOptions(timeout: _timeout),
-      );
-      
-      final result = await callable.call(data);
-      return result.data as T;
-    } on FirebaseFunctionsException catch (e) {
-      AppLogger.error("Firebase Functions error: ${e.code} - ${e.message}");
-      
-      // 에러 타입별 처리
-      switch (e.code) {
-        case 'unauthenticated':
-          throw Exception('로그인이 필요합니다.');
-        case 'resource-exhausted':
-          throw Exception('오늘의 무료 사용량을 초과했습니다.');
-        case 'deadline-exceeded':
-          throw Exception('요청 시간이 초과되었습니다. 다시 시도해주세요.');
-        default:
-          throw Exception('AI 서비스 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    } catch (e) {
-      AppLogger.error("Unexpected error calling function: $functionName", e);
-      throw Exception('네트워크 오류가 발생했습니다.');
-    }
+    return RetryHelper.execute(
+      operation: () async {
+        try {
+          final callable = _functions.httpsCallable(
+            functionName,
+            options: HttpsCallableOptions(timeout: _timeout),
+          );
+          
+          final result = await callable.call(data);
+          
+          if (result.data == null) {
+            throw ApiException.invalidResponse();
+          }
+          
+          return result.data as T;
+        } on FirebaseFunctionsException catch (e) {
+          AppLogger.error("Firebase Functions error: ${e.code} - ${e.message}");
+          
+          // 에러 타입별 처리
+          switch (e.code) {
+            case 'unauthenticated':
+              throw AuthException(code: 'unauthenticated', message: e.message);
+            case 'resource-exhausted':
+              throw ApiException.quotaExceeded();
+            case 'deadline-exceeded':
+              throw NetworkException.connectionTimeout();
+            case 'unavailable':
+              throw NetworkException.serverError();
+            case 'invalid-argument':
+              throw ApiException(code: 'invalid_argument', message: e.message);
+            default:
+              throw ApiException(code: e.code, message: e.message);
+          }
+        } catch (e) {
+          if (e is AppException) rethrow;
+          AppLogger.error("Unexpected error calling function: $functionName", e);
+          throw NetworkException(code: 'unknown_error', originalError: e);
+        }
+      },
+      operationName: 'GeminiService.$functionName',
+      policy: RetryPolicy.standard,
+      onRetry: (attempt, error) {
+        AppLogger.warning('Retrying $functionName (attempt $attempt): $error');
+      },
+    );
   }
   
   /// 단일 카드 해석 (원카드용)
@@ -80,7 +102,7 @@ class GeminiService {
     try {
       // 입력 유효성 검사
       if (!InputValidator.isValidMood(userMood)) {
-        throw Exception('유효하지 않은 감정 입력입니다.');
+        throw Exception('Invalid emotion input.');
       }
       
       final sanitizedMood = InputValidator.sanitizeText(userMood);
@@ -114,7 +136,7 @@ class GeminiService {
       
       final interpretation = result['interpretation'] as String?;
       if (interpretation == null || interpretation.isEmpty) {
-        throw Exception('해석 결과를 받지 못했습니다.');
+        throw Exception('Could not receive interpretation result.');
       }
       
       // 캐시 저장
@@ -154,7 +176,7 @@ class GeminiService {
     // 원카드는 단일 해석 함수 사용
     if (spreadType == SpreadType.oneCard) {
       return generateTarotInterpretation(
-        cardName: drawnCards[0].name,
+        cardName: drawnCards[0].getLocalizedName(language),
         userMood: userMood,
         language: language,
       );
@@ -180,11 +202,12 @@ class GeminiService {
       
       AppLogger.debug("Generating spread interpretation for: ${spreadType.name}");
       
-      // 카드 정보 준비
+      // 카드 정보 준비 - 언어별 로컬라이즈된 이름 사용
       final cardsData = drawnCards.map((card) => {
-        'name': card.name,
+        'name': card.getLocalizedName(language),
         'nameKr': card.nameKr,
         'id': card.id,
+        'nameEn': card.name, // 영어 이름도 참고용으로 포함
       }).toList();
       
       final Map<String, dynamic> result = await _callFunction(
@@ -194,14 +217,14 @@ class GeminiService {
           'cards': cardsData,
           'userMood': userMood,
           'spreadName': spread.name,
-          'positions': spread.positions.map((p) => p.titleKr).toList(),
+          'positions': spread.positions.map((p) => p.getLocalizedTitle(language)).toList(),
           'language': language,
         },
       );
       
       final interpretation = result['interpretation'] as String?;
       if (interpretation == null || interpretation.isEmpty) {
-        throw Exception('해석 결과를 받지 못했습니다.');
+        throw Exception('Could not receive interpretation result.');
       }
       
       // 캐시 저장
@@ -275,7 +298,7 @@ class GeminiService {
       
       final response = result['response'] as String?;
       if (response == null || response.isEmpty) {
-        throw Exception('응답을 생성하지 못했습니다.');
+        throw Exception('Failed to generate response.');
       }
       
       AppLogger.debug("Successfully generated chat response");
@@ -292,7 +315,7 @@ class GeminiService {
   /// 단일 카드 폴백 해석
   String _getFallbackInterpretation(String cardName, String userMood) {
     if (_fallbackMessages == null) {
-      return '카드 해석을 생성하는 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
+      return 'An error occurred while generating card interpretation. Please try again later.';
     }
     return _fallbackMessages!.getSingleCardFallback(cardName, userMood);
   }
@@ -305,22 +328,22 @@ class GeminiService {
   ) {
     switch (type) {
       case SpreadType.threeCard:
-        return _fallbackMessages?.getThreeCardFallback(cards, userMood) ?? '카드 해석을 생성하는 중 오류가 발생했습니다.';
+        return _fallbackMessages?.getThreeCardFallback(cards, userMood) ?? 'An error occurred while generating card interpretation.';
       case SpreadType.yesNo:
-        return _fallbackMessages?.getYesNoFallback(cards, userMood) ?? '카드 해석을 생성하는 중 오류가 발생했습니다.';
+        return _fallbackMessages?.getYesNoFallback(cards, userMood) ?? 'An error occurred while generating card interpretation.';
       case SpreadType.relationship:
-        return _fallbackMessages?.getRelationshipFallback(cards, userMood) ?? '카드 해석을 생성하는 중 오류가 발생했습니다.';
+        return _fallbackMessages?.getRelationshipFallback(cards, userMood) ?? 'An error occurred while generating card interpretation.';
       case SpreadType.celticCross:
-        return _fallbackMessages?.getCelticCrossFallback(cards, userMood) ?? '카드 해석을 생성하는 중 오류가 발생했습니다.';
+        return _fallbackMessages?.getCelticCrossFallback(cards, userMood) ?? 'An error occurred while generating card interpretation.';
       default:
-        return _fallbackMessages?.getSingleCardFallback(cards.first.nameKr, userMood) ?? '카드 해석을 생성하는 중 오류가 발생했습니다.';
+        return _fallbackMessages?.getSingleCardFallback(cards.first.nameKr, userMood) ?? 'An error occurred while generating card interpretation.';
     }
   }
   
   /// 채팅 폴백 응답
   String _getChatFallbackResponse(String cardName, String userMessage) {
     if (_fallbackMessages == null) {
-      return '죄송합니다. 지금은 응답을 생성할 수 없습니다. 나중에 다시 시도해주세요.';
+      return 'Sorry, I cannot generate a response right now. Please try again later.';
     }
     return _fallbackMessages!.getChatFallbackResponse(cardName, userMessage);
   }

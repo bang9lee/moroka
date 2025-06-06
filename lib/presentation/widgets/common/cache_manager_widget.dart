@@ -65,7 +65,7 @@ class _CacheManagerWidgetState extends ConsumerState<CacheManagerWidget> {
       ),
     );
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       setState(() => _isLoading = true);
       
       final cacheRepository = ref.read(cacheRepositoryProvider);

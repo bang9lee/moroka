@@ -80,7 +80,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
         child: SafeArea(
           child: Column(
             children: [
-              _buildHeader(context),
+              _buildHeader(context, l10n),
               Expanded(
                 child: _buildContent(screenSize, l10n),
               ),
@@ -91,7 +91,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -132,7 +132,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '앱 정보',
+                  l10n.aboutTitle,
                   style: AppTextStyles.displaySmall.copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -360,7 +360,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ),
           const SizedBox(height: 20),
           Text(
-            '운명의 카드가 당신을 기다립니다',
+            AppLocalizations.of(context)!.aboutTagline,
             style: AppTextStyles.displaySmall.copyWith(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -369,9 +369,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            'MOROKA는 고대의 신비로운 타로 카드를 통해 당신의 운명을 읽어드립니다. '
-            '78장의 카드 하나하나에 담긴 우주의 메시지를 AI 타로 마스터가 해석해 드립니다.\n\n'
-            '어둠 속에서 빛나는 진실, 그리고 당신만을 위한 특별한 메시지를 만나보세요.',
+            AppLocalizations.of(context)!.aboutDescription,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.textSecondary,
               height: 1.8,

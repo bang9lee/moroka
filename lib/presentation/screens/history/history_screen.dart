@@ -30,8 +30,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _dateFormat = DateFormat('yyyy년 MM월 dd일 HH:mm');
     _initializeScreen();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize date format with current locale
+    final locale = Localizations.localeOf(context);
+    _dateFormat = DateFormat.yMMMd(locale.toString()).add_jm();
   }
 
   void _initializeScreen() {
@@ -57,6 +64,24 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     super.dispose();
   }
 
+  String _getLocalizedSpreadNameFromKey(String spreadNameKey) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (spreadNameKey) {
+      case 'spreadOneCard':
+        return l10n.spreadOneCard;
+      case 'spreadThreeCard':
+        return l10n.spreadThreeCard;
+      case 'spreadCelticCross':
+        return l10n.spreadCelticCross;
+      case 'spreadRelationship':
+        return l10n.spreadRelationship;
+      case 'spreadYesNo':
+        return l10n.spreadYesNo;
+      default:
+        return l10n.spreadOneCard;
+    }
+  }
+
   String _getLocalizedSpreadName(String? spreadType) {
     final l10n = AppLocalizations.of(context)!;
     switch (spreadType) {
@@ -73,6 +98,78 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       default:
         return spreadType ?? '';
     }
+  }
+
+  Widget _buildDeleteAllButton(AppLocalizations l10n) {
+    return GestureDetector(
+      onTap: _showDeleteAllConfirmDialog,
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.bloodMoon.withAlpha(30),
+              AppColors.crimsonGlow.withAlpha(20),
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppColors.bloodMoon.withAlpha(50),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.bloodMoon.withAlpha(20),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: _showDeleteAllConfirmDialog,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.delete_sweep_rounded,
+                    color: AppColors.crimsonGlow,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      l10n.deleteAll,
+                      style: AppTextStyles.buttonLarge.copyWith(
+                        color: AppColors.crimsonGlow,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ).animate()
+        .fadeIn(duration: const Duration(milliseconds: 400))
+        .slideY(
+          begin: -0.2,
+          end: 0,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOutBack,
+        ),
+    );
   }
 
   @override
@@ -101,63 +198,76 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
   Widget _buildHeader(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.shadowGray.withAlpha(200),
-            AppColors.shadowGray.withAlpha(0),
-          ],
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.whiteOverlay10,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: AccessibleIconButton(
-              onPressed: () => context.pop(),
-              icon: Icons.arrow_back,
-              semanticLabel: l10n.back,
-              color: AppColors.ghostWhite,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.menuHistory,
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 24),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.menuHistoryDesc,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.fogGray,
-                  ),
-                ),
+    final state = ref.watch(historyViewModelProvider);
+    
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.shadowGray.withAlpha(200),
+                AppColors.shadowGray.withAlpha(0),
               ],
             ),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.whiteOverlay10,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: AccessibleIconButton(
+                  onPressed: () => context.pop(),
+                  icon: Icons.arrow_back,
+                  semanticLabel: l10n.back,
+                  color: AppColors.ghostWhite,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.menuHistory,
+                      style: AppTextStyles.displaySmall.copyWith(fontSize: 24),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.menuHistoryDesc,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.fogGray,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (state.readings.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: _buildDeleteAllButton(l10n),
+          ),
+      ],
     );
   }
 
   Widget _buildContent(HistoryState state) {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (state.isLoading && state.readings.isEmpty) {
-      return const Center(
+      return Center(
         child: CustomLoadingIndicator(
           size: 60,
           color: AppColors.evilGlow,
-          message: '기록을 불러오는 중...',
+          message: l10n.loadingHistory,
         ),
       );
     }
@@ -248,7 +358,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   Widget _buildReadingCard(TarotReadingModel reading, int index) {
     final l10n = AppLocalizations.of(context)!;
     return Semantics(
-      label: '${reading.spreadName}, ${l10n.date}: ${_dateFormat.format(reading.createdAt)}',
+      label: '${_getLocalizedSpreadNameFromKey(reading.spreadNameKey)}, ${l10n.date}: ${_dateFormat.format(reading.createdAt)}',
       button: true,
       child: GestureDetector(
         onTap: () {
@@ -405,7 +515,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 Semantics(
                   label: '${AppLocalizations.of(context)!.chatCount}: ${reading.chatHistory.length}',
                   child: Text(
-                    '대화 ${reading.chatHistory.length}회',
+                    AppLocalizations.of(context)!.chatCount(reading.chatHistory.length),
                     style: AppTextStyles.bodySmall.copyWith(
                       color: AppColors.fogGray,
                     ),
@@ -416,6 +526,73 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
           ),
       ],
     );
+  }
+
+  Future<void> _showDeleteAllConfirmDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: GlassMorphismContainer(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: AppColors.error,
+                  size: 64,
+                ).animate()
+                  .scale(duration: const Duration(milliseconds: 600))
+                  .shake(duration: const Duration(milliseconds: 600)),
+                const SizedBox(height: 24),
+                Text(
+                  l10n.deleteAllConfirmTitle,
+                  style: AppTextStyles.heading2.copyWith(
+                    color: AppColors.error,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.deleteAllConfirmMessage,
+                  style: AppTextStyles.body,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AccessibleButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        text: l10n.cancel,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AccessibleButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        text: l10n.deleteAllButton,
+                        icon: Icons.delete_forever,
+                        isDestructive: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    
+    if ((confirmed ?? false) && mounted) {
+      await ref.read(historyViewModelProvider.notifier).deleteAllReadings();
+    }
   }
 
   void _showReadingDetail(TarotReadingModel reading) {
@@ -492,7 +669,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          reading.spreadName,
+          _getLocalizedSpreadNameFromKey(reading.spreadNameKey),
           style: AppTextStyles.displaySmall.copyWith(fontSize: 24),
         ),
         const SizedBox(height: 8),
@@ -511,7 +688,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '선택된 카드',
+          AppLocalizations.of(context)!.selectedCards,
           style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -549,11 +726,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Widget _buildDetailInterpretation(TarotReadingModel reading) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '해석',
+          l10n.interpretation,
           style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -579,11 +757,12 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   Widget _buildDetailChatHistory(TarotReadingModel reading) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '대화 기록',
+          l10n.chatHistory,
           style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -595,14 +774,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildChatMessage(
-                title: '질문',
+                title: l10n.question,
                 content: chat.userMessage,
                 color: AppColors.mysticPurple,
                 backgroundColor: AppColors.mysticPurple.withAlpha(50),
               ),
               const SizedBox(height: 8),
               _buildChatMessage(
-                title: '타로 마스터',
+                title: l10n.tarotMaster,
                 content: chat.aiResponse,
                 color: AppColors.evilGlow,
                 backgroundColor: AppColors.blackOverlay20,

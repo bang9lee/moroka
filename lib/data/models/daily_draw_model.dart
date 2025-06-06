@@ -1,3 +1,5 @@
+import '../../core/constants/app_constants.dart';
+
 class DailyDrawData {
   final DateTime lastResetDate;
   final int freeDrawsRemaining;
@@ -60,9 +62,9 @@ class DailyDrawData {
 
 // 카드 뽑기 제한 상수
 class DrawLimits {
-  static const int dailyFreeDraws = 1;
-  static const int maxAdDraws = 10;
-  static const int drawsPerAd = 1;
+  static const int dailyFreeDraws = AppConstants.dailyFreeDraws;  
+  static const int maxAdDraws = AppConstants.maxDrawAdWatchCount;     
+  static const int drawsPerAd = AppConstants.drawsPerAd;      
   
   static int get totalMaxDrawsPerDay => dailyFreeDraws + maxAdDraws;
 }

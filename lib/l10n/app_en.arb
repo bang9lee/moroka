@@ -286,6 +286,16 @@
     "description": "Label for celtic cross spread"
   },
   
+  "crossSection": "Cross - Current Situation",
+  "@crossSection": {
+    "description": "Celtic Cross spread cross section label"
+  },
+  
+  "staffSection": "Staff - Future Development",
+  "@staffSection": {
+    "description": "Celtic Cross spread staff section label"
+  },
+  
   "relationshipSpread": "Relationship Spread",
   "@relationshipSpread": {
     "description": "Label for relationship spread"
@@ -364,6 +374,11 @@
   "menuHistoryDesc": "Look back at your past destinies",
   "@menuHistoryDesc": {
     "description": "Menu item description: history"
+  },
+  
+  "loadingHistory": "Loading history...",
+  "@loadingHistory": {
+    "description": "Loading message for history screen"
   },
   
   "menuStatistics": "Statistics & Analysis",
@@ -468,7 +483,47 @@
   
   "errorNetworkFailed": "Please check your network connection",
   "@errorNetworkFailed": {
-    "description": "Error: network connection failed"
+    "description": "Network error message"
+  },
+
+  "errorUserDataLoad": "Unable to load user data",
+  "@errorUserDataLoad": {
+    "description": "Error loading user data"
+  },
+
+  "errorUserNotFound": "Email not registered",
+  "@errorUserNotFound": {
+    "description": "User not found error"
+  },
+
+  "errorWrongPassword": "Incorrect password",
+  "@errorWrongPassword": {
+    "description": "Wrong password error"
+  },
+
+  "errorUserDisabled": "Account has been disabled",
+  "@errorUserDisabled": {
+    "description": "User disabled error"
+  },
+
+  "errorTooManyRequests": "Too many attempts. Please try again later",
+  "@errorTooManyRequests": {
+    "description": "Too many requests error"
+  },
+
+  "errorInvalidCredential": "Invalid email or password",
+  "@errorInvalidCredential": {
+    "description": "Invalid credential error"
+  },
+
+  "errorLogoutFailed": "Error occurred during logout",
+  "@errorLogoutFailed": {
+    "description": "Logout failed error"
+  },
+
+  "errorPasswordResetFailed": "Failed to send password reset email",
+  "@errorPasswordResetFailed": {
+    "description": "Password reset failed error"
   },
   
   "errorNotEnoughCards": "Please select more cards",
@@ -851,7 +906,12 @@
     "description": "About screen subtitle"
   },
   
-  "aboutDescription": "MOROKA\n\nThe gate of fate has opened\nThe shadow oracle will interpret your future\n\nTraditional tarot interpretation with mystical AI\nProviding deep insights and wisdom",
+  "aboutTagline": "The cards of fate await you",
+  "@aboutTagline": {
+    "description": "About screen tagline"
+  },
+  
+  "aboutDescription": "MOROKA reads your destiny through ancient mystical tarot cards. Our AI Tarot Master interprets the cosmic messages contained in each of the 78 cards.\n\nDiscover the truth that shines in the darkness, and the special message meant just for you.",
   "@aboutDescription": {
     "description": "About app description"
   },
@@ -1151,6 +1211,76 @@
     "description": "Delete reading dialog message"
   },
   
+  "deleteAll": "Delete All",
+  "@deleteAll": {
+    "description": "Delete all button text"
+  },
+  
+  "deleteAllConfirmTitle": "Delete All Records?",
+  "@deleteAllConfirmTitle": {
+    "description": "Delete all confirmation dialog title"
+  },
+  
+  "deleteAllConfirmMessage": "This will permanently delete all tarot reading records. This action cannot be undone.",
+  "@deleteAllConfirmMessage": {
+    "description": "Delete all confirmation dialog message"
+  },
+  
+  "deleteAllButton": "Delete All",
+  "@deleteAllButton": {
+    "description": "Delete all confirmation button"
+  },
+  
+  "totalTarotReadings": "Total Tarot Readings",
+  "@totalTarotReadings": {
+    "description": "Statistics: Total tarot readings"
+  },
+  
+  "mostFrequentCard": "Most Frequent Card",
+  "@mostFrequentCard": {
+    "description": "Statistics: Most frequent card"
+  },
+  
+  "cardFrequencyTop5": "Card Frequency - Top 5",
+  "@cardFrequencyTop5": {
+    "description": "Statistics: Card frequency top 5"
+  },
+  
+  "moodAnalysis": "Mood Analysis",
+  "@moodAnalysis": {
+    "description": "Statistics: Mood analysis"
+  },
+  
+  "monthlyReadingTrend": "Monthly Reading Trend",
+  "@monthlyReadingTrend": {
+    "description": "Statistics: Monthly reading trend"
+  },
+  
+  "noData": "No data",
+  "@noData": {
+    "description": "No data available"
+  },
+  
+  "noDataToAnalyze": "No data to analyze",
+  "@noDataToAnalyze": {
+    "description": "Statistics: No data to analyze"
+  },
+  
+  "startTarotReading": "Start a tarot reading to see your statistics",
+  "@startTarotReading": {
+    "description": "Statistics: Start tarot reading message"
+  },
+  
+  "aboutTagline": "The cards of fate await you",
+  "@aboutTagline": {
+    "description": "About screen tagline"
+  },
+  
+  "aboutDescription": "MOROKA reads your destiny through ancient mystical tarot cards. Our AI Tarot Master interprets the cosmic messages contained in each of the 78 cards.\n\nDiscover the truth that shines in the darkness, and the special message meant just for you.",
+  "@aboutDescription": {
+    "description": "About screen description"
+  },
+  
   "cardOfFate": "Card of Fate",
   "@cardOfFate": {
     "description": "Card selection dialog title"
@@ -1324,6 +1454,71 @@
   "skip": "SKIP",
   "@skip": {
     "description": "Skip button text"
+  },
+  
+  "languageChanged": "Language changed successfully",
+  "@languageChanged": {
+    "description": "Language changed notification"
+  },
+  
+  "notificationsEnabled": "Notifications enabled",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "Notifications disabled",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "Vibration enabled",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "Vibration disabled",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "Animations enabled",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "Animations disabled",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "notificationPermissionDenied": "Notification permission denied",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "successBackup": "Data backed up successfully",
+  "@successBackup": {
+    "description": "Backup success message"
+  },
+  
+  "successChangePassword": "Password changed successfully",
+  "@successChangePassword": {
+    "description": "Password change success message"
+  },
+  
+  "errorWrongPassword": "Wrong password",
+  "@errorWrongPassword": {
+    "description": "Wrong password error"
+  },
+  
+  "errorWeakPassword": "Password too weak",
+  "@errorWeakPassword": {
+    "description": "Weak password error"
+  },
+  
+  "moreTitle": "More",
+  "@moreTitle": {
+    "description": "More section title"
   },
   
   "cardOfFate": "Card of Fate",
@@ -1746,6 +1941,16 @@
     "description": "Label for user's chat message"
   },
   
+  "tarotMaster": "Tarot Master",
+  "@tarotMaster": {
+    "description": "Label for tarot master/AI"
+  },
+  
+  "question": "Question",
+  "@question": {
+    "description": "Label for user's question"
+  },
+
   "tarotMasterResponse": "Tarot master's response",
   "@tarotMasterResponse": {
     "description": "Label for AI's chat response"
@@ -2174,5 +2379,480 @@
   "yesNoDescription": "Fortune telling for clear answers",
   "@yesNoDescription": {
     "description": "Yes/No spread description"
+  },
+
+  "errorApiMessage": "Sorry, the threads of fate have become tangled. Please try again.",
+  "@errorApiMessage": {
+    "description": "Error message when AI API fails"
+  },
+
+  "defaultInterpretationStart": "The {spreadName} spread has been laid out.",
+  "@defaultInterpretationStart": {
+    "description": "Default interpretation start",
+    "placeholders": {
+      "spreadName": {
+        "type": "String"
+      }
+    }
+  },
+
+  "selectedCardsLabel": "Selected cards: {cards}",
+  "@selectedCardsLabel": {
+    "description": "Label for selected cards",
+    "placeholders": {
+      "cards": {
+        "type": "String"
+      }
+    }
+  },
+
+  "cardEnergyResonance": "The energy created by these cards resonates with your {mood} heart.",
+  "@cardEnergyResonance": {
+    "description": "Card energy resonance message",
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
+  },
+
+  "deeperInterpretationComing": "Each card's message connects to form a larger picture.\n\nI will share a deeper interpretation shortly...",
+  "@deeperInterpretationComing": {
+    "description": "Message about deeper interpretation coming"
+  },
+
+  "waitingMessage": "Loading...",
+  "@waitingMessage": {
+    "description": "General waiting/loading message"
+  },
+
+  "errorNameTooShort": "Name must be at least 2 characters",
+  "@errorNameTooShort": {
+    "description": "Name too short error"
+  },
+
+  "nameAvailable": "Name is available",
+  "@nameAvailable": {
+    "description": "Name is available message"
+  },
+
+  "nameAlreadyTaken": "Name is already taken",
+  "@nameAlreadyTaken": {
+    "description": "Name already taken error"
+  },
+
+  "errorNameCheckFailed": "Error checking name availability",
+  "@errorNameCheckFailed": {
+    "description": "Name check failed error"
+  },
+
+  "emailAvailable": "Email is available",
+  "@emailAvailable": {
+    "description": "Email is available message"
+  },
+
+  "emailAlreadyRegistered": "Email is already registered",
+  "@emailAlreadyRegistered": {
+    "description": "Email already registered error"
+  },
+
+  "errorEmailCheckFailed": "Error checking email availability",
+  "@errorEmailCheckFailed": {
+    "description": "Email check failed error"
+  },
+
+  "messageRequired": "Please enter a message",
+  "@messageRequired": {
+    "description": "Message required error"
+  },
+
+  "messageTooLong": "Message must be within 500 characters",
+  "@messageTooLong": {
+    "description": "Message too long error"
+  },
+
+  "messageInvalidCharacters": "Message contains invalid characters",
+  "@messageInvalidCharacters": {
+    "description": "Invalid characters error"
+  },
+
+  "messageInvalidScript": "Message contains invalid script",
+  "@messageInvalidScript": {
+    "description": "Invalid script error"
+  },
+
+  "passwordRequired": "Please enter a password",
+  "@passwordRequired": {
+    "description": "Password required error"
+  },
+
+  "passwordStrengthWeak": "Weak",
+  "@passwordStrengthWeak": {
+    "description": "Weak password strength"
+  },
+
+  "passwordStrengthMedium": "Medium",
+  "@passwordStrengthMedium": {
+    "description": "Medium password strength"
+  },
+
+  "passwordStrengthStrong": "Strong",
+  "@passwordStrengthStrong": {
+    "description": "Strong password strength"
+  },
+  
+  "error": "Error",
+  "@error": {
+    "description": "Generic error title"
+  },
+  
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  
+  "errorInvalidFormat": "Invalid format",
+  "@errorInvalidFormat": {
+    "description": "Invalid format error"
+  },
+  
+  "errorUnexpected": "An unexpected error occurred",
+  "@errorUnexpected": {
+    "description": "Unexpected error message"
+  },
+  
+  "errorUnknown": "Unknown error occurred",
+  "@errorUnknown": {
+    "description": "Unknown error message"
+  },
+  
+  "errorNetworkTimeout": "Network connection timed out",
+  "@errorNetworkTimeout": {
+    "description": "Network timeout error"
+  },
+  
+  "errorNoInternet": "No internet connection",
+  "@errorNoInternet": {
+    "description": "No internet connection error"
+  },
+  
+  "errorServerError": "Server error occurred",
+  "@errorServerError": {
+    "description": "Server error message"
+  },
+  
+  "errorInvalidCredentials": "Invalid email or password",
+  "@errorInvalidCredentials": {
+    "description": "Invalid credentials error"
+  },
+  
+  "errorEmailNotVerified": "Email not verified",
+  "@errorEmailNotVerified": {
+    "description": "Email not verified error"
+  },
+  
+  "errorSessionExpired": "Session expired. Please login again",
+  "@errorSessionExpired": {
+    "description": "Session expired error"
+  },
+  
+  "errorQuotaExceeded": "Daily limit exceeded",
+  "@errorQuotaExceeded": {
+    "description": "Quota exceeded error"
+  },
+  
+  "errorInvalidResponse": "Invalid response from server",
+  "@errorInvalidResponse": {
+    "description": "Invalid response error"
+  },
+  
+  "errorRateLimitExceeded": "Too many requests. Please try again later",
+  "@errorRateLimitExceeded": {
+    "description": "Rate limit exceeded error"
+  },
+  
+  "errorDataNotFound": "Data not found",
+  "@errorDataNotFound": {
+    "description": "Data not found error"
+  },
+  
+  "errorDataCorrupted": "Data corrupted",
+  "@errorDataCorrupted": {
+    "description": "Data corrupted error"
+  },
+  
+  "errorSaveFailed": "Failed to save data",
+  "@errorSaveFailed": {
+    "description": "Save failed error"
+  },
+  
+  "errorPermissionDenied": "Permission denied",
+  "@errorPermissionDenied": {
+    "description": "Permission denied error"
+  },
+  
+  "errorPermissionRestricted": "Access restricted",
+  "@errorPermissionRestricted": {
+    "description": "Permission restricted error"
+  },
+  
+  "errorEmailAlreadyInUse": "Email already in use",
+  "@errorEmailAlreadyInUse": {
+    "description": "Email already in use error"
+  },
+  
+  "errorInvalidEmail": "Invalid email address",
+  "@errorInvalidEmail": {
+    "description": "Invalid email error"
+  },
+  
+  "errorWeakPassword": "Password is too weak",
+  "@errorWeakPassword": {
+    "description": "Weak password error"
+  },
+  
+  "errorNetworkRequestFailed": "Network request failed",
+  "@errorNetworkRequestFailed": {
+    "description": "Network request failed error"
+  },
+  
+  "errorOperationNotAllowed": "Operation not allowed",
+  "@errorOperationNotAllowed": {
+    "description": "Operation not allowed error"
+  },
+  
+  "errorAuthFailed": "Authentication failed",
+  "@errorAuthFailed": {
+    "description": "Authentication failed error"
+  },
+  
+  "languageChanged": "Language changed successfully",
+  "@languageChanged": {
+    "description": "Language change success message"
+  },
+  
+  "notificationsEnabled": "Notifications enabled",
+  "@notificationsEnabled": {
+    "description": "Notifications enabled message"
+  },
+  
+  "notificationsDisabled": "Notifications disabled",
+  "@notificationsDisabled": {
+    "description": "Notifications disabled message"
+  },
+  
+  "vibrationEnabled": "Vibration enabled",
+  "@vibrationEnabled": {
+    "description": "Vibration enabled message"
+  },
+  
+  "vibrationDisabled": "Vibration disabled",
+  "@vibrationDisabled": {
+    "description": "Vibration disabled message"
+  },
+  
+  "animationsEnabled": "Animations enabled",
+  "@animationsEnabled": {
+    "description": "Animations enabled message"
+  },
+  
+  "animationsDisabled": "Animations disabled",
+  "@animationsDisabled": {
+    "description": "Animations disabled message"
+  },
+  
+  "logoutSuccess": "Logged out successfully",
+  "@logoutSuccess": {
+    "description": "Logout success message"
+  },
+  
+  "deleteAccountSuccess": "Account deleted successfully",
+  "@deleteAccountSuccess": {
+    "description": "Delete account success message"
+  },
+  
+  "errorOccurred": "An error occurred",
+  "@errorOccurred": {
+    "description": "Generic error message"
+  },
+  
+  "notificationPermissionDenied": "Notification permission is required",
+  "@notificationPermissionDenied": {
+    "description": "Notification permission denied message"
+  },
+  
+  "generalSettings": "General Settings",
+  "@generalSettings": {
+    "description": "General settings section title"
+  },
+  
+  "accountSettings": "Account Settings",
+  "@accountSettings": {
+    "description": "Account settings section title"
+  },
+  
+  "moreTitle": "More",
+  "@moreTitle": {
+    "description": "More section title"
+  },
+  
+  "languageTitle": "Language",
+  "@languageTitle": {
+    "description": "Language setting title"
+  },
+  
+  "notificationsTitle": "Notifications",
+  "@notificationsTitle": {
+    "description": "Notifications setting title"
+  },
+  
+  "vibrationTitle": "Haptic Feedback",
+  "@vibrationTitle": {
+    "description": "Vibration setting title"
+  },
+  
+  "vibrationSubtitle": "Enable vibration feedback",
+  "@vibrationSubtitle": {
+    "description": "Vibration setting subtitle"
+  },
+  
+  "animationsTitle": "Animations",
+  "@animationsTitle": {
+    "description": "Animations setting title"
+  },
+  
+  "animationsSubtitle": "Enable UI animations",
+  "@animationsSubtitle": {
+    "description": "Animations setting subtitle"
+  },
+  
+  "dailyTarotReminder": "Get daily tarot reminders",
+  "@dailyTarotReminder": {
+    "description": "Daily tarot reminder setting"
+  },
+  
+  "deleteAccountConfirmMessage": "This action cannot be undone. All your data will be permanently deleted.",
+  "@deleteAccountConfirmMessage": {
+    "description": "Delete account confirmation message"
+  },
+  
+  "chatCount": "Chat {count} times",
+  "@chatCount": {
+    "description": "Chat count display",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "selectedCards": "Selected Cards",
+  "@selectedCards": {
+    "description": "Selected cards label"
+  },
+  
+  "aiInterpretation": "AI Interpretation",
+  "@aiInterpretation": {
+    "description": "AI interpretation title"
+  },
+  
+  "invalidEmotionInput": "Invalid emotion input.",
+  "@invalidEmotionInput": {
+    "description": "Error when emotion input is invalid"
+  },
+  
+  "interpretationNotReceived": "Could not receive interpretation result.",
+  "@interpretationNotReceived": {
+    "description": "Error when interpretation is not received"
+  },
+  
+  "responseGenerationFailed": "Failed to generate response.",
+  "@responseGenerationFailed": {
+    "description": "Error when response generation fails"
+  },
+  
+  "invalidEmailFormat": "Invalid email format.",
+  "@invalidEmailFormat": {
+    "description": "Error for invalid email format"
+  },
+  
+  "weakPassword": "Password is too weak. Please use at least 8 characters including uppercase, lowercase, numbers, and special characters.",
+  "@weakPassword": {
+    "description": "Error for weak password"
+  },
+  
+  "invalidUsername": "Username must be 3-20 characters using only letters, numbers, and underscores.",
+  "@invalidUsername": {
+    "description": "Error for invalid username"
+  },
+  
+  "signupError": "An error occurred during sign up.",
+  "@signupError": {
+    "description": "General signup error"
+  },
+  
+  "loginError": "An error occurred during login.",
+  "@loginError": {
+    "description": "General login error"
+  },
+  
+  "logoutError": "An error occurred during logout.",
+  "@logoutError": {
+    "description": "General logout error"
+  },
+  
+  "passwordResetEmailFailed": "Failed to send password reset email.",
+  "@passwordResetEmailFailed": {
+    "description": "Error when password reset email fails"
+  },
+  
+  "profileCreationFailed": "Failed to create user profile.",
+  "@profileCreationFailed": {
+    "description": "Error when profile creation fails"
+  },
+  
+  "noLoggedInUser": "No logged in user.",
+  "@noLoggedInUser": {
+    "description": "Error when no user is logged in"
+  },
+  
+  "profileUpdateFailed": "Failed to update profile.",
+  "@profileUpdateFailed": {
+    "description": "Error when profile update fails"
+  },
+  
+  "cardInterpretationFailed": "Failed to get card interpretation: {error}",
+  "@cardInterpretationFailed": {
+    "description": "Error when card interpretation fails",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "emailAlreadyInUse": "This email is already in use.",
+  "@emailAlreadyInUse": {
+    "description": "Error when email is already registered"
+  },
+  
+  "signupErrorWithMessage": "An error occurred during sign up: {message}",
+  "@signupErrorWithMessage": {
+    "description": "Signup error with specific message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "tooManyRequests": "Too many requests. Please try again later.",
+  "@tooManyRequests": {
+    "description": "Error for rate limiting"
+  },
+  
+  "verificationEmailError": "An error occurred while sending verification email.",
+  "@verificationEmailError": {
+    "description": "Error when sending verification email"
   }
 }

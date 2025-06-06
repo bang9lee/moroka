@@ -44,7 +44,7 @@ class SignUpViewModel extends StateNotifier<SignUpState> {
       if (trimmedName.length < 2) {
         return NameCheckResult(
           isAvailable: false,
-          message: '이름은 2자 이상이어야 합니다',
+          message: 'errorNameTooShort',
         );
       }
 
@@ -58,19 +58,19 @@ class SignUpViewModel extends StateNotifier<SignUpState> {
       if (querySnapshot.docs.isEmpty) {
         return NameCheckResult(
           isAvailable: true,
-          message: '사용 가능한 이름입니다',
+          message: 'nameAvailable',
         );
       } else {
         return NameCheckResult(
           isAvailable: false,
-          message: '이미 사용 중인 이름입니다',
+          message: 'nameAlreadyTaken',
         );
       }
     } catch (e) {
       AppLogger.error('Error checking name availability', e);
       return NameCheckResult(
         isAvailable: false,
-        message: '이름 확인 중 오류가 발생했습니다',
+        message: 'errorNameCheckFailed',
       );
     }
   }
@@ -84,7 +84,7 @@ class SignUpViewModel extends StateNotifier<SignUpState> {
       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(trimmedEmail)) {
         return EmailCheckResult(
           isAvailable: false,
-          message: '올바른 이메일 형식이 아닙니다',
+          message: 'errorEmailInvalid',
         );
       }
 
@@ -98,19 +98,19 @@ class SignUpViewModel extends StateNotifier<SignUpState> {
       if (querySnapshot.docs.isEmpty) {
         return EmailCheckResult(
           isAvailable: true,
-          message: '사용 가능한 이메일입니다',
+          message: 'emailAvailable',
         );
       } else {
         return EmailCheckResult(
           isAvailable: false,
-          message: '이미 가입된 이메일입니다',
+          message: 'emailAlreadyRegistered',
         );
       }
     } catch (e) {
       AppLogger.error('Error checking email availability', e);
       return EmailCheckResult(
         isAvailable: false,
-        message: '이메일 확인 중 오류가 발생했습니다',
+        message: 'errorEmailCheckFailed',
       );
     }
   }

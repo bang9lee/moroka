@@ -319,7 +319,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                                     child: Text(
                                       _nameCheckMessage!,
                                       style: AppTextStyles.bodySmall.copyWith(
-                                        color: _isNameAvailable == true 
+                                        color: (_isNameAvailable ?? false) 
                                             ? AppColors.spiritGlow 
                                             : AppColors.bloodMoon,
                                         fontSize: 12,
@@ -363,7 +363,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
                                     child: Text(
                                       _emailCheckMessage!,
                                       style: AppTextStyles.bodySmall.copyWith(
-                                        color: _isEmailAvailable == true 
+                                        color: (_isEmailAvailable ?? false) 
                                             ? AppColors.spiritGlow 
                                             : AppColors.bloodMoon,
                                         fontSize: 12,
@@ -645,7 +645,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen>
       );
     }
     
-    if (isAvailable == true) {
+    if (isAvailable ?? false) {
       return const Icon(
         Icons.check_circle,
         color: AppColors.spiritGlow,

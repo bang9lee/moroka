@@ -50,10 +50,10 @@ class InputValidator {
     }
 
     // 8자 이상이지만 복잡도가 낮은 경우
-    bool hasLower = password.contains(RegExp(r'[a-z]'));
-    bool hasUpper = password.contains(RegExp(r'[A-Z]'));
-    bool hasDigit = password.contains(RegExp(r'[0-9]'));
-    bool hasSpecial = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    final bool hasLower = password.contains(RegExp(r'[a-z]'));
+    final bool hasUpper = password.contains(RegExp(r'[A-Z]'));
+    final bool hasDigit = password.contains(RegExp(r'[0-9]'));
+    final bool hasSpecial = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
     int complexity = 0;
     if (hasLower) complexity++;
@@ -99,19 +99,19 @@ class InputValidator {
   /// 채팅 메시지 유효성 검사
   static String? validateChatMessage(String? message) {
     if (message == null || message.trim().isEmpty) {
-      return '메시지를 입력해주세요.';
+      return 'messageRequired';
     }
 
     if (message.length > 500) {
-      return '메시지는 500자 이내로 입력해주세요.';
+      return 'messageTooLong';
     }
 
     if (_sqlInjectionRegex.hasMatch(message)) {
-      return '허용되지 않은 문자가 포함되어 있습니다.';
+      return 'messageInvalidCharacters';
     }
 
     if (_xssRegex.hasMatch(message)) {
-      return '허용되지 않은 스크립트가 포함되어 있습니다.';
+      return 'messageInvalidScript';
     }
 
     return null; // 유효한 경우
@@ -236,16 +236,16 @@ enum PasswordStrength {
 
 /// 비밀번호 강도 확장
 extension PasswordStrengthExtension on PasswordStrength {
-  String get text {
+  String get textKey {
     switch (this) {
       case PasswordStrength.empty:
-        return '비밀번호를 입력해주세요';
+        return 'passwordRequired';
       case PasswordStrength.weak:
-        return '약함';
+        return 'passwordStrengthWeak';
       case PasswordStrength.medium:
-        return '보통';
+        return 'passwordStrengthMedium';
       case PasswordStrength.strong:
-        return '강함';
+        return 'passwordStrengthStrong';
     }
   }
 

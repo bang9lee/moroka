@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vibration/vibration.dart';
-
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_text_styles.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../providers/locale_provider.dart';
-import '../../widgets/common/animated_gradient_background.dart';
-import '../../widgets/common/accessible_icon_button.dart';
-
-import 'settings_viewmodel.dart';
+import 'package:moroka/core/constants/app_colors.dart';
+import 'package:moroka/core/constants/app_text_styles.dart';
+import 'package:moroka/core/utils/haptic_utils.dart';
+import 'package:moroka/presentation/screens/settings/settings_viewmodel.dart';
+import 'package:moroka/presentation/screens/settings/settings_state.dart';
+import 'package:moroka/presentation/widgets/common/animated_gradient_background.dart';
+import 'package:moroka/presentation/widgets/common/glass_morphism_container.dart';
+import 'package:moroka/presentation/widgets/common/custom_loading_indicator.dart';
+import 'package:moroka/providers/locale_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -20,50 +20,439 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> 
-    with AutomaticKeepAliveClientMixin {
-  
-  @override
-  bool get wantKeepAlive => true;
-  
-  // 진동 가능 여부 캐싱
-  bool? _hasVibrator;
-  
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
   @override
   void initState() {
     super.initState();
-    _checkVibrator();
+    _initializeAnimations();
   }
-  
-  Future<void> _checkVibrator() async {
-    _hasVibrator = await Vibration.hasVibrator();
+
+  void _initializeAnimations() {
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+    
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _slideController,
+      curve: Curves.easeOutCubic,
+    ));
+    
+    _fadeController.forward();
+    _slideController.forward();
   }
-  
-  Future<void> _vibrate() async {
-    if (_hasVibrator == true) {
-      Vibration.vibrate(duration: 50);
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _slideController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _showLanguageDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
+            ),
+            child: GlassMorphismContainer(
+              padding: const EdgeInsets.all(24),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.languageTitle,
+                      style: AppTextStyles.heading,
+                    ),
+                    const SizedBox(height: 24),
+                    ..._buildLanguageOptions(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildLanguageOptions() {
+    final languages = [
+      {'code': 'en', 'name': 'English', 'flag': '🇺🇸'},
+      {'code': 'zh', 'name': '中文', 'flag': '🇨🇳'},
+      {'code': 'hi', 'name': 'हिन्दी', 'flag': '🇮🇳'},
+      {'code': 'ko', 'name': '한국어', 'flag': '🇰🇷'},
+      {'code': 'ja', 'name': '日本語', 'flag': '🇯🇵'},
+      {'code': 'es', 'name': 'Español', 'flag': '🇪🇸'},
+      {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷'},
+      {'code': 'de', 'name': 'Deutsch', 'flag': '🇩🇪'},
+      {'code': 'pt', 'name': 'Português', 'flag': '🇵🇹'},
+      {'code': 'th', 'name': 'ไทย', 'flag': '🇹🇭'},
+      {'code': 'vi', 'name': 'Tiếng Việt', 'flag': '🇻🇳'},
+    ];
+
+    return languages.map((lang) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: InkWell(
+          onTap: () {
+            HapticUtils.lightImpact();
+            ref.read(settingsViewModelProvider.notifier)
+                .changeLanguage(lang['code']!);
+            Navigator.of(context).pop();
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.divider.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              children: [
+                Text(lang['flag']!, style: const TextStyle(fontSize: 24)),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    lang['name']!,
+                    style: AppTextStyles.body,
+                  ),
+                ),
+                if (ref.watch(localeProvider)?.languageCode == lang['code'])
+                  const Icon(Icons.check, color: AppColors.primary),
+              ],
+            ),
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  Future<void> _showLogoutConfirmDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.cardBackground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            l10n.logoutTitle,
+            style: AppTextStyles.heading3,
+          ),
+          content: Text(
+            l10n.logoutMessage,
+            style: AppTextStyles.body1,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                HapticUtils.lightImpact();
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                l10n.logoutCancel,
+                style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                HapticUtils.lightImpact();
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                l10n.logoutConfirm,
+                style: AppTextStyles.body1.copyWith(color: AppColors.error),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result ?? false) {
+      await ref.read(settingsViewModelProvider.notifier).logout();
+    }
+  }
+
+  Future<void> _showDeleteAccountConfirmDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.cardBackground,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            l10n.dialogDeleteAccountTitle,
+            style: AppTextStyles.heading3.copyWith(color: AppColors.error),
+          ),
+          content: Text(
+            l10n.dialogDeleteAccountMessage,
+            style: AppTextStyles.body1,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                HapticUtils.lightImpact();
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                l10n.logoutCancel,
+                style: AppTextStyles.body1.copyWith(color: AppColors.textSecondary),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                HapticUtils.lightImpact();
+                Navigator.of(context).pop(true);
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.error.withValues(alpha: 0.1),
+              ),
+              child: Text(
+                l10n.dialogDeleteAccountTitle,
+                style: AppTextStyles.body1.copyWith(color: AppColors.error),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result ?? false) {
+      await ref.read(settingsViewModelProvider.notifier).deleteAccount();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(settingsViewModelProvider);
+    
+    ref.listen<SettingsState>(
+      settingsViewModelProvider,
+      (previous, next) {
+        if (next.notification != null) {
+          _showNotification(next.notification!);
+        }
+        
+        if (next.navigationRoute != null) {
+          context.go(next.navigationRoute!);
+        }
+      },
+    );
 
     return Scaffold(
-      body: AnimatedGradientBackground(
-        gradients: const [
-          AppColors.darkGradient,
-          AppColors.mysticGradient,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            HapticUtils.lightImpact();
+            context.pop();
+          },
+        ),
+        title: Text(
+          l10n.menuSettings,
+          style: AppTextStyles.heading2,
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          const AnimatedGradientBackground(child: SizedBox.expand()),
+          SafeArea(
+            child: state.isLoading
+                ? const Center(child: CustomLoadingIndicator())
+                : FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: _buildSettingsContent(state, l10n),
+                    ),
+                  ),
+          ),
         ],
-        child: SafeArea(
-          child: Column(
+      ),
+    );
+  }
+
+  Widget _buildSettingsContent(SettingsState state, AppLocalizations l10n) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle(l10n.settingsLanguageTitle),
+          const SizedBox(height: 16),
+          _buildSettingsTile(
+            icon: Icons.language,
+            title: l10n.settingsLanguageLabel,
+            subtitle: _getCurrentLanguageName(),
+            onTap: _showLanguageDialog,
+          ),
+          _buildSwitchTile(
+            icon: Icons.notifications_outlined,
+            title: l10n.settingsDailyNotification,
+            subtitle: l10n.settingsDailyNotificationDesc,
+            value: state.notificationsEnabled,
+            onChanged: (value) async {
+              await ref.read(settingsViewModelProvider.notifier)
+                  .toggleNotifications(value);
+            },
+          ),
+          _buildSwitchTile(
+            icon: Icons.vibration,
+            title: l10n.settingsVibration,
+            subtitle: l10n.settingsVibrationDesc,
+            value: state.vibrationEnabled,
+            onChanged: (value) {
+              ref.read(settingsViewModelProvider.notifier)
+                  .toggleVibration(value);
+            },
+          ),
+          _buildSwitchTile(
+            icon: Icons.animation,
+            title: l10n.settingsAnimations,
+            subtitle: l10n.settingsAnimationsDesc,
+            value: state.animationsEnabled,
+            onChanged: (value) {
+              ref.read(settingsViewModelProvider.notifier)
+                  .toggleAnimations(value);
+            },
+          ),
+          const SizedBox(height: 32),
+          _buildSectionTitle(l10n.settingsAccountTitle),
+          const SizedBox(height: 16),
+          if (state.userEmail != null)
+            _buildInfoTile(
+              icon: Icons.email_outlined,
+              title: l10n.emailLabel,
+              value: state.userEmail!,
+            ),
+          _buildSettingsTile(
+            icon: Icons.logout,
+            title: l10n.logoutButton,
+            titleColor: AppColors.error,
+            onTap: _showLogoutConfirmDialog,
+          ),
+          _buildSettingsTile(
+            icon: Icons.delete_forever,
+            title: l10n.settingsDeleteAccount,
+            titleColor: AppColors.error,
+            onTap: _showDeleteAccountConfirmDialog,
+          ),
+          const SizedBox(height: 32),
+          _buildSectionTitle(l10n.moreTitle),
+          const SizedBox(height: 16),
+          _buildSettingsTile(
+            icon: Icons.info_outline,
+            title: l10n.aboutTitle,
+            onTap: () => context.push('/about'),
+          ),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Text(
+        title,
+        style: AppTextStyles.heading3.copyWith(
+          color: AppColors.primary,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile({
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    Color? titleColor,
+    required VoidCallback onTap,
+  }) {
+    return GlassMorphismContainer(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () {
+          HapticUtils.lightImpact();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
             children: [
-              const _SettingsHeader(),
+              Icon(
+                icon,
+                color: titleColor ?? AppColors.primary,
+                size: 24,
+              ),
+              const SizedBox(width: 16),
               Expanded(
-                child: _SettingsList(
-                  state: state,
-                  onVibrate: _vibrate,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.body1.copyWith(
+                        color: titleColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: AppColors.textSecondary,
               ),
             ],
           ),
@@ -71,351 +460,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       ),
     );
   }
-}
 
-// 헤더를 별도 위젯으로 분리 (const 최적화)
-class _SettingsHeader extends StatelessWidget {
-  const _SettingsHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.shadowGray.withAlpha(200),
-            AppColors.shadowGray.withAlpha(0),
-          ],
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.whiteOverlay10,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: AccessibleIconButton(
-              onPressed: () => context.pop(),
-              icon: Icons.arrow_back,
-              semanticLabel: l10n.back,
-              color: AppColors.ghostWhite,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.menuSettings,
-                  style: AppTextStyles.displaySmall.copyWith(fontSize: 24),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.menuSettingsDesc,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.fogGray,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// 설정 리스트를 별도 위젯으로 분리
-class _SettingsList extends ConsumerWidget {
-  final SettingsState state;
-  final VoidCallback onVibrate;
-  
-  const _SettingsList({
-    required this.state,
-    required this.onVibrate,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final currentLocale = ref.watch(localeProvider);
-    
-    return ListView(
-      padding: const EdgeInsets.all(20),
-      // 스크롤 성능 최적화
-      physics: const BouncingScrollPhysics(),
-      cacheExtent: 500, // 캐시 영역 확대
-      children: [
-        // Language Section
-        _SectionTitle(title: l10n.settingsLanguageTitle),
-        const SizedBox(height: 16),
-        _LanguageSelector(
-          currentLocale: currentLocale,
-          onVibrate: onVibrate,
-        ),
-        
-        const SizedBox(height: 32),
-        
-        // Notifications Section
-        _SectionTitle(title: l10n.settingsNotificationTitle),
-        const SizedBox(height: 16),
-        _OptimizedSwitchTile(
-          title: l10n.settingsDailyNotification,
-          subtitle: l10n.settingsDailyNotificationDesc,
-          value: state.dailyNotification,
-          onChanged: (value) {
-            ref.read(settingsViewModelProvider.notifier)
-                .setDailyNotification(value);
-          },
-        ),
-        const SizedBox(height: 12),
-        _OptimizedSwitchTile(
-          title: l10n.settingsWeeklyReport,
-          subtitle: l10n.settingsWeeklyReportDesc,
-          value: state.weeklyReport,
-          onChanged: (value) {
-            ref.read(settingsViewModelProvider.notifier)
-                .setWeeklyReport(value);
-          },
-        ),
-        
-        const SizedBox(height: 32),
-        
-        // Display Section
-        _SectionTitle(title: l10n.settingsDisplayTitle),
-        const SizedBox(height: 16),
-        _OptimizedSwitchTile(
-          title: l10n.settingsVibration,
-          subtitle: l10n.settingsVibrationDesc,
-          value: state.vibrationEnabled,
-          onChanged: (value) {
-            ref.read(settingsViewModelProvider.notifier)
-                .setVibration(value);
-          },
-        ),
-        const SizedBox(height: 12),
-        _OptimizedSwitchTile(
-          title: l10n.settingsAnimations,
-          subtitle: l10n.settingsAnimationsDesc,
-          value: state.animationsEnabled,
-          onChanged: (value) {
-            ref.read(settingsViewModelProvider.notifier)
-                .setAnimations(value);
-          },
-        ),
-        
-        const SizedBox(height: 32),
-        
-        // Data Management Section
-        _SectionTitle(title: l10n.settingsDataTitle),
-        const SizedBox(height: 16),
-        _OptimizedActionTile(
-          icon: Icons.cloud_download,
-          title: l10n.settingsBackupData,
-          subtitle: l10n.settingsBackupDataDesc,
-          onTap: () {
-            onVibrate();
-            _showBackupDialog(context, ref);
-          },
-        ),
-        const SizedBox(height: 12),
-        _OptimizedActionTile(
-          icon: Icons.delete_sweep,
-          title: l10n.settingsClearCache,
-          subtitle: l10n.settingsClearCacheDesc,
-          onTap: () {
-            onVibrate();
-            _showClearCacheDialog(context, ref);
-          },
-        ),
-        const SizedBox(height: 12),
-        _OptimizedActionTile(
-          icon: Icons.delete_forever,
-          title: l10n.settingsDeleteData,
-          subtitle: l10n.settingsDeleteDataDesc,
-          onTap: () {
-            onVibrate();
-            _showDeleteAllDialog(context, ref);
-          },
-          isDestructive: true,
-        ),
-        
-        const SizedBox(height: 32),
-        
-        // Account Section
-        _SectionTitle(title: l10n.settingsAccountTitle),
-        const SizedBox(height: 16),
-        _OptimizedActionTile(
-          icon: Icons.lock,
-          title: l10n.settingsChangePassword,
-          subtitle: l10n.settingsChangePasswordDesc,
-          onTap: () {
-            onVibrate();
-            _showPasswordChangeDialog(context, ref);
-          },
-        ),
-        const SizedBox(height: 12),
-        _OptimizedActionTile(
-          icon: Icons.exit_to_app,
-          title: l10n.settingsDeleteAccount,
-          subtitle: l10n.settingsDeleteAccountDesc,
-          onTap: () {
-            onVibrate();
-            _showAccountDeleteDialog(context, ref);
-          },
-          isDestructive: true,
-        ),
-      ],
-    );
-  }
-}
-
-// 섹션 타이틀 (const 최적화)
-class _SectionTitle extends StatelessWidget {
-  final String title;
-  
-  const _SectionTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: AppTextStyles.bodyLarge.copyWith(
-        fontWeight: FontWeight.bold,
-        color: AppColors.textMystic,
-      ),
-    );
-  }
-}
-
-// 최적화된 스위치 타일 (애니메이션 제거)
-class _OptimizedSwitchTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool value;
-  final Function(bool) onChanged;
-
-  const _OptimizedSwitchTile({
-    required this.title,
-    required this.subtitle,
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // Glass morphism 대신 단순한 컨테이너 사용
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.blackOverlay20,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.cardBorder,
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.fogGray,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Semantics(
-            label: '$title: ${value ? AppLocalizations.of(context)!.on : AppLocalizations.of(context)!.off}',
-            toggled: value,
-            child: Switch(
-              value: value,
-              onChanged: onChanged,
-              activeColor: AppColors.mysticPurple,
-              inactiveThumbColor: AppColors.fogGray,
-              inactiveTrackColor: AppColors.blackOverlay40,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// 최적화된 액션 타일 (애니메이션 제거)
-class _OptimizedActionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-  final bool isDestructive;
-
-  const _OptimizedActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-    this.isDestructive = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: '$title. $subtitle',
-      button: true,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
+  Widget _buildSwitchTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return GlassMorphismContainer(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDestructive 
-              ? AppColors.bloodMoon.withAlpha(20)
-              : AppColors.blackOverlay20,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isDestructive
-                ? AppColors.bloodMoon.withAlpha(100)
-                : AppColors.cardBorder,
-            width: 1,
-          ),
-        ),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isDestructive
-                    ? AppColors.bloodMoon.withAlpha(50)
-                    : AppColors.mysticPurple.withAlpha(50),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                color: isDestructive 
-                    ? AppColors.crimsonGlow 
-                    : AppColors.evilGlow,
-                size: 24,
-              ),
+            Icon(
+              icon,
+              color: AppColors.primary,
+              size: 24,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -424,523 +486,49 @@ class _OptimizedActionTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: AppTextStyles.body1.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isDestructive ? AppColors.crimsonGlow : null,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.fogGray,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: AppColors.fogGray,
+            Switch(
+              value: value,
+              onChanged: (newValue) {
+                HapticUtils.lightImpact();
+                onChanged(newValue);
+              },
+              activeColor: AppColors.primary,
             ),
           ],
         ),
-        ),
       ),
     );
   }
-}
 
-// Dialog helper functions
-void _showBackupDialog(BuildContext context, WidgetRef ref) {
-  final l10n = AppLocalizations.of(context)!;
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: AppColors.shadowGray,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.cardBorder),
-      ),
-      title: Text(
-        l10n.dialogBackupTitle,
-        style: AppTextStyles.dialogTitle,
-      ),
-      content: Text(
-        l10n.dialogBackupMessage,
-        style: AppTextStyles.dialogContent.copyWith(
-          color: AppColors.fogGray,
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            l10n.cancel,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.textMystic,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            Navigator.pop(context);
-            try {
-              await ref.read(settingsViewModelProvider.notifier).backupData();
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.successBackup)),
-                );
-              }
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorBackup(e.toString())),
-                    backgroundColor: AppColors.bloodMoon,
-                  ),
-                );
-              }
-            }
-          },
-          child: Text(
-            l10n.backup,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.mysticPurple,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-void _showClearCacheDialog(BuildContext context, WidgetRef ref) async {
-  final l10n = AppLocalizations.of(context)!;
-  
-  // Get cache statistics
-  final cacheStats = await ref.read(settingsViewModelProvider.notifier).getCacheStatistics();
-  
-  if (!context.mounted) return;
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: AppColors.shadowGray,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.cardBorder),
-      ),
-      title: Text(
-        l10n.dialogClearCacheTitle,
-        style: AppTextStyles.dialogTitle,
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.dialogClearCacheMessage,
-            style: AppTextStyles.dialogContent.copyWith(
-              color: AppColors.fogGray,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppColors.blackOverlay20,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Cache Statistics',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.mysticPurple,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _buildCacheStatRow('AI Interpretations', '${cacheStats['aiInterpretations'] ?? 0}'),
-                _buildCacheStatRow('Reading Histories', '${cacheStats['readingHistories'] ?? 0}'),
-                _buildCacheStatRow('Cached Images', '${cacheStats['cachedImages'] ?? 0}'),
-                _buildCacheStatRow('Total Size', '${cacheStats['totalSizeMB'] ?? '0.00'} MB'),
-              ],
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            l10n.cancel,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.textMystic,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            Navigator.pop(context);
-            await ref.read(settingsViewModelProvider.notifier).clearCache();
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.successClearCache)),
-              );
-            }
-          },
-          child: Text(
-            l10n.delete,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.mysticPurple,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildCacheStatRow(String label, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: AppColors.fogGray,
-          ),
-        ),
-        Text(
-          value,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: AppColors.ghostWhite,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-void _showDeleteAllDialog(BuildContext context, WidgetRef ref) {
-  final l10n = AppLocalizations.of(context)!;
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: AppColors.shadowGray,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.cardBorder),
-      ),
-      title: Text(
-        l10n.dialogDeleteDataTitle,
-        style: AppTextStyles.dialogTitle.copyWith(
-          color: AppColors.crimsonGlow,
-        ),
-      ),
-      content: Text(
-        l10n.dialogDeleteDataMessage,
-        style: AppTextStyles.dialogContent.copyWith(
-          color: AppColors.fogGray,
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            l10n.cancel,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.textMystic,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            Navigator.pop(context);
-            try {
-              await ref.read(settingsViewModelProvider.notifier)
-                  .deleteAllData();
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.successDeleteData)),
-                );
-                context.go('/login');
-              }
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorDeleteData(e.toString())),
-                    backgroundColor: AppColors.bloodMoon,
-                  ),
-                );
-              }
-            }
-          },
-          child: Text(
-            l10n.delete,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.crimsonGlow,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-void _showPasswordChangeDialog(BuildContext context, WidgetRef ref) {
-  final l10n = AppLocalizations.of(context)!;
-  final currentPasswordController = TextEditingController();
-  final newPasswordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: AppColors.shadowGray,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.cardBorder),
-      ),
-      title: Text(
-        l10n.dialogChangePasswordTitle,
-        style: AppTextStyles.dialogTitle,
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _PasswordField(
-            controller: currentPasswordController,
-            label: l10n.currentPassword,
-          ),
-          const SizedBox(height: 16),
-          _PasswordField(
-            controller: newPasswordController,
-            label: l10n.newPassword,
-          ),
-          const SizedBox(height: 16),
-          _PasswordField(
-            controller: confirmPasswordController,
-            label: l10n.confirmNewPassword,
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            l10n.cancel,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.textMystic,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            if (newPasswordController.text != 
-                confirmPasswordController.text) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.errorPasswordMismatch),
-                  backgroundColor: AppColors.bloodMoon,
-                ),
-              );
-              return;
-            }
-            
-            try {
-              await ref.read(settingsViewModelProvider.notifier)
-                  .changePassword(
-                currentPassword: currentPasswordController.text,
-                newPassword: newPasswordController.text,
-              );
-              
-              if (context.mounted) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.successChangePassword)),
-                );
-              }
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorChangePassword(e.toString())),
-                    backgroundColor: AppColors.bloodMoon,
-                  ),
-                );
-              }
-            }
-          },
-          child: Text(
-            l10n.change,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.mysticPurple,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-class _PasswordField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  
-  const _PasswordField({
-    required this.controller,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      obscureText: true,
-      style: const TextStyle(color: AppColors.ghostWhite),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: AppColors.fogGray),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.cardBorder),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.mysticPurple),
-        ),
-      ),
-    );
-  }
-}
-
-void _showAccountDeleteDialog(BuildContext context, WidgetRef ref) {
-  final l10n = AppLocalizations.of(context)!;
-  
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: AppColors.shadowGray,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.cardBorder),
-      ),
-      title: Text(
-        l10n.dialogDeleteAccountTitle,
-        style: AppTextStyles.dialogTitle.copyWith(
-          color: AppColors.crimsonGlow,
-        ),
-      ),
-      content: Text(
-        l10n.dialogDeleteAccountMessage,
-        style: AppTextStyles.dialogContent.copyWith(
-          color: AppColors.fogGray,
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            l10n.cancel,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.textMystic,
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            Navigator.pop(context);
-            try {
-              await ref.read(settingsViewModelProvider.notifier)
-                  .deleteAccount();
-              
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.successDeleteAccount)),
-                );
-                context.go('/login');
-              }
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorDeleteAccount(e.toString())),
-                    backgroundColor: AppColors.bloodMoon,
-                  ),
-                );
-              }
-            }
-          },
-          child: Text(
-            l10n.delete,
-            style: AppTextStyles.dialogButton.copyWith(
-              color: AppColors.crimsonGlow,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-// Language Selector Widget
-class _LanguageSelector extends ConsumerWidget {
-  final Locale? currentLocale;
-  final VoidCallback onVibrate;
-  
-  const _LanguageSelector({
-    required this.currentLocale,
-    required this.onVibrate,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final systemLocale = View.of(context).platformDispatcher.locale;
-    final effectiveLocale = currentLocale ?? systemLocale;
-    
-    return Semantics(
-      label: '${l10n.settingsLanguageLabel}: ${localeNames[effectiveLocale.languageCode] ?? effectiveLocale.languageCode}',
-      button: true,
-      child: GestureDetector(
-        onTap: () {
-          onVibrate();
-          _showLanguageDialog(context, ref, effectiveLocale);
-        },
-        child: Container(
+  Widget _buildInfoTile({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return GlassMorphismContainer(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.blackOverlay20,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.cardBorder,
-            width: 1,
-          ),
-        ),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.mysticPurple.withAlpha(50),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.language,
-                color: AppColors.evilGlow,
-                size: 24,
-              ),
+            Icon(
+              icon,
+              color: AppColors.primary,
+              size: 24,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -948,91 +536,107 @@ class _LanguageSelector extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    l10n.settingsLanguageLabel,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w600,
+                    title,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    localeNames[effectiveLocale.languageCode] ?? effectiveLocale.languageCode,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.fogGray,
-                    ),
+                    value,
+                    style: AppTextStyles.body1,
                   ),
                 ],
               ),
             ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: AppColors.fogGray,
-            ),
           ],
-        ),
         ),
       ),
     );
   }
-  
-  void _showLanguageDialog(BuildContext context, WidgetRef ref, Locale currentLocale) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.shadowGray,
+
+  String _getCurrentLanguageName() {
+    final currentLocale = ref.watch(localeProvider)?.languageCode ?? 'en';
+    final languageMap = {
+      'en': 'English',
+      'ko': '한국어',
+      'ja': '日本語',
+      'zh': '中文',
+      'es': 'Español',
+      'fr': 'Français',
+      'de': 'Deutsch',
+      'pt': 'Português',
+      'hi': 'हिन्दी',
+      'th': 'ไทย',
+      'vi': 'Tiếng Việt',
+    };
+    return languageMap[currentLocale] ?? 'English';
+  }
+
+  void _showNotification(SettingsNotification notification) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_getNotificationMessage(notification, l10n)),
+        backgroundColor: notification.type == NotificationType.error
+            ? AppColors.error
+            : AppColors.success,
+        behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.cardBorder),
+          borderRadius: BorderRadius.circular(12),
         ),
-        title: Text(
-          AppLocalizations.of(context)!.settingsLanguageDesc,
-          style: AppTextStyles.dialogTitle,
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: supportedLocales.length,
-            itemBuilder: (context, index) {
-              final locale = supportedLocales[index];
-              final isSelected = locale.languageCode == currentLocale.languageCode;
-              
-              return Semantics(
-                label: localeNames[locale.languageCode] ?? locale.languageCode,
-                selected: isSelected,
-                child: RadioListTile<Locale>(
-                  value: locale,
-                  groupValue: currentLocale,
-                  onChanged: (Locale? value) {
-                    if (value != null) {
-                      ref.read(localeProvider.notifier).setLocale(value);
-                      Navigator.pop(context);
-                    }
-                  },
-                  title: Text(
-                    localeNames[locale.languageCode] ?? locale.languageCode,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: isSelected ? AppColors.mysticPurple : AppColors.ghostWhite,
-                    ),
-                  ),
-                  activeColor: AppColors.mysticPurple,
-                ),
-              );
-            },
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              AppLocalizations.of(context)!.logoutCancel,
-              style: AppTextStyles.dialogButton.copyWith(
-                color: AppColors.textMystic,
-              ),
-            ),
-          ),
-        ],
+        margin: const EdgeInsets.all(16),
       ),
     );
+  }
+
+  String _getNotificationMessage(SettingsNotification notification, AppLocalizations l10n) {
+    switch (notification.messageKey) {
+      case 'languageChanged':
+        return l10n.languageChanged;
+      case 'notificationsEnabled':
+        return l10n.notificationsEnabled;
+      case 'notificationsDisabled':
+        return l10n.notificationsDisabled;
+      case 'vibrationEnabled':
+        return l10n.vibrationEnabled;
+      case 'vibrationDisabled':
+        return l10n.vibrationDisabled;
+      case 'animationsEnabled':
+        return l10n.animationsEnabled;
+      case 'animationsDisabled':
+        return l10n.animationsDisabled;
+      case 'logoutSuccess':
+        return l10n.logoutSuccess;
+      case 'deleteAccountSuccess':
+        return l10n.deleteAccountSuccess;
+      case 'errorOccurred':
+        return l10n.errorOccurred;
+      case 'notificationPermissionDenied':
+        return l10n.notificationPermissionDenied;
+      case 'cacheCleared':
+        return 'Cache cleared successfully';
+      case 'errorClearingCache':
+        return 'Error clearing cache';
+      case 'dataBackedUp':
+        return notification.customMessage ?? l10n.successBackup;
+      case 'errorBackingUp':
+        return 'Error backing up data';
+      case 'dataDeleted':
+        return notification.customMessage ?? 'All data deleted';
+      case 'errorDeletingData':
+        return 'Error deleting data';
+      case 'passwordChanged':
+        return l10n.successChangePassword;
+      case 'wrongPassword':
+        return l10n.errorWrongPassword;
+      case 'weakPassword':
+        return l10n.errorWeakPassword;
+      case 'errorChangingPassword':
+        return 'Error changing password';
+      default:
+        return notification.customMessage ?? l10n.errorOccurred;
+    }
   }
 }

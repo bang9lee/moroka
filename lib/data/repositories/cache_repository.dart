@@ -165,6 +165,11 @@ class CacheRepository {
   Future<void> clearAllCache() async {
     await _cacheService.clearAllCache();
   }
+
+  /// Clear user reading history from cache
+  Future<void> clearUserReadingHistory(String userId) async {
+    await _cacheService.removeCachedReading('history_$userId');
+  }
   
   /// Get cache statistics
   Future<Map<String, dynamic>> getCacheStatistics() async {
